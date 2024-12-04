@@ -1,0 +1,88 @@
+{defaultcss}
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<div id="ebay-description" class="nojs">
+		
+		<div class="container">
+				<div class="block">
+                  <div class="container">
+				<img class="logo" src="{CDNUrl}/images/logo.png?width=200&amp;nostretch&etag={LogoEtag}" />
+		</div>
+						<div class="row">
+								<div class="span12">
+										<h2>{Title}</h2>
+								</div>
+						</div>
+						<div class="row">
+								<div class="span12">
+                                  <div style=""><font color="rgb(0,0,0)" face="Lato, sans-serif" size="5"><span style="letter-spacing: 0.63px;"><br></span></font>
+                     <b style="color: rgb(0,0,0); font-family: Lato, sans-serif; font-size: 18px; letter-spacing: 0.63px; box-sizing: inherit;">Part Description</b></div><br>
+                                  <div style="font-family: Lato; letter-spacing: 0.63px;">
+                 <span style="letter-spacing: normal;"><b style=""><div style="font-weight: 400;"><div style="font-family: Lato, sans-serif">
+                   <ul style="box-sizing: inherit; padding-left: 2rem; font-family: Lato, sans-serif; letter-spacing: 0.63px;">
+                       <font size="4" style="" color="#000000">
+										<!--startcodistodescription - DO NOT REMOVE-->
+										{include field="EbayDescription"}
+										<!--endcodistodescription - DO NOT REMOVE-->
+								</font></ul></div></div></b></span></div>
+                                </div>  
+						</div>
+      <div class="row">            
+        <div class="span12">             
+        <div style=""><font color="rgb(0,0,0)" face="Lato, sans-serif" size="5"><span style="letter-spacing: 0.63px;"><br></span></font>
+                     <b style="color: rgb(0,0,0); font-family: Lato, sans-serif; font-size: 18px; letter-spacing: 0.63px; box-sizing: inherit;">Paint Job Details</b></div><br>
+               <div style="font-family: Lato; letter-spacing: 0.63px;">
+                 <span style="letter-spacing: normal;"><b style=""><div style="font-weight: 400;"><div style="font-family: Lato, sans-serif">
+                   <ul style="box-sizing: inherit; padding-left: 2rem; font-family: Lato, sans-serif; letter-spacing: 0.63px;">
+                       <font size="4" style="" color="#000000"><li style="box-sizing: inherit; list-style: inherit;">High-quality paint ensures a durable and long-lasting finish.</li>
+                        <li style="box-sizing: inherit; list-style: inherit;">Precise color matching to achieve a 97%-99% match to the original color of your vehicle.</li>
+                        <li style="box-sizing: inherit; list-style: inherit;">Parts are prepped properly, including sanding and priming, to ensure paint adhesion and longevity.</li>
+                        <li style="box-sizing: inherit; list-style: inherit;">Lifetime warranty against peeling, cracking, or fading.</li>
+                        <li style="box-sizing: inherit; list-style: inherit;">Clear coats and finishes are applied to match the rest of the vehicle's surface for a seamless finish.</li>
+                    <li style="box-sizing: inherit; list-style: inherit; margin-bottom: 0px;">All work is done by experienced professionals who take pride in their craft and attention to detail.</li>
+                   </font></ul></div></div></b></span>
+                      </div>
+                  </div>
+               </div><br>
+                  <div class="row">            
+                 <div class="span12">
+              <div style=""><span style=" font-family: Lato, sans-serif; font-size: large; letter-spacing: 0.63px; box-sizing: inherit;">
+                 <span style="box-sizing: inherit; margin: 1.5rem 0px; letter-spacing: 0.63px;"><b>Fits: </b></span></span><font color="#00000" face="Lato, sans-serif" size="4"><span style="letter-spacing: 0.63px;">{include field="product_fitment"}</span></font>
+                    </div><br>
+                  </div> 
+               </div>
+                 <div class="row">            
+                 <div class="span12"> 
+                  <div style=""><span style=" font-family: Lato, sans-serif; font-size: large; letter-spacing: 0.63px; box-sizing: inherit;">
+                   <span style="box-sizing: inherit; margin: 1.5rem 0px; letter-spacing: 0.63px;"><b>Product OEM#: </b></span></span><font color="#000000" face="Lato, sans-serif"size="4"><span style="letter-spacing: 0.63px;">{include field="product_oem_"}</span></font>
+                  </div><br>
+                     </div>   
+                   </div>
+                  						<div class="row">
+								<div class="span5 buy-now">
+								{if !MultiVariant}
+										<a href="https://offer.{EbaySiteURL}/ws/eBayISAPI.dll?BinConfirm&amp;quantity=1&amp;fb=1&amp;item={EbayItemID}" target="_blank" class="btn btn-large btn-primary"><i class="icon-shopping-cart icon-white"></i> Buy now and save!</a>
+								{/if}
+								</div>
+						</div>
+                    </div>
+				</div>
+          </div>
+		
+  <footer>
+    <div class="pull-right logo" style="display:none">
+ <span class="muted"> eBay integration</span> by
+ <img class="baseline" src="{CDNUrl}/images/codisto-connect.png?width=200&amp;nostretch&amp;v=1" />
+</div>
+  </footer>
+
+
+
+
+
+
+
+
+
+

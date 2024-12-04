@@ -1,0 +1,143 @@
+<style>
+    .black-friday-button {
+        display: inline-block;
+        background: #000000;
+        color: #fff;
+        font-weight: bold;
+        font-size: 20px;
+        text-decoration: none;
+        padding: 16px 24px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        text-align: center;
+        width: 100%;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+    }
+    
+    .black-friday-button span.highlight {
+        color: #ff0000;
+        font-size: 22px;
+        font-weight: 800;
+    }
+    
+    .black-friday-button:hover {
+        transform: translateY(-2px);
+        {% comment %} box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); {% endcomment %}
+    }
+    
+    .black-friday-button:active {
+        transform: translateY(0);
+    }
+
+    .black-friday-button .cursor {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        position: relative;
+        top: 3px;
+        animation: click-animation 1s infinite;
+    }
+    
+    /* Click Animation */
+    @keyframes click-animation {
+        0% {
+            transform: scale(1);
+        }
+        30% {
+            transform: scale(0.9); /* Simulates "click" */
+        }
+        60% {
+            transform: scale(1.1); /* Slight overshoot for effect */
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    </style>
+    
+    {% if cart.item_count == 0 %}
+        <a href="#black-friday-table" class="black-friday-button" id="black-friday-button">
+            Cyber Monday Deals - Click To Learn More!
+            <svg class="cursor" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg">
+                <path d="M459.15 269.75a133.197 133.197 0 0 1-55.862 179.975l-42.782 22.541-10.52 5.533a71.277 71.277 0 0 1-62.966 1.685l-167.077-71.38 15.733-46.676 99.363 19.194-51.458-97.78-82.843-157.411 40.357-21.232 82.844 157.457 19.934-10.485-36.521-69.445 40.335-21.22 36.52 69.445 19.935-10.485-28.2-53.598 40.358-21.232 28.2 53.598 19.945-10.576-19.354-36.886 40.346-21.174 19.354 36.885 54.348 103.301zM73.268 146.674a60.03 60.03 0 0 1 42.361-102.459 60.098 60.098 0 0 1 56.58 80.169l10.588 20.013A78.29 78.29 0 0 0 115.708 26a78.233 78.233 0 0 0-5.635 156.262L99.428 162.02a59.688 59.688 0 0 1-26.16-15.346z"></path>
+            </svg>
+        </a>
+    {% else %}
+        {% assign current_cart_total = cart.total_price | divided_by: 100 %} <!-- Convert cents to dollars -->
+        {% if current_cart_total < 300 %}
+          {% assign next_tier = 300 %}
+          {% assign savings = 25 %}
+          {% assign previous_savings = 10 %}
+          {% assign savings_difference = savings | minus: previous_savings %}
+          {% assign difference = next_tier | minus: current_cart_total %}
+            <a href="#black-friday-table" class="black-friday-button" id="black-friday-button">
+                You're only <span class="highlight">${{ difference | round: 2 }}</span> away from getting an additional <span class="highlight">${{ savings_difference }}</span> off!
+                <svg class="cursor" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M459.15 269.75a133.197 133.197 0 0 1-55.862 179.975l-42.782 22.541-10.52 5.533a71.277 71.277 0 0 1-62.966 1.685l-167.077-71.38 15.733-46.676 99.363 19.194-51.458-97.78-82.843-157.411 40.357-21.232 82.844 157.457 19.934-10.485-36.521-69.445 40.335-21.22 36.52 69.445 19.935-10.485-28.2-53.598 40.358-21.232 28.2 53.598 19.945-10.576-19.354-36.886 40.346-21.174 19.354 36.885 54.348 103.301zM73.268 146.674a60.03 60.03 0 0 1 42.361-102.459 60.098 60.098 0 0 1 56.58 80.169l10.588 20.013A78.29 78.29 0 0 0 115.708 26a78.233 78.233 0 0 0-5.635 156.262L99.428 162.02a59.688 59.688 0 0 1-26.16-15.346z"></path>
+                </svg>
+            </a>
+        {% elsif current_cart_total < 600 %}
+          {% assign next_tier = 600 %}
+          {% assign savings = 50 %}
+          {% assign previous_savings = 25 %}
+          {% assign savings_difference = savings | minus: previous_savings %}
+          {% assign difference = next_tier | minus: current_cart_total %}
+            <a href="#black-friday-table" class="black-friday-button" id="black-friday-button">
+                You're only <span class="highlight">${{ difference | round: 2 }}</span> away from getting an additional <span class="highlight">${{ savings_difference }}</span> off!
+                <svg class="cursor" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M459.15 269.75a133.197 133.197 0 0 1-55.862 179.975l-42.782 22.541-10.52 5.533a71.277 71.277 0 0 1-62.966 1.685l-167.077-71.38 15.733-46.676 99.363 19.194-51.458-97.78-82.843-157.411 40.357-21.232 82.844 157.457 19.934-10.485-36.521-69.445 40.335-21.22 36.52 69.445 19.935-10.485-28.2-53.598 40.358-21.232 28.2 53.598 19.945-10.576-19.354-36.886 40.346-21.174 19.354 36.885 54.348 103.301zM73.268 146.674a60.03 60.03 0 0 1 42.361-102.459 60.098 60.098 0 0 1 56.58 80.169l10.588 20.013A78.29 78.29 0 0 0 115.708 26a78.233 78.233 0 0 0-5.635 156.262L99.428 162.02a59.688 59.688 0 0 1-26.16-15.346z"></path>
+                </svg>
+            </a>
+        {% elsif current_cart_total < 1200 %}
+            {% assign next_tier = 1200 %}
+            {% assign savings = 100 %}
+            {% assign previous_savings = 50 %}
+            {% assign savings_difference = savings | minus: previous_savings %}
+            {% assign difference = next_tier | minus: current_cart_total %}
+            <a href="#black-friday-table" class="black-friday-button" id="black-friday-button">
+                You're only <span class="highlight">${{ difference | round: 2 }}</span> away from getting an additional <span class="highlight">${{ savings_difference }}</span> off!
+                <svg class="cursor" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M459.15 269.75a133.197 133.197 0 0 1-55.862 179.975l-42.782 22.541-10.52 5.533a71.277 71.277 0 0 1-62.966 1.685l-167.077-71.38 15.733-46.676 99.363 19.194-51.458-97.78-82.843-157.411 40.357-21.232 82.844 157.457 19.934-10.485-36.521-69.445 40.335-21.22 36.52 69.445 19.935-10.485-28.2-53.598 40.358-21.232 28.2 53.598 19.945-10.576-19.354-36.886 40.346-21.174 19.354 36.885 54.348 103.301zM73.268 146.674a60.03 60.03 0 0 1 42.361-102.459 60.098 60.098 0 0 1 56.58 80.169l10.588 20.013A78.29 78.29 0 0 0 115.708 26a78.233 78.233 0 0 0-5.635 156.262L99.428 162.02a59.688 59.688 0 0 1-26.16-15.346z"></path>
+                </svg>
+            </a>
+        {% elsif current_cart_total < 1800 %}
+            {% assign next_tier = 1800 %}
+            {% assign savings = 150 %}
+            {% assign previous_savings = 100 %}
+            {% assign savings_difference = savings | minus: previous_savings %}
+            {% assign difference = next_tier | minus: current_cart_total %}
+            <a href="#black-friday-table" class="black-friday-button" id="black-friday-button">
+                You're only <span class="highlight">${{ difference | round: 2 }}</span> away from getting an additional <span class="highlight">${{ savings_difference }}</span> off!
+                <svg class="cursor" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M459.15 269.75a133.197 133.197 0 0 1-55.862 179.975l-42.782 22.541-10.52 5.533a71.277 71.277 0 0 1-62.966 1.685l-167.077-71.38 15.733-46.676 99.363 19.194-51.458-97.78-82.843-157.411 40.357-21.232 82.844 157.457 19.934-10.485-36.521-69.445 40.335-21.22 36.52 69.445 19.935-10.485-28.2-53.598 40.358-21.232 28.2 53.598 19.945-10.576-19.354-36.886 40.346-21.174 19.354 36.885 54.348 103.301zM73.268 146.674a60.03 60.03 0 0 1 42.361-102.459 60.098 60.098 0 0 1 56.58 80.169l10.588 20.013A78.29 78.29 0 0 0 115.708 26a78.233 78.233 0 0 0-5.635 156.262L99.428 162.02a59.688 59.688 0 0 1-26.16-15.346z"></path>
+                </svg>
+            </a>
+        {% else %}
+            {% assign savings = 150 %}
+            <a href="#black-friday-table" class="black-friday-button" id="black-friday-button">
+                Congratulations! You're eligible for <span class="highlight">$150</span> off your order!
+                <svg class="cursor" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M459.15 269.75a133.197 133.197 0 0 1-55.862 179.975l-42.782 22.541-10.52 5.533a71.277 71.277 0 0 1-62.966 1.685l-167.077-71.38 15.733-46.676 99.363 19.194-51.458-97.78-82.843-157.411 40.357-21.232 82.844 157.457 19.934-10.485-36.521-69.445 40.335-21.22 36.52 69.445 19.935-10.485-28.2-53.598 40.358-21.232 28.2 53.598 19.945-10.576-19.354-36.886 40.346-21.174 19.354 36.885 54.348 103.301zM73.268 146.674a60.03 60.03 0 0 1 42.361-102.459 60.098 60.098 0 0 1 56.58 80.169l10.588 20.013A78.29 78.29 0 0 0 115.708 26a78.233 78.233 0 0 0-5.635 156.262L99.428 162.02a59.688 59.688 0 0 1-26.16-15.346z"></path>
+                </svg>
+            </a>
+        {% endif %}
+      {% endif %}
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const button = document.getElementById("black-friday-button");
+            const table = document.getElementById("black-friday-table");
+        
+            button.addEventListener("click", function(event) {
+                event.preventDefault();
+                table.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center" 
+                });
+            });
+        });
+    </script>
+    

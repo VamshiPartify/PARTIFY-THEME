@@ -1,0 +1,226 @@
+#asm-ajax {
+	display: none;
+}
+
+#delivery-countdown-outer {
+    display: none;
+}
+
+#delivery-countdown {
+	display: none;
+/*  float: left;
+	width: 100%;
+	font-size: 13px;
+	line-height: normal;
+    margin-bottom: 10px;*/
+}
+
+#delivery-countdown span {
+	vertical-align: unset;
+}
+
+#dc-error {
+	display: none;
+}
+
+#dc-truck {
+	float: left;
+	width: 40px;
+	height: 30px;
+}
+
+#dc-trucker-helper {
+	display: inline-block;
+	height: 100%;
+	vertical-align: top;	
+}
+
+#dc-truck-img {
+	max-height: 30px;
+	max-width: 30px;
+	vertical-align: top;	
+}
+
+#dc-info {
+	float: left;
+  	width: calc(100% - 40px);
+    line-height: normal;
+}
+
+#dc-top {
+	color: #000000;
+	font-weight: bold;
+	margin-bottom: 3px;
+}
+
+#dc-bottom {
+	color: #ff0000;
+	font-weight: bold;
+}
+
+#dc-ship {
+	float: right;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+#dc-zip {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+#dc-alt-zip-holder {
+	display: none;
+	margin-top: 5px;
+    clear: both;
+}
+
+#dc-alt-zip {
+	float: right;
+	width: 130px;
+	height: 40px;
+	padding: 10px;
+	border: 1px solid #cecece;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-right: 0px;
+	outline: none;
+}
+
+#dc-alt-zip-apply {
+	float: right;
+	height: 40px;
+	padding: 10px;
+	color: #ffffff;
+	background-color: #000000;
+	border: 1px solid #cecece;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.clear-both {
+	clear: both;
+}
+
+#dc-details {
+    float: left;
+    color: #307962;
+	font-weight: bold;
+	text-decoration: underline;
+	cursor: pointer;
+	margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#dc-details-info {
+	display: none;
+	position: relative;
+}
+
+#asm-calc-details {
+	width: 320px;
+	box-shadow: 0 12px 30px 0 rgba(31,31,92,0.12);
+	border: 1px solid #c3c3c3;
+	padding: 15px;
+	margin-top: 10px;
+	margin-left: 15px;
+	position: absolute;
+	z-index: 10;
+	background-color: #fff;
+}
+
+#asm-calc-details-close-holder {
+	position: relative;
+}
+
+#asm-calc-details-close {
+	position: absolute;
+	right: 5px;
+	width: 16px;
+	height: 16px;
+	opacity: 0.3;
+	cursor: pointer;
+}
+
+#asm-calc-details-close:hover {
+	opacity: 1;
+}
+
+#asm-calc-details-close:before, #asm-calc-details-close:after {
+	position: absolute;
+	left: 15px;
+	content: ' ';
+	height: 17px;
+	width: 2px;
+	background-color: #333;
+}
+
+#asm-calc-details-close:before {
+	transform: rotate(45deg);
+}
+
+#asm-calc-details-close:after {
+	transform: rotate(-45deg);
+}
+
+#asm-calc-title-left, #asm-calc-title-right {
+    float: left;
+	width: 125px;
+	color: #8e8e8e;
+	font-size: 11px;
+	font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#asm-calc-title-right {
+	text-align: right;
+}
+
+.asm-calc-method {
+	margin-top: 10px;
+}
+
+.asm-calc-method-top-left {
+	float: left;
+	width: 200px;
+	color: #474747;
+	font-size: 16px;
+	font-weight: bold;
+  	margin-top: 10px;
+}
+
+.asm-calc-method-top-right {
+	float: right;
+	width: 75px;
+	color: #0b8c44;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: right;
+  	margin-top: 10px;
+}
+
+.asm-calc-method-bottom {
+	width: 200px;
+	color: #474747;
+	font-size: 12px;
+}
+
+#asm-calc-message {
+	color: #474747;
+	text-align: center;
+	font-size: 12px;
+	margin-top: 15px;
+}
+
+#asm-calc-msg-line {
+	margin: 15px 0px;
+	height: 1px;
+	border: 0;
+	color: #8e8e8e;
+	background-color: #8e8e8e;
+}
+
+#asm-calc-note {
+	color: #8e8e8e;
+	font-size: 12px;
+}
