@@ -633,6 +633,7 @@
           position: relative;
       }
   </style>
+  {% comment %} {% render 'cart-swatch-checker' %} {% endcomment %}
   {% comment %} {% render 'black-friday-button' %} {% endcomment %}
   {% if product.available == true or product.variants.first.inventory_policy == 'continue' %}
     <!-- Modal trigger button -->
@@ -662,7 +663,7 @@
             <!-- Add to Cart Button -->
               <button type="submit" class="btn full-width bold-text" id="add-to-cart" style="margin: 10px 0;" disabled>Add to Cart</button>
           </form>
-    
+
     <!-- Form for either customizations or add to cart on product page -->
       {% comment %} <form> {% endcomment %}
       {% elsif product.variants.size > 1 %}
@@ -772,7 +773,7 @@
               </form>
 
               {% render 'paint-match-percentage-popup' %}
-
+            <!-- Color mismatch popup -->
               <div id="color-mismatch-popup" style="display: none;">
                   <div class="customize-color-mismatch-popup-overlay">
                     <div class="color-mismatch-container">
@@ -878,7 +879,7 @@
   {% comment %} </div> {% endcomment %}
   </form>
 {% endif %}
-  {% comment %} {% render 'black-friday-table' %} {% endcomment %}
+{% comment %} {% render 'black-friday-table' %} {% endcomment %}
   
 
 
@@ -1014,9 +1015,13 @@
                 const optionTitle = document.querySelector('.option-title');
 
                 if(productTypeSelect && productTypeSelect.disabled === true) {
-                  verifyFitmentHeader.style.color = "#e61b24";
+                  if(verifyFitmentHeader) {
+                    verifyFitmentHeader.style.color = "#e61b24";
+                  }
                 } else {
-                  verifyFitmentHeader.style.color = "#333";
+                  if(verifyFitmentHeader) {
+                    verifyFitmentHeader.style.color = "#333";
+                  }
                 }
 
                 if(qualityHeader && oemVinContainer.style.display === "none") {
@@ -1111,8 +1116,7 @@
                 } else {
                     fitmentFailButton.style.display = 'none';
                     addToCartButton.disabled = true;
-                }
-        
+                }        
             }
         
             // Polling function to continuously check fitment status every 500ms
@@ -1168,11 +1172,13 @@
                 let scrollPosition = 0;
             
                 // Close the modal when the "X" button is clicked
-                document.getElementById('close-paint-swatch').onclick = function(event) {
-                    paintSwatchModal.style.display = 'none';
-                    document.body.classList.remove('no-scroll');
-                    document.body.style.top = '';
-                    window.scrollTo(0, scrollPosition);
+                if(document.getElementById('close-paint-swatch')) {
+                  document.getElementById('close-paint-swatch').onclick = function(event) {
+                      paintSwatchModal.style.display = 'none';
+                      document.body.classList.remove('no-scroll');
+                      document.body.style.top = '';
+                      window.scrollTo(0, scrollPosition);
+                  }
                 }
             
                 // Close the modal when clicking outside the image
@@ -1185,13 +1191,15 @@
                     }
                 }
 
-                document.getElementById('open-paint-code-modal').onclick = function() {
-                  if(paintSwatchImage) {
-                    scrollPosition = window.scrollY;
-                    paintSwatchImage.style.display = "block";
-                    paintSwatchModal.style.display = 'flex';
-                    document.body.classList.add('no-scroll');
-                    document.body.style.top = `-${scrollPosition}px`;
+                if(document.getElementById('open-paint-code-modal')) {
+                  document.getElementById('open-paint-code-modal').onclick = function() {
+                    if(paintSwatchImage) {
+                      scrollPosition = window.scrollY;
+                      paintSwatchImage.style.display = "block";
+                      paintSwatchModal.style.display = 'flex';
+                      document.body.classList.add('no-scroll');
+                      document.body.style.top = `-${scrollPosition}px`;
+                    }
                   }
                 }
         
@@ -1398,15 +1406,20 @@
         let cartContents = fetch(window.Shopify.routes.root + 'cart.js')
         .then(response => response.json())
         .then(data => { 
+          console.log('data: ', data);
           if(data.items.length) {
             firstItem = data.items[0].variant_title;
+            let isFirstItemSwatch = data.items[0].product_title.toUpperCase();
+            if(isFirstItemSwatch.includes("SWATCH")) {
+              return;
+            }
             if(firstItem && firstItem !== selectedVariantColor) {
               const matchArray = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
               if(matchArray) {
                 mismatchMessageBtn.textContent = `The color you selected is different from items already in your cart. Would you like to switch to ${firstItem}?`;
                 cancelBtn.textContent = `Yes, Update Color`;
               } else {
-                mismatchMessageBtn.textContent = "The color you selected is different from items already in your cart."
+                mismatchMessageBtn.textContent = "The color you selected is different from the color of items already in your cart."
                 mismatchBtnContainer.style.justifyContent = "center";
                 continueBtn.textContent = "Continue Anyway";
                 continueBtn.style.width = "fit-content";
@@ -1421,18 +1434,22 @@
           })
       });
   
-      continueBtn.addEventListener('click', function() {
-        popup.style.display = "none";
-      })
+      if(continueBtn) {
+        continueBtn.addEventListener('click', function() {
+          popup.style.display = "none";
+        })
+      }
   
-      cancelBtn.addEventListener('click', function() {
-        const matchOption = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
-  
-        if(matchOption) {
-          variantSelector.value = matchOption.value;
-          window.handleVariantChange();
-        }
-        popup.style.display = "none";
-      })
+      if(cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+          const matchOption = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
+    
+          if(matchOption) {
+            variantSelector.value = matchOption.value;
+            window.handleVariantChange();
+          }
+          popup.style.display = "none";
+        })
+      }
     });
   </script>

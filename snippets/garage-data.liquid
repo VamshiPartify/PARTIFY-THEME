@@ -1,38 +1,27 @@
 <script>
-    {% comment %} document.addEventListener("DOMContentLoaded", function() {
-        let easysearchFitmentHeader = document.querySelector('.easysearch-fitment-header');
-
-        setTimeout(() => {
-            if (easysearchFitmentHeader) {
-                console.log('Text content of easysearch-fitment-header after delay:', easysearchFitmentHeader.innerHTML);
-            } else {
-                console.log('Element .easysearch-fitment-header not found');
-            }
-        }, 2000);
-    }); {% endcomment %}
-
-
     if('{{ template.name }}' === 'collection') {
         if({{ collection.title | json }} !== localStorage.getItem("searchTerms") && {{ collection.title | json }} !== null) {
             let newSearchTerm = {{ collection.title | json }};
 
-            if(localStorage.getItem("searchTerms") == null) {
-                localStorage.setItem("searchTerms", "[]");
-            }
+        //The /^\d{4}/.test(newSearchTerm) enforces the first four characters are numbers
+        //The .split(' ') enforces that there are at least three words
+            if (/^\d{4}/.test(newSearchTerm)) {
+                if (newSearchTerm.split(' ').length >= 3) {
+                    if(localStorage.getItem("searchTerms") == null) {
+                        localStorage.setItem("searchTerms", "[]");
+                    }
 
-            let oldSearchTerms = JSON.parse(localStorage.getItem("searchTerms"));
-            if(!oldSearchTerms.includes(newSearchTerm)) {
-                oldSearchTerms.unshift(newSearchTerm);
-                if (oldSearchTerms.length > 5) {
-                    oldSearchTerms.pop();
+                    let oldSearchTerms = JSON.parse(localStorage.getItem("searchTerms"));
+                    if(!oldSearchTerms.includes(newSearchTerm)) {
+                        oldSearchTerms.unshift(newSearchTerm);
+                        if (oldSearchTerms.length > 5) {
+                            oldSearchTerms.pop();
+                        }
+
+                        localStorage.setItem("searchTerms", JSON.stringify(oldSearchTerms));
+                    }
                 }
-
-                localStorage.setItem("searchTerms", JSON.stringify(oldSearchTerms));
             }
         }
     }
-
-    {% comment %} if('{{ template.name }}' === 'product') {
-
-    } {% endcomment %}
   </script>

@@ -144,7 +144,7 @@
             </span>
             {% comment %} We expect you to be aware that there may be a difference in shade. {% endcomment %}
         </p>
-        {% assign associated_paint_swatch = product.vendor | downcase %}
+        {% assign associated_paint_swatch = product.vendor | downcase | replace: ' ', '-' %}
             <a 
                 type="button"
                 id="paint-swatch-link" 
