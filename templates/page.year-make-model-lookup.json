@@ -1,0 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "dynamic_custom_liquid_PBCrtY": {
+      "type": "dynamic-custom-liquid",
+      "disabled": true,
+      "custom_css": [
+
+      ],
+      "settings": {
+        "custom_liquid": "<header class=\"header-section\" style=\"margin: 40px 0; padding: 20px; text-align: center;\">\n    <h1 style=\"color: #0c1a94; font-size: 24pt;\">Find Your Parts by Year, Make, and Model</h1>\n    <p style=\"font-size: 14pt; line-height: 1.5;\">Quickly locate the automotive parts you need.</p>\n</header>"
+      }
+    },
+    "dynamic_custom_liquid_FbFfYG": {
+      "type": "dynamic-custom-liquid",
+      "custom_css": [
+
+      ],
+      "settings": {
+        "custom_liquid": "<header class=\"header-section\" style=\"margin: 40px 0; padding: 20px; text-align: center;\">\n    <h1 style=\"color: #0c1a94; font-size: 24pt;\">Find Your Parts by Year, Make, and Model</h1>\n    <p style=\"font-size: 14pt; line-height: 1.5;\">Quickly locate the automotive parts you need.</p>\n</header>\n{% capture easysearchWidget %}{% render \"easysearch\" %}{% endcapture %}\n{% unless easysearchWidget contains \"Liquid error\" %}{{ easysearchWidget }}{% endunless %}\n\n<style>\n.easysearch-container {\n  margin-top: 0;\n  margin-bottom: 0;\n  background-color: #0c1a94;\n  border-radius: 5px; /* \n  max-width: 1000px;\n  margin: 0 auto;\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Matching the box shadow */\n  padding: 40px; /* Ensured padding matches header */\nbox-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);\n}\n\n#easysearch-search {\n  background: #fdac3a !important;\n  min-width: 200px;\n  text-align: center;\n  font-size: 16pt !important;\n}\n\n.easysearch-btn {\n  color: #0c1a94 !important;\n  margin: 0 auto;\n}\n\n#easysearch_field_4973,\n#easysearch_field_4974,\n#easysearch_field_4975 {\n  min-width: 200px;\n  font-size: 16pt !important;\n}\n\n.easysearch-vertical-mode .easysearch-btn-holder {\n  width: 100% !important;\n}\n</style>\n<div class=\"vehicle-lookup-info\" style=\"margin: 40px 0; padding: 20px; text-align: center;\">\n    <p style=\"font-size: 14pt; line-height: 1.5; margin-bottom: 15px;\">\n        At Partify, our Year, Make, and Model dropdowns allow you to quickly identify parts that fit your vehicle. You can refine your search by product type, helping you locate the specific parts you need with precision.</p>\n    <p style=\"font-size: 14pt; line-height: 1.5; margin-bottom: 20px; font-weight: bold;\">\n        <strong>Note:</strong>  Before completing your purchase, be sure to check the fitment details and submodel information on the product pages. This ensures the part will be the right fit for your vehicle.\n    </p>\n    <p style=\"font-size: 14pt; line-height: 1.5;\">\n        Start your search today and discover how simple it is to find the perfect parts for your ride!\n    </p>\n</div>"
+      }
+    },
+    "dynamic_custom_liquid_UdUzgV": {
+      "type": "dynamic-custom-liquid",
+      "disabled": true,
+      "settings": {
+        "custom_liquid": "<div class=\"vehicle-lookup-info\" style=\"margin: 40px 0; padding: 20px; text-align: center;\">\n    <p style=\"font-size: 14pt; line-height: 1.5; margin-bottom: 15px;\">\n        At Partify, our Year, Make, and Model dropdowns allow you to quickly identify parts that fit your vehicle. You can refine your search by product type, helping you locate the specific parts you need with precision.</p>\n    <p style=\"font-size: 14pt; line-height: 1.5; margin-bottom: 20px; font-weight: bold;\">\n        <strong>Note:</strong>  Before completing your purchase, be sure to check the fitment details and submodel information on the product pages. This ensures the part will be the right fit for your vehicle.\n    </p>\n    <p style=\"font-size: 14pt; line-height: 1.5;\">\n        Start your search today and discover how simple it is to find the perfect parts for your ride!\n    </p>\n</div>"
+      }
+    },
+    "dynamic_custom_liquid_3w9FTj": {
+      "type": "dynamic-custom-liquid",
+      "disabled": true,
+      "settings": {
+        "custom_liquid": ""
+      }
+    },
+    "dynamic_custom_liquid_tttJRW": {
+      "type": "dynamic-custom-liquid",
+      "disabled": true,
+      "custom_css": [
+        ".what-makes-partify-different iframe {max-width: 100%; height: auto;}"
+      ],
+      "settings": {
+        "custom_liquid": "<div class=\"what-makes-partify-different\" style=\"margin: 40px 0; text-align: center;\">\n    <h2 style=\"color: #0c1a94;\">What Makes Partify Different?</h2>\n    <p style=\"font-size: 16pt; margin-bottom: 20px;\">\n        At Partify, we pride ourselves on offering a seamless shopping experience for auto parts. Our commitment to quality, affordability, and exceptional customer service sets us apart from the competition.\n    </p>\n    \n    <div class=\"video-placeholder\" style=\"position: relative; max-width: 560px; height: auto; margin: 0 auto; overflow: hidden; border-radius: 8px;\">\n        <a href=\"https://www.youtube.com/watch?v=_M47bLg8Zg8\" target=\"_blank\">\n            <img src=\"https://img.youtube.com/vi/_M47bLg8Zg8/hqdefault.jpg\" \n                 alt=\"YouTube video thumbnail\" \n                 style=\"width: 100%; height: auto; cursor: pointer;\">\n        </a>\n        <iframe \n            width=\"560\" \n            height=\"315\" \n            src=\"https://www.youtube.com/embed/_M47bLg8Zg8?rel=0\" \n            title=\"YouTube video player\" \n            frameborder=\"0\" \n            allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" \n            referrerpolicy=\"strict-origin-when-cross-origin\" \n            allowfullscreen \n            loading=\"lazy\" \n            style=\"display: none;\">\n        </iframe>\n        <noscript>\n            <iframe \n                width=\"560\" \n                height=\"315\" \n                src=\"https://www.youtube.com/embed/_M47bLg8Zg8?rel=0\" \n                title=\"YouTube video player\" \n                frameborder=\"0\" \n                allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" \n                referrerpolicy=\"strict-origin-when-cross-origin\" \n                allowfullscreen>\n            </iframe>\n        </noscript>\n    </div>\n\n    <p style=\"font-size: 16pt; margin-top: 20px;\">\n        Discover how we help you find the right parts for your vehicle and ensure a hassle-free installation process!\n    </p>\n</div>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "dynamic_custom_liquid_PBCrtY",
+    "dynamic_custom_liquid_FbFfYG",
+    "dynamic_custom_liquid_UdUzgV",
+    "dynamic_custom_liquid_3w9FTj",
+    "dynamic_custom_liquid_tttJRW"
+  ]
+}
