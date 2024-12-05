@@ -632,6 +632,41 @@
           opacity: 0.8;
           position: relative;
       }
+
+      .option-title-vin {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 3px;
+        color: #333;
+      }
+
+      #vin-textbox-container-for-oem {
+        width: 100%;
+      }
+
+      #vin-textbox-container-for-oem input {
+          margin: 0;
+      }
+
+      #vin-textbox-for-oem:disabled {
+        background-color: #f0f0f0;
+        color: #ccc;
+        pointer-events: none;
+        opacity: 0.6;
+      }
+
+      #vin-textbox-for-oem {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      #vin-warning-for-oem {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      }
   </style>
   {% comment %} {% render 'cart-swatch-checker' %} {% endcomment %}
   {% comment %} {% render 'black-friday-button' %} {% endcomment %}
@@ -797,6 +832,21 @@
                   </div>
                 </div>
               </div>
+              {% if product.title contains 'OEM' %}
+                <div class="oem-vin-container" style="display: block; width: 100%; padding-top: 5px;">
+                  <label class="option-title-vin" for="product-type-select">VIN</label>
+                  <div id="vin-textbox-container-for-oem">
+                    <input
+                        type="text"
+                        id="vin-textbox-for-oem"
+                        name="properties[VIN]"
+                        placeholder="Enter your VIN"
+                        maxlength="17"
+                    >
+                    <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+                  </div>
+                </div>
+              {% endif %}
               <div class="divider-small-screen"></div>
               <div class="unpainted-add-to-cart-btn-container">
                 <input type="hidden" name="id" value="{{ product.variants.first.id }}">
@@ -915,7 +965,7 @@
         
   
         // Customization portion
-            document.addEventListener('DOMContentLoaded', () => {
+          document.addEventListener('DOMContentLoaded', () => {
             const fitmentPage = document.getElementById('fitment-verification-page');
             const fitmentFailPage = document.getElementById('model-fitmentfail-button-container');
             const addToCartPage = document.getElementById('add-to-cart-page');
@@ -923,6 +973,8 @@
             const variantSelector = document.getElementById('variant-selector');
             const form = document.getElementById('product-form');
             const addToCartButton = document.getElementById('add-to-cart');
+            const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
+            const vinTextBox = document.getElementById('vin-textbox');
 
             //Used for How to find Paint Code
             const paintSwatchImage = document.getElementById('paint-swatch-image');
@@ -976,10 +1028,25 @@
                     }
                     fitmentFailButton.style.display = 'block';
                     fitmentSuccess = false;
+                    if(vinTextBoxOEM) {
+                      vinTextBoxOEM.disabled = true;
+                    }
                 } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){
                     fitmentFailButton.style.display = 'none';
-                    addToCartButtonForUnpaintedItems.style.display = 'block';
-                    addToCartButtonForUnpaintedItems.disabled = false;
+                    //If vinTextBoxOEM means on unpainted product that is OEM
+                    if(vinTextBoxOEM) {
+                      vinTextBoxOEM.disabled = false;
+                    }
+                    //If vinTextBox means customer is on painted product page
+                    if(vinTextBox) {
+                      addToCartButtonForUnpaintedItems.style.display = 'block';
+                      addToCartButtonForUnpaintedItems.disabled = false;
+                    }
+                    //No vin textbox and no oem box means on unpainted product page that is not OEM
+                    if(!vinTextBox && !vinTextBoxOEM) {
+                      addToCartButtonForUnpaintedItems.style.display = 'block';
+                      addToCartButtonForUnpaintedItems.disabled = false;
+                    }
                     let event = new Event('eventFitmentSuccess');
                     easyFitmentSuccess.dispatchEvent(event);
                     fitmentSuccess = true;
@@ -989,9 +1056,12 @@
                     fitmentSuccess = false;
                 }
                 } else {
-                fitmentFailButton.style.display = 'none';
-                addToCartButtonForUnpaintedItems.style.display = 'block';
-                addToCartButtonForUnpaintedItems.disabled = true
+                  fitmentFailButton.style.display = 'none';
+                  addToCartButtonForUnpaintedItems.style.display = 'block';
+                  addToCartButtonForUnpaintedItems.disabled = true
+                  if(vinTextBoxOEM) {
+                    vinTextBoxOEM.disabled = true;
+                  }
                 }
                 handleFitmentSuccessChange();
             }
@@ -1264,6 +1334,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const variantSelector = document.getElementById('variant-selector');
             const vinTextBox = document.getElementById('vin-textbox');
+            const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
             const addToCartButton = document.getElementById('add-to-cart');
             const useVinButton = document.getElementById('select-vin-variant');
             const paintOrVin = document.querySelector('.paint-or-vin');
@@ -1292,9 +1363,12 @@
                 }
               }
             }
+
     
             // Check variant on change
-            variantSelector.addEventListener('change', checkVariant);
+            if(variantSelector) {
+              variantSelector.addEventListener('change', checkVariant);
+            }
     
             // Initial check in case a default selected variant is the VIN variant
             {% comment %} checkVariant(); {% endcomment %}
@@ -1320,6 +1394,38 @@
                       vinSuccess = true;    
                   } else {
                       addToCartButton.disabled = true;
+                      vinSuccess = false;
+                  }
+              });
+            };
+
+            if(!vinTextBox && vinTextBoxOEM) {
+              document.getElementById('vin-textbox-for-oem').addEventListener('input', function(event) {
+
+                  const vinInput = event.target.value.toUpperCase();
+                  const warning = document.getElementById('vin-warning-for-oem');
+                  const addToCartButtonForUnpaintedItems = document.getElementById("add-to-cart-for-unpainted");
+
+      
+                  // Remove I, O, Q characters
+                  const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
+
+
+                  if (vinInput !== filteredValue) {
+                      alert("Please enter valid characters. I,O, & Q and other special characters are not included in VINs");
+                  } else {
+                      warning.style.display = 'none';
+                  }
+
+                  event.target.value = filteredValue;
+
+
+                  // Ensure VIN input is 17 characters before enabling Add to Cart
+                  if (vinInput.length === 17 && fitmentSuccess) {
+                    addToCartButtonForUnpaintedItems.disabled = false;
+                      vinSuccess = true;    
+                  } else {
+                    addToCartButtonForUnpaintedItems.disabled = true;
                       vinSuccess = false;
                   }
               });
@@ -1406,7 +1512,6 @@
         let cartContents = fetch(window.Shopify.routes.root + 'cart.js')
         .then(response => response.json())
         .then(data => { 
-          console.log('data: ', data);
           if(data.items.length) {
             firstItem = data.items[0].variant_title;
             let isFirstItemSwatch = data.items[0].product_title.toUpperCase();
