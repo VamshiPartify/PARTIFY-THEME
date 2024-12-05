@@ -1,4 +1,4 @@
-Steps to add update and merge new branches:
+**Steps to add update and merge new branches:**
 1. shopify theme pull
 2. git init
 3. git remote add origin https://github.com/elkaholic6/shopify-git-test.git
@@ -12,7 +12,7 @@ Steps to add update and merge new branches:
 11. create PR
 12. Merge changes once feature is live to keep main branch up-to-date
 
-If i made changes but want to make sure I am up to date with current Shopify theme
+**If i made changes but want to make sure I am up to date with current Shopify theme**
 1. git stash
 2. shopify theme pull
 3. git add .
@@ -20,7 +20,7 @@ If i made changes but want to make sure I am up to date with current Shopify the
 5. Fix conflicts if any
 
 
-Workflow for new feature
+**Workflow for new feature**
 1. shopify theme pull
 2. git init
 3. git remote add origin https://github.com/elkaholic6/shopify-git-test.git
