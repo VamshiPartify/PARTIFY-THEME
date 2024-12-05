@@ -1028,9 +1028,9 @@
                     }
                     fitmentFailButton.style.display = 'block';
                     fitmentSuccess = false;
-                    {% comment %} if(vinTextBoxOEM) {
+                    if(vinTextBoxOEM) {
                       vinTextBoxOEM.disabled = true;
-                    } {% endcomment %}
+                    }
                 } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){
                     fitmentFailButton.style.display = 'none';
                     //If vinTextBoxOEM means on unpainted product that is OEM
