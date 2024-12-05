@@ -1,15 +1,16 @@
 Steps to add update and merge new branches:
 1. shopify theme pull
 2. git init
-3. git checkout -b feature/major-changes (or any other branch name e.g. feature/cool-branch)
-4. Use source control within VScode to fix conflicting files (choose to keep current changes if I made changes on vscode before comparing to git main branch, keep incoming if I want to incorporate changes already on main)
-5. git add .
-6. git commit (maybe add a message too)
-7. git push -u origin feature/major-changes (or any other branch name e.g. feature/cool-branch)
-8. git pull origin main --allow-unrelated-histories
-9. Compare diffs, make sure they are correct
-10. create PR
-11. Merge changes once feature is live to keep main branch up-to-date
+3. git remote add origin https://github.com/elkaholic6/shopify-git-test.git
+4. git checkout -b feature/major-changes (or any other branch name e.g. feature/cool-branch)
+5. Use source control within VScode to fix conflicting files (choose to keep current changes if I made changes on vscode before comparing to git main branch, keep incoming if I want to incorporate changes already on main)
+6. git add .
+7. git commit (maybe add a message too)
+8. git push -u origin feature/major-changes (or any other branch name e.g. feature/cool-branch)
+9. git pull origin main --allow-unrelated-histories
+10. Compare diffs, make sure they are correct
+11. create PR
+12. Merge changes once feature is live to keep main branch up-to-date
 
 
 Workflow for new feature
