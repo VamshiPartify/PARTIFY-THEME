@@ -438,6 +438,7 @@
     font-weight: 700;
     font-size: large;
     cursor: pointer;
+    margin-bottom: 10px;
     }
 
   .conditional-small-screen {
@@ -675,9 +676,12 @@
       {% if product.title contains 'Swatch' %}
         <!-- Form for Swatches -->
           <form id="product-form-swatches" method="post" action="/cart/add">
-            {% comment %} <div class="price-container-large-screen">
-              <div id="price-display">{{ product.price_min | money }}</div>
-            </div>  {% endcomment %}
+            <div id="model-fitmentfail-button-container">
+              <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
+                <div class="model-fitment-easysearch-container">
+                    <div class="easysearch-embed-widget-fitment"></div>
+                </div>
+            </div>
             <!-- Variant Selector -->
             <select id="variant-selector" name="id">
               <option value="" selected disabled>Select Paint Option*</option>
