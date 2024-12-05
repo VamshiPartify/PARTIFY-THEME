@@ -12,6 +12,13 @@ Steps to add update and merge new branches:
 11. create PR
 12. Merge changes once feature is live to keep main branch up-to-date
 
+If i made changes but want to make sure I am up to date with current Shopify theme
+1. git stash
+2. shopify theme pull
+3. git add .
+4. git stash pop
+5. Fix conflicts if any
+
 
 Workflow for new feature
 1. shopify theme pull
