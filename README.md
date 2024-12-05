@@ -9,7 +9,7 @@ Steps to add update and merge new branches:
 8. git pull origin main --allow-unrelated-histories
 9. Compare diffs, make sure they are correct
 10. create PR
-11. Merge changes
+11. Merge changes once feature is live to keep main branch up-to-date
 
 
 Workflow for new feature
