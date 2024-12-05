@@ -1,0 +1,40 @@
+<style>
+    #price-display, #price-display-small-screen {
+        font-size: 1.7em;
+        font-weight: bold;
+        color: #333;
+        {% comment %} padding-left: 20px; {% endcomment %}
+        width: fit-content;
+        text-align: left;
+      }
+
+    .price-container {
+        width: 100%;
+        display: flex;
+        min-height: 34px;
+    }
+
+    .price-container-large-screen {
+        display: none;
+    }
+
+    @media (min-width: 720px) {
+        .price-container {
+            display: none;
+        }
+
+        .price-container-large-screen {
+            display: flex;
+            min-height: 34px;
+        }
+    }
+</style>
+<div>
+    <div class="price-container-large-screen">
+        <div id="price-display">{{ product.price_min | money }}</div>
+    </div> 
+
+    <div class="price-container">
+        <div id="price-display-small-screen">{{ product.price_min | money }}</div>
+    </div> 
+</div>
