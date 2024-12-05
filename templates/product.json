@@ -1,0 +1,559 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "static-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "b0e438c8-4795-49ce-80cb-6a21e1798e46": {
+          "type": "shopify://apps/yotpo-product-reviews/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "settings": {
+            "product": "{{product}}"
+          }
+        },
+        "custom_liquid_JeCXVF": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{% render 'product-page-price' %}"
+          }
+        },
+        "price": {
+          "type": "price",
+          "disabled": true,
+          "settings": {}
+        },
+        "affirm_pay_over_time_messaging_product_block_ytR9C3": {
+          "type": "shopify://apps/affirm-pay-over-time-messaging/blocks/product-block/6dce54be-130d-4d13-9636-1e8f611b3071",
+          "settings": {
+            "logo_align": "left",
+            "font_size": 16,
+            "logo_color": "blue",
+            "logo_type": "logo",
+            "public_api_key": "",
+            "price_selector": ""
+          }
+        },
+        "custom_liquid_9kgHLn": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "<class = 'affirm-as-low-as'>"
+          }
+        },
+        "custom_liquid_W7THLx": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{%if product.title contains \"CAPA Certified\" %}\n<img src=\"https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Capa_Certified_Icon_26a22ba1-e72d-4724-a44d-e73fbf1f0d2d.png?>v=1714511905\">{% endif %}\n{%if product.title contains \"OEM\" %}\n<img src=\"https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png?v=1715627168\">{% endif %}"
+          }
+        },
+        "5006f5e7-554d-4cc1-a089-51bc9c37611e": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{%- if product.metafields.custom.product_fitment!= blank -%}Model Fitment: <b style=\"color:#00000\" line-height:3em;>{{product.metafields.custom.product_fitment}}</b>{% endif %}"
+          }
+        },
+        "61112cbc-8780-4d01-873f-9aa747212ed9": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{% render 'delivery-countdown' %}"
+          }
+        },
+        "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{%if product.tags contains \"Quickship\" or product.tags contains \"Stocked\" %}\n    <p><b>Availability: </b><img src=\"https://cdn.shopify.com/s/files/1/1788/2309/files/Checkmark.jpg?v=1700771717\" width=\"11\"><b style=\"color:#01a601\"> Ships within 2-3 business days!</p></b>\n{% elsif product.tags contains \"Paint Sample\" %}\n<b>Free Shipping!  </b><img src=\"https://cdn.shopify.com/s/files/1/1788/2309/files/Checkmark.jpg?v=1700771717\" width=\"11\"><b style=\"color:#01a601\"> Ships within 1-2 business days!</p></b>\n{% elsif product.variants.first.inventory_policy == \"continue\" %}<p><b>Availability: </b><img src=\"https://cdn.shopify.com/s/files/1/1788/2309/files/Checkmark.jpg?v=1700771717\" width=\"11\"><b style=\"color:#01a601\"> Ships within 3-7 business days!</p></b>\n  {% endif %}"
+          }
+        },
+        "arrivesby_delivery_estimate_GtVWkc": {
+          "type": "shopify://apps/arrivesby/blocks/delivery-estimate/b4f15d36-71f0-4a8c-954f-e485b7529360",
+          "settings": {
+            "show_offer": false,
+            "show_countdown": true,
+            "show_location": true,
+            "show_shipping_policy": false,
+            "text_color": "#121212",
+            "background_color": "",
+            "countdown_color": "#32741e",
+            "icon": "",
+            "offer_text": "<strong>FREE</strong> shipping",
+            "date_format": "long",
+            "delivery_estimate_message": "Arrives by",
+            "countdown_message": "Order within",
+            "deliver_to_message": "Deliver to"
+          }
+        },
+        "arrivesby_delivery_time_CtCA7H": {
+          "type": "shopify://apps/arrivesby/blocks/delivery-time/b4f15d36-71f0-4a8c-954f-e485b7529360",
+          "disabled": true,
+          "settings": {
+            "font_size": 16,
+            "text_align": "left",
+            "text_color": "#121212",
+            "background_color": "#fafafa",
+            "icon": "",
+            "heading": "",
+            "prefix": "Ships By",
+            "separator": "-",
+            "suffix": "From Michigan",
+            "date_format": "long",
+            "show_shipping_policy": false,
+            "show_delivery_cutoff": true,
+            "cutoff_time_format": "timer",
+            "cutoff_message": "Order within"
+          }
+        },
+        "custom_liquid_dzWzKA": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "<div id=\"details\">{%- if product.metafields.custom.keystone_description!= blank -%}\n<div class=\"easysearch-custom-metafield\"><p>Additional Fitment Details</p><div>{{ product.metafields.custom.keystone_description }}</div></div>\n{%- endif -%}</div>"
+          }
+        },
+        "easysearch_ymm_easysearch_fitment_widget_nbATPE": {
+          "type": "shopify://apps/easysearch-ymm/blocks/easysearch-fitment-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
+          "disabled": true,
+          "settings": {
+            "placement_selector": "",
+            "insert_method": "prepend"
+          }
+        },
+        "custom_liquid_eHTi9X": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<div id=\"button-row\">\n{%- if product.metafields.custom.howtofindpaintcodeurl!= blank -%}\n    <div id=\"buttons\">\n      {% render 'product-unfolded-popup' %}\n    </div>\n  {%- endif %}\n {%- if product.metafields.custom.vin_variant_id!= blank -%}\n    <!-- Custom Liquid Block -->\n    <!-- Button to select a specific variant -->\n    <button id=\"vin-url\" class=\"btn btn-primary\">Click Here to Use VIN Instead</button>\n  {%- endif %}  \n\n\n \n</div>\n\n<!-- JavaScript to search for the variant -->\n<script>\n  document.addEventListener('DOMContentLoaded', function() {\n    var searchButton = document.getElementById('vin-url');\n    var variantIdToSearch = {{ product.metafields.custom.vin_variant_id | json }};\n    searchButton.addEventListener('click', function() {\n      var currentUrl = new URL(window.location.href);\n      currentUrl.searchParams.set('variant', variantIdToSearch);\n      currentUrl.hash = 'details';\n      window.location.href = currentUrl.href;\n      console.log('Redirecting to:', currentUrl.href);\n    });\n  });\n</script>\n\n<script>\n  document.addEventListener('DOMContentLoaded', function() {\n    var searchButton = document.getElementById('vin-url');\n    var variantIdToSearch = {{ product.metafields.custom.vin_variant_id | json }}; // Replace with your desired variant ID\n    searchButton.addEventListener('click', function() {\n      // Get the current URL\n      var currentUrl = new URL(window.location.href);\n      \n      // Add the variant ID as a query parameter\n      currentUrl.searchParams.set('variant', variantIdToSearch);\n\n      // Append #vin-url to the end of the URL\n      currentUrl.hash = 'details';\n\n      // Redirect to the updated URL\n      window.location.href = currentUrl.href;\n\n      console.log('Redirecting to:', currentUrl.href);\n    });\n  });\n</script>\n\n<style>\n/* Desktop */\n#vin-url {\n  display: block;\n  color: #fff;\n  background-color: #0866ff;\n  border: none;\n  font-size: 18px;\n  padding: 10px 20px; /* Adjust padding */\n  max-width: 500px; /* Limit maximum width */\n  margin: 20px 0 ; /* Adjust margin */\n  text-align: left; /* Align text to left */\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n}\n#vin-url:hover {\n  background-color: #063175;\n\n}\n#button-row{display:flex; gap: 0 10px; /* Space between buttons */\n  flex-wrap: wrap; /* Wrap buttons on smaller screens */}\n/* Phone */\n@media only screen and (max-width: 590px) {\n#button-row{display:block; gap: 0px; /* Space between buttons */\n  flex-wrap: wrap; /* Wrap buttons on smaller screens */}\n  #vin-url {\n    color: #fff;\n    background-color: #0866ff;\n    border: none;\n    font-size: 16px;\n    padding: 12px 0; /* Adjust vertical padding */\n    width: 100%; /* Full width button\n    margin: 10px auto; /* Center button */\n    text-align: center;\n    cursor: pointer;\n    transition: background-color 0.3s ease;\n  }\n  #vin-url:hover {\n    background-color: #063175;\n  }\n}\n\n</style>"
+          }
+        },
+        "custom_liquid_tBB8WB": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{% if product.available == true or product.variants.first.inventory_policy == 'continue' %}<div id=\"buttons\">\n      {% render 'Customize Button' %}\n    </div>{% endif %}"
+          }
+        },
+        "custom_liquid_EKKgEh": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "<div id=\"buttons\">\n      {% render 'product-page-customization' %}\n    </div>"
+          }
+        },
+        "custom_liquid_7ik3my": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<b>Find My Paint Code</b>"
+          }
+        },
+        "e663a24f-1006-459a-8a37-8f77bfe52850": {
+          "type": "shopify://apps/infinite-options/blocks/app-block/7e73b6f9-82b0-45f5-9b9b-04f446ba1a9b",
+          "disabled": true,
+          "settings": {}
+        },
+        "custom_liquid_XyjxVd": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{%- if product.metafields.custom.associated_paint_swatch!= blank -%}\n<a href=\"#paint-match-section\" class=\"paint-match-button\">Worried about our Paint Match? Order a Sample.</a>\n<style>\n.paint-match-link {\n  color: #007bff;\n  font-weight: bold;\n  font-size: 18px;\n  text-decoration: none;\n  padding: 5px 10px;\n  border-bottom: 2px solid transparent;\n  transition: all 0.3s ease;\n}\n\n.paint-match-link:hover {\n  color: #0056b3;\n  border-bottom: 2px solid #0056b3;\n}</style>\n{% endif %}"
+          }
+        },
+        "custom_liquid_qMFNLp": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "<div id=\"Vin-Lookup\"></div>"
+          }
+        },
+        "custom_liquid_cnnecd": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{% if product.tags contains \"Option: Painted\" %}\n<p><b>PREMIUM PAINT JOB:</b> 1 coat of primer, 2 coats of color, and 2 coats of clear. Partify paints just like the factory does. 97%-99% color match guaranteed.  </p><p>\n  {% endif %}"
+          }
+        },
+        "custom_liquid_QhiWpf": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{% if product.tags contains \"Unfolded Option\" %}\n<h6><p><b style=\"color:#FF000F\"> Unfolded Shipping:</b> This bumper ships unfolded. Ready to install on your vehicle immediately. Guaranteed to arrive with no damage. Not like our competitors who aggressively fold this bumper which causes deformity and paint cracking. </p></h6>{% endif %}"
+          }
+        },
+        "36419bf2-c0eb-45fa-8ebc-68487c89820c": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{% if product.tags contains \"Economy/Premium\" %}<p>\nAt checkout you will be presented with two different shipping options.</p>\n<p><b>STANDARD SHIPPING:</b> Your bumper will be folded for the most inexpensive shipping possible. This method can cause imperfections.</p>\n<p><b>PREMIUM SHIPPING:</b> Your bumper will come unfolded. Guaranteed to arrive with no damage.</p>\n  {% endif %}"
+          }
+        },
+        "custom_liquid_MwatAr": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{% if product.tags contains \"Economy/Freight\" %}<p>\nAt checkout you will be presented with two different shipping options.</p>\n<p><b>STANDARD SHIPPING:</b> Your bumper will be folded for the most inexpensive shipping possible. This method can cause imperfections.</p>\n<p><b>FREIGHT SHIPPING:</b> Your bumper will come unfolded. Guaranteed to arrive with no damage.</p>\n  {% endif %}"
+          }
+        },
+        "custom_liquid_JaA9hJ": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{% if product.type == \"Tailgate\" %}\n<div class=\"Unfolded\"><iframe width=\"100%\" height=\"350px\" src=\"https://www.youtube.com/embed/4_-MjnIKiNU?si=14KAut6ANOVHfy6N\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe></div>\n{% endif %}"
+          }
+        },
+        "custom_liquid_fxV6cn": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{% if product.tags contains \"Unfolded Option\" %}\n<div class=\"Unfolded\">\n    <div class=\"youtube-placeholder\" data-src=\"https://www.youtube.com/embed/RNA07HvpgXM?si=_XSgQ-IuNohDFvS9\" style=\"width: 100%; height: 350px; background-image: url('https://img.youtube.com/vi/RNA07HvpgXM/hqdefault.jpg'); background-size: cover; background-position: center; cursor: pointer;\">\n    </div>\n</div>\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function() {\n    const lazyLoad = (element) => {\n        const iframe = document.createElement('iframe');\n        iframe.setAttribute('width', '100%');\n        iframe.setAttribute('height', '350px');\n        iframe.setAttribute('src', element.getAttribute('data-src'));\n        iframe.setAttribute('title', 'YouTube video player');\n        iframe.setAttribute('frameborder', '0');\n        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; web-share');\n        iframe.setAttribute('allowfullscreen', '');\n\n        element.parentNode.replaceChild(iframe, element);\n    };\n\n    const observer = new IntersectionObserver((entries) => {\n        entries.forEach(entry => {\n            if (entry.isIntersecting) {\n                lazyLoad(entry.target);\n                observer.unobserve(entry.target);\n            }\n        });\n    }, { threshold: 0.1 });\n\n    document.querySelectorAll('.youtube-placeholder').forEach(element => observer.observe(element));\n});\n</script>\n{% endif %}"
+          }
+        },
+        "description": {
+          "type": "description",
+          "disabled": true,
+          "settings": {}
+        },
+        "custom_liquid_hNWmYL": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{%- if product.metafields.custom.keystone_description!= blank -%}<b>Additional Details</b>\n<ul>\n{{product.metafields.custom.keystone_description| replace: '•', '</li><li>' }}</li></ul>{%- endif -%}"
+          }
+        },
+        "46d75d9b-6bf4-4de3-95b8-6bf0d36a486f": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<p><img src=\"https://cdn.shopify.com/s/files/1/0248/6291/6693/files/US-United-States-Flag-icon.png?v=1703109236\" width=\"25\"><b> Ships From Fraser, Michigan</b></p>"
+          }
+        },
+        "0165ca06-dd14-444d-91f3-3d5080c7f8b8": {
+          "type": "collapsible-tab",
+          "disabled": true,
+          "settings": {
+            "collapsible_tab_heading": "OEM Part Numbers",
+            "collapsible_tab_text": "<p>{{ product.metafields.custom.product_oem_ | metafield_tag }}</p>"
+          }
+        },
+        "custom_liquid_e9GQq4": {
+          "type": "custom-liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "{%- if product.metafields.custom.product_oem_!= blank -%}OEM Part #: <b style=\"color:#00000\" line-height:3em;>{{product.metafields.custom.product_oem_}}</b>{% endif %}"
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "b0e438c8-4795-49ce-80cb-6a21e1798e46",
+        "custom_liquid_JeCXVF",
+        "price",
+        "affirm_pay_over_time_messaging_product_block_ytR9C3",
+        "custom_liquid_9kgHLn",
+        "custom_liquid_W7THLx",
+        "5006f5e7-554d-4cc1-a089-51bc9c37611e",
+        "61112cbc-8780-4d01-873f-9aa747212ed9",
+        "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6",
+        "arrivesby_delivery_estimate_GtVWkc",
+        "arrivesby_delivery_time_CtCA7H",
+        "custom_liquid_dzWzKA",
+        "easysearch_ymm_easysearch_fitment_widget_nbATPE",
+        "custom_liquid_eHTi9X",
+        "custom_liquid_tBB8WB",
+        "custom_liquid_EKKgEh",
+        "custom_liquid_7ik3my",
+        "e663a24f-1006-459a-8a37-8f77bfe52850",
+        "custom_liquid_XyjxVd",
+        "custom_liquid_qMFNLp",
+        "custom_liquid_cnnecd",
+        "custom_liquid_QhiWpf",
+        "36419bf2-c0eb-45fa-8ebc-68487c89820c",
+        "custom_liquid_MwatAr",
+        "custom_liquid_JaA9hJ",
+        "custom_liquid_fxV6cn",
+        "description",
+        "custom_liquid_hNWmYL",
+        "46d75d9b-6bf4-4de3-95b8-6bf0d36a486f",
+        "0165ca06-dd14-444d-91f3-3d5080c7f8b8",
+        "custom_liquid_e9GQq4",
+        "share"
+      ],
+      "custom_css": [
+        ".spb-select {font-size: 12px;}",
+        ".quantity-selector {display: none;}",
+        ".delivery-time-variant {font-family: lato; color: #01a601; font-size: 16px;}",
+        ".arrivesby-dt {background-color: #ffffff;}",
+        ".arrivesby-dt-timer {font-family: lato; font-weight: medium; font-size: 16px;}",
+        ".delivery-date-earliest-value {color: #01a601; font-family: lato; font-size: 16px;}",
+        ".quantity-selector {display: none !important;}",
+        ".product-title {font-size: 18px; overflow-wrap: anywhere;}"
+      ],
+      "settings": {
+        "gallery_aspect_ratio": "square",
+        "gallery_image_crop": true,
+        "gallery_thumbnail_position": "below",
+        "gallery_video_autoplay": false,
+        "gallery_video_looping": false,
+        "gallery_hover_zoom": "disabled",
+        "gallery_click_to_zoom": "always"
+      }
+    },
+    "655a9f95bcc3be27ea06": {
+      "type": "apps",
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "custom_collapsible_blocks_6WrnVa": {
+      "type": "Custom-Collapsible-Blocks",
+      "blocks": {
+        "collapsible_text_8yaD9P": {
+          "type": "collapsible_text",
+          "settings": {
+            "block_title": "Description",
+            "block_content": "<div class=\"product-description-collapsible-text\">{{product.description}} </div>"
+          }
+        },
+        "collapsible_text_Ttcq3E": {
+          "type": "collapsible_text",
+          "settings": {
+            "block_title": "Capa Quality",
+            "block_content": "{% if product.title contains 'CAPA' %}\n  <div class=\"capa-quality-description\">\n    <b>About Capa Quality</b>\n    <p>Capa products are known for their exceptional quality, crafted with precision and attention to detail. You can trust that every Capa item you purchase meets the highest standards of durability and performance.</p>\n  </div>\n{% endif %}"
+          }
+        },
+        "collapsible_text_VPzttP": {
+          "type": "collapsible_text",
+          "settings": {
+            "block_title": "What Are Headlight Washers Holes?",
+            "block_content": "{% if product.title contains 'Headlight Washer' %}\n  <div class=\"headlight-washer-description\">\n    <b>Does my vehicle have Headlight Washer Holes?</b>\n    <p>\nHeadlight washer holes are small openings near the headlights, usually found on the front bumper, that contain retractable nozzles for cleaning the headlight lenses. These washers are designed to spray high-pressure water or cleaning fluid to clear away dirt, grime, or snow, helping to maintain optimal visibility. Before ordering this product, it's important for you to double-check if your vehicle has headlight washer holes, as not all models are equipped with them. Ensuring compatibility will help avoid installation issues and ensure the product fits correctly.</p>\n  </div>\n{% endif %}"
+          }
+        },
+        "collapsible_text_E6GKc7": {
+          "type": "collapsible_text",
+          "settings": {
+            "block_title": "What Are Sensor Holes?",
+            "block_content": "{% if product.title contains 'Sensor' %}\n  <div class=\"sensor-hole-description\">\n    <b>Does my vehicle have Sensor Holes?</b>\n    <p>\nSensor holes are small openings on a vehicle’s bumper or body panels that house sensors used for parking assistance, collision detection, or adaptive cruise control. These sensors help detect obstacles, measure distance, and enhance the vehicle's safety features. Before purchasing, be sure to double-check if your vehicle is equipped with sensor holes, as not all models have them. Confirming compatibility will help avoid any installation issues and ensure the product fits perfectly.</p>\n  </div>\n{% endif %}"
+          }
+        },
+        "collapsible_text_kzEiiY": {
+          "type": "collapsible_text",
+          "settings": {
+            "block_title": "OEM Part Numbers",
+            "block_content": "{%- if product.metafields.custom.product_oem_!= blank -%} <div class=\"oem-part-numbers\">\n    <b>{{ product.variants[0].sku }}'s OEM Part Number(s)?</b>\n    <p>\n{{product.metafields.custom.product_oem_}}</p>\n  </div>{% endif %}"
+          }
+        },
+        "collapsible_text_jQjJRy": {
+          "type": "collapsible_text",
+          "settings": {
+            "block_title": "Why Choose CAPA?",
+            "block_content": "{%- if product.metafields.custom.capa_product!= blank -%}\n<p>CAPA-certified parts meet or exceed OEM standards, ensuring high-quality, reliable replacements at a more affordable price.</p>\n\n    <ul>\n        <li><strong>Quality Assurance:</strong> CAPA parts are rigorously tested to meet or exceed OEM performance standards.</li>\n        <li><strong>Exact Fit:</strong> Designed to fit your vehicle model seamlessly, just like OEM parts.</li>\n        <li><strong>Cost-Effective:</strong> Affordable replacements without compromising on quality or safety.</li>\n        <li><strong>Certified Safety:</strong> CAPA parts undergo safety and durability testing to meet industry standards.</li>\n    </ul>{% endif %}"
+          }
+        },
+        "collapsible_text_TaKyUT": {
+          "type": "collapsible_text",
+          "settings": {
+            "block_title": "Why Choose OEM?",
+            "block_content": "{%- if product.metafields.custom.oem_product!= blank -%}\n<p>OEM parts are built to the exact specifications of your vehicle, ensuring a perfect fit, high performance, and reliability.</p>\n\n    <ul>\n        <li><strong>Exact Fit:</strong> Made specifically for your model, guaranteeing seamless installation and performance.</li>\n        <li><strong>Premium Materials:</strong> Crafted with high-quality materials for durability and longevity.</li>\n        <li><strong>Superior Paint Adhesion:</strong> Holds paint better for a lasting, high-quality finish.</li>\n        <li><strong>Safety:</strong> Meets original safety standards for peace of mind.</li>\n    </ul>{% endif %}"
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_text_8yaD9P",
+        "collapsible_text_Ttcq3E",
+        "collapsible_text_VPzttP",
+        "collapsible_text_E6GKc7",
+        "collapsible_text_kzEiiY",
+        "collapsible_text_jQjJRy",
+        "collapsible_text_TaKyUT"
+      ],
+      "custom_css": [],
+      "settings": {}
+    },
+    "17144009168f88b4d9": {
+      "type": "apps",
+      "blocks": {
+        "easysearch_year_make_model_easysearch_fitment_widget_ex6FfB": {
+          "type": "shopify://apps/easysearch-ymm/blocks/easysearch-fitment-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
+          "disabled": true,
+          "settings": {
+            "placement_selector": "",
+            "insert_method": "prepend"
+          }
+        }
+      },
+      "block_order": [
+        "easysearch_year_make_model_easysearch_fitment_widget_ex6FfB"
+      ],
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "d57f4867-0187-4e19-abcb-f92373d4433d": {
+      "type": "dynamic-custom-liquid",
+      "custom_css": [
+        "@media only screen and (max-width: 450px) {table {overflow-x: auto; max-width: 100% !important; width: 100%; font-size: 10px; } tr {font-size: 9.5px; }}",
+        "@media only screen and (min-width: 451px) {table {width: 80%; }}",
+        "h3 {padding-top: 20px; margin: 0 auto; text-align: center; padding-bottom: 30px;}",
+        "table {margin: 0 auto; text-align: center; max-width: 100%; table-layout: fixed;}",
+        "th {font-style: strong; font-size: 14px; white-space: nowrap;}",
+        "table,th,td {border-collapse: collapse; border: 1px solid; word-wrap: break-word; table-layout: fixed;}"
+      ],
+      "settings": {
+        "custom_liquid": "{%- if product.metafields.custom.fitment_table!= blank -%}\n<h3>Fitment Data</h3>\n{{product.metafields.custom.fitment_table}}{%- endif -%}"
+      }
+    },
+    "dynamic_custom_liquid_yVjLBC": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": "<div id=\"paint-match-section\"></div>"
+      }
+    },
+    "dynamic_featured_product_qp7CrL": {
+      "type": "dynamic-featured-product",
+      "blocks": {
+        "custom_liquid_TtzRVm": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "<h1>{{product.vendor}} Paint Sample</h1></div>"
+          }
+        },
+        "rating_ndA8UW": {
+          "type": "rating",
+          "settings": {}
+        },
+        "price_FDKJVA": {
+          "type": "price",
+          "settings": {}
+        },
+        "custom_liquid_djc7BF": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"swatch-desktop-description\">\n<p>Worried about the color match? Maybe your vehicle has experienced sun or weather fading? Maybe you have a rare paint color? Just select your paint code below and order a sample to see how Partify's paint will compare to your vehicle's paint.</p>\n\n<p>If you're satisfied with the match, then rest easy knowing the part you're going to get from us will be the same paint and will match just as well.</p>\n\n<p>If you're not 100% satisfied with the match, we'll either send you another paint swatch sample more finely-tuned to your vehicle's color or we'll refund you, your choice.</p>\n</div>\n\n<div class=\"swatch-mobile-description\">\n   <p>Worried about the color match? Whether your vehicle's paint has faded or you have a rare color, just select your paint code below and order a sample to compare with your vehicle's paint.</p> <p>If you're happy with the match, rest assured your part will arrive painted to match. If not, we’ll send another swatch more finely tuned to your color or refund you—your choice.</p>\n</div>\n<p><b>Paint sample price will be credited towards future order.</b></p>\n<style>\n.swatch-mobile-description {\n    display: none;\n}\n\n@media (max-width: 767px) {\n    .swatch-desktop-description {\n        display: none;\n    }\n    \n    .swatch-mobile-description {\n        display: block;\n    }\n}\n\n@media (min-width: 768px) {\n    .swatch-desktop-description {\n        display: block;\n    }\n}\n</style>"
+          }
+        },
+        "description_FTFA3R": {
+          "type": "description",
+          "disabled": true,
+          "settings": {}
+        },
+        "form_EX8T98": {
+          "type": "form",
+          "settings": {
+            "enable_local_pickup": true
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_TtzRVm",
+        "rating_ndA8UW",
+        "price_FDKJVA",
+        "custom_liquid_djc7BF",
+        "description_FTFA3R",
+        "form_EX8T98"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".quantity-selector {display: none;}",
+        "shopify-payment-terms {display: none !important;}"
+      ],
+      "settings": {
+        "product": "{{ product.metafields.custom.associated_paint_swatch.value }}",
+        "gallery_aspect_ratio": "natural",
+        "gallery_image_crop": false,
+        "gallery_thumbnail_position": "below",
+        "gallery_video_autoplay": true,
+        "gallery_video_looping": true,
+        "gallery_hover_zoom": "disabled"
+      }
+    },
+    "dynamic_custom_liquid_hJnC4j": {
+      "type": "dynamic-custom-liquid",
+      "disabled": true,
+      "custom_css": [
+        ".Unfolded {margin: 0 auto; text-align: center;}"
+      ],
+      "settings": {
+        "custom_liquid": "{% if product.tags contains \"Unfolded Option\" %}\n<div class=\"Unfolded\"><iframe width=\"80%\" height=\"400px\" src=\"https://www.youtube.com/embed/RNA07HvpgXM?si=_XSgQ-IuNohDFvS9\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe></div>\n{% endif %}"
+      }
+    },
+    "a9e9248c-f557-4bc1-b013-f361d5e40e16": {
+      "type": "dynamic-page",
+      "disabled": true,
+      "settings": {
+        "width": "wide",
+        "page": "{{ product.metafields.custom.how_to_find_paint_code.value }}",
+        "show_heading": true,
+        "heading_size": "small"
+      }
+    },
+    "recommendations": {
+      "type": "static-product-recommendations",
+      "custom_css": [
+        ".quickshop-button {display: none;}"
+      ],
+      "settings": {
+        "show_product_recommendations": true,
+        "product_recommendations_heading": "You may also like"
+      }
+    },
+    "169221692215ae7b25": {
+      "type": "apps",
+      "blocks": {
+        "yotpo_product_reviews_ugc_questions_and_answers_GGBTrT": {
+          "type": "shopify://apps/yotpo-product-reviews/blocks/questions_and_answers/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "settings": {
+            "product": "{{product}}"
+          }
+        },
+        "61461c5e-e7e0-4e45-9cad-086df62fca09": {
+          "type": "shopify://apps/yotpo-product-reviews/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "settings": {
+            "product": "{{product}}"
+          }
+        }
+      },
+      "block_order": [
+        "yotpo_product_reviews_ugc_questions_and_answers_GGBTrT",
+        "61461c5e-e7e0-4e45-9cad-086df62fca09"
+      ],
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "91b3801f-49ae-463c-8817-1585d92d4264": {
+      "type": "apps",
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "recently-viewed": {
+      "type": "static-recently-viewed",
+      "disabled": true,
+      "settings": {
+        "enable_recently_viewed_products": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "655a9f95bcc3be27ea06",
+    "custom_collapsible_blocks_6WrnVa",
+    "17144009168f88b4d9",
+    "d57f4867-0187-4e19-abcb-f92373d4433d",
+    "dynamic_custom_liquid_yVjLBC",
+    "dynamic_featured_product_qp7CrL",
+    "dynamic_custom_liquid_hJnC4j",
+    "a9e9248c-f557-4bc1-b013-f361d5e40e16",
+    "recommendations",
+    "169221692215ae7b25",
+    "91b3801f-49ae-463c-8817-1585d92d4264",
+    "recently-viewed"
+  ]
+}

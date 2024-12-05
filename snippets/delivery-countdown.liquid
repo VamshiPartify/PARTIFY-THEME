@@ -1,0 +1,28 @@
+{% if settings.asm_delivery_countdown == 'Enabled' %}
+<!-- Advanced Shipping Manager Delivery Countdown -->
+<link rel="stylesheet" type="text/css" href="{{ 'delivery-countdown.css' | asset_url }}" />
+<script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script>
+<div id="delivery-countdown">
+	
+	<div id="dc-info">
+		<div id="dc-top">Delivered by <span id="dc-weekday"></span>, <span id="dc-month-short"></span> <span id="dc-day"></span></div>
+		<div id="dc-bottom">if ordered within <span id="dc-hours"></span> hours and <span id="dc-minutes"></span> minutes</div>
+		<div id="dc-details" onclick="toggleCalc();">More Delivery Options</div>
+		<div id="dc-details-info"></div>
+        <div id="dc-ship">Delivery to <span id="dc-zip" onclick="toggleZipInput();"></span>?</div>
+		<div class="clear-both"></div>
+		<div id="dc-alt-zip-holder">
+		   <button id="dc-alt-zip-apply" onclick="deliveryRecalc(); return false;">Apply</button>
+		   <input type="text" id="dc-alt-zip" onkeydown="return activate_enter (event);" />
+		   <div class="clear-both"></div>
+		</div>
+		<div class="clear-both"></div>
+    </div>
+	<div class="clear-both"></div>
+</div>
+<div id="asm-ajax"></div>
+<script type="text/javascript">
+	deliveryCountdown ('{{ shop.permanent_domain }}', '{{ product.variants.first.sku }}');
+</script>
+<!-- Advanced Shipping Manager Delivery Countdown -->
+{% endif %}

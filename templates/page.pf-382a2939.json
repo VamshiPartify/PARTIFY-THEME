@@ -1,0 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pf-382a2939": {
+      "type": "pf-382a2939",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "2661bfee-c84c-48cf-9c24-b9cbe5c0ca81": {
+      "type": "dynamic-page",
+      "settings": {
+        "width": "wide",
+        "page": "how-to-find-your-paint-code-test",
+        "show_heading": true,
+        "heading_size": "medium"
+      }
+    }
+  },
+  "order": [
+    "pf-382a2939",
+    "2661bfee-c84c-48cf-9c24-b9cbe5c0ca81"
+  ]
+}
