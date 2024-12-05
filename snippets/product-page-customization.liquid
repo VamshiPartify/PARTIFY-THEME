@@ -648,6 +648,13 @@
           margin: 0;
       }
 
+      #vin-textbox-for-oem:disabled {
+        background-color: #f0f0f0;
+        color: #ccc;
+        pointer-events: none;
+        opacity: 0.6;
+      }
+
       #vin-textbox-for-oem {
         width: 100%;
         padding: 10px;
@@ -1021,13 +1028,21 @@
                     }
                     fitmentFailButton.style.display = 'block';
                     fitmentSuccess = false;
+                    {% comment %} if(vinTextBoxOEM) {
+                      vinTextBoxOEM.disabled = true;
+                    } {% endcomment %}
                 } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){
                     fitmentFailButton.style.display = 'none';
+                    //If vinTextBoxOEM means on unpainted product that is OEM
+                    if(vinTextBoxOEM) {
+                      vinTextBoxOEM.disabled = false;
+                    }
                     //If vinTextBox means customer is on painted product page
                     if(vinTextBox) {
                       addToCartButtonForUnpaintedItems.style.display = 'block';
                       addToCartButtonForUnpaintedItems.disabled = false;
                     }
+                    //No vin textbox and no oem box means on unpainted product page that is not OEM
                     if(!vinTextBox && !vinTextBoxOEM) {
                       addToCartButtonForUnpaintedItems.style.display = 'block';
                       addToCartButtonForUnpaintedItems.disabled = false;
@@ -1041,9 +1056,12 @@
                     fitmentSuccess = false;
                 }
                 } else {
-                fitmentFailButton.style.display = 'none';
-                addToCartButtonForUnpaintedItems.style.display = 'block';
-                addToCartButtonForUnpaintedItems.disabled = true
+                  fitmentFailButton.style.display = 'none';
+                  addToCartButtonForUnpaintedItems.style.display = 'block';
+                  addToCartButtonForUnpaintedItems.disabled = true
+                  if(vinTextBoxOEM) {
+                    vinTextBoxOEM.disabled = true;
+                  }
                 }
                 handleFitmentSuccessChange();
             }
