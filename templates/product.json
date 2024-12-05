@@ -17,7 +17,7 @@
           "settings": {}
         },
         "b0e438c8-4795-49ce-80cb-6a21e1798e46": {
-          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "type": "shopify://apps/yotpo-product-reviews/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
           "settings": {
             "product": "{{product}}"
           }
@@ -108,7 +108,6 @@
             "prefix": "Ships By",
             "separator": "-",
             "suffix": "From Michigan",
-            "show_as": "date",
             "date_format": "long",
             "show_shipping_policy": false,
             "show_delivery_cutoff": true,
@@ -459,6 +458,7 @@
         "description_FTFA3R",
         "form_EX8T98"
       ],
+      "disabled": true,
       "custom_css": [
         ".quantity-selector {display: none;}",
         "shopify-payment-terms {display: none !important;}"
@@ -507,13 +507,13 @@
       "type": "apps",
       "blocks": {
         "yotpo_product_reviews_ugc_questions_and_answers_GGBTrT": {
-          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/questions_and_answers/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "type": "shopify://apps/yotpo-product-reviews/blocks/questions_and_answers/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
           "settings": {
             "product": "{{product}}"
           }
         },
         "61461c5e-e7e0-4e45-9cad-086df62fca09": {
-          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "type": "shopify://apps/yotpo-product-reviews/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
           "settings": {
             "product": "{{product}}"
           }
