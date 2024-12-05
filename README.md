@@ -1,5 +1,6 @@
 Steps to add update and merge new branches:
-1. git init
+1a. shopify theme pull
+1b. git init
 2. git checkout -b feature/major-changes (or any other branch name e.g. feature/cool-branch)
 3. Use source control within VScode to fix conflicting files (choose to keep current changes)
 4. git add .
