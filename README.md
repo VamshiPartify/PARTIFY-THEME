@@ -19,6 +19,17 @@
 4. git stash pop
 5. Fix conflicts if any
 
+**Pull latest changes from shopify**
+1. git stash
+2. shopify theme pull
+3. git checkout -b feature/<new-branch>
+4. git add .
+5. git stash pop (if needed)
+6. git commit
+7. git push -u origin feature/<new-branch>
+8. Create PR and merge changes
+9. git checkout main
+10. git pull origin main
 
 **Workflow for new feature**
 1. shopify theme pull
