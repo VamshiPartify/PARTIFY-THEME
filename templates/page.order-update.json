@@ -11,11 +11,17 @@
   "sections": {
     "main": {
       "type": "page",
+      "settings": {}
+    },
+    "dynamic_custom_liquid_CN4a3j": {
+      "type": "dynamic-custom-liquid",
       "settings": {
+        "custom_liquid": "{% render 'signup-form' %}"
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "dynamic_custom_liquid_CN4a3j"
   ]
 }
