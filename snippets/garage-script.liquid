@@ -286,7 +286,7 @@
             button.addEventListener('click', function(event) {
                 const strongElement = event.currentTarget.closest('.vehicle-item').querySelector('strong');
                 const vehicleData = strongElement.getAttribute('data-vehicle');
-                let collectionHandle = vehicleData.toLowerCase().replace(/\s+/g, '-');
+                let collectionHandle = vehicleData.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/--+/g, '-');
                 moveVehicleToFront(vehicleData);
                 window.location.href = `/collections/${collectionHandle}`;
               });
@@ -416,7 +416,7 @@
                 button.addEventListener('click', function (event) {
                     const strongElement = event.currentTarget.closest('.vehicle-item').querySelector('strong');
                     const vehicleData = strongElement.getAttribute('data-vehicle');
-                    let collectionHandle = vehicleData.toLowerCase().replace(/\s+/g, '-');
+                    let collectionHandle = vehicleData.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/--+/g, '-');
                     moveVehicleToFront(vehicleData);
                     window.location.href = `/collections/${collectionHandle}`;
                 });
