@@ -191,31 +191,42 @@
           {% if availableProductTypes contains 'aftermarket' %}
             {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
             {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
-            {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
-            {% if aftermarket_product.available %}
-              <option value="aftermarket">Aftermarket - {{ aftermarket_price }}</option>
-            {% else %}
-              <option value="aftermarket" disabled style="color: gray;">Aftermarket (Out of Stock)</option>
+            {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+
+            {% if aftermarket_variant_count > 0 %}
+              {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
+              {% if aftermarket_product.available %}
+                <option value="aftermarket">Aftermarket - {{ aftermarket_price }}</option>
+              {% else %}
+                <option value="aftermarket" disabled style="color: gray;">Aftermarket (Out of Stock)</option>
+              {% endif %}
             {% endif %}
           {% endif %}
           {% if availableProductTypes contains 'capa' %}
             {% assign capa_product_handle = product.metafields.custom.capa_product %}
             {% assign capa_product = all_products[capa_product_handle] %}
-            {% assign capa_price = capa_product.variants.first.price | money %}
-            {% if capa_product.available %}
-              <option value="capa">CAPA Certified - {{ capa_price }}</option>
-            {% else %}
-              <option value="capa" disabled style="color: gray;">CAPA Certified (Out of Stock)</option>
+            {% assign capa_variant_count = capa_product.variants | size %}
+            {% if capa_variant_count > 0 %}
+              {% assign capa_price = capa_product.variants.first.price | money %}
+              {% if capa_product.available %}
+                <option value="capa">CAPA Certified - {{ capa_price }}</option>
+              {% else %}
+                <option value="capa" disabled style="color: gray;">CAPA Certified (Out of Stock)</option>
+              {% endif %}
             {% endif %}
           {% endif %}
           {% if availableProductTypes contains 'oem' %}
             {% assign oem_product_handle = product.metafields.custom.oem_product %}
             {% assign oem_product = all_products[oem_product_handle] %}
-            {% assign oem_price = oem_product.variants.first.price | money %}
-            {% if oem_product.available %}
-              <option value="oem">OEM - {{ oem_price }}</option>
-            {% else %}
-              <option value="oem" disabled style="color: gray;">OEM (Out of Stock)</option>
+            {% assign oem_variant_count = oem_product.variants | size %}
+
+            {% if oem_variant_count > 0 %}
+              {% assign oem_price = oem_product.variants.first.price | money %}
+              {% if oem_product.available %}
+                <option value="oem">OEM - {{ oem_price }}</option>
+              {% else %}
+                <option value="oem" disabled style="color: gray;">OEM (Out of Stock)</option>
+              {% endif %}
             {% endif %}
           {% endif %}
         </select>
@@ -257,26 +268,28 @@
                 {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
                 {% if aftermarket_product_handle %}
                   {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
-            
-                  {% if aftermarket_product and aftermarket_product.variants.size > 0 %}
-                    {% assign aftermarket_base_price = aftermarket_product.variants.first.price %} <!-- Price of the first variant -->
-            
-                    {% for variant in aftermarket_product.variants %}
-                      {% assign aftermarket_variant_price = variant.price %}
-                      {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
-                        { 
-                          "id": "{{ variant.id }}",
-                          "title": "{{ variant.title }} +{{ price_difference | money }}",
-                          "price": "{{ variant.price | money }}",
-                          "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
-                          "variantTitle": "{{ variant.title }}",
-                          "productTitle": "{{ aftermarket_product.title | escape  }}",
-                          "productDescription": {{ aftermarket_product.description | json }},
-                          "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
-                        },
-                    {% endfor %}
-                  {% else %}
-                    <option value="" disabled>No Aftermarket Options Available</option>
+                  {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+                  {% if aftermarket_variant_count > 0 %}
+                    {% if aftermarket_product %}
+                      {% assign aftermarket_base_price = aftermarket_product.variants.first.price %} <!-- Price of the first variant -->
+              
+                      {% for variant in aftermarket_product.variants %}
+                        {% assign aftermarket_variant_price = variant.price %}
+                        {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            "price": "{{ variant.price | money }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                            "variantTitle": "{{ variant.title }}",
+                            "productTitle": "{{ aftermarket_product.title | escape  }}",
+                            "productDescription": {{ aftermarket_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No Aftermarket Options Available</option>
+                    {% endif %}
                   {% endif %}
                 {% else %}
                   <option value="" disabled>No Aftermarket Product Assigned</option>
@@ -288,26 +301,28 @@
                 {% assign capa_product_handle = product.metafields.custom.capa_product %}
                 {% if capa_product_handle %}
                   {% assign capa_product = all_products[capa_product_handle] %}
-            
-                  {% if capa_product and capa_product.variants.size > 0 %}
-                    {% assign capa_base_price = capa_product.variants.first.price %} <!-- Price of the first variant -->
-            
-                    {% for variant in capa_product.variants %}
-                      {% assign capa_variant_price = variant.price %}
-                      {% assign price_difference = capa_variant_price | minus: capa_base_price %}
-                        { 
-                          "id": "{{ variant.id }}",
-                          "title": "{{ variant.title }} +{{ price_difference | money }}",
-                          "price": "{{ variant.price | money }}",
-                          "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
-                          "variantTitle": "{{ variant.title }}",
-                          "productTitle": "{{ capa_product.title | escape  }}",
-                          "productDescription": {{ capa_product.description | json }},
-                          "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
-                        },
-                    {% endfor %}
-                  {% else %}
-                    <option value="" disabled>No CAPA Options Available</option>
+                  {% assign capa_variant_count = capa_product.variants | size %}
+                  {% if capa_variant_count > 0 %}
+                    {% if capa_product %}
+                      {% assign capa_base_price = capa_product.variants.first.price %} <!-- Price of the first variant -->
+              
+                      {% for variant in capa_product.variants %}
+                        {% assign capa_variant_price = variant.price %}
+                        {% assign price_difference = capa_variant_price | minus: capa_base_price %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            "price": "{{ variant.price | money }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                            "variantTitle": "{{ variant.title }}",
+                            "productTitle": "{{ capa_product.title | escape  }}",
+                            "productDescription": {{ capa_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No CAPA Options Available</option>
+                    {% endif %}
                   {% endif %}
                 {% else %}
                   <option value="" disabled>No CAPA Product Assigned</option>
@@ -319,26 +334,28 @@
                 {% assign oem_product_handle = product.metafields.custom.oem_product %}
                 {% if oem_product_handle %}
                   {% assign oem_product = all_products[oem_product_handle] %}
-            
-                  {% if oem_product and oem_product.variants.size > 0 %}
-                    {% assign oem_base_price = oem_product.variants.first.price %} <!-- Price of the first variant -->
-            
-                    {% for variant in oem_product.variants %}
-                      {% assign oem_variant_price = variant.price %}
-                      {% assign price_difference = oem_variant_price | minus: oem_base_price %}
-                        { 
-                          "id": "{{ variant.id }}",
-                          "title": "{{ variant.title }} +{{ price_difference | money }}",
-                          "price": "{{ variant.price | money }}",
-                          "color": "{{ variant.metafields.custom.paint_preview_hex_code }}" ,
-                          "variantTitle": "{{ variant.title }}",
-                          "productTitle": "{{ oem_product.title | escape  }}",
-                          "productDescription": {{ oem_product.description | json }},
-                          "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
-                        },
-                    {% endfor %}
-                  {% else %}
-                    <option value="" disabled>No OEM Options Available</option>
+                  {% assign oem_variant_count = oem_product.variants | size %}
+                  {% if oem_variant_count > 0 %}
+                    {% if oem_product %}
+                      {% assign oem_base_price = oem_product.variants.first.price %} <!-- Price of the first variant -->
+              
+                      {% for variant in oem_product.variants %}
+                        {% assign oem_variant_price = variant.price %}
+                        {% assign price_difference = oem_variant_price | minus: oem_base_price %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            "price": "{{ variant.price | money }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}" ,
+                            "variantTitle": "{{ variant.title }}",
+                            "productTitle": "{{ oem_product.title | escape  }}",
+                            "productDescription": {{ oem_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No OEM Options Available</option>
+                    {% endif %}
                   {% endif %}
                 {% else %}
                   <option value="" disabled>No OEM Product Assigned</option>
@@ -348,7 +365,6 @@
         };
 
         {% comment %} window.selectedProductType = ''; {% endcomment %}
-
         const productTypeSelect = document.getElementById('product-type-select');
         const combinedVariantSelect = document.getElementById('variant-selector');
         const selectVinVariantButton = document.getElementById('select-vin-variant');
@@ -456,6 +472,7 @@
 
         // 3. When product type is selected
         productTypeSelect.addEventListener('change', function() {
+          console.log("selected");
           const selectedType = productTypeSelect.value;
           const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
           const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
