@@ -472,7 +472,6 @@
 
         // 3. When product type is selected
         productTypeSelect.addEventListener('change', function() {
-          console.log("selected");
           const selectedType = productTypeSelect.value;
           const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
           const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
