@@ -671,6 +671,8 @@
   </style>
   {% comment %} {% render 'cart-swatch-checker' %} {% endcomment %}
   {% comment %} {% render 'black-friday-button' %} {% endcomment %}
+  {% render 'Vin-Decoder-app' %}
+
   {% if product.available == true or product.variants.first.inventory_policy == 'continue' %}
     <!-- Modal trigger button -->
       {% if product.title contains 'Swatch' %}
@@ -935,7 +937,6 @@
 {% endif %}
 {% comment %} {% render 'black-friday-table' %} {% endcomment %}
   
-
 
   <script>
         let vinSuccess = false;
