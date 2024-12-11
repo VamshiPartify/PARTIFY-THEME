@@ -239,6 +239,11 @@
           "edit_account_back_link_text": "Back to account",
           "enable_js_api": false
         }
+      },
+      "13768625480086291342": {
+        "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
