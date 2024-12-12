@@ -13,15 +13,37 @@
       "type": "page",
       "settings": {}
     },
-    "dynamic_custom_liquid_CN4a3j": {
-      "type": "dynamic-custom-liquid",
+    "1733951802e735928d": {
+      "type": "apps",
+      "blocks": {
+        "forms_inline_axwLeh": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "246734",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 0,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_axwLeh"
+      ],
       "settings": {
-        "custom_liquid": "{% render 'signup-form' %}"
+        "include_padding": true
       }
     }
   },
   "order": [
     "main",
-    "dynamic_custom_liquid_CN4a3j"
+    "1733951802e735928d"
   ]
 }
