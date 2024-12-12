@@ -53,4 +53,14 @@
       </div>
     {% endform %}
   </article>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("Current template: {{ template }}");  // Logs current template name
+    if ("{{ template }}" == "customers.account") {   // Checks if we're on the correct account template
+      console.log("Orders page detected");             // If true, log and alert
+      alert("You are on the /orders page!");
+    }
+  });
+</script>
+
 </section>

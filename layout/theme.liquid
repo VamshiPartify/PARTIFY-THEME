@@ -215,6 +215,16 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
       // Use your live public API Key and https://cdn1.affirm.com/js/v2/affirm.js script to point to Affirm production environment.
     </script>
     <!-- End Affirm -->
+    {% if template == 'account.orders' %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log("Account Orders Page Script Loaded");
+      if (window.location.pathname === '/account/orders') {
+        alert("You are on the /orders page!");
+      }
+    });
+  </script>
+{% endif %}
   </head>
 
   <body
@@ -704,6 +714,61 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
       type="module"
       defer
     ></script>
+
+<script>
+  if (window.location.pathname === '/account/orders') {
+  console.log("We are on the correct orders page.");
+}
+  document.addEventListener("DOMContentLoaded", function() {
+    // Log the page URL and check for the correct path
+    console.log("Page URL:", window.location.href);
+
+    if (window.location.pathname.includes('/orders')) {
+      // Check if the redirected cookie exists to prevent looping redirects
+      const redirectCookie = document.cookie.split(';').some((cookie) => cookie.trim().startsWith('redirected='));
+      console.log("Redirect Cookie Exists:", redirectCookie);
+
+      // Only proceed if the redirect hasn't already occurred
+      if (!redirectCookie) {
+        // Read the referrer cookie
+        const cookies = document.cookie.split(';');
+        let referrer = null;
+
+        cookies.forEach(function(cookie) {
+          if (cookie.trim().startsWith('referrer=')) {
+            referrer = cookie.split('=')[1];
+          }
+        });
+
+        console.log("Referrer Cookie Value:", referrer);
+
+        // If referrer is 'signup-form', redirect to signup page
+        if (referrer === 'signup-form') {
+          console.log("Redirecting to signup page...");
+
+          // Set the 'redirected' cookie to prevent further redirects
+          document.cookie = "redirected=true; path=/; domain=.partifyusa.com; max-age=86400"; // Cookie expires in 1 day
+
+          // Perform the redirect
+          window.location.href = 'https://partifyusa.com/pages/signup-form';
+        } else {
+          console.log("Referrer is not 'signup-form'. No redirect.");
+        }
+      } else {
+        console.log("Redirect has already occurred. Skipping.");
+      }
+    }
+  });
+</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log("Script loaded.");
+      if (window.location.pathname === '/account/orders') {
+        console.log("We are on the /orders page.");
+      }
+    });
+  </script>
+
 
 
 
