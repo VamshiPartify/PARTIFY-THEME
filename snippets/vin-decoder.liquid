@@ -29,13 +29,13 @@
     .get-paint-code-using-vin:disabled {
         background-color: #f0f0f0;
         color: #ccc;
-        pointer-events: none;
+        cursor: no-drop;
         opacity: 0.6;
     }
 
     .vin-decoder-or {
         text-align: center;
-        color: #000;
+        color: #6b6b6b;
     }
 
 </style>
@@ -49,7 +49,7 @@
     <div class="vindecoder-paintcode-app-container" style="display: none;">
         {% render 'Vin-Decoder-app' %}
     </div>
-    <button type="button" class="get-paint-code-using-vin">
+    <button type="button" class="get-paint-code-using-vin" disabled>
         Get Paint Code Using VIN
     </button>
 </div>

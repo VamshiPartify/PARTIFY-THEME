@@ -87,6 +87,12 @@
       #how-to-find-your-paint-code-vindecoder:hover {
         background-color: #063175;
       }
+      #how-to-find-your-paint-code-vindecoder:disabled {
+        color: #ccc;
+        cursor: no-drop;
+        background-color: #f0f0f0;
+        opacity: 0.6;
+      }
     }
     /* Desktop */
     @media only screen and (min-width: 451px) {
@@ -156,14 +162,20 @@
       #how-to-find-your-paint-code-vindecoder:active {
         background-color: #0C1A94;
         transform: translateY(0);
-        }
+      }
+      #how-to-find-your-paint-code-vindecoder:disabled {
+        color: #ccc;
+        cursor: no-drop;
+        background-color: #f0f0f0;
+        opacity: 0.6;
+      }
     }
     @keyframes drop-in {
       0% { opacity: 0; transform: translateY(-50px); }
       100% { opacity: 1; transform: translateY(0); }
     }
   </style>
-  <button id="how-to-find-your-paint-code-vindecoder" type="button" class="btn">How To Find Your Paint Code</button>
+  <button id="how-to-find-your-paint-code-vindecoder" type="button" class="btn" disabled>How To Find Your Paint Code</button>
   <div class="product-unfolded-popup-dark-overlay"></div>
   <div class="unfolded-popup-container">
     <div class="unfolded-popup-modal">

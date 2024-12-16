@@ -31,7 +31,7 @@
         }
 
         #product-type-select:disabled {
-            color: #ddd;
+            color: #ccc;
         }
 
         #product-type-select {
@@ -400,6 +400,9 @@
         const vinTextBox = document.getElementById('vin-textbox-for-oem');
         const vinTextBoxForPaintOption = document.getElementById('vin-textbox');
 
+        const howToFindPaintCodeBtn = document.getElementById('how-to-find-your-paint-code-vindecoder');
+        const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
+
         let oem;
 
         function decodeHtmlEntities(text) {
@@ -420,6 +423,12 @@
             
             if (variants.length > 0) {
                 combinedVariantSelect.disabled = false;
+                if(howToFindPaintCodeBtn) {
+                  howToFindPaintCodeBtn.disabled = false;
+                }
+                if(getPaintCodeUsingVin) {
+                  getPaintCodeUsingVin.disabled = false;
+                }
                 if(selectVinVariantButton) {
                   selectVinVariantButton.disabled = false;
                 }
@@ -483,6 +492,12 @@
                 });
             } else {
                 combinedVariantSelect.disabled = true;
+                if(howToFindPaintCodeBtn) {
+                  howToFindPaintCodeBtn.disabled = true;
+                }
+                if(getPaintCodeUsingVin) {
+                  getPaintCodeUsingVin.disabled = true;
+                }
                 combinedVariantSelect.selectedIndex = 0;
                 if(selectVinVariantButton) {
                   selectVinVariantButton.disabled = true;
@@ -565,10 +580,22 @@
                 vinTextBox.value = '';
                 oem = selectedType;
                 combinedVariantSelect.disabled = true;
+                if(howToFindPaintCodeBtn) {
+                  howToFindPaintCodeBtn.disabled = true;
+                }
+                if(getPaintCodeUsingVin) {
+                  getPaintCodeUsingVin.disabled = true;
+                }
                 combinedVariantSelect.selectedIndex = 0;
               }
           } else {
               combinedVariantSelect.disabled = true;
+              if(howToFindPaintCodeBtn) {
+                howToFindPaintCodeBtn.disabled = true;
+              }
+              if(getPaintCodeUsingVin) {
+                getPaintCodeUsingVin.disabled = true;
+              }
               combinedVariantSelect.selectedIndex = 0;
               if(selectVinVariantButton) {
                 selectVinVariantButton.disabled = true;
@@ -615,6 +642,12 @@
             populateVariantDropdown(oem);
           } else {
             combinedVariantSelect.disabled = true;
+            if(howToFindPaintCodeBtn) {
+              howToFindPaintCodeBtn.disabled = true;
+            }
+            if(getPaintCodeUsingVin) {
+              getPaintCodeUsingVin.disabled = true;
+            }
             combinedVariantSelect.selectedIndex = 0;
           }
       });
