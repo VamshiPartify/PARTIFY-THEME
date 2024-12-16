@@ -671,6 +671,7 @@
   </style>
   {% comment %} {% render 'cart-swatch-checker' %} {% endcomment %}
   {% comment %} {% render 'black-friday-button' %} {% endcomment %}
+
   {% if product.available == true or product.variants.first.inventory_policy == 'continue' %}
     <!-- Modal trigger button -->
       {% if product.title contains 'Swatch' %}
@@ -765,25 +766,30 @@
 
                   <!-- Select VIN Option -->
                   {%- if product.variants[1].sku contains ".VIN" -%}
-                    <div class="vin-options-container">
-                      <div class="paint-or-vin">
-                          <p>Or</p>
-                      </div>
-                      <!-- Text box for VIN input -->
-                      <div id="vin-textbox-container" style="display: none;">
-                        <input
-                            type="text"
-                            id="vin-textbox"
-                            name="properties[VIN]"
-                            placeholder="Enter your VIN"
-                            maxlength="17"
-                        >
-                        <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-                      </div>
+                    {% if product.handle contains "nissan" %}
+                      {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
 
-                      <!-- Button to select Match Paint by VIN variant -->
-                      <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button> 
-                    </div> 
+                    {% else %}
+                      <div class="vin-options-container">
+                        <div class="paint-or-vin">
+                            <p>Or</p>
+                        </div>
+                        <!-- Text box for VIN input -->
+                        <div id="vin-textbox-container" style="display: none;">
+                          <input
+                              type="text"
+                              id="vin-textbox"
+                              name="properties[VIN]"
+                              placeholder="Enter your VIN"
+                              maxlength="17"
+                          >
+                          <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+                        </div>
+  
+                        <!-- Button to select Match Paint by VIN variant -->
+                        <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>   
+                      </div> 
+                    {% endif %}
                   {% endif %}
 
                   <div class="color-preview-container-for-customizations">
@@ -908,6 +914,9 @@
         </div>
         <!-- Button to select Match Paint by VIN variant -->
         <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>
+
+        {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
+
       </div>  
     {% endif %}
 
@@ -935,7 +944,6 @@
 {% endif %}
 {% comment %} {% render 'black-friday-table' %} {% endcomment %}
   
-
 
   <script>
         let vinSuccess = false;
