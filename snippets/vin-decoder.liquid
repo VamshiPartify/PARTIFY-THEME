@@ -38,6 +38,18 @@
         color: #6b6b6b;
     }
 
+    .close-wrapper-vin-decoder {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+    }
+
+    .close-vin-decoder {
+        background-color: unset;
+        border: none;
+        color: #e61b24;
+    }
+
 </style>
 
 
@@ -46,6 +58,9 @@
         {% render 'how-to-find-paint-code' %}
     </div>
     <p class="vin-decoder-or">Or</p>
+    <div class="close-wrapper-vin-decoder">
+        <button type="button" class="close-vin-decoder" style="display: none;">Close</button>
+    </div>
     <div class="vindecoder-paintcode-app-container" style="display: none;">
         {% render 'Vin-Decoder-app' %}
     </div>
@@ -57,12 +72,20 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const vindecoderAppContainer = document.querySelector(".vindecoder-paintcode-app-container");
+        const closeVinDecoderBtn = document.querySelector('.close-vin-decoder');
         const appBtn = document.querySelector(".get-paint-code-using-vin");
 
 
         appBtn.addEventListener("click", () => {
             vindecoderAppContainer.style.display = "block";
+            closeVinDecoderBtn.style.display = "block";
             appBtn.style.display = "none";
+        });
+
+        closeVinDecoderBtn.addEventListener("click", () => {
+            vindecoderAppContainer.style.display = "none";
+            closeVinDecoderBtn.style.display = "none";
+            appBtn.style.display = "block";
         })
     })
 </script>
