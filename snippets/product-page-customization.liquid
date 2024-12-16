@@ -735,33 +735,68 @@
                   {% if meta_fields > 1 %}
                       {% render 'CAPA-OEM-options' %}
                   {% elsif product.variants.size > 1 %}
-                      <!-- Variant Dropdown -->
-                      <div id="variant-selector-container">
-                        <div class="divider-large-screen"></div>
-                        <div class="how-to-find-paint-code-wrapper">
-                          <div class="find-paint-option-link-container">
-                            <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
-                          </div>
+                      <!-- Variant Dropdown if paint selection but no quality selection -->
+                      <!-- For nissans -->
+                      {% if product.handle contains "nissan" %}
+                        <div id="variant-selector-container">
+                          <div class="divider-large-screen"></div>
+                          {% comment %} <div class="how-to-find-paint-code-wrapper">
+                            <div class="find-paint-option-link-container">
+                              <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+                            </div>
+                          </div> {% endcomment %}
+                          <label for="variant-selector" class="variant-label">Paint Option</label>
+                          <select id="variant-selector" name="id" class="variant-dropdown">
+                            <option value="" selected disabled>Paint Option</option>
+                            {% for variant in product.variants %}
+                            {% assign price_diff = variant.price | minus: product.price_min | money %}  
+                            {% if price_diff == 0 %}
+                                {{ '' }}
+                            {% else %}
+                                {{ '+' }}{{ price_diff | money | remove: '.00' }}
+                            {% endif %}
+                            <option 
+                                value="{{ variant.id }}" 
+                                class="variant-option"
+                                data-price="{{ variant.price }}">
+                                {{ variant.title }} + {{ price_diff }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                          {% render 'vin-decoder' %}
                         </div>
-                      <label for="variant-selector" class="variant-label">Paint Option</label>
-                      <select id="variant-selector" name="id" class="variant-dropdown">
-                          <option value="" selected disabled>Paint Option</option>
-                          {% for variant in product.variants %}
-                          {% assign price_diff = variant.price | minus: product.price_min | money %}  
-                          {% if price_diff == 0 %}
-                              {{ '' }}
-                          {% else %}
-                              {{ '+' }}{{ price_diff | money | remove: '.00' }}
-                          {% endif %}
-                          <option 
-                              value="{{ variant.id }}" 
-                              class="variant-option"
-                              data-price="{{ variant.price }}">
-                              {{ variant.title }} + {{ price_diff }}
-                          </option>
-                          {% endfor %}
-                      </select>
-                      </div>
+                        
+
+                        <!-- Everything but nissans -->
+                      {% else %}
+                        <div id="variant-selector-container">
+                          <div class="divider-large-screen"></div>
+                          <div class="how-to-find-paint-code-wrapper">
+                            <div class="find-paint-option-link-container">
+                              <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+                            </div>
+                          </div>
+                          <label for="variant-selector" class="variant-label">Paint Option</label>
+                          <select id="variant-selector" name="id" class="variant-dropdown">
+                            <option value="" selected disabled>Paint Option</option>
+                            {% for variant in product.variants %}
+                            {% assign price_diff = variant.price | minus: product.price_min | money %}  
+                            {% if price_diff == 0 %}
+                                {{ '' }}
+                            {% else %}
+                                {{ '+' }}{{ price_diff | money | remove: '.00' }}
+                            {% endif %}
+                            <option 
+                                value="{{ variant.id }}" 
+                                class="variant-option"
+                                data-price="{{ variant.price }}">
+                                {{ variant.title }} + {{ price_diff }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      {% endif %}
+
                   {% endif %}
 
                   <!-- Select VIN Option -->
@@ -988,6 +1023,9 @@
             const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
             const vinTextBox = document.getElementById('vin-textbox');
 
+            const howToFindPaintCodeBtn = document.getElementById('how-to-find-your-paint-code-vindecoder');
+            const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
+
             //Used for How to find Paint Code
             const paintSwatchImage = document.getElementById('paint-swatch-image');
         
@@ -1158,6 +1196,13 @@
                         }
                         combinedVariantSelect.selectedIndex = 0;
                         combinedVariantSelect.disabled = true;
+                        //The following two are for the vin decoder button and how to find paint code button
+                        if(howToFindPaintCodeBtn) {
+                          howToFindPaintCodeBtn.disabled = true;
+                        }
+                        if(getPaintCodeUsingVin) {
+                          getPaintCodeUsingVin.disabled = true;
+                        }
                         if(selectVinVariantButton) {
                           selectVinVariantButton.disabled = true;
                         }
@@ -1173,6 +1218,13 @@
                         // This means if there is not a quality selection present
                         if(!optionDropdowns) {
                           combinedVariantSelect.disabled = false;
+                          //The following two are for the vin decoder button and how to find paint code button
+                          if(howToFindPaintCodeBtn) {
+                            howToFindPaintCodeBtn.disabled = false;
+                          }
+                          if(getPaintCodeUsingVin) {
+                            getPaintCodeUsingVin.disabled = false;
+                          }
 
                           if(selectVinVariantButton !== null) {
                             selectVinVariantButton.disabled = false;
@@ -1188,6 +1240,13 @@
                         }
                         combinedVariantSelect.selectedIndex = 0;
                         combinedVariantSelect.disabled = true;
+                        //The following two are for the vin decoder button and how to find paint code button
+                        if(howToFindPaintCodeBtn) {
+                          howToFindPaintCodeBtn.disabled = true;
+                        }
+                        if(getPaintCodeUsingVin) {
+                          getPaintCodeUsingVin.disabled = true;
+                        }
                         if(selectVinVariantButton) {
                           selectVinVariantButton.disabled = true;
                         }
