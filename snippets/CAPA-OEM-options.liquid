@@ -244,21 +244,41 @@
           </div>
         </div>
       </div>
-      <div class="divider"></div>
-      <div class="combined-variant-dropdown">
-        <div class="paint-option-and-how-to-find-paint-code-wrapper">
-          <div class="find-paint-option-link-container">
-            <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+      {% if product.handle contains "nissan" %}
+        <div class="divider"></div>
+          <div class="combined-variant-dropdown">
+            <div class="paint-option-and-how-to-find-paint-code-wrapper">
+              <div class="find-paint-option-link-container" style="display: none;">
+                <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+              </div>
+              <label class="option-title" for="product-type-select">Paint Option</label>
+            </div>
+            <div class="paint-code-wrapper">
+              <select id="variant-selector" name="id" disabled>
+                <option value="" disabled selected>Select Paint Code</option>
+              </select>
+            </div>
+            {% render 'vin-decoder' %}
+
           </div>
-          <label class="option-title" for="product-type-select">Paint Option</label>
+        </div> 
+      {% else %}
+      <div class="divider"></div>
+        <div class="combined-variant-dropdown">
+          <div class="paint-option-and-how-to-find-paint-code-wrapper">
+            <div class="find-paint-option-link-container">
+              <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+            </div>
+            <label class="option-title" for="product-type-select">Paint Option</label>
+          </div>
+          <div class="paint-code-wrapper">
+            <select id="variant-selector" name="id" disabled>
+              <option value="" disabled selected>Select Paint Code</option>
+            </select>
+          </div>
         </div>
-        <div class="paint-code-wrapper">
-          <select id="variant-selector" name="id" disabled>
-            <option value="" disabled selected>Select Paint Code</option>
-          </select>
-        </div>
-      </div>
-    </div>  
+      </div> 
+    {% endif %}
   
   <script>
     document.addEventListener('DOMContentLoaded', function() {

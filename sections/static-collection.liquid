@@ -2,12 +2,18 @@
 {% assign sidebar_blocks = false %}
 {% assign menu_block_count = 0 %}
 {% assign active_filters = false %}
+{% assign first_four_chars = collection.handle | slice: 0, 4 %}
+{% assign is_number = first_four_chars | plus: 0 %}
+
+
 
 
 {% for filter in collection.filters %}
   {% if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value %}
     {% assign active_filters = true %}
     {% break %}
+  {% elsif is_number == 0 %}
+      {% assign active_filters = true %}
   {% endif %}
 {% endfor %}
 
