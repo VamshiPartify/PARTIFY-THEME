@@ -1,0 +1,145 @@
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6LdicZQqAAAAAL4DqKIn60ipSsYj0_o7ua4fEXxE"></script>
+
+{% if customer %}
+<div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 700px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+  <p><strong>If you’re a tax-exempt customer, you may submit tax exemption documents using the steps below:</strong></p>
+
+  <ol style="margin-left: 20px;">
+    <li>
+      Click on the <span style="text-decoration: underline; color: #007bff; cursor: pointer;">Submit Certificates</span> button
+      to dynamically generate a tax exemption certificate through a guided flow. If you already have a completed tax document, click on the
+      <span style="text-decoration: underline; color: #007bff; cursor: pointer;">Upload Pre-Completed Certificates</span> button.
+    </li>
+    <li>
+      Once you submit your document(s), you will be able to proceed with checkout exempt from sales tax.
+    </li>
+    <li>
+      Please note that if your document is expired or is determined to be invalid at a later date, we may collect sales tax and reach out to you offline to address any issues.
+    </li>
+  </ol>
+
+  <p>If you have any questions specific to tax, please contact your tax advisor.</p>
+
+  <p style="text-align: center; margin-top: 20px;">
+    <a style="color: #ffffff; background-color: #007bff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;" 
+       href="#" 
+       onClick="exemptionRequest=window.open(
+       'https://app.exemptax.com/ecommerce-drop?integration_type=shopify&shop_domain={{shop.permanent_domain|url_encode}}&customer_id={{customer.id|url_encode}}&email={{customer.email|url_encode}}&first_name={{customer.first_name|url_encode}}&last_name={{customer.last_name|url_encode}}&phone={{customer.phone|url_encode}}&tax_exempt={{customer.tax_exempt|url_encode}}&address1={{customer.default_address.address1|url_encode}}&address2={{customer.default_address.address2|url_encode}}&city={{customer.default_address.city|url_encode}}&zip={{customer.default_address.zip|url_encode}}&company={{customer.default_address.company|url_encode}}&country={{customer.default_address.country|url_encode}}&address_id={{customer.default_address.id|url_encode}}',
+       'exemptionRequest','left=50,top=100,width=1000,height=600,menubar=0,toolbar=0,location=0,status=0'); 
+       return false;">
+       <strong>Click here to submit certificates</strong>
+    </a>
+  </p>
+</div>
+
+{% else %}
+  <script>
+    document.cookie = "referrer=signup-form; path=/; domain=.partifyusa.com; max-age=86400";
+  </script>
+<!-- Collapsible Login Section -->
+<div class="collapsible-section">
+  <button type="button" class="collapsible">Login</button>
+  <div class="content">
+    <form method="post" action="/account/login" id="demo-form">
+      <label for="email">Email Address</label>
+      <input type="email" name="customer[email]" id="email" required>
+
+      <label for="password">Password</label>
+      <input type="password" name="customer[password]" id="password" required>
+      
+      <!-- reCAPTCHA v3 Button -->
+      <button class="g-recaptcha"
+              data-sitekey="6LdicZQqAAAAAL4DqKIn60ipSsYj0_o7ua4fEXxE"
+              data-callback='onSubmit'
+              data-action='submit'>
+        Log In
+      </button>
+      <p id="error-message" style="color: red; display: none;">Invalid login credentials. Please try again.</p>
+    </form>
+    <p><a href="/account/reset">Forgot your password?</a></p>
+  </div>
+</div>
+
+<!-- Collapsible Signup Section -->
+<div class="collapsible-section">
+  <button type="button" class="collapsible">Sign Up</button>
+  <div class="content">
+    <form method="post" action="/account/register">
+      <label for="signup-email">Email Address</label>
+      <input type="email" id="signup-email" name="customer[email]" required>
+
+      <label for="signup-password">Password</label>
+      <input type="password" id="signup-password" name="customer[password]" required>
+
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<!-- Collapsible Section Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var coll = document.querySelectorAll(".collapsible");
+    coll.forEach(function (button) {
+      button.addEventListener("click", function () {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          content.style.padding = "0 10px";
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+          content.style.padding = "10px";
+        }
+      });
+    });
+  });
+
+  function onSubmit(token) {
+    document.getElementById('demo-form').submit();
+  }
+</script>
+
+<!-- Add CSS for Collapsible Sections -->
+<style>
+  .collapsible-section {
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  .collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    transition: background-color 0.3s;
+  }
+
+  .collapsible:hover,
+  .collapsible.active {
+    background-color: #555;
+  }
+
+  .content {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 10px;
+    background-color: #f1f1f1;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+
+  .content.show {
+    max-height: 1500px;
+    padding: 10px;
+  }
+
+  .content form {
+    margin: 0;
+  }
+</style>

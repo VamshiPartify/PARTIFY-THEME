@@ -1,0 +1,161 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "static-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "b0e438c8-4795-49ce-80cb-6a21e1798e46": {
+          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "settings": {
+            "product": "{{product}}"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+          }
+        },
+        "e663a24f-1006-459a-8a37-8f77bfe52850": {
+          "type": "shopify://apps/infinite-options/blocks/app-block/7e73b6f9-82b0-45f5-9b9b-04f446ba1a9b",
+          "settings": {
+          }
+        },
+        "form": {
+          "type": "form",
+          "settings": {
+            "enable_local_pickup": false,
+            "show_gift_card_recipient_form": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "b0e438c8-4795-49ce-80cb-6a21e1798e46",
+        "price",
+        "e663a24f-1006-459a-8a37-8f77bfe52850",
+        "form",
+        "description",
+        "share"
+      ],
+      "custom_css": [
+        ".spb-select {font-size: 12px;}",
+        ".quantity-selector {display: none;}"
+      ],
+      "settings": {
+        "gallery_aspect_ratio": "square",
+        "gallery_image_crop": true,
+        "gallery_thumbnail_position": "below",
+        "gallery_video_autoplay": true,
+        "gallery_video_looping": true,
+        "gallery_hover_zoom": "replace",
+        "gallery_click_to_zoom": "always"
+      }
+    },
+    "d57f4867-0187-4e19-abcb-f92373d4433d": {
+      "type": "dynamic-custom-liquid",
+      "custom_css": [
+        "@media only screen and (max-width: 450px) {table {overflow-x: auto; max-width: 100% !important; width: 100%; font-size: 10px; } tr {font-size: 9.5px; }}",
+        "@media only screen and (min-width: 451px) {table {width: 80%; }}",
+        "h3 {padding-top: 20px; margin: 0 auto; text-align: center; padding-bottom: 30px;}",
+        "table {margin: 0 auto; text-align: center; max-width: 100%; table-layout: fixed;}",
+        "th {font-style: strong; font-size: 14px; white-space: nowrap;}",
+        "table,th,td {border-collapse: collapse; border: 1px solid;}"
+      ],
+      "settings": {
+        "custom_liquid": "{%- if product.metafields.custom.fitment_table!= blank -%}\n<h3>Fitment Data</h3>\n{{product.metafields.custom.fitment_table}}{%- endif -%}"
+      }
+    },
+    "a9e9248c-f557-4bc1-b013-f361d5e40e16": {
+      "type": "dynamic-page",
+      "settings": {
+        "width": "wide",
+        "page": "{{ product.metafields.custom.how_to_find_paint_code.value }}",
+        "show_heading": true,
+        "heading_size": "small"
+      }
+    },
+    "recommendations": {
+      "type": "static-product-recommendations",
+      "disabled": true,
+      "settings": {
+        "show_product_recommendations": true,
+        "product_recommendations_heading": "You may also like"
+      }
+    },
+    "169221692215ae7b25": {
+      "type": "apps",
+      "blocks": {
+        "61461c5e-e7e0-4e45-9cad-086df62fca09": {
+          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "settings": {
+            "product": "{{product}}"
+          }
+        }
+      },
+      "block_order": [
+        "61461c5e-e7e0-4e45-9cad-086df62fca09"
+      ],
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "91b3801f-49ae-463c-8817-1585d92d4264": {
+      "type": "apps",
+      "blocks": {
+        "6d5e6498-d1ba-4f00-808a-18e5b47c0154": {
+          "type": "shopify://apps/boost-ai-search-discovery/blocks/recommendation/7fc998ae-a150-4367-bab8-505d8a4503f7",
+          "settings": {
+            "widgetId": "productpage-502271",
+            "additional_classes": "",
+            "custom_css": ""
+          }
+        }
+      },
+      "block_order": [
+        "6d5e6498-d1ba-4f00-808a-18e5b47c0154"
+      ],
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "recently-viewed": {
+      "type": "static-recently-viewed",
+      "disabled": true,
+      "settings": {
+        "enable_recently_viewed_products": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "d57f4867-0187-4e19-abcb-f92373d4433d",
+    "a9e9248c-f557-4bc1-b013-f361d5e40e16",
+    "recommendations",
+    "169221692215ae7b25",
+    "91b3801f-49ae-463c-8817-1585d92d4264",
+    "recently-viewed"
+  ]
+}

@@ -1,0 +1,21 @@
+<!-- Sections/product-certification-badges.liquid -->
+
+{% if product.title contains "CAPA Certified" %}
+  <img src="https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Capa_Certified_Icon_26a22ba1-e72d-4724-a44d-e73fbf1f0d2d.png" alt="CAPA Certified">
+{% endif %}
+
+{% if product.title contains "OEM" %}
+  <img src="https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png" alt="OEM Certified">
+{% endif %}
+
+{% schema %}
+{
+  "name": "Cert Badges",
+  "presets": [
+    {
+      "name": "Cert Badges",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
