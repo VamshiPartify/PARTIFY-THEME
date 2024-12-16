@@ -12,6 +12,20 @@
 11. create PR
 12. Merge changes once feature is live to keep main branch up-to-date
 
+**If i pushed a branch and want to merge it into the latest shopify theme code**
+1. Push my latest changes to a branch "feature/<new branch>"
+2. git checkout feature/latest-updates
+3. shopify theme pull
+4. git add .
+5. git commit
+6. git push -u origin feature/latest-updates
+7. merge these changes with the main
+8. git checkout feature/<new branch>
+9. git merge main
+10. press esc
+11. type :wq and then enter
+12. 
+
 **If i made changes but want to make sure I am up to date with current Shopify theme**
 1. git stash
 2. shopify theme pull
