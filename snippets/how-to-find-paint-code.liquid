@@ -190,6 +190,19 @@
 
 
   <script>
+    function hideShopifyChat() {
+      const shopifyChat = document.getElementById('shopify-chat');
+      if (shopifyChat) {
+        shopifyChat.style.display = 'none';
+      }
+    }
+  
+  function showShopifyChat() {
+    const shopifyChat = document.getElementById('shopify-chat');
+    if (shopifyChat) {
+      shopifyChat.style.display = 'block';
+    }
+  }
     let scrollPosition = 0;
 
     const showOverlay = () => document.querySelector(".product-unfolded-popup-dark-overlay").style.display = "block";
@@ -217,7 +230,8 @@
 
     // Open Modal
     document.querySelector("#how-to-find-your-paint-code-vindecoder").onclick = async function() {
-        scrollPosition = window.pageYOffset;
+      hideShopifyChat();
+      scrollPosition = window.pageYOffset;
       showOverlay();
       try {
         document.body.classList.add('no-scroll-paint-swatch');
@@ -237,6 +251,7 @@
         document.body.style.top = '';
         window.scrollTo({ top: top, behavior: 'instant' });
 
+      showShopifyChat();
       hideOverlay();
       hideModal();
     };
@@ -248,6 +263,7 @@
         document.body.style.top = '';
         window.scrollTo({ top: top, behavior: 'instant' });
 
+        showShopifyChat();
         hideOverlay();
         hideModal();
       }
