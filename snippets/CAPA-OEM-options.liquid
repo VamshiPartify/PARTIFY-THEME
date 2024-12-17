@@ -168,6 +168,18 @@
         margin-top: 5px;
       }
     </style>
+
+    {% assign makes = settings.makes_list | split: ", " %}
+    {% assign is_make_found = false %}
+    {% assign downcase_handle = product.handle | downcase %}
+
+    {% for make in makes %}
+      {% if downcase_handle contains make %}
+        {% assign is_make_found = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    
   
     <div class="option-dropdowns">
       <!-- Main Product Type Dropdown -->
@@ -244,7 +256,7 @@
           </div>
         </div>
       </div>
-      {% if product.handle contains "nissan" %}
+      {% if is_make_found %}
         <div class="divider"></div>
           <div class="combined-variant-dropdown">
             <div class="paint-option-and-how-to-find-paint-code-wrapper">
