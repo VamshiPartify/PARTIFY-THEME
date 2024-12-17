@@ -90,7 +90,7 @@
             "icon": "",
             "offer_text": "<strong>FREE</strong> shipping",
             "date_format": "long",
-            "delivery_estimate_message": "Arrives by",
+            "delivery_estimate_message": "Ships by",
             "countdown_message": "Order within",
             "deliver_to_message": "Deliver to"
           }

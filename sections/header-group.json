@@ -13,14 +13,15 @@
   "sections": {
     "announcement-bar": {
       "type": "static-announcement",
+      "disabled": true,
       "settings": {
-        "show_announcement": false,
+        "show_announcement": true,
         "homepage_announcement": false,
-        "announcement_text": "Announce something here",
+        "announcement_text": "We sincerely apologize, but it seems checkout is unavailable at the moment. Please try again shortly or reach out to us",
         "announcement_text_mobile": "",
         "announcement_link": "",
         "announcement_color": "#000000",
-        "announcement_background": "#f5f3ed"
+        "announcement_background": "#e5a210"
       }
     },
     "utility-bar": {

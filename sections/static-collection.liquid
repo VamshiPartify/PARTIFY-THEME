@@ -4,6 +4,12 @@
 {% assign active_filters = false %}
 {% assign first_four_chars = collection.handle | slice: 0, 4 %}
 {% assign is_number = first_four_chars | plus: 0 %}
+{% assign all_collection = collection.handle | slice: 0, 3 | strip %}
+
+
+{% if all_collection == "all" %}
+  {% assign active_filters = true %}
+{% endif %}
 
 
 
