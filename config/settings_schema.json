@@ -1048,5 +1048,16 @@
         "default": "Enabled"
       }
     ]
+  },
+  {
+    "name": "Makes",
+    "settings": [
+      {
+        "type": "text",
+        "id": "makes_list",
+        "label": "Makes List",
+        "default": "nissan, infiniti"
+      }
+    ]
   }
 ]

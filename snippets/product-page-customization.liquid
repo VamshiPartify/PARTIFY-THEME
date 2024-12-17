@@ -671,6 +671,17 @@
   </style>
   {% comment %} {% render 'cart-swatch-checker' %} {% endcomment %}
   {% comment %} {% render 'black-friday-button' %} {% endcomment %}
+   
+  {% assign makes = settings.makes_list | split: ", " %}
+  {% assign is_make_found = false %}
+  {% assign downcase_handle = product.handle | downcase %}
+
+  {% for make in makes %}
+    {% if downcase_handle contains make %}
+      {% assign is_make_found = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
 
   {% if product.available == true or product.variants.first.inventory_policy == 'continue' %}
     <!-- Modal trigger button -->
@@ -737,7 +748,7 @@
                   {% elsif product.variants.size > 1 %}
                       <!-- Variant Dropdown if paint selection but no quality selection -->
                       <!-- For nissans -->
-                      {% if product.handle contains "nissan" %}
+                      {% if is_make_found %}
                         <div id="variant-selector-container">
                           <div class="divider-large-screen"></div>
                           {% comment %} <div class="how-to-find-paint-code-wrapper">
@@ -801,7 +812,7 @@
 
                   <!-- Select VIN Option -->
                   {%- if product.variants[1].sku contains ".VIN" -%}
-                    {% if product.handle contains "nissan" %}
+                    {% if is_make_found %}
                       {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
 
                     {% else %}
