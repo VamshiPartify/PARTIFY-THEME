@@ -306,6 +306,14 @@
                       {% assign aftermarket_base_price = aftermarket_product.variants.first.price %} <!-- Price of the first variant -->
               
                       {% for variant in aftermarket_product.variants %}
+                        {% if is_make_found %}
+                          {% if variant.title contains "Match Paint by VIN" %}
+                            {% continue %}
+                          {% endif %}
+                          {% if variant.title contains "Custom Paint Code" %}
+                            {% continue %}
+                          {% endif %}
+                        {% endif %}
                         {% assign aftermarket_variant_price = variant.price %}
                         {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
                           { 
@@ -339,6 +347,14 @@
                       {% assign capa_base_price = capa_product.variants.first.price %} <!-- Price of the first variant -->
               
                       {% for variant in capa_product.variants %}
+                        {% if is_make_found %}
+                          {% if variant.title contains "Match Paint by VIN" %}
+                            {% continue %}
+                          {% endif %}
+                          {% if variant.title contains "Custom Paint Code" %}
+                            {% continue %}
+                          {% endif %}
+                        {% endif %}
                         {% assign capa_variant_price = variant.price %}
                         {% assign price_difference = capa_variant_price | minus: capa_base_price %}
                           { 
@@ -372,6 +388,14 @@
                       {% assign oem_base_price = oem_product.variants.first.price %} <!-- Price of the first variant -->
               
                       {% for variant in oem_product.variants %}
+                        {% if is_make_found %}
+                          {% if variant.title contains "Match Paint by VIN" %}
+                            {% continue %}
+                          {% endif %}
+                          {% if variant.title contains "Custom Paint Code" %}
+                            {% continue %}
+                          {% endif %}
+                        {% endif %}
                         {% assign oem_variant_price = variant.price %}
                         {% assign price_difference = oem_variant_price | minus: oem_base_price %}
                           { 
@@ -430,6 +454,7 @@
 
             // Get the relevant variants for selected product type
             const variants = productVariants[selectedType] || [];
+            console.log('variants: ', variants);
             const variantsUpdateEvent = new CustomEvent('variantsUpdated', { detail: { variants } });
             document.dispatchEvent(variantsUpdateEvent);
             

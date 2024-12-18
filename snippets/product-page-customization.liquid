@@ -760,18 +760,26 @@
                           <select id="variant-selector" name="id" class="variant-dropdown">
                             <option value="" selected disabled>Paint Option</option>
                             {% for variant in product.variants %}
-                            {% assign price_diff = variant.price | minus: product.price_min | money %}  
-                            {% if price_diff == 0 %}
-                                {{ '' }}
-                            {% else %}
-                                {{ '+' }}{{ price_diff | money | remove: '.00' }}
-                            {% endif %}
-                            <option 
-                                value="{{ variant.id }}" 
-                                class="variant-option"
-                                data-price="{{ variant.price }}">
-                                {{ variant.title }} + {{ price_diff }}
-                            </option>
+                              {% if is_make_found %}
+                                {% if variant.title contains "Match Paint by VIN" %}
+                                  {% continue %}
+                                {% endif %}
+                                {% if variant.title contains "Custom Paint Code" %}
+                                  {% continue %}
+                                {% endif %}
+                              {% endif %}
+                              {% assign price_diff = variant.price | minus: product.price_min | money %}  
+                              {% if price_diff == 0 %}
+                                  {{ '' }}
+                              {% else %}
+                                  {{ '+' }}{{ price_diff | money | remove: '.00' }}
+                              {% endif %}
+                              <option 
+                                  value="{{ variant.id }}" 
+                                  class="variant-option"
+                                  data-price="{{ variant.price }}">
+                                  {{ variant.title }} + {{ price_diff }}
+                              </option>
                             {% endfor %}
                           </select>
                           {% render 'vin-decoder' %}
@@ -943,27 +951,29 @@
     
 
     {%- if product.variants[1].sku contains ".VIN" -%}
-      <div class="vin-options-container">
-        <div class="paint-or-vin">
-            <p>Or</p>
-        </div>
-        <!-- Text box for VIN input -->
-        <div id="vin-textbox-container" style="display: none;">
-          <input
-              type="text"
-              id="vin-textbox"
-              name="properties[VIN]"
-              placeholder="Enter your VIN"
-              maxlength="17"
-          >
-          <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-        </div>
-        <!-- Button to select Match Paint by VIN variant -->
-        <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>
+      {% if is_make_found == false %}
+        <div class="vin-options-container">
+          <div class="paint-or-vin">
+              <p>Or</p>
+          </div>
+          <!-- Text box for VIN input -->
+          <div id="vin-textbox-container" style="display: none;">
+            <input
+                type="text"
+                id="vin-textbox"
+                name="properties[VIN]"
+                placeholder="Enter your VIN"
+                maxlength="17"
+            >
+            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+          </div>
+          <!-- Button to select Match Paint by VIN variant -->
+          <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>
 
-        {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
+          {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
 
-      </div>  
+        </div>         
+    {% endif %}
     {% endif %}
 
     <div class="color-preview-container-for-customizations">
