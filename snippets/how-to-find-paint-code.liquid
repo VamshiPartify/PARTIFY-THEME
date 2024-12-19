@@ -1,8 +1,98 @@
 <style>
-
     body.no-scroll-paint-swatch {
-        overflow: hidden !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden !important;
     }
+
+    .htfypc-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .button_svg_container {
+      display: flex;
+      justify-content: end;
+    }
+
+    .button_svg {
+      display: flex;
+      justify-content: center;
+    }
+    /* Accordion Style */
+.accordion-section {
+  margin: 10px 0 0 0;
+}
+
+.accordion-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 4px 12px;
+  background-color: #0a1e9c;
+  color: #ffffff;
+  border: none;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.accordion-button:hover {
+  background-color: #062e7a;
+  transform: translateY(-2px);
+}
+
+.accordion-button p {
+  margin: 0;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease-out, opacity 0.3s ease;
+  {% comment %} background-color: #f4f6fc; {% endcomment %}
+  padding: 0 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Show content when active */
+.accordion-content.open {
+  max-height: 400px;
+  opacity: 1;
+  padding: 2px;
+}
+
+.circle_plus {
+  font-size: 14px;
+}
+
+.circle_none {
+  font-size: 14px;
+}
+
+.vin-decoder-accordion-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.how-to-find-paintcode-accordion-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 
     .product-unfolded-popup-dark-overlay {
       display: none;
@@ -12,14 +102,12 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.7);
-      overflow: auto;
-      animation-name: animateopacity;
-      animation-duration: 0.5s;
       z-index: 3000;
+      animation: fade-in 0.5s;
     }
-    @keyframes animateopacity {
-      from { background-color: rgba(0,0,0,0.0); }
-      to { background-color: rgba(0,0,0,0.7); }
+    @keyframes fade-in {
+      from { background-color: rgba(0, 0, 0, 0); }
+      to { background-color: rgba(0, 0, 0, 0.7); }
     }
     /* Phone */
     @media only screen and (max-width: 450px) {
@@ -38,9 +126,10 @@
         position: relative;
         width: 90%;
         max-width: 400px;
+        {% comment %} min-height: 451px; {% endcomment %}
         background-color: white;
         margin: 10% auto;
-        padding: 20px;
+        padding: 30px 20px 20px 20px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         z-index: 9999;
@@ -53,13 +142,40 @@
         margin: 0 auto;
       }
       .unfolded-popup-modal h1 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        text-align: center;
+        font-size: 30px;
+        margin-bottom: 5px;
+        text-align: left;
+        color: #373737;
+      }
+      .unfolded-popup-modal h2 {
+        font-size: 22px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        text-align: left;
+        color: #4b4b4b;
+      }
+      .unfolded-popup-modal h4, h5 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 8px 0;
+        text-align: left;
+        color: #4b4b4b;
+        line-height: 24px;
+      }
+
+      .unfolded-popup-modal ol {
+        font-size: 16px;
+        padding-left: 18px;
+        color: #4b4b4b;
+        font-weight: 400;
+        margin-top: 0;
+        line-height: 20px;
       }
       .popup-modal-content {
         font-size: 16px;
-        line-height: 1.6;
+        line-height: 20px;
+        color: #4b4b4b;
+        font-weight: 400;
       }
       #modal-exit {
         position: absolute;
@@ -68,24 +184,32 @@
         font-size: 24px;
         color: #888;
         cursor: pointer;
+        background-color: #fff;
+        border: none;
       }
       #how-to-find-your-paint-code-vindecoder {
-        color: #fff;
-        background-color: #0C1A94;
+        width:100%;
+        color: #3b3b3b;
+        background-color: #f3f3f3;
         border: none;
         font-size: 18px;
-        padding: 12px 0;
-        width: 100%;
-        max-width: 500px;
-        margin: 10px auto;
+        padding: 10px 20px;
+        {% comment %} margin: 20px 0; {% endcomment %}
         display: block;
-        text-align: center;
+        text-align: left;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s, transform 0.2s;
         border-radius: 6px;
+        font-family: 'Lato', sans-serif;
+      }
+      #how-to-find-your-paint-code-vindecoder p {
+        margin: 0;
       }
       #how-to-find-your-paint-code-vindecoder:hover {
-        background-color: #063175;
+        background-color: #e5e5e5;
+      }
+      #how-to-find-your-paint-code-vindecoder:active {
+        background-color: #f3f3f3;
       }
       #how-to-find-your-paint-code-vindecoder:disabled {
         color: #ccc;
@@ -105,14 +229,16 @@
         height: 100%;
         z-index: 5000;
         overflow-y: auto;
+        font-family: 'Lato', sans-serif;
       }
       .unfolded-popup-modal {
         position: relative;
         width: 60%;
         max-width: 800px;
+        {% comment %} min-height: 456px; {% endcomment %}
         background-color: white;
         margin: 5% auto;
-        padding: 30px;
+        padding: 40px 30px 30px 30px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         z-index: 9999;
@@ -125,13 +251,41 @@
         margin: 0 auto;
       }
       .unfolded-popup-modal h1 {
-        font-size: 28px;
-        margin-bottom: 15px;
-        text-align: center;
+        font-size: 32px;
+        margin-bottom: 5px;
+        text-align: left;
+        color: #373737;
       }
-      .popup-modal-content {
+      .unfolded-popup-modal h2 {
+        font-size: 22px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        text-align: left;
+        color: #4b4b4b;
+      }
+      .unfolded-popup-modal h4, h5 {
         font-size: 18px;
-        line-height: 1.6;
+        font-weight: 700;
+        margin: 8px 0;
+        text-align: left;
+        color: #4b4b4b;
+        line-height: 24px;
+      }
+
+      .unfolded-popup-modal ol {
+        font-size: 16px;
+        padding-left: 18px;
+        color: #4b4b4b;
+        font-weight: 400;
+        margin-top: 0;
+        line-height: 20px;
+      }
+
+      .popup-modal-content {
+        font-size: 16px;
+        line-height: 20px;
+        color: #4b4b4b;
+        font-weight: 400;
       }
       #modal-exit {
         position: absolute;
@@ -140,28 +294,32 @@
         font-size: 28px;
         color: #888;
         cursor: pointer;
+        background-color: #fff;
+        border: none;
       }
       #how-to-find-your-paint-code-vindecoder {
         width:100%;
-        color: #fff;
-        background-color: #0C1A94;
+        color: #3b3b3b;
+        background-color: #f3f3f3;
         border: none;
         font-size: 18px;
         padding: 10px 20px;
         {% comment %} margin: 20px 0; {% endcomment %}
         display: block;
-        text-align: center;
+        text-align: left;
         cursor: pointer;
         transition: background-color 0.3s, transform 0.2s;
         border-radius: 6px;
+        font-family: 'Lato', sans-serif;
+      }
+      #how-to-find-your-paint-code-vindecoder p {
+        margin: 0;
       }
       #how-to-find-your-paint-code-vindecoder:hover {
-        background-color: #063175;
-        transform: translateY(-2px);
+        background-color: #e5e5e5;
       }
       #how-to-find-your-paint-code-vindecoder:active {
-        background-color: #0C1A94;
-        transform: translateY(0);
+        background-color: #f3f3f3;
       }
       #how-to-find-your-paint-code-vindecoder:disabled {
         color: #ccc;
@@ -174,15 +332,67 @@
       0% { opacity: 0; transform: translateY(-50px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+    @keyframes drop-out {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-50px); }
+  }
   </style>
-  <button id="how-to-find-your-paint-code-vindecoder" type="button" class="btn" disabled>How To Find Your Paint Code</button>
+  <button id="how-to-find-your-paint-code-vindecoder" type="button" class="btn" disabled>
+    <div class="htfypc-wrapper">
+      <p id="button-text">
+        <b>Not sure what your paint code is?</b>
+        <br />
+        Explore the different ways you can get your paint code.
+      </p>
+      <div class="button_svg_container">
+        <svg class="button_svg" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="14px" width="14px" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path></svg>
+      </div>
+    </div>
+  </button>
   <div class="product-unfolded-popup-dark-overlay"></div>
   <div class="unfolded-popup-container">
     <div class="unfolded-popup-modal">
-      <button id="modal-exit" type="button">&#x2715;</button>
-      <h1>How To Find Your Paint Code</h1>
-      <div class="popup-modal-content">
-        <!-- Placeholder for dynamically inserted content -->
+      <button id="modal-exit" type="button">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><path d="M331.3 308.7L278.6 256l52.7-52.7c6.2-6.2 6.2-16.4 0-22.6-6.2-6.2-16.4-6.2-22.6 0L256 233.4l-52.7-52.7c-6.2-6.2-15.6-7.1-22.6 0-7.1 7.1-6 16.6 0 22.6l52.7 52.7-52.7 52.7c-6.7 6.7-6.4 16.3 0 22.6 6.4 6.4 16.4 6.2 22.6 0l52.7-52.7 52.7 52.7c6.2 6.2 16.4 6.2 22.6 0 6.3-6.2 6.3-16.4 0-22.6z"></path><path d="M256 76c48.1 0 93.3 18.7 127.3 52.7S436 207.9 436 256s-18.7 93.3-52.7 127.3S304.1 436 256 436c-48.1 0-93.3-18.7-127.3-52.7S76 304.1 76 256s18.7-93.3 52.7-127.3S207.9 76 256 76m0-28C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48z"></path></svg>
+      </button>
+      <h1>Not sure what your paint code is?</h1>
+      <h2>That's okay. We're here to help.</h2>
+      <div id="paint-code-instructions">
+        <h4>There are two main ways to get a paint code.</h4>
+        <ol>
+          <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
+          <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
+        </ol>
+      </div>
+      <div class="accordion-section" id="vin-decoder-accordion">
+        <div class="vin-decoder-accordion-container">
+          <button type="button" class="accordion-button">
+            <p>Get Paint Code With VIN</p>
+            <!-- Plus -->
+            <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
+            <!-- minus -->
+            <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
+          </button>
+        </div>
+        <div class="accordion-content">
+          {% render 'Vin-Decoder-app' %}
+        </div>
+      </div>
+      <div class="accordion-section" id="paint-code-accordion">
+        <div class="how-to-find-paintcode-accordion-container">
+          <button type="button" class="accordion-button">
+            <p>How to Find Paint Code</p>
+            <!-- Plus -->
+            <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
+            <!-- minus -->
+            <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
+          </button>
+        </div>
+        <div class="accordion-content">
+          <div class="popup-modal-content">
+            <!-- Placeholder for dynamically inserted content -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -190,6 +400,7 @@
 
 
   <script>
+    let noPaintSwatchImage = false;
     function hideShopifyChat() {
       const shopifyChat = document.getElementById('shopify-chat');
       if (shopifyChat) {
@@ -203,7 +414,69 @@
       shopifyChat.style.display = 'block';
     }
   }
-    let scrollPosition = 0;
+
+  //Autoscrolls to paintcode section
+  document.getElementById('instructions-link').addEventListener('click', function(event) {
+    event.preventDefault();
+        let paintCodeSection = document.getElementById('paint-code-accordion');
+    
+    paintCodeSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+  });
+
+  //Clicking on the buttons will expand that one and then close the other
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionSection = button.closest('.accordion-section');
+      const content = accordionSection.querySelector('.accordion-content');
+      const circlePlus = accordionSection.querySelector('.circle_plus');
+      const circleNone = accordionSection.querySelector('.circle_none');
+  
+      // Check if the clicked accordion is already open
+      const isOpen = content.classList.contains('open');
+  
+      // Close all accordion content sections and reset icons
+      {% comment %} document.querySelectorAll('.accordion-section').forEach(section => {
+        const sectionContent = section.querySelector('.accordion-content');
+        const sectionCirclePlus = section.querySelector('.circle_plus');
+        const sectionCircleNone = section.querySelector('.circle_none');
+  
+        if (sectionContent) {
+          sectionContent.style.maxHeight = null; // Reset height
+          sectionContent.classList.remove('open');
+        }
+        if (sectionCirclePlus && sectionCircleNone) {
+          sectionCirclePlus.style.display = 'block';
+          sectionCircleNone.style.display = 'none';
+        }
+      }); {% endcomment %}
+      if (isOpen) {
+        // Open the clicked accordion
+        content.classList.remove('open');
+        content.style.maxHeight = 0;
+  
+        // Show the minus icon and hide the plus icon for the active accordion
+        circlePlus.style.display = 'block';
+        circleNone.style.display = 'none';
+      }
+  
+      if (!isOpen) {
+        // Open the clicked accordion
+        content.classList.add('open');
+        content.style.maxHeight = content.scrollHeight + "px";
+  
+        // Show the minus icon and hide the plus icon for the active accordion
+        circlePlus.style.display = 'none';
+        circleNone.style.display = 'block';
+      }
+    });
+  });
+  
+  
+  
 
     const showOverlay = () => document.querySelector(".product-unfolded-popup-dark-overlay").style.display = "block";
     const showModal = (content) => {
@@ -212,7 +485,20 @@
       document.querySelector(".unfolded-popup-container").style.display = "block";
     };
     const hideOverlay = () => document.querySelector(".product-unfolded-popup-dark-overlay").style.display = "none";
-    const hideModal = () => document.querySelector(".unfolded-popup-container").style.display = "none";
+    const hideModal = () => {
+      const container = document.querySelector('.unfolded-popup-container');
+      const modal = document.querySelector('.unfolded-popup-modal');
+      const onAnimationEnd = function() {
+        modal.style.animation = '';
+        container.style.display = 'none';
+        modal.removeEventListener('animationend', onAnimationEnd);
+      };
+    
+      modal.style.animation = "drop-out 0.3s forwards";
+      modal.addEventListener('animationend', onAnimationEnd);
+    };
+
+
     // Function to fetch content from Shopify page using Liquid
     const fetchPageContent = async () => {
       try {
@@ -221,22 +507,49 @@
           throw new Error('Failed to fetch content');
         }
         const data = await response.json();
+        console.log('data: ', data);
         return data.page.body_html; // Assuming the content is in the body_html of the page
       } catch (error) {
+        noPaintSwatchImage = true;
+        if (noPaintSwatchImage) {
+          const accordion = document.getElementById("paint-code-accordion");
+          if (accordion) {
+              accordion.style.display = "none";
+              updatePaintCodeInstructions();
+          }
+      }
         console.error('Fetch error:', error);
-        throw error;
+        {% comment %} throw error; {% endcomment %}
       }
     };
 
     // Open Modal
     document.querySelector("#how-to-find-your-paint-code-vindecoder").onclick = async function() {
       hideShopifyChat();
-      scrollPosition = window.pageYOffset;
       showOverlay();
+      const accordionSection = document.querySelectorAll('.accordion-section');
+      accordionSection.forEach(section => {
+        const content = section.querySelector('.accordion-content');
+        const circlePlus = section.querySelector('.circle_plus');
+        const circleNone = section.querySelector('.circle_none');
+
+        const isOpen = content.classList.contains('open');
+        //auto expands the accordion
+        if (!isOpen) {
+          // Open the clicked accordion
+          content.classList.add('open');
+          content.style.maxHeight = 'fit-content';
+    
+          // Show the minus icon and hide the plus icon for the active accordion
+          circlePlus.style.display = 'none';
+          circleNone.style.display = 'block';
+        }
+
+      });
+
+
       try {
         document.body.classList.add('no-scroll-paint-swatch');
-        document.body.style.top = `-${scrollPosition}px`;
-
         const pageContent = await fetchPageContent();
         showModal(pageContent);
       } catch (error) {
@@ -247,10 +560,6 @@
     // Close Modal
     document.getElementById("modal-exit").onclick = function() {
         document.body.classList.remove('no-scroll-paint-swatch');
-        const top = parseInt(document.body.style.top || '0', 10) * -1;
-        document.body.style.top = '';
-        window.scrollTo({ top: top, behavior: 'instant' });
-
       showShopifyChat();
       hideOverlay();
       hideModal();
@@ -259,13 +568,53 @@
     window.onclick = function(event) {
       if(event.target === document.querySelector('.unfolded-popup-container')){
         document.body.classList.remove('no-scroll-paint-swatch');
-        const top = parseInt(document.body.style.top || '0', 10) * -1;
-        document.body.style.top = '';
-        window.scrollTo({ top: top, behavior: 'instant' });
-
         showShopifyChat();
         hideOverlay();
-        hideModal();
+        {% comment %} hideModal(); {% endcomment %}
       }
     };
+
+    
+    function updatePaintCodeInstructions() {
+      const instructionsContainer = document.getElementById("paint-code-instructions");
+  
+      if (noPaintSwatchImage === false) {
+          instructionsContainer.innerHTML = `
+              <h4>There are two main ways to get a paint code.</h4>
+              <ol>
+                <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
+                <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
+              </ol>
+          `;
+      } else {
+          instructionsContainer.innerHTML = `
+              <h5>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</h5>
+          `;
+      }
+    }
+
+    function updateButtonText() {
+      const buttonText = document.getElementById("button-text");
+  
+      // Check screen size
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        // Small screen text
+        buttonText.innerHTML = `
+          <b>Unsure of your paint code?</b><br />
+          Learn how to find it.
+        `;
+      } else {
+        // Default text for larger screens
+        buttonText.innerHTML = `
+          <b>Not sure what your paint code is?</b><br />
+          Explore the different ways you can get your paint code.
+        `;
+      }
+    }
+  
+    // Run the function on page load
+    updateButtonText();
+  
+    // Add an event listener to handle screen size changes
+    window.addEventListener("resize", updateButtonText);
   </script>
