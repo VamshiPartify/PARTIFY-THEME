@@ -1,7 +1,7 @@
 <div class="product-type-buttons" id="product-type-id">
   {% assign all_product_types = '' %}
   {%- for product in collection.all_products -%}
-    {%- unless all_product_types contains product.type -%}
+    {%- unless all_product_types contains product.type or product.title contains 'Sample' -%}
       {%- assign all_product_types = all_product_types | append: product.type | append: ',' -%}
     {%- endunless -%}
   {%- endfor -%}

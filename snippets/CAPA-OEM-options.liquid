@@ -447,14 +447,13 @@
           return tempElement.value;
         }
 
-
+        
         // 2. Populate the variant dropdown based on selected product type
         function populateVariantDropdown(selectedType) {
             combinedVariantSelect.innerHTML = '<option value="">Select Paint Code</option>';
 
             // Get the relevant variants for selected product type
             const variants = productVariants[selectedType] || [];
-            console.log('variants: ', variants);
             const variantsUpdateEvent = new CustomEvent('variantsUpdated', { detail: { variants } });
             document.dispatchEvent(variantsUpdateEvent);
             

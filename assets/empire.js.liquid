@@ -50422,7 +50422,6 @@ document.addEventListener('easysearch_loaded', function () {
   const addVehicleBtn = document.getElementById("add-vehicle-btn");
   const closeGarageBtn = document.querySelector('.garage-close-button');
 
-  let scrollPosition = 0;
 
   function hideShopifyChat() {
     const shopifyChat = document.getElementById('shopify-chat');
@@ -50444,18 +50443,16 @@ function showShopifyChat() {
 
     garageEasyPopup.classList.toggle("hidden");
     if (!garageEasyPopup.classList.contains("hidden")) {
-      // Save the current scroll position
-      scrollPosition = window.scrollY;
-  
-      // Disable background scrolling and maintain position
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollPosition}px`;
-      document.body.style.width = '100%';
        if (!document.getElementById(garagePopupStyleId)) {
         const style = document.createElement('style');
         style.id = garagePopupStyleId;
         style.textContent = `
           body.no-scroll {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden !important;
           }
         `;
@@ -50463,19 +50460,12 @@ function showShopifyChat() {
       }
       document.body.classList.add('no-scroll');
     } else {
-      // Re-enable scrolling and restore position
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
       document.body.classList.remove('no-scroll');
 
       const style = document.getElementById(garagePopupStyleId);
-    if (style) {
-      style.remove();
-    }
-  
-      // Scroll back to the original position
-      window.scrollTo(0, scrollPosition);
+      if (style) {
+        style.remove();
+      }
     }
   }
 

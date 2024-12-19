@@ -45,24 +45,26 @@
   data-product-gallery-aspect-ratio="{{ aspect_ratio }}"
   data-product-gallery-thumbnails="{{ thumbnail_position }}"
 >
-  {%
-    render 'product-gallery-viewer'
-    product: product,
-    selected_media: selected_media,
-    aspect_ratio: aspect_ratio,
-    image_crop: image_crop,
-    gallery_hover_zoom: gallery_hover_zoom,
-    onboarding: onboarding,
-    gallery_click_to_zoom: gallery_click_to_zoom,
-  %}
+  <div class="product-gallery-fit-content">
+    {%
+      render 'product-gallery-viewer'
+      product: product,
+      selected_media: selected_media,
+      aspect_ratio: aspect_ratio,
+      image_crop: image_crop,
+      gallery_hover_zoom: gallery_hover_zoom,
+      onboarding: onboarding,
+      gallery_click_to_zoom: gallery_click_to_zoom,
+    %}
 
-  {%
-    render 'product-gallery-navigation'
-    product: product,
-    selected_media: selected_media,
-    aspect_ratio: aspect_ratio,
-    image_crop: image_crop
-  %}
+    {%
+      render 'product-gallery-navigation'
+      product: product,
+      selected_media: selected_media,
+      aspect_ratio: aspect_ratio,
+      image_crop: image_crop
+    %}
+  </div>
 
   {% assign first_model = product.media | where: "media_type", "model" | first %}
   {% if selected_media.media_type == 'model' %}
