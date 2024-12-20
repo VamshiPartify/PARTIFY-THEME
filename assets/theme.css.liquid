@@ -1790,7 +1790,7 @@ noscript .disclosure-list {
 {% comment %}Inject border-mix end{% endcomment %}
 {% endcapture %}
 
-  {% assign color_border = color_background | color_mix: border_mix, 50 %}
+  {% assign color_border = '#808080' %}
   {% assign color_border_mix_encoded = border_mix | color_to_hex | replace: '#', '' %}
 {% assign overlay_opacity = settings.overlay_opacity | divided_by: 100.00 %}
 {% assign color_background_light = settings.color_text | color_mix: color_background, 5 %}
