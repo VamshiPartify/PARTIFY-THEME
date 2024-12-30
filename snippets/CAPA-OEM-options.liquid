@@ -12,7 +12,7 @@
             height: fit-content;
             width: 100%;
         }
-        .product-type-dropdown select {
+        {% comment %} .product-type-dropdown select {
           color: #000;
           background-color: #fff;
           border: 1px solid #ddd;
@@ -23,20 +23,20 @@
           padding: 10px;
           width: 100%;
           min-height: 45px;
-          margin-bottom: 1rem;
+          margin-bottom: 10px;
         }
         .product-type-dropdown {
             display: flex;
             flex-direction: column;
-        }
+        } {% endcomment %}
 
-        #product-type-select:disabled {
+        {% comment %} #product-type-select:disabled {
             color: #ccc;
         }
 
         #product-type-select {
           color: #000;
-      }
+      } {% endcomment %}
 
         .divider {
           height: 1px;
@@ -53,19 +53,19 @@
             margin-bottom: 3px;
             color: #333;
         }
-        .option-title-quality {
+        {% comment %} .option-title-quality {
           font-size: 1.2rem;
           font-weight: 800;
           margin-bottom: 3px;
           color: #333;
-      }
+      } {% endcomment %}
 
-        .option-title-vin {
+        {% comment %} .option-title-vin {
           font-size: 1.2rem;
           font-weight: 800;
           margin-bottom: 3px;
           color: #333;
-      }
+      } {% endcomment %}
         .paint-code-wrapper {
             margin-top: 3px;
         }
@@ -76,12 +76,12 @@
             margin-top: 1rem;
         }
 
-        .product-type-dropdown select[disabled]{
+        {% comment %} .product-type-dropdown select[disabled]{
           background-color: #f0f0f0;
           color: #ccc;
           pointer-events: none;
           opacity: 0.6;
-        }
+        } {% endcomment %}
       
         .combined-variant-dropdown {
             height: fit-content;
@@ -147,26 +147,30 @@
           }
         }
 
-        #vin-textbox-container-for-oem {
+        {% comment %} #vin-textbox-container-for-oem {
           width: 100%;
       }
   
       #vin-textbox-container-for-oem input {
           margin: 0;
-      }
+      } {% endcomment %}
 
-      #vin-textbox-for-oem {
+      {% comment %} #vin-textbox-for-oem {
         width: 100%;
         padding: 10px;
         border: 1px solid #ddd;
         border-radius: 4px;
-      }
+      } {% endcomment %}
 
-      #vin-warning-for-oem {
+      {% comment %} #vin-warning-for-oem {
         color: red;
         font-size: 14px;
         margin-top: 5px;
-      }
+      } {% endcomment %}
+
+      {% comment %} .quality-description-container {
+        padding: 10px 0;
+      } {% endcomment %}
     </style>
 
     {% assign makes = settings.makes_list | split: ", " %}
@@ -184,7 +188,8 @@
     <div class="option-dropdowns">
       <!-- Main Product Type Dropdown -->
       <div class="divider"></div>
-      <div class="product-type-dropdown">
+      {% render 'quality-type-dropdown' %}
+      {% comment %} <div class="product-type-dropdown">
         <label class="option-title-quality" for="product-type-select">Quality</label>
         <select id="product-type-select" disabled>
           <option value="" disabled selected>Select Quality</option>
@@ -255,12 +260,34 @@
             <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
           </div>
         </div>
-      </div>
-      {% if is_make_found %}
+        <div class="quality-description-container">
+          {% render 'quality-description-modal', qualityTypes: availableProductTypes %}
+        </div>
+      </div> {% endcomment %}
+      {% if product.variants.size > 1 %}
+        {% if is_make_found %}
+          <div class="divider"></div>
+            <div class="combined-variant-dropdown">
+              <div class="paint-option-and-how-to-find-paint-code-wrapper">
+                <div class="find-paint-option-link-container" style="display: none;">
+                  <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+                </div>
+                <label class="option-title" for="product-type-select">Paint Option</label>
+              </div>
+              <div class="paint-code-wrapper">
+                <select id="variant-selector" name="id" disabled>
+                  <option value="" disabled selected>Select Paint Code</option>
+                </select>
+              </div>
+              {% render 'vin-decoder' %}
+
+            </div>
+          </div> 
+        {% else %}
         <div class="divider"></div>
           <div class="combined-variant-dropdown">
             <div class="paint-option-and-how-to-find-paint-code-wrapper">
-              <div class="find-paint-option-link-container" style="display: none;">
+              <div class="find-paint-option-link-container">
                 <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
               </div>
               <label class="option-title" for="product-type-select">Paint Option</label>
@@ -270,31 +297,19 @@
                 <option value="" disabled selected>Select Paint Code</option>
               </select>
             </div>
-            {% render 'vin-decoder' %}
-
           </div>
         </div> 
-      {% else %}
-      <div class="divider"></div>
-        <div class="combined-variant-dropdown">
-          <div class="paint-option-and-how-to-find-paint-code-wrapper">
-            <div class="find-paint-option-link-container">
-              <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
-            </div>
-            <label class="option-title" for="product-type-select">Paint Option</label>
-          </div>
-          <div class="paint-code-wrapper">
-            <select id="variant-selector" name="id" disabled>
-              <option value="" disabled selected>Select Paint Code</option>
-            </select>
-          </div>
-        </div>
-      </div> 
+      {% endif %}
     {% endif %}
   
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const productVariants = {
+      let unpainted = false;
+      if('{{ product.variants.size }}' <= 1) {
+        unpainted = true;
+      };
+
+      const productVariants = {
             aftermarket: [
               {% if product.metafields.custom.aftermarket_product %}
                 {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
@@ -418,7 +433,7 @@
                 {% endif %}
               {% endif %}
             ]
-        };
+      };
 
         {% comment %} window.selectedProductType = ''; {% endcomment %}
         const productTypeSelect = document.getElementById('product-type-select');
@@ -450,7 +465,9 @@
         
         // 2. Populate the variant dropdown based on selected product type
         function populateVariantDropdown(selectedType) {
+          if(combinedVariantSelect) {
             combinedVariantSelect.innerHTML = '<option value="">Select Paint Code</option>';
+          }
 
             // Get the relevant variants for selected product type
             const variants = productVariants[selectedType] || [];
@@ -458,7 +475,9 @@
             document.dispatchEvent(variantsUpdateEvent);
             
             if (variants.length > 0) {
+              if(combinedVariantSelect) {
                 combinedVariantSelect.disabled = false;
+              }
                 if(howToFindPaintCodeBtn) {
                   howToFindPaintCodeBtn.disabled = false;
                 }
@@ -471,6 +490,7 @@
 
                 variants.forEach(function(variant) {
                   const option = document.createElement('option');
+                  window.selectedVariantId = variant.id;
                   option.value = variant.id;
                   option.textContent = `${variant.title}`;
                   option.dataset.price = variant.price;
@@ -500,11 +520,11 @@
                         capaImg.style.margin = "0 0 0 10px";
                         
                         
-                        if(window.innerWidth > 720) {
+                        {% comment %} if(window.innerWidth > 720) {
                           priceContainerLargeScreen.appendChild(capaImg);
                         } else {
                           priceContainerSmallScreen.appendChild(capaImg);
-                        }
+                        } {% endcomment %}
                       }
                     } else {  
                       if(!productTitle.includes("OEM")) {
@@ -524,17 +544,21 @@
                   if (productPartDescription) {
                       productPartDescription.innerHTML = tempElement.innerHTML;
                   }
-                  combinedVariantSelect.appendChild(option);
+                  if(combinedVariantSelect) {
+                    combinedVariantSelect.appendChild(option);
+                  }
                 });
             } else {
-                combinedVariantSelect.disabled = true;
+                if(combinedVariantSelect) {
+                  combinedVariantSelect.disabled = true;
+                  combinedVariantSelect.selectedIndex = 0;
+                }
                 if(howToFindPaintCodeBtn) {
                   howToFindPaintCodeBtn.disabled = true;
                 }
                 if(getPaintCodeUsingVin) {
                   getPaintCodeUsingVin.disabled = true;
                 }
-                combinedVariantSelect.selectedIndex = 0;
                 if(selectVinVariantButton) {
                   selectVinVariantButton.disabled = true;
                 }
@@ -615,24 +639,28 @@
 
                 vinTextBox.value = '';
                 oem = selectedType;
-                combinedVariantSelect.disabled = true;
+                if(combinedVariantSelect) {
+                  combinedVariantSelect.disabled = true;
+                  combinedVariantSelect.selectedIndex = 0;
+                }
                 if(howToFindPaintCodeBtn) {
                   howToFindPaintCodeBtn.disabled = true;
                 }
                 if(getPaintCodeUsingVin) {
                   getPaintCodeUsingVin.disabled = true;
                 }
-                combinedVariantSelect.selectedIndex = 0;
               }
           } else {
-              combinedVariantSelect.disabled = true;
+              if(combinedVariantSelect) {
+                combinedVariantSelect.disabled = true;
+                combinedVariantSelect.selectedIndex = 0;
+              }
               if(howToFindPaintCodeBtn) {
                 howToFindPaintCodeBtn.disabled = true;
               }
               if(getPaintCodeUsingVin) {
                 getPaintCodeUsingVin.disabled = true;
               }
-              combinedVariantSelect.selectedIndex = 0;
               if(selectVinVariantButton) {
                 selectVinVariantButton.disabled = true;
               }
@@ -640,23 +668,25 @@
         });
 
         // 4. When a variant is selected, show the price
-        combinedVariantSelect.addEventListener('change', function() {
-            const selectedOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex];
-            const selectedPrice = selectedOption ? selectedOption.dataset.price : null;
-            const selectedColor = selectedOption ? selectedOption.dataset.color : null;
-            const selectedTitle = selectedOption ? selectedOption.dataset.variantTitle : null;
+        if(combinedVariantSelect) { 
+            combinedVariantSelect.addEventListener('change', function() {
+              const selectedOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex];
+              const selectedPrice = selectedOption ? selectedOption.dataset.price : null;
+              const selectedColor = selectedOption ? selectedOption.dataset.color : null;
+              const selectedTitle = selectedOption ? selectedOption.dataset.variantTitle : null;
 
-    
-            if (selectedPrice) {
-                priceDisplay.textContent = selectedPrice;
-                priceDisplaySmallScreen.textContent = selectedPrice;
+      
+              if (selectedPrice) {
+                  priceDisplay.textContent = selectedPrice;
+                  priceDisplaySmallScreen.textContent = selectedPrice;
+              }
+              if (selectedColor) {
+                window.selectedProductColor = selectedColor;
+                window.selectedProductTitle = selectedTitle
+                {% comment %} window.dispatchEvent(new Event('colorUpdated')); {% endcomment %}
             }
-            if (selectedColor) {
-              window.selectedProductColor = selectedColor;
-              window.selectedProductTitle = selectedTitle
-              {% comment %} window.dispatchEvent(new Event('colorUpdated')); {% endcomment %}
-          }
-        });
+          });
+        }
 
         document.getElementById('vin-textbox-for-oem').addEventListener('input', function(event) {
           const vinInput = event.target.value.toUpperCase();

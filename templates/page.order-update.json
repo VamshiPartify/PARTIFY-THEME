@@ -40,10 +40,17 @@
       "settings": {
         "include_padding": true
       }
+    },
+    "dynamic_custom_liquid_nCWghX": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'order-status-lookup' %}"
+      }
     }
   },
   "order": [
     "main",
-    "1733951802e735928d"
+    "1733951802e735928d",
+    "dynamic_custom_liquid_nCWghX"
   ]
 }

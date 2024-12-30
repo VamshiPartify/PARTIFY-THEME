@@ -757,31 +757,35 @@
                             </div>
                           </div> {% endcomment %}
                           <label for="variant-selector" class="variant-label">Paint Option</label>
-                          <select id="variant-selector" name="id" class="variant-dropdown">
+                         <select id="variant-selector" name="id" class="variant-dropdown">
                             <option value="" selected disabled>Paint Option</option>
                             {% for variant in product.variants %}
-                              {% if is_make_found %}
-                                {% if variant.title contains "Match Paint by VIN" %}
-                                  {% continue %}
+                                {% if is_make_found %}
+                                    {% if variant.title contains "Match Paint by VIN" %}
+                                        {% continue %}
+                                    {% endif %}
+                                    {% if variant.title contains "Custom Paint Code" %}
+                                        {% continue %}
+                                    {% endif %}
+                                  {% if v.title == value and v.metafields.custom.hide_paint_code == true %}
+                                    {% continue %}
+                                    {% endif %}
                                 {% endif %}
-                                {% if variant.title contains "Custom Paint Code" %}
-                                  {% continue %}
+                                {% assign price_diff = variant.price | minus: product.price_min | money %}  
+                                {% if price_diff == 0 %}
+                                    {{ '' }}
+                                {% else %}
+                                    {{ '+' }}{{ price_diff | money | remove: '.00' }}
                                 {% endif %}
-                              {% endif %}
-                              {% assign price_diff = variant.price | minus: product.price_min | money %}  
-                              {% if price_diff == 0 %}
-                                  {{ '' }}
-                              {% else %}
-                                  {{ '+' }}{{ price_diff | money | remove: '.00' }}
-                              {% endif %}
-                              <option 
-                                  value="{{ variant.id }}" 
-                                  class="variant-option"
-                                  data-price="{{ variant.price }}">
-                                  {{ variant.title }} + {{ price_diff }}
-                              </option>
+                                <option 
+                                    value="{{ variant.id }}" 
+                                    class="variant-option"
+                                    data-price="{{ variant.price }}">
+                                    {{ variant.title }} + {{ price_diff }}
+                                </option>
                             {% endfor %}
-                          </select>
+                      </select>
+
                           {% render 'vin-decoder' %}
                         </div>
                         
@@ -799,6 +803,7 @@
                           <select id="variant-selector" name="id" class="variant-dropdown">
                             <option value="" selected disabled>Paint Option</option>
                             {% for variant in product.variants %}
+                              
                             {% assign price_diff = variant.price | minus: product.price_min | money %}  
                             {% if price_diff == 0 %}
                                 {{ '' }}
@@ -871,7 +876,7 @@
                   </div>
               </form>
 
-              {% render 'paint-match-percentage-popup' %}
+              {% comment %}{% render 'paint-match-percentage-popup' %} {% endcomment %}
             <!-- Color mismatch popup -->
               <div id="color-mismatch-popup" style="display: none;">
                   <div class="customize-color-mismatch-popup-overlay">
@@ -896,7 +901,7 @@
                   </div>
                 </div>
               </div>
-              {% if product.title contains 'OEM' %}
+              {% comment %} {% if product.title contains 'OEM' %}
                 <div class="oem-vin-container" style="display: block; width: 100%; padding-top: 5px;">
                   <label class="option-title-vin" for="product-type-select">VIN</label>
                   <div id="vin-textbox-container-for-oem">
@@ -910,7 +915,8 @@
                     <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
                   </div>
                 </div>
-              {% endif %}
+              {% endif %} {% endcomment %}
+              {% render 'CAPA-OEM-options' %}
               <div class="divider-small-screen"></div>
               <div class="unpainted-add-to-cart-btn-container">
                 <input type="hidden" name="id" value="{{ product.variants.first.id }}">
@@ -1019,16 +1025,17 @@
         const addToCartButton = document.getElementById('add-to-cart');
         
         // let vinSuccess = false;
-    
-        variantSelector.addEventListener('change', function () {
-            if (variantSelector.value) {
-            addToCartButton.style.display = 'block';
-            addToCartButton.disabled = false;
-            } else {
-            addToCartButton.style.display = 'none';
-            addToCartButton.disabled = true;
-            }
-        });
+          if(variantSelector) {
+            variantSelector.addEventListener('change', function () {
+              if (variantSelector.value) {
+              addToCartButton.style.display = 'block';
+              addToCartButton.disabled = false;
+              } else {
+              addToCartButton.style.display = 'none';
+              addToCartButton.disabled = true;
+              }
+            });
+          };
         });
         
   
@@ -1070,7 +1077,7 @@
         
             if(addToCartButtonForUnpaintedItems !== null) {
                 addToCartButtonForUnpaintedItems.addEventListener("click", function () {
-                    form.action = `/cart/add?id=${'{{ product.variants[0].id }}'}`;
+                    form.action = `/cart/add?id=${window.selectedVariantId}`;
                     {% comment %} form.submit(); {% endcomment %}
             });
             }
@@ -1081,6 +1088,9 @@
                 const easyFitmentSuccess = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-icon-success');
                 const fitmentLink = document.querySelector('.easysearch-fitment-link');
                 const fitmentHeader = document.querySelector('.easysearch-fitment-header');
+                const productTypeSelect = document.getElementById('product-type-select');
+                const qualityDescriptionBtn = document.getElementById('quality-description-vindecoder');
+                let productSelect;
         
         
                 let failChecker = 0;
@@ -1091,41 +1101,52 @@
                 }
         
                 if(fitmentHeader.offsetWidth === 0) {
-                if (easyFitmentFail && fitmentLink && failChecker !== 0) {
-                    fitmentFailButton.style.display = 'block';
-                    addToCartButtonForUnpaintedItems.disabled = true;
-                    if (!document.getElementById('fitment-fail-button')) {
-                    fitmentFailPage.appendChild(fitmentFailButton);
+                    if (easyFitmentFail && fitmentLink && failChecker !== 0) {
+                        fitmentFailButton.style.display = 'block';
+                        addToCartButtonForUnpaintedItems.disabled = true;
+                        if (!document.getElementById('fitment-fail-button')) {
+                        fitmentFailPage.appendChild(fitmentFailButton);
+                        }
+                        fitmentFailButton.style.display = 'block';
+                        fitmentSuccess = false;
+                        if(vinTextBoxOEM) {
+                          vinTextBoxOEM.disabled = true;
+                        }
+                        if(productTypeSelect) {
+                          productTypeSelect.selectedIndex = 0;
+                          productTypeSelect.disabled = true;
+                          qualityDescriptionBtn.disabled = true;
+                        }
+                    } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){
+                        fitmentFailButton.style.display = 'none';
+                        //If vinTextBoxOEM means on unpainted product that is OEM
+                        if(vinTextBoxOEM) {
+                          vinTextBoxOEM.disabled = false;
+                        }
+                        //If vinTextBox means customer is on painted product page
+                        if(vinTextBox) {
+                          addToCartButtonForUnpaintedItems.style.display = 'block';
+                          addToCartButtonForUnpaintedItems.disabled = false;
+                        }
+                        //No vin textbox and no oem box means on unpainted product page that is not OEM
+                        {% comment %} if(!vinTextBox && !vinTextBoxOEM) {
+                          addToCartButtonForUnpaintedItems.style.display = 'block';
+                          addToCartButtonForUnpaintedItems.disabled = false;
+                        } {% endcomment %}
+                        let event = new Event('eventFitmentSuccess');
+                        easyFitmentSuccess.dispatchEvent(event);
+                        if(productTypeSelect) {
+                          productTypeSelect.disabled = false;
+                          productSelect = productTypeSelect.value;
+                          qualityDescriptionBtn.disabled = false;
+                        }
+                        fitmentSuccess = true;
+                    } else {
+                        fitmentFailButton.style.display = 'none';
+                        addToCartButtonForUnpaintedItems.style.display = 'block';
+                        fitmentSuccess = false;
                     }
-                    fitmentFailButton.style.display = 'block';
-                    fitmentSuccess = false;
-                    if(vinTextBoxOEM) {
-                      vinTextBoxOEM.disabled = true;
-                    }
-                } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){
-                    fitmentFailButton.style.display = 'none';
-                    //If vinTextBoxOEM means on unpainted product that is OEM
-                    if(vinTextBoxOEM) {
-                      vinTextBoxOEM.disabled = false;
-                    }
-                    //If vinTextBox means customer is on painted product page
-                    if(vinTextBox) {
-                      addToCartButtonForUnpaintedItems.style.display = 'block';
-                      addToCartButtonForUnpaintedItems.disabled = false;
-                    }
-                    //No vin textbox and no oem box means on unpainted product page that is not OEM
-                    if(!vinTextBox && !vinTextBoxOEM) {
-                      addToCartButtonForUnpaintedItems.style.display = 'block';
-                      addToCartButtonForUnpaintedItems.disabled = false;
-                    }
-                    let event = new Event('eventFitmentSuccess');
-                    easyFitmentSuccess.dispatchEvent(event);
-                    fitmentSuccess = true;
-                } else {
-                    fitmentFailButton.style.display = 'none';
-                    addToCartButtonForUnpaintedItems.style.display = 'block';
-                    fitmentSuccess = false;
-                }
+                    handleFitmentSuccessChange(productSelect);
                 } else {
                   fitmentFailButton.style.display = 'none';
                   addToCartButtonForUnpaintedItems.style.display = 'block';
@@ -1134,7 +1155,6 @@
                     vinTextBoxOEM.disabled = true;
                   }
                 }
-                handleFitmentSuccessChange();
             }
         
         
@@ -1146,6 +1166,7 @@
                 const fitmentLink = document.querySelector('.easysearch-fitment-link'); // Get the dynamic link
                 const fitmentHeader = document.querySelector('.easysearch-fitment-header');
                 const productTypeSelect = document.getElementById('product-type-select');
+                const qualityDescriptionBtn = document.getElementById('quality-description-vindecoder');
                 const combinedVariantSelect = document.getElementById('variant-selector');
                 const selectVinVariantButton = document.getElementById('select-vin-variant');
                 const optionDropdowns = document.querySelector('.option-dropdowns');
@@ -1154,6 +1175,8 @@
                 const vinHeader = document.querySelector('.option-title-vin');
                 const oemVinContainer = document.querySelector('.oem-vin-container');
                 const optionTitle = document.querySelector('.option-title');
+
+                let productSelect;
 
                 if(productTypeSelect && productTypeSelect.disabled === true) {
                   if(verifyFitmentHeader) {
@@ -1214,6 +1237,7 @@
                         if(productTypeSelect) {
                           productTypeSelect.selectedIndex = 0;
                           productTypeSelect.disabled = true;
+                          qualityDescriptionBtn.disabled = true;
                         }
                         combinedVariantSelect.selectedIndex = 0;
                         combinedVariantSelect.disabled = true;
@@ -1233,7 +1257,9 @@
                         let event = new Event('eventFitmentSuccess');
                         easyFitmentSuccess.dispatchEvent(event);
                         if(productTypeSelect) {
+                          productSelect = productTypeSelect.value;
                           productTypeSelect.disabled = false;
+                          qualityDescriptionBtn.disabled = false;
                         }
 
                         // This means if there is not a quality selection present
@@ -1258,6 +1284,7 @@
                         if(productTypeSelect) {
                           productTypeSelect.selectedIndex = 0;
                           productTypeSelect.disabled = true;
+                          qualityDescriptionBtn.disabled = true;
                         }
                         combinedVariantSelect.selectedIndex = 0;
                         combinedVariantSelect.disabled = true;
@@ -1273,7 +1300,7 @@
                         }
                         fitmentSuccess = false;
                     }
-                    handleFitmentSuccessChange();
+                    handleFitmentSuccessChange(productSelect);
                     checkBothConditions(); 
                 } else {
                     fitmentFailButton.style.display = 'none';
@@ -1365,8 +1392,8 @@
                   }
                 }
         
-        
-            variantSelector.addEventListener('change', function() {
+            if(variantSelector) {
+              variantSelector.addEventListener('change', function() {
                 const variantId = this.value;
                 if (variantId && fitmentSuccess) {
                     form.action = `/cart/add?id=${variantId}`;
@@ -1376,18 +1403,31 @@
                     form.action = '/cart/add';
                     addToCartButton.disabled = true;
                 }
-            });
+              });
+            }
         
-            function handleFitmentSuccessChange() {
-                const variantId = this.value;
+            function handleFitmentSuccessChange(productSelect) {
                 if(addToCartButton) {
+                  const variantId = this.value;
                   if (variantId && fitmentSuccess) {
                       form.action = `/cart/add?id=${variantId}`;
                       addToCartButton.style.display = 'block';
                       addToCartButton.disabled = false;
+                      console.log('here1');
+
                   } else {
                       form.action = '/cart/add';
                       addToCartButton.disabled = true;
+                  }
+                } else if (addToCartButtonForUnpaintedItems) {
+                  const variantId = productSelect;
+                  if (variantId && fitmentSuccess) {
+                      form.action = `/cart/add?id=${variantId}`;
+                      addToCartButtonForUnpaintedItems.style.display = 'block';
+                      addToCartButtonForUnpaintedItems.disabled = false;
+                  } else {
+                      form.action = '/cart/add';
+                      addToCartButtonForUnpaintedItems.disabled = true;
                   }
                 } else {
                     form.action = '/cart/add';
@@ -1402,6 +1442,7 @@
         // This is for the Use VIN Instead button
             document.addEventListener('DOMContentLoaded', () => {
                 const variantSelector = document.getElementById('variant-selector');
+                if(!variantSelector) return;
                 const selectVinVariantButton = document.getElementById('select-vin-variant');
                 const paintSwatchImage = document.getElementById('paint-swatch-image');
             
@@ -1551,8 +1592,9 @@
                   }
               }
   
-              // Check variant on change
-              variantSelector.addEventListener('change', checkVariant);
+              if(variantSelector) {
+                variantSelector.addEventListener('change', checkVariant);
+              }
   
               // Initial check in case a default selected variant is the VIN variant
               {% comment %} checkVariant(); {% endcomment %}
@@ -1562,7 +1604,7 @@
   
   {% comment %} Formats Price for Cart {% endcomment %}
   <script>
-    if({{  product.variants.size }} > 1) {
+    if({{ product.variants.size }} > 1) {
       document.getElementById('variant-selector').addEventListener('change', function() {
         var selectedOption = this.options[this.selectedIndex];
         var price = selectedOption.getAttribute('data-price');
@@ -1581,72 +1623,74 @@
   
   {% comment %} Color Mismatch Popup {% endcomment %}
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const variantSelector = document.getElementById('variant-selector');
-      const popup = document.getElementById('color-mismatch-popup');
-      const continueBtn = document.getElementById('continue-btn');
-      const cancelBtn = document.getElementById('cancel-btn');
-      const mismatchMessageBtn = document.getElementById('mismatch-message');
-      const mismatchBtnContainer = document.getElementById('mismatch-buttons-container');
-      let variantSelectorArray = Array.from(variantSelector.options);
-      let firstItem;
-  
-      variantSelector.addEventListener('change', function() {
-        const variantId = this.value;
-        const selectedOption = variantSelector.options[variantSelector.selectedIndex];
-        const selectedLabel = selectedOption.label;
-        const selectedVariantColor = selectedLabel.split(' ')[0];
-      
-        if (selectedLabel.startsWith("Match Paint by VIN") || selectedLabel.startsWith("Unpainted") || selectedLabel.startsWith("Custom Paint Code")) {
-          return;
-        }
-  
-        let cartContents = fetch(window.Shopify.routes.root + 'cart.js')
-        .then(response => response.json())
-        .then(data => { 
-          if(data.items.length) {
-            firstItem = data.items[0].variant_title;
-            let isFirstItemSwatch = data.items[0].product_title.toUpperCase();
-            if(isFirstItemSwatch.includes("SWATCH")) {
-              return;
-            }
-            if(firstItem && firstItem !== selectedVariantColor) {
-              const matchArray = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
-              if(matchArray) {
-                mismatchMessageBtn.textContent = `The color you selected is different from items already in your cart. Would you like to switch to ${firstItem}?`;
-                cancelBtn.textContent = `Yes, Update Color`;
-              } else {
-                mismatchMessageBtn.textContent = "The color you selected is different from the color of items already in your cart."
-                mismatchBtnContainer.style.justifyContent = "center";
-                continueBtn.textContent = "Continue Anyway";
-                continueBtn.style.width = "fit-content";
-                cancelBtn.style.display = "none";
-              }
-              popup.style.display = 'block';
-            }
-          }
-        })
-        .catch(error => {
-            console.error("Error fetching cart data:", error);
-          })
-      });
-  
-      if(continueBtn) {
-        continueBtn.addEventListener('click', function() {
-          popup.style.display = "none";
-        })
-      }
-  
-      if(cancelBtn) {
-        cancelBtn.addEventListener('click', function() {
-          const matchOption = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
+    if({{ product.variants.size }} > 1) {
+      document.addEventListener('DOMContentLoaded', function() {
+        const variantSelector = document.getElementById('variant-selector');
+        const popup = document.getElementById('color-mismatch-popup');
+        const continueBtn = document.getElementById('continue-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const mismatchMessageBtn = document.getElementById('mismatch-message');
+        const mismatchBtnContainer = document.getElementById('mismatch-buttons-container');
+        let variantSelectorArray = Array.from(variantSelector.options);
+        let firstItem;
     
-          if(matchOption) {
-            variantSelector.value = matchOption.value;
-            window.handleVariantChange();
+        variantSelector.addEventListener('change', function() {
+          const variantId = this.value;
+          const selectedOption = variantSelector.options[variantSelector.selectedIndex];
+          const selectedLabel = selectedOption.label;
+          const selectedVariantColor = selectedLabel.split(' ')[0];
+        
+          if (selectedLabel.startsWith("Match Paint by VIN") || selectedLabel.startsWith("Unpainted") || selectedLabel.startsWith("Custom Paint Code")) {
+            return;
           }
-          popup.style.display = "none";
-        })
-      }
-    });
+    
+          let cartContents = fetch(window.Shopify.routes.root + 'cart.js')
+          .then(response => response.json())
+          .then(data => { 
+            if(data.items.length) {
+              firstItem = data.items[0].variant_title;
+              let isFirstItemSwatch = data.items[0].product_title.toUpperCase();
+              if(isFirstItemSwatch.includes("SWATCH")) {
+                return;
+              }
+              if(firstItem && firstItem !== selectedVariantColor) {
+                const matchArray = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
+                if(matchArray) {
+                  mismatchMessageBtn.textContent = `The color you selected is different from items already in your cart. Would you like to switch to ${firstItem}?`;
+                  cancelBtn.textContent = `Yes, Update Color`;
+                } else {
+                  mismatchMessageBtn.textContent = "The color you selected is different from the color of items already in your cart."
+                  mismatchBtnContainer.style.justifyContent = "center";
+                  continueBtn.textContent = "Continue Anyway";
+                  continueBtn.style.width = "fit-content";
+                  cancelBtn.style.display = "none";
+                }
+                popup.style.display = 'block';
+              }
+            }
+          })
+          .catch(error => {
+              console.error("Error fetching cart data:", error);
+            })
+        });
+    
+        if(continueBtn) {
+          continueBtn.addEventListener('click', function() {
+            popup.style.display = "none";
+          })
+        }
+    
+        if(cancelBtn) {
+          cancelBtn.addEventListener('click', function() {
+            const matchOption = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
+      
+            if(matchOption) {
+              variantSelector.value = matchOption.value;
+              window.handleVariantChange();
+            }
+            popup.style.display = "none";
+          })
+        }
+      });
+    }
   </script>

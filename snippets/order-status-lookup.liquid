@@ -1,0 +1,167 @@
+{% comment %} Order Status Lookup Snippet {% endcomment %}
+<div class="order-status-container">
+  <h1>Track Your Order</h1>
+  <p class="instructions">Enter your order number below to see its current status and history:</p>
+  <form id="order-form">
+    <div class="form-group">
+      <label for="orderNumber">Order Number:</label>
+      <input type="text" id="orderNumber" name="orderNumber" placeholder="e.g., 12345" required>
+    </div>
+    <button type="submit" class="btn-submit">Check Status</button>
+  </form>
+  <div id="status" class="status-message"></div>
+  <ul id="status-list" class="status-list"></ul>
+</div>
+
+<style>
+  .order-status-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    color: #333;
+  }
+
+  .instructions {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .btn-submit {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-submit:hover {
+    background-color: #0056b3;
+  }
+
+  .status-message {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    display: inline-block;
+  }
+
+  .status-message.loading {
+    color: #007bff;
+  }
+
+  .status-message.success {
+    color: #28a745;
+  }
+
+  .status-message.error {
+    color: #dc3545;
+  }
+
+  .status-list {
+    margin-top: 1rem;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+  }
+
+  .status-list li {
+    font-size: 1rem;
+    color: #495057;
+    padding: 0.5rem 0;
+  }
+
+  .status-list li:first-child {
+    font-weight: bold;
+    color: #007bff;
+  }
+</style>
+
+<script>
+  document.getElementById("order-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const statusDiv = document.getElementById("status");
+    const statusList = document.getElementById("status-list");
+    statusDiv.textContent = "Checking order status...";
+    statusDiv.className = "status-message loading";
+    statusList.innerHTML = ""; // Clear previous results
+
+    const orderNumber = document.getElementById("orderNumber").value.trim();
+
+    // Replace with your deployed URL
+    const url = `https://script.google.com/macros/s/AKfycbwuMsVGjIeh-8yFrRSWJ07fGxIQG6UqLt4vsKOTOVcXI181jfnrDAs8dAx-YHo4RcTF/exec?orderNumber=${encodeURIComponent(orderNumber)}`;
+
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then((data) => {
+        if (data) {
+          const statusArray = data.split(";");
+
+          
+
+          // Display the current status
+          if (statusMessages.length > 0) {
+            statusDiv.textContent = `Current Status: ${statusMessages[0]}`;
+            statusDiv.className = "status-message success";
+
+            // Build the timeline of status updates
+            statusList.innerHTML = statusMessages
+              .map((status, index) =>
+                index === 0
+                  ? `<li><strong>${status}</strong></li>`
+                  : `<li>${status}</li>`
+              )
+              .join("");
+          } else {
+            statusDiv.textContent = "No status updates available.";
+            statusDiv.className = "status-message error";
+          }
+        } else {
+          statusDiv.textContent = "Order not found. Please check your order number.";
+          statusDiv.className = "status-message error";
+        }
+      })
+      .catch((error) => {
+        statusDiv.textContent = "Unable to retrieve status. Please try again later.";
+        statusDiv.className = "status-message error";
+        console.error("Fetch error:", error);
+      });
+  });
+  
+</script>
+

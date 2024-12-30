@@ -215,16 +215,48 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
       // Use your live public API Key and https://cdn1.affirm.com/js/v2/affirm.js script to point to Affirm production environment.
     </script>
     <!-- End Affirm -->
-    {% if template == 'account.orders' %}
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      console.log("Account Orders Page Script Loaded");
-      if (window.location.pathname === '/account/orders') {
-        alert("You are on the /orders page!");
+    <script>
+  (function () {
+    // Check if the page is a collection page based on URL structure
+    if (window.location.pathname.includes('/collections/')) {
+      var _learnq = window._learnq || [];
+      var collectionURL = window.location.href;
+
+      // Retrieve the Klaviyo cookie for anonymous tracking
+      var kla_id = getKlaviyoCookie('__kla_id');
+      
+      // If you have an email, add it to the identify call (replace 'user@example.com' with actual email if you have it)
+      var email = "user@example.com"; // Or dynamically retrieve if available
+
+      if (email) {
+        // If email is available, associate it with the user and send data
+        _learnq.push(['identify', {
+          '$email': email,
+          'Visited Collection': collectionURL
+        }]);
+      } else if (kla_id) {
+        // If no email, send data with the __kla_id cookie
+        _learnq.push(['identify', {
+          '$anonymous_id': kla_id,  // Use anonymous identifier
+          'Visited Collection': collectionURL
+        }]);
       }
-    });
-  </script>
-{% endif %}
+    }
+
+    // Helper function to get Klaviyo cookie
+    function getKlaviyoCookie(name) {
+      var cookieArr = document.cookie.split(';');
+      for (var i = 0; i < cookieArr.length; i++) {
+        var cookie = cookieArr[i].trim();
+        if (cookie.indexOf(name + '=') === 0) {
+          return cookie.substring(name.length + 1);
+        }
+      }
+      return null; // Return null if cookie not found
+    }
+  })();
+</script>
+
   </head>
 
   <body
@@ -714,59 +746,37 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
       type="module"
       defer
     ></script>
-
 <script>
-  if (window.location.pathname === '/account/orders') {
-  console.log("We are on the correct orders page.");
-}
+  // Klaviyo Collection Tracking
   document.addEventListener("DOMContentLoaded", function() {
-    // Log the page URL and check for the correct path
+    try {
+      if (window.location.pathname.includes('/collections/')) {
+        // Extract collection details
+        let collectionName = document.title.split('|')[0].trim();
+        let collectionUrl = window.location.href;
 
-    if (window.location.pathname.includes('/orders')) {
-      // Check if the redirected cookie exists to prevent looping redirects
-      const redirectCookie = document.cookie.split(';').some((cookie) => cookie.trim().startsWith('redirected='));
-      console.log("Redirect Cookie Exists:", redirectCookie);
-
-      // Only proceed if the redirect hasn't already occurred
-      if (!redirectCookie) {
-        // Read the referrer cookie
-        const cookies = document.cookie.split(';');
-        let referrer = null;
-
-        cookies.forEach(function(cookie) {
-          if (cookie.trim().startsWith('referrer=')) {
-            referrer = cookie.split('=')[1];
-          }
-        });
-
-        console.log("Referrer Cookie Value:", referrer);
-
-        // If referrer is 'signup-form', redirect to signup page
-        if (referrer === 'signup-form') {
-          console.log("Redirecting to signup page...");
-
-          // Set the 'redirected' cookie to prevent further redirects
-          document.cookie = "redirected=true; path=/; domain=.partifyusa.com; max-age=86400"; // Cookie expires in 1 day
-
-          // Perform the redirect
-          window.location.href = 'https://partifyusa.com/pages/signup-form';
-        } else {
-          console.log("Referrer is not 'signup-form'. No redirect.");
+        // Clean up the collection name if it contains 'Painted Replacement'
+        if (collectionName.includes('Painted Replacement')) {
+          collectionName = collectionName.split('Painted Replacement')[0].trim();
         }
-      } else {
-        console.log("Redirect has already occurred. Skipping.");
+
+        // Remove everything after '?' in the URL
+        collectionUrl = collectionUrl.split('?')[0];
+
+        // Update Klaviyo profile with last viewed collection details
+        if (typeof _learnq !== "undefined") {
+          _learnq.push(['identify', {
+            $last_viewed_collection_name: collectionName,
+            $last_viewed_collection_url: collectionUrl
+          }]);
+        }
       }
+    } catch (error) {
+      console.error("Klaviyo Collection Tracking Error:", error);
     }
   });
 </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      console.log("Script loaded.");
-      if (window.location.pathname === '/account/orders') {
-        console.log("We are on the /orders page.");
-      }
-    });
-  </script>
+
 
 
 
