@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {}
+    },
+    "dynamic_custom_liquid_j69KYd": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>\n  .store-policies {\n    max-width: 800px;\n    margin: 0 auto;\n    padding: 20px;\n    font-family: Arial, sans-serif;\n    line-height: 1.6;\n    background: #f9f9f9;\n    border-radius: 10px;\n    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n  }\n  .store-policies h2 {\n    font-size: 24px;\n    color: #333;\n    margin-bottom: 10px;\n    border-bottom: 2px solid #e5e5e5;\n    padding-bottom: 5px;\n  }\n  .store-policies div {\n    margin-bottom: 20px;\n    color: #555;\n  }\n  .store-policies p {\n    margin: 10px 0;\n  }\n</style>\n\n<div class=\"store-policies\">\n  {% if shop.refund_policy %}\n    <h2>Refund Policy</h2>\n    <div>{{ shop.refund_policy }}</div>\n  {% endif %}\n\n  {% if shop.privacy_policy %}\n    <h2>Privacy Policy</h2>\n    <div>{{ shop.privacy_policy }}</div>\n  {% endif %}\n\n  {% if shop.terms_of_service %}\n    <h2>Terms of Service</h2>\n    <div>{{ shop.terms_of_service }}</div>\n  {% endif %}\n\n  {% if shop.shipping_policy %}\n    <h2>Shipping Policy</h2>\n    <div>{{ shop.shipping_policy }}</div>\n  {% endif %}\n</div>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "dynamic_custom_liquid_j69KYd"
+  ]
+}

@@ -1,0 +1,267 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "bb8bbd89-2fb0-44fa-b240-4c8162c0dc28": {
+      "type": "dynamic-slideshow",
+      "blocks": {
+        "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1": {
+          "type": "slide",
+          "settings": {
+            "background_image": "shopify://shop_images/Black_Friday_Banner_2023_be33cf09-b015-4539-840a-62a5698f1bee.png",
+            "title": "",
+            "text": "",
+            "color": "#ffffff",
+            "link": "shopify://collections/all",
+            "text_alignment": "center",
+            "button_one_label": "",
+            "button_one_link": "",
+            "button_one_style": "primary",
+            "button_two_label": "",
+            "button_two_link": "",
+            "button_two_style": "primary",
+            "show_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 50
+          }
+        }
+      },
+      "block_order": [
+        "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1"
+      ],
+      "custom_css": [
+
+      ],
+      "settings": {
+        "enable_autoplay": false,
+        "autoplay_duration": 8,
+        "slideshow_width": "full",
+        "slideshow_height": "adapt",
+        "slideshow_height_mobile": "adapt",
+        "slideshow_text_below_image": false
+      }
+    },
+    "356b94ad-78c0-440e-a0e8-a224ed3debf1": {
+      "type": "dynamic-collection-list",
+      "blocks": {
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-1": {
+          "type": "collection",
+          "settings": {
+            "collection": "front-bumper",
+            "title": ""
+          }
+        },
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-2": {
+          "type": "collection",
+          "settings": {
+            "collection": "rear-bumpers",
+            "title": ""
+          }
+        },
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-3": {
+          "type": "collection",
+          "settings": {
+            "collection": "fenders-1",
+            "title": ""
+          }
+        },
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-4": {
+          "type": "collection",
+          "settings": {
+            "collection": "tailgates-1",
+            "title": ""
+          }
+        },
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-5": {
+          "type": "collection",
+          "settings": {
+            "collection": "grilles-1",
+            "title": ""
+          }
+        },
+        "7e5bb5bb-80d4-43c8-8886-6e68622847d0": {
+          "type": "collection",
+          "settings": {
+            "collection": "mirrors",
+            "title": ""
+          }
+        },
+        "eae109f0-d838-41f8-ad33-992936b56441": {
+          "type": "collection",
+          "settings": {
+            "collection": "fender-liner",
+            "title": ""
+          }
+        },
+        "919d3ec0-0263-4637-b63e-2ed8e8b4492a": {
+          "type": "collection",
+          "settings": {
+            "collection": "handles",
+            "title": ""
+          }
+        },
+        "4cc64fc4-2a8e-4de6-a5e8-daadf94647c3": {
+          "type": "collection",
+          "settings": {
+            "collection": "molding",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-1",
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-2",
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-3",
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-4",
+        "template--14842501464149__356b94ad-78c0-440e-a0e8-a224ed3debf1-collection-5",
+        "7e5bb5bb-80d4-43c8-8886-6e68622847d0",
+        "eae109f0-d838-41f8-ad33-992936b56441",
+        "919d3ec0-0263-4637-b63e-2ed8e8b4492a",
+        "4cc64fc4-2a8e-4de6-a5e8-daadf94647c3"
+      ],
+      "custom_css": [
+        "span {margin-top: 6px; font-size: 15px; font-weight: 900;}",
+        "img {}",
+        ".collection__item pxu-lia-block pxu-lia-block--play {height: 10px;}",
+        ".collection-list__content[data-layout=\"grid\"] {row-gap: 15px;}"
+      ],
+      "settings": {
+        "title": "",
+        "thumbnail_columns_desktop": 3,
+        "thumbnail_columns_mobile": 3,
+        "image-crop": "original",
+        "cta_label": "View All",
+        "cta_link": "shopify://collections/all",
+        "cta_button_style": "primary"
+      }
+    },
+    "dynamic_blog_posts": {
+      "type": "dynamic-blog-posts",
+      "settings": {
+        "title": "Blog posts",
+        "blog": "the-more-you-know",
+        "show_date": false,
+        "show_author": false,
+        "show_excerpt": true
+      }
+    },
+    "dc25b428-6fdb-4bea-b22c-750a75858f25": {
+      "type": "dynamic-testimonials",
+      "blocks": {
+        "template--14842501464149__dc25b428-6fdb-4bea-b22c-750a75858f25-testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Grille.png",
+            "star_rating": "5",
+            "text": "<p><strong>Painted front bumper</strong></p><p><em>Unbelievable, unpacked the boxed bumper, placed in the sun on the shipping box and like magic it opened up and reshaped itself as the company claimed. Paint was a perfect match. Can’t thank you guys enough. Got to save hundreds over doing it any other way.</em></p>",
+            "author": "<p>Kenneth R.</p>"
+          }
+        },
+        "6dc98bfe-9b50-4ff6-8d8d-2e9197fe80fd": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Front_Bumper_5.png",
+            "star_rating": "5",
+            "text": "<p><strong>Quick Delivery & Exactly What I Wanted</strong></p><p>I was a little spectacle about purchasing a bumper from this site due to lack of reviews. This was the only place (other than $520+ from two other sites) that I could find an OEM bumper for my car. It was delivered after a week and packaged very well. I definitely recommend purchasing from here!</p>",
+            "author": "<p>Caroline O.</p>"
+          }
+        },
+        "6f396d9c-0e38-4e8d-959a-ef1c6d1aadc1": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Front_Bumper_b8e6c2e9-01d5-49b2-8455-47ab49382965.png",
+            "star_rating": "5",
+            "text": "<p><strong>Was perfect</strong></p><p>I ordered a bumper cover for my 2013 Veloster. The price was awesome, shipping was fast, the quality was excellent, the paint match-up was exact. I am very pleased. I will definitely be using Partify in the future.</p>",
+            "author": "<p>Russell B.</p>"
+          }
+        },
+        "6c2aae5e-a98c-4c26-bad6-14f5f90d3873": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Front_Bumper_6.png",
+            "star_rating": "4.5",
+            "text": "<p><strong>Great product perfect fit excellent color match</strong></p><p>I am very pleased with the quality of my order. The product has a perfect color match and good fit. Easy to install no issues whatsoever. I have done both the right and left fenders. Very Happy with the staff and the manner in which they were willing to help me with the courier issue. I would order from here again.</p>",
+            "author": "<p>Erwin G.</p>"
+          }
+        },
+        "template--14842501464149__dc25b428-6fdb-4bea-b22c-750a75858f25-testimonial-2": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Truck.png",
+            "star_rating": "5",
+            "text": "<p><strong>Would buy again!</strong></p><p>Was very impressed with paint quality and packaging</p>",
+            "author": "<p>Clay R.</p>"
+          }
+        },
+        "template--14842501464149__dc25b428-6fdb-4bea-b22c-750a75858f25-testimonial-3": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Fender.png",
+            "star_rating": "4.5",
+            "text": "<p><strong>2018 Dodge Durango Fender</strong></p><p>The shipment was fast and the fender showed up wrapped really well and the paint matched up perfectly. Thank you.</p>",
+            "author": "<p>Jerry S.</p>"
+          }
+        },
+        "96713aef-30ec-4a19-9cfe-12391f29fcff": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Bumper.png",
+            "star_rating": "5",
+            "text": "<p><strong>Fantastic Product</strong></p><p>I’ve never ordered from Partify before so I was skeptical of the end product but I was pleasantly surprised at the quality! The paint on the fender I ordered is now nicer than the rest of the paint on my car!</p>",
+            "author": "<p>Mitchell B.</p>"
+          }
+        },
+        "4aa751ac-32cf-4956-97b7-23da182a481c": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Front_Bumper_2.png",
+            "star_rating": "5",
+            "text": "<p><strong>Fast shipping. Good quality car part.</strong></p><p>The item looks great and fits perfectly in my car. The shipping was fast as well.</p>",
+            "author": "<p>Maverick</p>"
+          }
+        },
+        "351ca8df-8262-4df9-af2e-7351537afce1": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Front_Bumper_4.png",
+            "star_rating": "4.5",
+            "text": "<p><strong>100% color match! I appreciate it!</strong></p><p>The fit is amazing just like the original. The color match is 100%. Accurate. Thanks for a quality product.</p>",
+            "author": "<p>Tibby G.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "template--14842501464149__dc25b428-6fdb-4bea-b22c-750a75858f25-testimonial-1",
+        "6dc98bfe-9b50-4ff6-8d8d-2e9197fe80fd",
+        "6f396d9c-0e38-4e8d-959a-ef1c6d1aadc1",
+        "6c2aae5e-a98c-4c26-bad6-14f5f90d3873",
+        "template--14842501464149__dc25b428-6fdb-4bea-b22c-750a75858f25-testimonial-2",
+        "template--14842501464149__dc25b428-6fdb-4bea-b22c-750a75858f25-testimonial-3",
+        "96713aef-30ec-4a19-9cfe-12391f29fcff",
+        "4aa751ac-32cf-4956-97b7-23da182a481c",
+        "351ca8df-8262-4df9-af2e-7351537afce1"
+      ],
+      "custom_css": [
+
+      ],
+      "settings": {
+        "title": "Testimonials",
+        "image_crop": "original",
+        "text_size": "medium"
+      }
+    }
+  },
+  "order": [
+    "bb8bbd89-2fb0-44fa-b240-4c8162c0dc28",
+    "356b94ad-78c0-440e-a0e8-a224ed3debf1",
+    "dynamic_blog_posts",
+    "dc25b428-6fdb-4bea-b22c-750a75858f25"
+  ]
+}

@@ -1,0 +1,27 @@
+<script>
+    if('{{ template.name }}' === 'collection') {
+        if({{ collection.title | json }} !== localStorage.getItem("searchTerms") && {{ collection.title | json }} !== null) {
+            let newSearchTerm = {{ collection.title | json }};
+
+        //The /^\d{4}/.test(newSearchTerm) enforces the first four characters are numbers
+        //The .split(' ') enforces that there are at least three words
+            if (/^\d{4}/.test(newSearchTerm)) {
+                if (newSearchTerm.split(' ').length >= 3) {
+                    if(localStorage.getItem("searchTerms") == null) {
+                        localStorage.setItem("searchTerms", "[]");
+                    }
+
+                    let oldSearchTerms = JSON.parse(localStorage.getItem("searchTerms"));
+                    if(!oldSearchTerms.includes(newSearchTerm)) {
+                        oldSearchTerms.unshift(newSearchTerm);
+                        if (oldSearchTerms.length > 5) {
+                            oldSearchTerms.pop();
+                        }
+
+                        localStorage.setItem("searchTerms", JSON.stringify(oldSearchTerms));
+                    }
+                }
+            }
+        }
+    }
+  </script>

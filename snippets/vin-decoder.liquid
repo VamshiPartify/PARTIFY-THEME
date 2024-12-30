@@ -1,0 +1,92 @@
+<style>
+    .vin-decoder-product-page-container {
+        padding-top: 20px;
+    }
+    .get-paint-code-using-vin {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 18px;
+        {% comment %} font-weight: bold; {% endcomment %}
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        width: 100%;
+        border-radius: 6px;
+        margin-bottom: 10px;
+    }
+
+    .get-paint-code-using-vin:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+  
+    .get-paint-code-using-vin:active {
+        background-color: #004494;
+        transform: translateY(0);
+    }
+
+    .get-paint-code-using-vin:disabled {
+        background-color: #f0f0f0;
+        color: #ccc;
+        cursor: no-drop;
+        opacity: 0.6;
+    }
+
+    .vin-decoder-or {
+        text-align: center;
+        color: #6b6b6b;
+    }
+
+    .close-wrapper-vin-decoder {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+    }
+
+    .close-vin-decoder {
+        background-color: unset;
+        border: none;
+        color: #e61b24;
+        cursor: pointer;
+    }
+
+</style>
+
+
+<div class="vin-decoder-product-page-container">
+    <div class='htfpc-swatch-modal'>
+        {% render 'how-to-find-paint-code' %}
+    </div>
+    {% comment %} <p class="vin-decoder-or">Or</p>
+    <div class="close-wrapper-vin-decoder">
+        <button type="button" class="close-vin-decoder" style="display: none;">Close</button>
+    </div>
+    <div class="vindecoder-paintcode-app-container" style="display: none;">
+        {% render 'Vin-Decoder-app' %}
+    </div>
+    <button type="button" class="get-paint-code-using-vin" disabled>
+        Get Paint Code Using VIN
+    </button> {% endcomment %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const vindecoderAppContainer = document.querySelector(".vindecoder-paintcode-app-container");
+        const closeVinDecoderBtn = document.querySelector('.close-vin-decoder');
+        const appBtn = document.querySelector(".get-paint-code-using-vin");
+
+
+        appBtn.addEventListener("click", () => {
+            vindecoderAppContainer.style.display = "block";
+            closeVinDecoderBtn.style.display = "block";
+            appBtn.style.display = "none";
+        });
+
+        closeVinDecoderBtn.addEventListener("click", () => {
+            vindecoderAppContainer.style.display = "none";
+            closeVinDecoderBtn.style.display = "none";
+            appBtn.style.display = "block";
+        })
+    })
+</script>

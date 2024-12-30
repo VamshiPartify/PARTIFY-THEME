@@ -1,0 +1,146 @@
+{% assign turbo_found = false %}
+{% assign non_turbo_found = false %}
+{% assign available_aspirations = '' %}
+
+{%- for product in collection.all_products -%}
+  {%- assign aspiration_list = product.metafields.custom.aspiration -%}
+  {%- if aspiration_list != blank -%}
+    {%- assign aspiration = aspiration_list | remove: '["' | remove: '"]' | split: '","' -%}
+    {%- for asp in aspiration -%}
+      {%- unless available_aspirations contains asp -%}
+        {%- assign available_aspirations = available_aspirations | append: asp | append: ',' -%}
+      {%- endunless -%}
+
+      {%- if asp == 'Turbo' %}
+        {% assign turbo_found = true %}
+      {%- endif -%}
+
+      {%- if asp == 'Non Turbo' %}
+        {% assign non_turbo_found = true %}
+      {%- endif -%}
+
+    {%- endfor -%}
+  {%- endif -%}
+  {% if turbo_found and non_turbo_found %}
+    {% break %}
+  {% endif %}
+{%- endfor -%}
+
+{% assign aspiration_array = available_aspirations | split: ',' | uniq %}
+
+{% if turbo_found and non_turbo_found %}
+  {% if aspiration_array.size > 0 %}
+    <div id="aspiration-content" class="aspiration-question">
+      <h2 class="question-title">Does your vehicle have Non Turbo, Turbo, or Supercharged?</h2>
+      <div class="aspiration-options">
+        {% for aspiration in aspiration_array %}
+          {% unless aspiration == '' %}
+            {% assign encoded_aspiration = aspiration | url_encode %}
+            <script>
+              // Get the current URL
+              var currentUrl = window.location.href;
+              var filterString = "filter.p.m.custom.aspiration={{ encoded_aspiration }}";
+              var separator = '';
+
+              // Check if the URL ends with ?
+              if (currentUrl.endsWith('?')) {
+                separator = '';  // Append filter normally
+              } else if (currentUrl.includes('?')) {
+                separator = '&';  // URL already has ?filter, so use &
+              } else {
+                separator = '?';  // URL has no ?, append ?
+              }
+
+              // Create the full URL with the appropriate separator
+              var urlWithFilter = currentUrl + separator + filterString;
+
+              // Inject the link with the generated URL
+              document.write('<a href="' + urlWithFilter + '" class="aspiration-option">{{ aspiration }}</a>');
+            </script>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+
+<!-- JavaScript to hide content if 'aspiration' is in the URL -->
+<script>
+  if (window.location.href.includes("aspiration")) {
+    document.getElementById("aspiration-content").style.display = "none";
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Select all elements with the class "collection-filters__filter-title"
+    const filterTitles = document.querySelectorAll('.collection-filters__filter-title');
+
+    // Check if any of them has the text "Aspiration"
+    let aspirationExists = false;
+    filterTitles.forEach((title) => {
+        if (title.textContent.trim() === 'Aspiration') {
+            aspirationExists = true;
+        }
+    });
+
+    // Execute logic if "Aspiration" exists
+    if (aspirationExists) {
+        console.log('Aspiration filter exists on the page!');
+        const aspirationContent = document.getElementById('aspiration-content');
+        if (aspirationContent) {
+            aspirationContent.style.display = 'block';
+        }
+    } else {
+      const aspirationContent = document.getElementById('aspiration-content');
+      if (aspirationContent) {
+        aspirationContent.style.display = 'none';
+    }
+        console.log('Aspiration filter does not exist on the page.');
+    }
+});
+</script>
+
+<style>
+  .aspiration-question {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .question-title {
+    font-size: 24px;
+    color: #0C1A94;
+    margin-bottom: 15px;
+  }
+
+  .aspiration-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .aspiration-option {
+    padding: 10px 20px;
+    background-color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid #0C1A94;
+    color: #0C1A94;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .aspiration-option:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .aspiration-options {
+      flex-direction: column; /* Stack options on mobile */
+    }
+
+    .aspiration-option {
+      width: 100%; /* Full width for each option on mobile */
+    }
+  }
+</style>

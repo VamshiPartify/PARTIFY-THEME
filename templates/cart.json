@@ -1,0 +1,78 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "static-cart",
+      "settings": {
+        "show_sku": true,
+        "enable_order_notes": false,
+        "enable_shipping_calc": false,
+        "shipping_calc_default_country": "United States"
+      }
+    },
+    "dynamic_custom_liquid_aPyhWh": {
+      "type": "dynamic-custom-liquid",
+      "custom_css": [
+        "div {margin-top: 0; margin-bottom: 0; background-color: #0c1a94;}",
+        "#easysearch-search {background: #fdac3a !important; font-size: 16pt !important;}",
+        ".easysearch-btn {color: #0c1a94 !important;}",
+        "#easysearch_field_4973 {min-width: 200px; font-size: 16pt !important;}",
+        "#easysearch_field_4974 {min-width: 200px; font-size: 16pt !important;}",
+        "#easysearch_field_4975 {min-width: 200px; font-size: 16pt !important;}",
+        ".easysearch-vertical-mode .easysearch-btn-holder {width: 100% !important;}",
+        "h2{text-align:center;padding-bottom:10px;}"
+      ],
+      "settings": {
+        "custom_liquid": "{% capture easysearchWidget %}{% render \"easysearch\" %}{% endcapture %}<h2>Continue Shopping</h2>\n{% unless easysearchWidget contains \"Liquid error\" %}{{ easysearchWidget }}{% endunless %}"
+      }
+    },
+    "dynamic_custom_liquid_q8PR94": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": "{% assign current_date = 'now' | date: \"%B %d, %Y\" %}\n<h1>Why You'll Love Our Products: Customer Reviews</h1>\n<br>\n<div class=\"Review-Block\">\n<div class=\"row\">\n  \n<div class=\"column border-right\">\n<br>\n<h2>4.5/5</h2>\n<small>Overall Rating</small>\n<p><b>\"I’m always a little skeptical about ordering parts like this online (front fender for Nissan Rogue) but, with body shops quoting me a price upwards of $1.7k, I decided to take a chance. I’m so glad I did! The fender fit well and the color was a perfect match.\"</b> -David S.</p>\n<p><a href=\"https://www.trustpilot.com/review/partify.store\"></a></p>\n<u><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://www.trustpilot.com/review/partify.store\">TrustPilot, {{ current_date }}</a></u><br><br>\n\n<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://www.trustpilot.com/review/partify.store\"><img src=\"https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Trustpilot_Reviews_Partify.png?v=1709764082\" height=\"75\"></a>\n</div>\n\n\n\n<div class=\"column border-right\"> <hr>\n<br>\n<h2>4.9/5</h2>\n<small>Overall Rating</small>\n<p><b>\"2012 Ford Escape.  I was pleasantly surprised how well this fender fit the vehicle, and how well the paint matched.  It looks great.  Also, it shipped to my house very fast.  Great price for the value!\"</b> -Mike S.</p>\n<u><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://customerreviews.google.com/v/merchant?q=partifyusa.com&amp;c=US&amp;v=19&amp;hl=en\">Google Reviews, {{ current_date }}</a></u><br><br>\n\n<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://customerreviews.google.com/v/merchant?q=partifyusa.com&amp;c=US&amp;v=19&amp;hl=en\"><img src=\"https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Google-Review-Logo.png?v=1709764368\" height=\"75\"></a>\n</div>\n\n\n<div class=\"column\">\n<hr>\n<br>\n<h2>4.9/5</h2>\n<small>Overall Rating</small>\n<p><b>\"The bumper looks amazing and the paint matches so perfectly with my car. This is the second part I've gotten from this website the other part being a fender and that part was also perfect.</b> -David F.</p>\n<u><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://partifyusa.com/pages/reviews\">Yotpo, {{ current_date }}</a></u><br><br>\n\n<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://partifyusa.com/pages/reviews\"><img src=\"https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Yotpo_Reviews_Logo.png?v=1709765979\" height=\"60\">\n</a>\n</div>\n</div>\n</div>\n\n\n\n<style>\n.Review-Block{\nbackground:000000;\npadding-bottom:30px;\nwidth:100%;\ndisplay: inline-block;\noverflow: none;\nmin-width: 100%;\n\n\n}\n\n\n.column {\n  float: left;\n  width: 33.333%;\ntext-align: center;\n\n}\n.column h2{\nmargin:0 auto;\ntext-align: center;\n}\n@media screen and (max-width: 600px) {\n  .column {\n    width: 100%;\npadding:10px;\n  }\n}\n\n@media screen and (min-width: 600px){\n  .Review-Block hr{display: none;}\n.border-right{\nborder-right: 1px solid black;\nheight:400px;\n\n}\n.column{padding-left:20px;padding-right: 20px;\n}\nh1{text-align:center;}\n</style>"
+      }
+    },
+    "dynamic_custom_liquid_NakEAp": {
+      "type": "dynamic-custom-liquid",
+      "disabled": true,
+      "settings": {
+        "custom_liquid": "<div class=\"cart-urgency-message\">\n  <p>These parts are in high demand and selling quickly. Make sure to complete your purchase now to ensure these parts are yours before they're gone!</p>\n  <p>If you have any questions or need assistance, don’t hesitate to reach out to us. You can contact us at:</p>\n  <ul>\n    <li>Phone: <a href=\"tel:1-888-719-8297\">1-888-719-8297</a></li>\n    <li>Email: <a href=\"mailto:info@partify.store\">info@partify.store</a></li>\n    <li>Chat with us using the chat option in the bottom corner.</li>\n  </ul>\n</div>"
+      }
+    },
+    "4f29a2b8-abf4-4a5f-b335-a2f5a167b475": {
+      "type": "apps",
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "dynamic_custom_liquid_UnPAwr": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": ""
+      }
+    },
+    "17254572111e48cf99": {
+      "type": "apps",
+      "settings": {
+        "include_padding": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "dynamic_custom_liquid_aPyhWh",
+    "dynamic_custom_liquid_q8PR94",
+    "dynamic_custom_liquid_NakEAp",
+    "4f29a2b8-abf4-4a5f-b335-a2f5a167b475",
+    "dynamic_custom_liquid_UnPAwr",
+    "17254572111e48cf99"
+  ]
+}

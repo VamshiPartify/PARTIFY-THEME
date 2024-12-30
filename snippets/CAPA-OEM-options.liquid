@@ -1,0 +1,722 @@
+    <style>
+      .easysearch-fitment-search-widget {
+        border: none;
+        padding: 3px 0 0 0;
+      }
+        .option-dropdowns {
+            color: #0073e6;
+            font-weight: bold;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 5px;
+            height: fit-content;
+            width: 100%;
+        }
+        {% comment %} .product-type-dropdown select {
+          color: #000;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          box-sizing: border-box;
+          display: block;
+          font-size: 16px;
+          padding: 10px;
+          width: 100%;
+          min-height: 45px;
+          margin-bottom: 10px;
+        }
+        .product-type-dropdown {
+            display: flex;
+            flex-direction: column;
+        } {% endcomment %}
+
+        {% comment %} #product-type-select:disabled {
+            color: #ccc;
+        }
+
+        #product-type-select {
+          color: #000;
+      } {% endcomment %}
+
+        .divider {
+          height: 1px;
+          width: 104%;
+          background-color: #ddd;
+          margin: 5px 0 8px 0;
+          opacity: 0.8;
+          position: relative;
+          left: -2%;
+      }
+        .option-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 3px;
+            color: #333;
+        }
+        {% comment %} .option-title-quality {
+          font-size: 1.2rem;
+          font-weight: 800;
+          margin-bottom: 3px;
+          color: #333;
+      } {% endcomment %}
+
+        {% comment %} .option-title-vin {
+          font-size: 1.2rem;
+          font-weight: 800;
+          margin-bottom: 3px;
+          color: #333;
+      } {% endcomment %}
+        .paint-code-wrapper {
+            margin-top: 3px;
+        }
+        .product-options .price-info {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-top: 1rem;
+        }
+
+        {% comment %} .product-type-dropdown select[disabled]{
+          background-color: #f0f0f0;
+          color: #ccc;
+          pointer-events: none;
+          opacity: 0.6;
+        } {% endcomment %}
+      
+        .combined-variant-dropdown {
+            height: fit-content;
+        }
+        .combined-variant-dropdown select {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            pointer-events: auto;
+            opacity: 1;
+        }
+        .combined-variant-dropdown select[disabled] {
+            background-color: #f0f0f0;
+            color: #ccc;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .find-paint-option-link-container {
+          display: flex;
+          justify-content: start;
+          width: 100%;
+          font-size: 14px;
+          color: #0000EE;
+        }
+
+        .paint-option-and-how-to-find-paint-code-wrapper {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        .find-paint-option-link-container {
+          order: 1;
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: #0000EE;
+          margin: 3px 0 8px 0;
+        }
+        
+        .option-title {
+          order: 2;
+        }
+        
+        @media only screen and (min-width: 769px) {
+          .paint-option-and-how-to-find-paint-code-wrapper {
+            flex-direction: row;
+            align-items: center;
+          }
+          
+          .find-paint-option-link-container {
+            order: 2;
+            margin-bottom: 0;
+            width: fit-content;
+          }
+        
+          .option-title {
+            order: 1;
+          }
+        }
+
+        {% comment %} #vin-textbox-container-for-oem {
+          width: 100%;
+      }
+  
+      #vin-textbox-container-for-oem input {
+          margin: 0;
+      } {% endcomment %}
+
+      {% comment %} #vin-textbox-for-oem {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      } {% endcomment %}
+
+      {% comment %} #vin-warning-for-oem {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      } {% endcomment %}
+
+      {% comment %} .quality-description-container {
+        padding: 10px 0;
+      } {% endcomment %}
+    </style>
+
+    {% assign makes = settings.makes_list | split: ", " %}
+    {% assign is_make_found = false %}
+    {% assign downcase_handle = product.handle | downcase %}
+
+    {% for make in makes %}
+      {% if downcase_handle contains make %}
+        {% assign is_make_found = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    
+  
+    <div class="option-dropdowns">
+      <!-- Main Product Type Dropdown -->
+      <div class="divider"></div>
+      {% render 'quality-type-dropdown' %}
+      {% comment %} <div class="product-type-dropdown">
+        <label class="option-title-quality" for="product-type-select">Quality</label>
+        <select id="product-type-select" disabled>
+          <option value="" disabled selected>Select Quality</option>
+          {% assign availableProductTypes = '' %}
+          
+          {% if product.metafields.custom.aftermarket_product %}
+            {% assign availableProductTypes = availableProductTypes | append: 'aftermarket,' %}
+          {% endif %}
+          {% if product.metafields.custom.capa_product %}
+            {% assign availableProductTypes = availableProductTypes | append: 'capa,' %}
+          {% endif %}
+          {% if product.metafields.custom.oem_product %}
+            {% assign availableProductTypes = availableProductTypes | append: 'oem,' %}
+          {% endif %}
+
+          {% if availableProductTypes contains 'aftermarket' %}
+            {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
+            {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
+            {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+
+            {% if aftermarket_variant_count > 0 %}
+              {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
+              {% if aftermarket_product.available %}
+                <option value="aftermarket">Aftermarket - {{ aftermarket_price }}</option>
+              {% else %}
+                <option value="aftermarket" disabled style="color: gray;">Aftermarket (Out of Stock)</option>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+          {% if availableProductTypes contains 'capa' %}
+            {% assign capa_product_handle = product.metafields.custom.capa_product %}
+            {% assign capa_product = all_products[capa_product_handle] %}
+            {% assign capa_variant_count = capa_product.variants | size %}
+            {% if capa_variant_count > 0 %}
+              {% assign capa_price = capa_product.variants.first.price | money %}
+              {% if capa_product.available %}
+                <option value="capa">CAPA Certified - {{ capa_price }}</option>
+              {% else %}
+                <option value="capa" disabled style="color: gray;">CAPA Certified (Out of Stock)</option>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+          {% if availableProductTypes contains 'oem' %}
+            {% assign oem_product_handle = product.metafields.custom.oem_product %}
+            {% assign oem_product = all_products[oem_product_handle] %}
+            {% assign oem_variant_count = oem_product.variants | size %}
+
+            {% if oem_variant_count > 0 %}
+              {% assign oem_price = oem_product.variants.first.price | money %}
+              {% if oem_product.available %}
+                <option value="oem">OEM - {{ oem_price }}</option>
+              {% else %}
+                <option value="oem" disabled style="color: gray;">OEM (Out of Stock)</option>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        </select>
+        <div class="oem-vin-container" style="display: none;">
+          <label class="option-title-vin" for="product-type-select">VIN</label>
+          <div id="vin-textbox-container-for-oem">
+            <input
+                type="text"
+                id="vin-textbox-for-oem"
+                name="properties[Vin]"
+                placeholder="Enter your VIN"
+                maxlength="17"
+            >
+            <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+          </div>
+        </div>
+        <div class="quality-description-container">
+          {% render 'quality-description-modal', qualityTypes: availableProductTypes %}
+        </div>
+      </div> {% endcomment %}
+      {% if product.variants.size > 1 %}
+        {% if is_make_found %}
+          <div class="divider"></div>
+            <div class="combined-variant-dropdown">
+              <div class="paint-option-and-how-to-find-paint-code-wrapper">
+                <div class="find-paint-option-link-container" style="display: none;">
+                  <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+                </div>
+                <label class="option-title" for="product-type-select">Paint Option</label>
+              </div>
+              <div class="paint-code-wrapper">
+                <select id="variant-selector" name="id" disabled>
+                  <option value="" disabled selected>Select Paint Code</option>
+                </select>
+              </div>
+              {% render 'vin-decoder' %}
+
+            </div>
+          </div> 
+        {% else %}
+        <div class="divider"></div>
+          <div class="combined-variant-dropdown">
+            <div class="paint-option-and-how-to-find-paint-code-wrapper">
+              <div class="find-paint-option-link-container">
+                <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+              </div>
+              <label class="option-title" for="product-type-select">Paint Option</label>
+            </div>
+            <div class="paint-code-wrapper">
+              <select id="variant-selector" name="id" disabled>
+                <option value="" disabled selected>Select Paint Code</option>
+              </select>
+            </div>
+          </div>
+        </div> 
+      {% endif %}
+    {% endif %}
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let unpainted = false;
+      if('{{ product.variants.size }}' <= 1) {
+        unpainted = true;
+      };
+
+      const productVariants = {
+            aftermarket: [
+              {% if product.metafields.custom.aftermarket_product %}
+                {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
+                {% if aftermarket_product_handle %}
+                  {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
+                  {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+                  {% if aftermarket_variant_count > 0 %}
+                    {% if aftermarket_product %}
+                      {% assign aftermarket_base_price = aftermarket_product.variants.first.price %} <!-- Price of the first variant -->
+              
+                      {% for variant in aftermarket_product.variants %}
+                        {% if is_make_found %}
+                          {% if variant.title contains "Match Paint by VIN" %}
+                            {% continue %}
+                          {% endif %}
+                          {% if variant.title contains "Custom Paint Code" %}
+                            {% continue %}
+                          {% endif %}
+                        {% endif %}
+                        {% assign aftermarket_variant_price = variant.price %}
+                        {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            "price": "{{ variant.price | money }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                            "variantTitle": "{{ variant.title }}",
+                            "productTitle": "{{ aftermarket_product.title | escape  }}",
+                            "productDescription": {{ aftermarket_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No Aftermarket Options Available</option>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <option value="" disabled>No Aftermarket Product Assigned</option>
+                {% endif %}
+              {% endif %}
+            ],
+            capa: [
+              {% if product.metafields.custom.capa_product %}
+                {% assign capa_product_handle = product.metafields.custom.capa_product %}
+                {% if capa_product_handle %}
+                  {% assign capa_product = all_products[capa_product_handle] %}
+                  {% assign capa_variant_count = capa_product.variants | size %}
+                  {% if capa_variant_count > 0 %}
+                    {% if capa_product %}
+                      {% assign capa_base_price = capa_product.variants.first.price %} <!-- Price of the first variant -->
+              
+                      {% for variant in capa_product.variants %}
+                        {% if is_make_found %}
+                          {% if variant.title contains "Match Paint by VIN" %}
+                            {% continue %}
+                          {% endif %}
+                          {% if variant.title contains "Custom Paint Code" %}
+                            {% continue %}
+                          {% endif %}
+                        {% endif %}
+                        {% assign capa_variant_price = variant.price %}
+                        {% assign price_difference = capa_variant_price | minus: capa_base_price %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            "price": "{{ variant.price | money }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                            "variantTitle": "{{ variant.title }}",
+                            "productTitle": "{{ capa_product.title | escape  }}",
+                            "productDescription": {{ capa_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No CAPA Options Available</option>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <option value="" disabled>No CAPA Product Assigned</option>
+                {% endif %}
+              {% endif %}
+            ],
+            oem: [
+              {% if product.metafields.custom.oem_product %}
+                {% assign oem_product_handle = product.metafields.custom.oem_product %}
+                {% if oem_product_handle %}
+                  {% assign oem_product = all_products[oem_product_handle] %}
+                  {% assign oem_variant_count = oem_product.variants | size %}
+                  {% if oem_variant_count > 0 %}
+                    {% if oem_product %}
+                      {% assign oem_base_price = oem_product.variants.first.price %} <!-- Price of the first variant -->
+              
+                      {% for variant in oem_product.variants %}
+                        {% if is_make_found %}
+                          {% if variant.title contains "Match Paint by VIN" %}
+                            {% continue %}
+                          {% endif %}
+                          {% if variant.title contains "Custom Paint Code" %}
+                            {% continue %}
+                          {% endif %}
+                        {% endif %}
+                        {% assign oem_variant_price = variant.price %}
+                        {% assign price_difference = oem_variant_price | minus: oem_base_price %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            "price": "{{ variant.price | money }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}" ,
+                            "variantTitle": "{{ variant.title }}",
+                            "productTitle": "{{ oem_product.title | escape  }}",
+                            "productDescription": {{ oem_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No OEM Options Available</option>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <option value="" disabled>No OEM Product Assigned</option>
+                {% endif %}
+              {% endif %}
+            ]
+      };
+
+        {% comment %} window.selectedProductType = ''; {% endcomment %}
+        const productTypeSelect = document.getElementById('product-type-select');
+        const combinedVariantSelect = document.getElementById('variant-selector');
+        const selectVinVariantButton = document.getElementById('select-vin-variant');
+        {% comment %} const combinedVariantContainer = document.querySelector('.combined-variant-dropdown'); {% endcomment %}
+        const priceInfo = document.querySelector('.price-info');
+        const priceDisplay = document.getElementById('price-display');
+        const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
+        const titleElement = document.querySelector('.product-title');
+        const productPartDescription = document.querySelector('.product-description-collapsible-text');
+        const priceContainerLargeScreen = document.querySelector('.price-container-large-screen');
+        const priceContainerSmallScreen = document.querySelector('.price-container');
+        const oemVinContainer = document.querySelector('.oem-vin-container');
+        const vinTextBox = document.getElementById('vin-textbox-for-oem');
+        const vinTextBoxForPaintOption = document.getElementById('vin-textbox');
+
+        const howToFindPaintCodeBtn = document.getElementById('how-to-find-your-paint-code-vindecoder');
+        const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
+
+        let oem;
+
+        function decodeHtmlEntities(text) {
+          const tempElement = document.createElement('textarea');
+          tempElement.innerHTML = text;
+          return tempElement.value;
+        }
+
+        
+        // 2. Populate the variant dropdown based on selected product type
+        function populateVariantDropdown(selectedType) {
+          if(combinedVariantSelect) {
+            combinedVariantSelect.innerHTML = '<option value="">Select Paint Code</option>';
+          }
+
+            // Get the relevant variants for selected product type
+            const variants = productVariants[selectedType] || [];
+            const variantsUpdateEvent = new CustomEvent('variantsUpdated', { detail: { variants } });
+            document.dispatchEvent(variantsUpdateEvent);
+            
+            if (variants.length > 0) {
+              if(combinedVariantSelect) {
+                combinedVariantSelect.disabled = false;
+              }
+                if(howToFindPaintCodeBtn) {
+                  howToFindPaintCodeBtn.disabled = false;
+                }
+                if(getPaintCodeUsingVin) {
+                  getPaintCodeUsingVin.disabled = false;
+                }
+                if(selectVinVariantButton) {
+                  selectVinVariantButton.disabled = false;
+                }
+
+                variants.forEach(function(variant) {
+                  const option = document.createElement('option');
+                  window.selectedVariantId = variant.id;
+                  option.value = variant.id;
+                  option.textContent = `${variant.title}`;
+                  option.dataset.price = variant.price;
+                  option.dataset.color = variant.color;
+                  option.dataset.variantTitle = variant.variantTitle;
+                  option.dataset.productTitle = variant.productTitle;
+                  if(variant.productTitle.length > 0) {
+                  
+                  const productTitle = decodeHtmlEntities(variant.productTitle);
+                    if(selectedType !== "oem") {
+                      titleElement.textContent = productTitle;
+                    }
+                    if(productTitle.includes("CAPA Certified")) {
+                      const oemImg = document.getElementById('oem-badge');
+                      if (oemImg) {
+                        oemImg.remove();
+                      }
+                      const capaImgId = document.getElementById('capa-certified-badge');
+                      if(!capaImgId) {
+                        const capaImg = document.createElement('img');
+                        capaImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Capa_Certified_Icon_26a22ba1-e72d-4724-a44d-e73fbf1f0d2d.png';
+                        capaImg.alt = 'CAPA Certified';
+                        capaImg.id = 'capa-certified-badge';
+
+                        capaImg.style.position = 'relative';
+                        capaImg.style.height = "34px";
+                        capaImg.style.margin = "0 0 0 10px";
+                        
+                        
+                        {% comment %} if(window.innerWidth > 720) {
+                          priceContainerLargeScreen.appendChild(capaImg);
+                        } else {
+                          priceContainerSmallScreen.appendChild(capaImg);
+                        } {% endcomment %}
+                      }
+                    } else {  
+                      if(!productTitle.includes("OEM")) {
+                        const capaImg = document.getElementById('capa-certified-badge');
+                        if (capaImg) {
+                          capaImg.remove();
+                        }
+                        const oemImg = document.getElementById('oem-badge');
+                        if (oemImg) {
+                          oemImg.remove();
+                        }
+                      }
+                    }
+                }
+                  const tempElement = document.createElement('div');
+                  tempElement.innerHTML = variant.productDescription;
+                  if (productPartDescription) {
+                      productPartDescription.innerHTML = tempElement.innerHTML;
+                  }
+                  if(combinedVariantSelect) {
+                    combinedVariantSelect.appendChild(option);
+                  }
+                });
+            } else {
+                if(combinedVariantSelect) {
+                  combinedVariantSelect.disabled = true;
+                  combinedVariantSelect.selectedIndex = 0;
+                }
+                if(howToFindPaintCodeBtn) {
+                  howToFindPaintCodeBtn.disabled = true;
+                }
+                if(getPaintCodeUsingVin) {
+                  getPaintCodeUsingVin.disabled = true;
+                }
+                if(selectVinVariantButton) {
+                  selectVinVariantButton.disabled = true;
+                }
+            }
+        }
+
+        // 3. When product type is selected
+        productTypeSelect.addEventListener('change', function() {
+          const selectedType = productTypeSelect.value;
+          const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
+          const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
+          window.selectedProductType = selectedType;
+          const container = document.querySelector('.vin-options-container');
+          if(vinTextBoxForPaintOption) {
+            vinTextBoxForPaintOption.value = '';
+            vinTextBoxForPaintOption.style.display = 'none';
+          }
+          if(selectVinVariantButton) {
+            selectVinVariantButton.style.display = 'block'; // Show Use VIN button
+          }
+
+          if(selectedType === "oem") {
+            oemVinContainer.style.display = "block";
+            if (container) {
+              container.style.display = "none"; // Remove the container from the DOM
+            }
+          } else {
+            oemVinContainer.style.display = "none";
+            if(container) {
+              if (container.style.display = "none") {
+                container.style.display = "flex"; //
+              }
+            }
+          }
+
+          if (selectedType) {
+              priceDisplay.textContent = priceMatch[0];
+              priceDisplaySmallScreen.textContent = priceMatch[0];
+              if(selectedType !== "oem") {
+                vinTextBox.value = '';
+                oem = null;
+                populateVariantDropdown(selectedType);
+              } else {
+              //Because populateVariantDropdown isn't called here, the title, badge, and description updates must be made here for OEM
+                const variants = productVariants[selectedType];
+                if(variants.length > 0) {
+                  titleElement.textContent = decodeHtmlEntities(variants[0].productTitle);
+                }
+                if(variants[0].productTitle.includes("OEM")) {
+                  const capaImg = document.getElementById('capa-certified-badge');
+                  if (capaImg) {
+                    capaImg.remove();
+                  }
+                  const oemImgId = document.getElementById('oem-badge');
+                  if(!oemImgId) {
+                    const oemImg = document.createElement('img');
+                    oemImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png';
+                    oemImg.alt = 'OEM Certified';
+                    oemImg.id = 'oem-badge';
+
+                    oemImg.style.position = 'relative';
+                    oemImg.style.height = "34px";
+                    oemImg.style.margin = "0 0 0 10px";
+
+                    if(window.innerWidth > 720) {
+                      priceContainerLargeScreen.appendChild(oemImg);
+                    } else {
+                      priceContainerSmallScreen.appendChild(oemImg);
+                    }
+                  }
+                }
+
+                const tempElement = document.createElement('div');
+                tempElement.innerHTML = variants[0].productDescription;
+                if (productPartDescription) {
+                    productPartDescription.innerHTML = tempElement.innerHTML;
+                }
+
+                vinTextBox.value = '';
+                oem = selectedType;
+                if(combinedVariantSelect) {
+                  combinedVariantSelect.disabled = true;
+                  combinedVariantSelect.selectedIndex = 0;
+                }
+                if(howToFindPaintCodeBtn) {
+                  howToFindPaintCodeBtn.disabled = true;
+                }
+                if(getPaintCodeUsingVin) {
+                  getPaintCodeUsingVin.disabled = true;
+                }
+              }
+          } else {
+              if(combinedVariantSelect) {
+                combinedVariantSelect.disabled = true;
+                combinedVariantSelect.selectedIndex = 0;
+              }
+              if(howToFindPaintCodeBtn) {
+                howToFindPaintCodeBtn.disabled = true;
+              }
+              if(getPaintCodeUsingVin) {
+                getPaintCodeUsingVin.disabled = true;
+              }
+              if(selectVinVariantButton) {
+                selectVinVariantButton.disabled = true;
+              }
+          }
+        });
+
+        // 4. When a variant is selected, show the price
+        if(combinedVariantSelect) { 
+            combinedVariantSelect.addEventListener('change', function() {
+              const selectedOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex];
+              const selectedPrice = selectedOption ? selectedOption.dataset.price : null;
+              const selectedColor = selectedOption ? selectedOption.dataset.color : null;
+              const selectedTitle = selectedOption ? selectedOption.dataset.variantTitle : null;
+
+      
+              if (selectedPrice) {
+                  priceDisplay.textContent = selectedPrice;
+                  priceDisplaySmallScreen.textContent = selectedPrice;
+              }
+              if (selectedColor) {
+                window.selectedProductColor = selectedColor;
+                window.selectedProductTitle = selectedTitle
+                {% comment %} window.dispatchEvent(new Event('colorUpdated')); {% endcomment %}
+            }
+          });
+        }
+
+        document.getElementById('vin-textbox-for-oem').addEventListener('input', function(event) {
+          const vinInput = event.target.value.toUpperCase();
+          const warning = document.getElementById('vin-warning-for-oem');
+
+          // Remove I, O, Q characters
+          const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
+
+          if (vinInput !== filteredValue) {
+              alert("Please enter valid characters. I,O, & Q and other special characters are not included in VINs");
+          } else {
+              warning.style.display = 'none';
+          }
+
+          event.target.value = filteredValue;
+
+          // Ensure VIN input is 17 characters before enabling Add to Cart
+          if (vinInput.length === 17) {
+            populateVariantDropdown(oem);
+          } else {
+            combinedVariantSelect.disabled = true;
+            if(howToFindPaintCodeBtn) {
+              howToFindPaintCodeBtn.disabled = true;
+            }
+            if(getPaintCodeUsingVin) {
+              getPaintCodeUsingVin.disabled = true;
+            }
+            combinedVariantSelect.selectedIndex = 0;
+          }
+      });
+    });
+  </script>
+  

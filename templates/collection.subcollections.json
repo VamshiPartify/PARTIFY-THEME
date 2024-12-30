@@ -1,0 +1,31 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "static-subcollections-featured-collection",
+      "settings": {
+        "show_breadcrumbs": true,
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "show_subcollection_menu": true,
+        "layout": "grid",
+        "product_count": 4,
+        "cta_label": "Shop all",
+        "shop_all_card_enable": true,
+        "shop_all_card_text_color": "#ffffff",
+        "shop_all_card_background_color": "#047084"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

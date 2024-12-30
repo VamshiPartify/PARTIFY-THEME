@@ -1,0 +1,654 @@
+<style>
+    body.no-scroll-quality {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden !important;
+    }
+
+    .quality-description-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .button_svg_container {
+      display: flex;
+      justify-content: end;
+    }
+
+    .button_svg {
+      display: flex;
+      justify-content: center;
+    }
+    /* Accordion Style */
+.quality-accordion-section {
+  margin: 10px 0 0 0;
+}
+
+.quality-accordion-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 4px 12px;
+  background-color: #0a1e9c;
+  color: #ffffff;
+  border: none;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.quality-accordion-button:hover {
+  background-color: #062e7a;
+  transform: translateY(-2px);
+}
+
+.quality-accordion-button p {
+  margin: 0;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease-out, opacity 0.3s ease;
+  {% comment %} background-color: #f4f6fc; {% endcomment %}
+  padding: 0 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Show content when active */
+.accordion-content.open {
+  max-height: 400px;
+  opacity: 1;
+  padding: 2px;
+}
+
+.circle_plus {
+  font-size: 14px;
+}
+
+.circle_none {
+  font-size: 14px;
+}
+
+.aftermarket-accordion-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.capa-accordion-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+    .quality-description-popup-dark-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 3000;
+      animation: fade-in 0.5s;
+    }
+    @keyframes fade-in {
+      from { background-color: rgba(0, 0, 0, 0); }
+      to { background-color: rgba(0, 0, 0, 0.7); }
+    }
+    /* Phone */
+    @media only screen and (max-width: 450px) {
+      .quality-description-popup-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5000;
+        overflow-y: auto;
+        font-family: 'Lato', sans-serif;
+      }
+      .quality-description-popup-modal {
+        position: relative;
+        width: 90%;
+        max-width: 400px;
+        {% comment %} min-height: 451px; {% endcomment %}
+        background-color: white;
+        margin: 10% auto;
+        padding: 30px 20px 20px 20px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 9999;
+        border-radius: 8px;
+      }
+      .quality-description-popup-modal img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+      .quality-description-popup-modal h1 {
+        font-size: 30px;
+        margin-bottom: 5px;
+        text-align: left;
+        color: #373737;
+      }
+      .quality-description-popup-modal h2 {
+        font-size: 20px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        text-align: left;
+        color: #4b4b4b;
+      }
+      .quality-description-popup-modal h4, h5 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 8px 0;
+        text-align: left;
+        color: #4b4b4b;
+        line-height: 24px;
+      }
+
+      .quality-description-popup-modal ol {
+        font-size: 16px;
+        padding-left: 18px;
+        color: #4b4b4b;
+        font-weight: 400;
+        margin-top: 0;
+        line-height: 20px;
+      }
+      .popup-modal-content {
+        font-size: 16px;
+        line-height: 20px;
+        color: #4b4b4b;
+        font-weight: 400;
+      }
+      #quality-modal-exit {
+        position: absolute;
+        top: 10px;
+        right: 0;
+        font-size: 24px;
+        color: #888;
+        cursor: pointer;
+        background-color: #fff;
+        border: none;
+      }
+      #quality-description-vindecoder {
+        width:100%;
+        color: #3b3b3b;
+        background-color: #f3f3f3;
+        border: none;
+        font-size: 16px;
+        padding: 10px 12px;
+        display: block;
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        border-radius: 6px;
+        font-family: 'Lato', sans-serif;
+      }
+      #quality-description-vindecoder p {
+        margin: 0;
+      }
+      #quality-description-vindecoder:hover {
+        background-color: #e5e5e5;
+      }
+      #quality-description-vindecoder:active {
+        background-color: #f3f3f3;
+      }
+      #quality-description-vindecoder:disabled {
+        color: #ccc;
+        cursor: no-drop;
+        background-color: #f0f0f0;
+        opacity: 0.6;
+      }
+    }
+    /* Desktop */
+    @media only screen and (min-width: 451px) {
+      .quality-description-popup-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5000;
+        overflow-y: auto;
+        font-family: 'Lato', sans-serif;
+      }
+      .quality-description-popup-modal {
+        position: relative;
+        width: 60%;
+        max-width: 800px;
+        {% comment %} min-height: 456px; {% endcomment %}
+        background-color: white;
+        margin: 5% auto;
+        padding: 40px 30px 30px 30px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 9999;
+        border-radius: 8px;
+      }
+      .quality-description-popup-modal img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+      .quality-description-popup-modal h1 {
+        font-size: 32px;
+        margin-bottom: 5px;
+        text-align: left;
+        color: #373737;
+      }
+      .quality-description-popup-modal h2 {
+        font-size: 20px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        text-align: left;
+        color: #4b4b4b;
+      }
+      .quality-description-popup-modal h4, h5 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 8px 0;
+        text-align: left;
+        color: #4b4b4b;
+        line-height: 24px;
+      }
+
+      .quality-description-popup-modal ol {
+        font-size: 16px;
+        padding-left: 18px;
+        color: #4b4b4b;
+        font-weight: 400;
+        margin-top: 0;
+        line-height: 20px;
+      }
+
+      .popup-modal-content {
+        font-size: 16px;
+        line-height: 20px;
+        color: #4b4b4b;
+        font-weight: 400;
+      }
+      #quality-modal-exit {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 28px;
+        color: #888;
+        cursor: pointer;
+        background-color: #fff;
+        border: none;
+      }
+      #quality-description-vindecoder {
+        width:100%;
+        color: #3b3b3b;
+        background-color: #f3f3f3;
+        border: none;
+        font-size: 18px;
+        padding: 10px 12px;
+        {% comment %} margin: 20px 0; {% endcomment %}
+        display: block;
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        border-radius: 6px;
+        font-family: 'Lato', sans-serif;
+      }
+      #quality-description-vindecoder p {
+        margin: 0;
+      }
+      #quality-description-vindecoder:hover {
+        background-color: #e5e5e5;
+      }
+      #quality-description-vindecoder:active {
+        background-color: #f3f3f3;
+      }
+      #quality-description-vindecoder:disabled {
+        color: #ccc;
+        cursor: no-drop;
+        background-color: #f0f0f0;
+        opacity: 0.6;
+      }
+    }
+    @keyframes drop-in {
+      0% { opacity: 0; transform: translateY(-50px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes drop-out {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-50px); }
+  }
+  </style>
+  <button id="quality-description-vindecoder" type="button" class="btn" disabled>
+    <div class="quality-description-wrapper">
+      <p id="quality-button-text">
+        <b>Need help choosing a quality?</b>
+        <br/>
+        Get a better understanding of the different options.        
+      </p>
+      <div class="button_svg_container">
+        <svg class="button_svg" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="14px" width="14px" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path></svg>
+      </div>
+    </div>
+  </button>
+  <div class="quality-description-popup-dark-overlay"></div>
+  <div class="quality-description-popup-container">
+    <div class="quality-description-popup-modal">
+      <button id="quality-modal-exit" type="button">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><path d="M331.3 308.7L278.6 256l52.7-52.7c6.2-6.2 6.2-16.4 0-22.6-6.2-6.2-16.4-6.2-22.6 0L256 233.4l-52.7-52.7c-6.2-6.2-15.6-7.1-22.6 0-7.1 7.1-6 16.6 0 22.6l52.7 52.7-52.7 52.7c-6.7 6.7-6.4 16.3 0 22.6 6.4 6.4 16.4 6.2 22.6 0l52.7-52.7 52.7 52.7c6.2 6.2 16.4 6.2 22.6 0 6.3-6.2 6.3-16.4 0-22.6z"></path><path d="M256 76c48.1 0 93.3 18.7 127.3 52.7S436 207.9 436 256s-18.7 93.3-52.7 127.3S304.1 436 256 436c-48.1 0-93.3-18.7-127.3-52.7S76 304.1 76 256s18.7-93.3 52.7-127.3S207.9 76 256 76m0-28C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48z"></path></svg>
+      </button>
+      <h1>Not sure what quality really means?</h1>
+      <h2>That's okay. We're here to help.</h2>
+      {% if qualityTypes contains 'aftermarket' %}
+        <div class="quality-accordion-section" id="aftermarket-accordion">
+            <div class="aftermarket-accordion-container">
+            <button type="button" class="quality-accordion-button">
+                <p>Aftermarket</p>
+                <!-- Plus -->
+                <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
+                <!-- minus -->
+                <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
+            </button>
+            </div>
+            <div class="accordion-content">
+                <div id="aftermarket-quality-explanations">
+                    <h4>Aftermarket parts offer a budget-friendly alternative for vehicle repairs, providing a dependable fit and functionality at a more affordable price.</h4>
+                    <ol>
+                    <li><b>Affordable Solution:</b> A budget-friendly option that helps you save without compromising on essential quality.</li>
+                    <li><b>Dependable Fit:</b> Designed to align closely with OEM standards, ensuring a reliable and functional fit for your vehicle.</li>
+                    <li><b>Everyday Performance:</b> Engineered to support standard repairs and maintain reliable vehicle operation.</li>
+                    <li><b>Exceptional Value:</b> Combines cost savings with solid performance, delivering a smart choice for most repair needs.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if qualityTypes contains 'capa' %}
+            <div class="quality-accordion-section" id="capa-accordion">
+                <div class="capa-accordion-container">
+                <button type="button" class="quality-accordion-button">
+                    <p>CAPA</p>
+                    <!-- Plus -->
+                    <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
+                    <!-- minus -->
+                    <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
+                </button>
+                </div>
+                <div class="accordion-content">
+                    <div id="capa-quality-explanations">
+                        <h4>CAPA-certified parts meet or exceed OEM standards, ensuring high-quality, reliable replacements at a more affordable price.</h4>
+                        <ol>
+                        <li><b>Quality Assurance:</b> CAPA parts are rigorously tested to meet or exceed OEM performance standards.</li>
+                        <li><b>Exact Fit:</b> Designed to fit your vehicle model seamlessly, just like OEM parts.</li>
+                        <li><b>Cost-Effective:</b> Affordable replacements without compromising on quality or safety.</li>
+                        <li><b>Certified Safety:</b> CAPA parts undergo safety and durability testing to meet industry standards.</li>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if qualityTypes contains 'oem' %}
+            <div class="quality-accordion-section" id="oem-accordion">
+                <div class="oem-accordion-container">
+                <button type="button" class="quality-accordion-button">
+                    <p>OEM</p>
+                    <!-- Plus -->
+                    <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
+                    <!-- minus -->
+                    <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
+                </button>
+                </div>
+                <div class="accordion-content">
+                    <div id="oem-quality-explanations">
+                        <h4>OEM parts are made by the same manufacturer of your vehicle, ensuring a perfect fit.</h4>
+                        <ol>
+                        <li><b>Exact Fit:</b> Made specifically for your model, guaranteeing seamless installation and performance.</li>
+                        <li><b>Premium Materials:</b> Crafted with high-quality materials for durability and longevity.</li>
+                        <li><b>Safety:</b> Meets original safety standards for peace of mind.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+  </div>
+
+
+
+  <script>
+    {% comment %} let noPaintSwatchImage = false; {% endcomment %}
+    function hideShopifyChat() {
+      const shopifyChat = document.getElementById('shopify-chat');
+      if (shopifyChat) {
+        shopifyChat.style.display = 'none';
+      }
+    }
+  
+  function showShopifyChat() {
+    const shopifyChat = document.getElementById('shopify-chat');
+    if (shopifyChat) {
+      shopifyChat.style.display = 'block';
+    }
+  }
+
+  //Autoscrolls to paintcode section
+  {% comment %} document.getElementById('instructions-link').addEventListener('click', function(event) {
+    event.preventDefault();
+        let paintCodeSection = document.getElementById('paint-code-accordion');
+    
+    paintCodeSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+  }); {% endcomment %}
+
+  //Clicking on the buttons will expand that one and then close the other
+  const qualityAccordionButtons = document.querySelectorAll('.quality-accordion-button');
+  qualityAccordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionSection = button.closest('.quality-accordion-section');
+      const content = accordionSection.querySelector('.accordion-content');
+      const circlePlus = accordionSection.querySelector('.circle_plus');
+      const circleNone = accordionSection.querySelector('.circle_none');
+  
+      // Check if the clicked accordion is already open
+      const isOpen = content.classList.contains('open');
+  
+      // Close all accordion content sections and reset icons
+      {% comment %} document.querySelectorAll('.quality-accordion-section').forEach(section => {
+        const sectionContent = section.querySelector('.accordion-content');
+        const sectionCirclePlus = section.querySelector('.circle_plus');
+        const sectionCircleNone = section.querySelector('.circle_none');
+  
+        if (sectionContent) {
+          sectionContent.style.maxHeight = null; // Reset height
+          sectionContent.classList.remove('open');
+        }
+        if (sectionCirclePlus && sectionCircleNone) {
+          sectionCirclePlus.style.display = 'block';
+          sectionCircleNone.style.display = 'none';
+        }
+      }); {% endcomment %}
+      if (isOpen) {
+        // Open the clicked accordion
+        content.classList.remove('open');
+        content.style.maxHeight = 0;
+  
+        // Show the minus icon and hide the plus icon for the active accordion
+        circlePlus.style.display = 'block';
+        circleNone.style.display = 'none';
+      }
+  
+      if (!isOpen) {
+        // Open the clicked accordion
+        content.classList.add('open');
+        content.style.maxHeight = content.scrollHeight + "px";
+  
+        // Show the minus icon and hide the plus icon for the active accordion
+        circlePlus.style.display = 'none';
+        circleNone.style.display = 'block';
+      }
+    });
+  });
+  
+  
+  
+
+    const showQualityOverlay = () => document.querySelector(".quality-description-popup-dark-overlay").style.display = "block";
+    const showQualityModal = () => {
+      const modalContent = document.querySelector(".popup-modal-content");
+      {% comment %} modalContent.innerHTML = content; {% endcomment %}
+      document.querySelector(".quality-description-popup-container").style.display = "block";
+    };
+    const hideQualityOverlay = () => document.querySelector(".quality-description-popup-dark-overlay").style.display = "none";
+    const hideQualityModal = () => {
+      const container = document.querySelector('.quality-description-popup-container');
+      const modal = document.querySelector('.quality-description-popup-modal');
+      const onAnimationEnd = function() {
+        modal.style.animation = '';
+        container.style.display = 'none';
+        modal.removeEventListener('animationend', onAnimationEnd);
+      };
+    
+      modal.style.animation = "drop-out 0.3s forwards";
+      modal.addEventListener('animationend', onAnimationEnd);
+    };
+
+
+    // Function to fetch content from Shopify page using Liquid
+    {% comment %} const fetchPageContent = async () => {
+      try {
+        const response = await fetch('{{ product.metafields.custom.howtofindpaintcodeurl | escape }}.json');
+        if (!response.ok) {
+          throw new Error('Failed to fetch content');
+        }
+        const data = await response.json();
+        console.log('data: ', data);
+        return data.page.body_html; // Assuming the content is in the body_html of the page
+      } catch (error) {
+        {% comment %} noPaintSwatchImage = true;
+        if (noPaintSwatchImage) {
+          const accordion = document.getElementById("paint-code-accordion");
+          if (accordion) {
+              accordion.style.display = "none";
+              updatePaintCodeInstructions();
+          }
+      } {% endcomment %}
+        console.error('Fetch error:', error);
+        {% comment %} throw error; {% endcomment %}
+      }
+    }; {% endcomment %}
+
+    // Open Modal
+    document.querySelector("#quality-description-vindecoder").onclick = async function() {
+      hideShopifyChat();
+      showQualityOverlay();
+      const accordionSection = document.querySelectorAll('.quality-accordion-section');
+      accordionSection.forEach(section => {
+        const content = section.querySelector('.accordion-content');
+        const circlePlus = section.querySelector('.circle_plus');
+        const circleNone = section.querySelector('.circle_none');
+
+        {% comment %} const isOpen = content.classList.contains('open');
+        //auto expands the accordion
+        if (!isOpen) {
+          // Open the clicked accordion
+          content.classList.add('open');
+          content.style.maxHeight = 'fit-content';
+    
+          // Show the minus icon and hide the plus icon for the active accordion
+          circlePlus.style.display = 'none';
+          circleNone.style.display = 'block';
+        } {% endcomment %}
+
+      });
+
+
+      try {
+        document.body.classList.add('no-scroll-quality');
+        {% comment %} const pageContent = await fetchPageContent(); {% endcomment %}
+        showQualityModal();
+      } catch (error) {
+        console.error('Error fetching page content:', error);
+      }
+    };
+
+    // Close Modal
+    document.getElementById("quality-modal-exit").onclick = function() {
+        document.body.classList.remove('no-scroll-quality');
+      showShopifyChat();
+      hideQualityOverlay();
+      hideQualityModal();
+    };
+    
+    window.onclick = function(event) {
+      if(event.target === document.querySelector('.quality-description-popup-container')){
+        document.body.classList.remove('no-scroll-quality');
+        showShopifyChat();
+        hideQualityOverlay();
+        {% comment %} hideQualityModal(); {% endcomment %}
+      }
+    };
+
+    
+    function updatePaintCodeInstructions() {
+      {% comment %} const instructionsContainer = document.getElementById("capa-quality-explanations"); {% endcomment %}
+  
+      {% comment %} if (noPaintSwatchImage === false) { {% endcomment %}
+          {% comment %} instructionsContainer.innerHTML = `
+              <h4>There are two main ways to get a paint code.</h4>
+              <ol>
+                <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
+                <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
+              </ol>
+          `; {% endcomment %}
+      {% comment %} } else {
+          instructionsContainer.innerHTML = `
+              <h5>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</h5>
+          `;
+      } {% endcomment %}
+    }
+
+    {% comment %} function updateButtonText() {
+      const buttonText = document.getElementById("quality-button-text");
+  
+      // Check screen size
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        // Small screen text
+        buttonText.innerHTML = `
+          <b>Unsure of your paint code?</b><br />
+          Learn how to find it.
+        `;
+      } else {
+        // Default text for larger screens
+        buttonText.innerHTML = `
+          <b>Not sure what your paint code is?</b><br />
+          Explore the different ways you can get your paint code.
+        `;
+      }
+    }
+  
+    // Run the function on page load
+    updateButtonText(); {% endcomment %}
+  
+    // Add an event listener to handle screen size changes
+    {% comment %} window.addEventListener("resize", updateButtonText); {% endcomment %}
+  </script>

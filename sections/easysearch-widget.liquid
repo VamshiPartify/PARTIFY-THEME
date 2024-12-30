@@ -1,0 +1,58 @@
+<div class="easysearch-container">
+  {% capture easysearchWidget %}{% render "easysearch" %}{% endcapture %}
+  {% unless easysearchWidget contains 'Liquid error' %}{{ easysearchWidget }}{% endunless %}
+</div>
+<style>
+    #easysearch-container{
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: #0c1a94;
+  }
+  #easysearch-search {
+    background: #fdac3a !important;
+    font-size: 16pt !important;
+  }
+  .easysearch-btn {
+    color: #0c1a94 !important;
+  }
+  #easysearch_field_4973 {
+    min-width: 200px;
+    font-size: 16pt !important;
+  }
+  #easysearch_field_4974 {
+    min-width: 200px;
+    font-size: 16pt !important;
+  }
+  #easysearch_field_4975 {
+    min-width: 200px;
+    font-size: 16pt !important;
+  }
+  .easysearch-vertical-mode .easysearch-btn-holder {
+    width: 100% !important;
+  }
+</style>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('open') === 'year') {
+    const yearDropdown = document.getElementById("easysearch_field_4973");
+    if (yearDropdown) {
+      yearDropdown.focus();
+      yearDropdown.click();
+    }
+  }
+});
+</script>
+
+{% schema %}
+{
+"name": "Easysearch Widget",
+"settings": [],
+"presets": [
+{
+"name": "Easysearch Widget",
+"category": "ADVANCED LAYOUT"
+}
+]
+}
+{% endschema %}

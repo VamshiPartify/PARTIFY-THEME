@@ -1,0 +1,141 @@
+<style>
+    .product-type-dropdown select {
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: block;
+        font-size: 16px;
+        padding: 10px;
+        width: 100%;
+        min-height: 45px;
+        margin-bottom: 10px;
+      }
+      .product-type-dropdown {
+          display: flex;
+          flex-direction: column;
+      }
+      .product-type-dropdown select[disabled]{
+        background-color: #f0f0f0;
+        color: #ccc;
+        pointer-events: none;
+        opacity: 0.6;
+      }
+      .option-title-quality {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 3px;
+        color: #333;
+    }
+    #product-type-select:disabled {
+        color: #ccc;
+    }
+
+    #product-type-select {
+      color: #000;
+    }
+    .option-title-vin {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 3px;
+        color: #333;
+    }
+    #vin-textbox-container-for-oem {
+        width: 100%;
+    }
+
+    #vin-textbox-container-for-oem input {
+        margin: 0;
+    }
+    #vin-textbox-for-oem {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    #vin-warning-for-oem {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    }
+    .quality-description-container {
+        padding: 10px 0;
+      }
+</style>
+
+<div class="product-type-dropdown">
+    <label class="option-title-quality" for="product-type-select">Quality</label>
+    <select id="product-type-select" disabled>
+      <option value="" disabled selected>Select Quality</option>
+      {% assign available_product_types = '' %}
+      
+      {% if product.metafields.custom.aftermarket_product %}
+        {% assign available_product_types = available_product_types | append: 'aftermarket,' %}
+      {% endif %}
+      {% if product.metafields.custom.capa_product %}
+        {% assign available_product_types = available_product_types | append: 'capa,' %}
+      {% endif %}
+      {% if product.metafields.custom.oem_product %}
+        {% assign available_product_types = available_product_types | append: 'oem,' %}
+      {% endif %}
+
+      {% if available_product_types contains 'aftermarket' %}
+        {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
+        {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
+        {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+
+        {% if aftermarket_variant_count > 0 %}
+          {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
+          {% if aftermarket_product.available %}
+            <option value="aftermarket">Aftermarket - {{ aftermarket_price }}</option>
+          {% else %}
+            <option value="aftermarket" disabled style="color: gray;">Aftermarket (Out of Stock)</option>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      {% if available_product_types contains 'capa' %}
+        {% assign capa_product_handle = product.metafields.custom.capa_product %}
+        {% assign capa_product = all_products[capa_product_handle] %}
+        {% assign capa_variant_count = capa_product.variants | size %}
+        {% if capa_variant_count > 0 %}
+          {% assign capa_price = capa_product.variants.first.price | money %}
+          {% if capa_product.available %}
+            <option value="capa">CAPA Certified - {{ capa_price }}</option>
+          {% else %}
+            <option value="capa" disabled style="color: gray;">CAPA Certified (Out of Stock)</option>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      {% if available_product_types contains 'oem' %}
+        {% assign oem_product_handle = product.metafields.custom.oem_product %}
+        {% assign oem_product = all_products[oem_product_handle] %}
+        {% assign oem_variant_count = oem_product.variants | size %}
+
+        {% if oem_variant_count > 0 %}
+          {% assign oem_price = oem_product.variants.first.price | money %}
+          {% if oem_product.available %}
+            <option value="oem">OEM - {{ oem_price }}</option>
+          {% else %}
+            <option value="oem" disabled style="color: gray;">OEM (Out of Stock)</option>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    </select>
+    <div class="oem-vin-container" style="display: none;">
+      <label class="option-title-vin" for="product-type-select">VIN</label>
+      <div id="vin-textbox-container-for-oem">
+        <input
+            type="text"
+            id="vin-textbox-for-oem"
+            name="properties[Vin]"
+            placeholder="Enter your VIN"
+            maxlength="17"
+        >
+        <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+      </div>
+    </div>
+    <div class="quality-description-container">
+      {% render 'quality-description-modal', qualityTypes: available_product_types %}
+    </div>
+  </div>
