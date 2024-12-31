@@ -401,7 +401,7 @@
 
   <script>
     let noPaintSwatchImage = false;
-    function hideShopifyChat() {
+    {% comment %} function hideShopifyChat() {
       const shopifyChat = document.getElementById('shopify-chat');
       if (shopifyChat) {
         shopifyChat.style.display = 'none';
@@ -413,7 +413,7 @@
     if (shopifyChat) {
       shopifyChat.style.display = 'block';
     }
-  }
+  } {% endcomment %}
 
   //Autoscrolls to paintcode section
   document.getElementById('instructions-link').addEventListener('click', function(event) {
@@ -469,8 +469,8 @@
       modalContent.innerHTML = content;
       document.querySelector(".unfolded-popup-container").style.display = "block";
     };
-    const hideOverlay = () => document.querySelector(".product-unfolded-popup-dark-overlay").style.display = "none";
-    const hideModal = () => {
+    window.hideOverlay = () => document.querySelector(".product-unfolded-popup-dark-overlay").style.display = "none";
+    window.hideModal = () => {
       const container = document.querySelector('.unfolded-popup-container');
       const modal = document.querySelector('.unfolded-popup-modal');
       const onAnimationEnd = function() {
@@ -492,7 +492,6 @@
           throw new Error('Failed to fetch content');
         }
         const data = await response.json();
-        console.log('data: ', data);
         return data.page.body_html; // Assuming the content is in the body_html of the page
       } catch (error) {
         noPaintSwatchImage = true;
