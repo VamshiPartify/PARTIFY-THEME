@@ -680,8 +680,9 @@
                   priceDisplay.textContent = selectedPrice;
                   priceDisplaySmallScreen.textContent = selectedPrice;
               }
+
+              window.selectedProductColor = selectedColor;
               if (selectedColor) {
-                window.selectedProductColor = selectedColor;
                 window.selectedProductTitle = selectedTitle
                 {% comment %} window.dispatchEvent(new Event('colorUpdated')); {% endcomment %}
             }

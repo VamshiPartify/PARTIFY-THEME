@@ -76,6 +76,7 @@
         const colorSkeleton = document.getElementById("color-preview-skeleton");
         const variantSelector = document.querySelector('[name="id"]');
         const colorPreviewTitle = document.querySelector('.color-preview-title');
+        const colorPreviewContainer = document.querySelector('.color-preview-container-for-customizations');
 
         let currentColor = '';
     
@@ -99,21 +100,15 @@
 
 
             if (selectedColor) {
-                if(currentColor !== selectedColor) {
-                    // Show the color preview and hide the skeleton
-                    colorBox.style.backgroundColor = selectedColor;
-                    colorPreviewTitle.style.visibility = "visible";
-                    colorBox.style.display = 'block';
-                    colorSkeleton.style.display = 'none';
-                    colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
-                    currentColor = selectedColor
-                } else {
-                    colorPreviewTitle.style.visibility = "hidden";
-                    colorBox.style.display = 'none';
-                    colorSkeleton.style.display = 'block';
-                    colorBox.removeAttribute("title");
-                }
+                colorPreviewContainer.style.display = 'block';
+                colorBox.style.backgroundColor = selectedColor;
+                colorPreviewTitle.style.visibility = "visible";
+                colorBox.style.display = 'block';
+                colorSkeleton.style.display = 'none';
+                colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
+                currentColor = selectedColor;
             } else if (paintColor) {
+                colorPreviewContainer.style.display = 'block';
                 colorBox.style.backgroundColor = paintColor;
                 colorPreviewTitle.style.visibility = "visible";
                 colorBox.style.display = 'block';
@@ -121,6 +116,7 @@
                 colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
             } else {
                 // Hide both the color preview and the skeleton if no metafield
+                colorPreviewContainer.style.display = 'none';
                 colorPreviewTitle.style.visibility = "hidden";
                 colorBox.style.display = 'none';
                 colorSkeleton.style.display = 'block';
