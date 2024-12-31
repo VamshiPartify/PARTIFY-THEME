@@ -29,14 +29,44 @@
         
         // Listen for messages from the iframe
         window.addEventListener('message', function(event) {
-            // Ensure the message is from the expected iframe's origin
             if (event.origin === 'https://vin-to-paintcode-app-445858330997.us-east5.run.app') {
-                // Check if the message is related to resizing the iframe
                 if (event.data.type === 'resizeIframe') {
                     // Adjust the iframe's height based on the received data
                     iframe.style.height = event.data.height + 50 + 'px';
-                    console.log('height: ', iframe.style.height);
+                }
 
+            //Automatically select the color in the variant-selector dropdown
+                if (event.data.type === "updatePaintCode") {
+                  const paintCode = event.data.paintCode;
+                  let matchingOption = false;
+                  let autoSelectedColor;
+
+                  const variantSelector = document.getElementById('variant-selector');
+                  if (variantSelector) {
+                      const options = Array.from(variantSelector.options);
+                        options.find(option => {
+                            if(option.label.split(" ")[0] === paintCode) {
+                                matchingOption = true;
+                                autoSelectedColor = option.value;
+                                return;
+                            }
+                        });
+      
+                      if (matchingOption) {
+                          variantSelector.value = autoSelectedColor;
+                          document.body.classList.remove('no-scroll-paint-swatch');
+                          hideOverlay();
+                          hideModal();
+                          showShopifyChat();
+      
+                          // Trigger the change event programmatically
+                          variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
+                      } else {
+                          console.warn(`No matching option found for paint code: ${paintCode}`);
+                      }
+                  } else {
+                      console.warn('Variant selector dropdown not found.');
+                  }
                 }
             }
         });
