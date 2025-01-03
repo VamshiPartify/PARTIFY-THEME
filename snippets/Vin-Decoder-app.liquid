@@ -13,7 +13,7 @@
     <div id="paintcode-app-container">
         <iframe
             id="paintcode-iframe"
-            src="https://vin-to-paintcode-app-445858330997.us-east5.run.app"
+            src="https://called-malpractice-follows-survivors.trycloudflare.com"
             style="width: 100%; height: 100%; min-height: 225px; border: none;"
             scrolling="no"
             allowfullscreen
@@ -29,7 +29,7 @@
         
         // Listen for messages from the iframe
         window.addEventListener('message', function(event) {
-            if (event.origin === 'https://vin-to-paintcode-app-445858330997.us-east5.run.app') {
+            if (event.origin === 'https://called-malpractice-follows-survivors.trycloudflare.com') {
                 if (event.data.type === 'resizeIframe') {
                     // Adjust the iframe's height based on the received data
                     iframe.style.height = event.data.height + 50 + 'px';

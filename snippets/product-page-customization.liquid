@@ -673,7 +673,9 @@
   {% comment %} {% render 'black-friday-button' %} {% endcomment %}
    
   {% assign makes = settings.makes_list | split: ", " %}
+  {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
   {% assign is_make_found = false %}
+  {% assign is_excluded_make_found = false %}
   {% assign downcase_handle = product.handle | downcase %}
 
   {% for make in makes %}
@@ -682,6 +684,15 @@
       {% break %}
     {% endif %}
   {% endfor %}
+
+
+  {% for excluded_make in excluded_makes %}
+    {% if downcase_handle contains excluded_make %}
+      {% assign is_excluded_make_found = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
 
   {% if product.available == true or product.variants.first.inventory_policy == 'continue' %}
     <!-- Modal trigger button -->
@@ -747,19 +758,17 @@
                       {% render 'CAPA-OEM-options' %}
                   {% elsif product.variants.size > 1 %}
                       <!-- Variant Dropdown if paint selection but no quality selection -->
-                      <!-- For nissans -->
+                      <!-- For makes easily found with chromedata (e.g. Nissan) -->
                       {% if is_make_found %}
                         <div id="variant-selector-container">
                           <div class="divider-large-screen"></div>
-                          {% comment %} <div class="how-to-find-paint-code-wrapper">
-                            <div class="find-paint-option-link-container">
-                              <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
-                            </div>
-                          </div> {% endcomment %}
                           <label for="variant-selector" class="variant-label">Paint Option</label>
                          <select id="variant-selector" name="id" class="variant-dropdown">
                             <option value="" selected disabled>Paint Option</option>
                             {% for variant in product.variants %}
+                                {% if variant.metafields.custom.hide_paint_code == true %}
+                                  {% continue %}
+                                {% endif %}
                                 {% if is_make_found %}
                                     {% if variant.title contains "Match Paint by VIN" %}
                                         {% continue %}
@@ -825,7 +834,7 @@
 
                   <!-- Select VIN Option -->
                   {%- if product.variants[1].sku contains ".VIN" -%}
-                    {% if is_make_found %}
+                    {% if is_make_found or is_excluded_make_found %}
                       {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
 
                     {% else %}

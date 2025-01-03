@@ -146,40 +146,24 @@
             order: 1;
           }
         }
-
-        {% comment %} #vin-textbox-container-for-oem {
-          width: 100%;
-      }
-  
-      #vin-textbox-container-for-oem input {
-          margin: 0;
-      } {% endcomment %}
-
-      {% comment %} #vin-textbox-for-oem {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      } {% endcomment %}
-
-      {% comment %} #vin-warning-for-oem {
-        color: red;
-        font-size: 14px;
-        margin-top: 5px;
-      } {% endcomment %}
-
-      {% comment %} .quality-description-container {
-        padding: 10px 0;
-      } {% endcomment %}
     </style>
 
     {% assign makes = settings.makes_list | split: ", " %}
+    {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
     {% assign is_make_found = false %}
+    {% assign is_excluded_make_found = false %}
     {% assign downcase_handle = product.handle | downcase %}
 
     {% for make in makes %}
       {% if downcase_handle contains make %}
         {% assign is_make_found = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+
+    {% for excluded_make in excluded_makes %}
+      {% if downcase_handle contains excluded_make %}
+        {% assign is_excluded_make_found = true %}
         {% break %}
       {% endif %}
     {% endfor %}
@@ -189,81 +173,6 @@
       <!-- Main Product Type Dropdown -->
       <div class="divider"></div>
       {% render 'quality-type-dropdown' %}
-      {% comment %} <div class="product-type-dropdown">
-        <label class="option-title-quality" for="product-type-select">Quality</label>
-        <select id="product-type-select" disabled>
-          <option value="" disabled selected>Select Quality</option>
-          {% assign availableProductTypes = '' %}
-          
-          {% if product.metafields.custom.aftermarket_product %}
-            {% assign availableProductTypes = availableProductTypes | append: 'aftermarket,' %}
-          {% endif %}
-          {% if product.metafields.custom.capa_product %}
-            {% assign availableProductTypes = availableProductTypes | append: 'capa,' %}
-          {% endif %}
-          {% if product.metafields.custom.oem_product %}
-            {% assign availableProductTypes = availableProductTypes | append: 'oem,' %}
-          {% endif %}
-
-          {% if availableProductTypes contains 'aftermarket' %}
-            {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
-            {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
-            {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
-
-            {% if aftermarket_variant_count > 0 %}
-              {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
-              {% if aftermarket_product.available %}
-                <option value="aftermarket">Aftermarket - {{ aftermarket_price }}</option>
-              {% else %}
-                <option value="aftermarket" disabled style="color: gray;">Aftermarket (Out of Stock)</option>
-              {% endif %}
-            {% endif %}
-          {% endif %}
-          {% if availableProductTypes contains 'capa' %}
-            {% assign capa_product_handle = product.metafields.custom.capa_product %}
-            {% assign capa_product = all_products[capa_product_handle] %}
-            {% assign capa_variant_count = capa_product.variants | size %}
-            {% if capa_variant_count > 0 %}
-              {% assign capa_price = capa_product.variants.first.price | money %}
-              {% if capa_product.available %}
-                <option value="capa">CAPA Certified - {{ capa_price }}</option>
-              {% else %}
-                <option value="capa" disabled style="color: gray;">CAPA Certified (Out of Stock)</option>
-              {% endif %}
-            {% endif %}
-          {% endif %}
-          {% if availableProductTypes contains 'oem' %}
-            {% assign oem_product_handle = product.metafields.custom.oem_product %}
-            {% assign oem_product = all_products[oem_product_handle] %}
-            {% assign oem_variant_count = oem_product.variants | size %}
-
-            {% if oem_variant_count > 0 %}
-              {% assign oem_price = oem_product.variants.first.price | money %}
-              {% if oem_product.available %}
-                <option value="oem">OEM - {{ oem_price }}</option>
-              {% else %}
-                <option value="oem" disabled style="color: gray;">OEM (Out of Stock)</option>
-              {% endif %}
-            {% endif %}
-          {% endif %}
-        </select>
-        <div class="oem-vin-container" style="display: none;">
-          <label class="option-title-vin" for="product-type-select">VIN</label>
-          <div id="vin-textbox-container-for-oem">
-            <input
-                type="text"
-                id="vin-textbox-for-oem"
-                name="properties[Vin]"
-                placeholder="Enter your VIN"
-                maxlength="17"
-            >
-            <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-          </div>
-        </div>
-        <div class="quality-description-container">
-          {% render 'quality-description-modal', qualityTypes: availableProductTypes %}
-        </div>
-      </div> {% endcomment %}
       {% if product.variants.size > 1 %}
         {% if is_make_found %}
           <div class="divider"></div>
@@ -283,6 +192,25 @@
 
             </div>
           </div> 
+        {% elsif is_excluded_make_found %}
+          <div class="divider"></div>
+          <div class="combined-variant-dropdown">
+            <div class="paint-option-and-how-to-find-paint-code-wrapper">
+              <div class="find-paint-option-link-container" style="display: none;">
+                <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+              </div>
+              <label class="option-title" for="product-type-select">Paint Option</label>
+            </div>
+            <div class="paint-code-wrapper">
+              <select id="variant-selector" name="id" disabled>
+                <option value="" disabled selected>Select Paint Code</option>
+              </select>
+            </div>
+            {% comment %} Here is where i render the email/text input boxes for nonchromedata compatible makes {% endcomment %}
+            {% render 'excluded-chromedata-makes' %}
+
+          </div>
+        </div>
         {% else %}
         <div class="divider"></div>
           <div class="combined-variant-dropdown">
@@ -321,7 +249,10 @@
                       {% assign aftermarket_base_price = aftermarket_product.variants.first.price %} <!-- Price of the first variant -->
               
                       {% for variant in aftermarket_product.variants %}
-                        {% if is_make_found %}
+                        {% if variant.metafields.custom.hide_paint_code == true %}
+                          {% continue %}
+                        {% endif %}
+                        {% if is_make_found or is_excluded_make_found %}
                           {% if variant.title contains "Match Paint by VIN" %}
                             {% continue %}
                           {% endif %}
@@ -362,7 +293,10 @@
                       {% assign capa_base_price = capa_product.variants.first.price %} <!-- Price of the first variant -->
               
                       {% for variant in capa_product.variants %}
-                        {% if is_make_found %}
+                        {% if variant.metafields.custom.hide_paint_code == true %}
+                          {% continue %}
+                        {% endif %}
+                        {% if is_make_found or is_excluded_make_found %}
                           {% if variant.title contains "Match Paint by VIN" %}
                             {% continue %}
                           {% endif %}
@@ -403,7 +337,10 @@
                       {% assign oem_base_price = oem_product.variants.first.price %} <!-- Price of the first variant -->
               
                       {% for variant in oem_product.variants %}
-                        {% if is_make_found %}
+                        {% if variant.metafields.custom.hide_paint_code == true %}
+                          {% continue %}
+                        {% endif %}
+                        {% if is_make_found or is_excluded_make_found %}
                           {% if variant.title contains "Match Paint by VIN" %}
                             {% continue %}
                           {% endif %}
