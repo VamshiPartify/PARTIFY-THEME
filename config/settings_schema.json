@@ -1059,5 +1059,16 @@
         "default": "nissan, infiniti"
       }
     ]
+  },
+  {
+    "name": "Excluded Makes",
+    "settings": [
+      {
+        "type": "text",
+        "id": "excluded_makes_list",
+        "label": "Excluded Makes",
+        "default": "honda"
+      }
+    ]
   }
 ]

@@ -337,6 +337,30 @@
       100% { opacity: 0; transform: translateY(-50px); }
   }
   </style>
+
+  {% assign makes = settings.makes_list | split: ", " %}
+  {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+  {% assign is_make_found = false %}
+  {% assign is_excluded_make_found = false %}
+  {% assign downcase_handle = product.handle | downcase %}
+
+  {% for make in makes %}
+    {% if downcase_handle contains make %}
+      {% assign is_make_found = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+
+  {% for excluded_make in excluded_makes %}
+    {% if downcase_handle contains excluded_make %}
+      {% assign is_excluded_make_found = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+
+
   <button id="how-to-find-your-paint-code-vindecoder" type="button" class="btn" disabled>
     <div class="htfypc-wrapper">
       <p id="button-text">
@@ -357,13 +381,23 @@
       </button>
       <h1>Not sure what your paint code is?</h1>
       <h2>That's okay. We're here to help.</h2>
-      <div id="paint-code-instructions">
-        <h4>There are two main ways to get a paint code.</h4>
-        <ol>
-          <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
-          <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
-        </ol>
-      </div>
+      {% if is_make_found %}
+        <div id="paint-code-instructions">
+          <h4>There are two main ways to get a paint code.</h4>
+          <ol>
+            <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
+            <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
+          </ol>
+        </div>
+      {% else %}
+        <div id="paint-code-instructions">
+          <h4>There are two main ways to get a paint code.</h4>
+          <ol>
+            <li>Simply enter your VIN, and we’ll respond to you with your code as soon as we can.</li>
+            <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
+          </ol>
+        </div>
+      {% endif %}
       <div class="accordion-section" id="vin-decoder-accordion">
         <div class="vin-decoder-accordion-container">
           <button type="button" class="accordion-button">
@@ -401,19 +435,14 @@
 
   <script>
     let noPaintSwatchImage = false;
-    {% comment %} function hideShopifyChat() {
-      const shopifyChat = document.getElementById('shopify-chat');
-      if (shopifyChat) {
-        shopifyChat.style.display = 'none';
-      }
-    }
-  
-  function showShopifyChat() {
-    const shopifyChat = document.getElementById('shopify-chat');
-    if (shopifyChat) {
-      shopifyChat.style.display = 'block';
-    }
-  } {% endcomment %}
+    {% comment %} let isExcludedValue = '{{ is_excluded_make_found }}'; {% endcomment %}
+    let isExcludedValue = false;
+
+    console.log("isExcludedValue", isExcludedValue);
+
+    const targetOrigin = window.location.hostname === 'http://127.0.0.1' ? '*' : 'https://vin-to-paintcode-app-445858330997.us-east5.run.app';
+    window.parent.postMessage({ type: 'excludedMake', isExcluded: isExcludedValue}, 'https://called-malpractice-follows-survivors.trycloudflare.com');
+
 
   //Autoscrolls to paintcode section
   document.getElementById('instructions-link').addEventListener('click', function(event) {
@@ -580,7 +609,7 @@
       }
     }
 
-    function updateButtonText() {
+    {% comment %} function updateButtonText() {
       const buttonText = document.getElementById("button-text");
   
       // Check screen size
@@ -600,8 +629,8 @@
     }
   
     // Run the function on page load
-    updateButtonText();
+    updateButtonText(); {% endcomment %}
   
     // Add an event listener to handle screen size changes
-    window.addEventListener("resize", updateButtonText);
+    {% comment %} window.addEventListener("resize", updateButtonText); {% endcomment %}
   </script>
