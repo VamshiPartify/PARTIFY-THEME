@@ -85,7 +85,7 @@
     "continue_url_cart": false,
     "continue_url_404": true,
     "makes_list": "nissan, infiniti, mazda, kia, chrysler, jeep, fiat, dodge, ram, hyundai, genesis",
-    "excluded_makes_list": "honda",
+    "excluded_makes_list": "",
     "product_show_sku": false,
     "product_social_sharing": false,
     "product_grid_show_quickshop": "always",

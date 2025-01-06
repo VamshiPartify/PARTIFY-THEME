@@ -7,13 +7,36 @@
 </style>
 
 <div>
+    {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+    {% assign is_excluded_make_found = false %}
+    {% assign downcase_handle = product.handle | downcase %}
+
+    {% for excluded_make in excluded_makes %}
+        {% if downcase_handle contains excluded_make %}
+            {% assign is_excluded_make_found = true %}
+            {% break %}
+        {% endif %}
+    {% endfor %}
+
+
+    {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+    {% assign is_excluded_make_found = false %}
+    {% assign downcase_handle = product.handle | downcase %}
+
+    {% for excluded_make in excluded_makes %}
+      {% if downcase_handle contains excluded_make %}
+        {% assign is_excluded_make_found = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  
     <div id="product-details-for-app" data-product-title="{{ product.title }}" data-product-id="{{ product.id }}">
     </div>
 
     <div id="paintcode-app-container">
         <iframe
             id="paintcode-iframe"
-            src="https://called-malpractice-follows-survivors.trycloudflare.com"
+            src="https://vin-to-paintcode-app-445858330997.us-east5.run.app"
             style="width: 100%; height: 100%; min-height: 225px; border: none;"
             scrolling="no"
             allowfullscreen
@@ -25,11 +48,29 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const iframe = document.getElementById('paintcode-iframe');
+        const parentUrl = window.location.href;
         const productDetailsElement = document.getElementById('product-details-for-app');
+        let isExcludedValue = '{{ is_excluded_make_found }}';
+          window.addEventListener('message', function(event) {
+            if (event.data.type === 'iframeReady') {
+                iframe.contentWindow.postMessage(
+                    { type: 'productPage', url: parentUrl, makeExcluded: isExcludedValue },
+                    'https://vin-to-paintcode-app-445858330997.us-east5.run.app'
+                );
+            }
+        });
+        // iframe.addEventListener('load', () => {
+        //     console.log('Sending message to iframe');
+        //     iframe.contentWindow.postMessage(
+        //         { type: 'parentUrl', url: parentUrl }, 
+        //         'https://vin-to-paintcode-app-445858330997.us-east5.run.app' // Specify your app's origin
+        //     );
+        // });
+
         
         // Listen for messages from the iframe
         window.addEventListener('message', function(event) {
-            if (event.origin === 'https://called-malpractice-follows-survivors.trycloudflare.com') {
+            if (event.origin === 'https://vin-to-paintcode-app-445858330997.us-east5.run.app') {
                 if (event.data.type === 'resizeIframe') {
                     // Adjust the iframe's height based on the received data
                     iframe.style.height = event.data.height + 50 + 'px';
