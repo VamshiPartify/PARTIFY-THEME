@@ -1,0 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {
+      }
+    },
+    "dynamic_custom_liquid_9hf7XH": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": "<p>Welcome to our Vehicle Lookup page, your ultimate destination for finding the exact parts you need for your vehicle. Our Year Make Model lookup tool is the most efficient and precise way to browse our extensive inventory. Whether you need bumpers, fenders, tailgates, grilles, or hoods, our user-friendly search feature ensures you find the perfect match for your vehicle with ease.</p>"
+      }
+    },
+    "1717424861dd36e838": {
+      "type": "apps",
+      "blocks": {
+        "easysearch_year_make_model_easysearch_widget_WFFpEV": {
+          "type": "shopify://apps/easysearch-ymm/blocks/easysearch-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
+          "settings": {
+            "placement_selector": "",
+            "insert_method": "prepend"
+          }
+        }
+      },
+      "block_order": [
+        "easysearch_year_make_model_easysearch_widget_WFFpEV"
+      ],
+      "custom_css": [
+        "div {margin-top: 0; margin-bottom: 0; background-color: #0c1a94;}",
+        "#easysearch-search {background: #fdac3a !important; min-width: 200px; text-align: center; font-size: 16pt !important;}",
+        ".easysearch-btn {color: #0c1a94 !important; margin: 0 auto;}",
+        "#easysearch_field_4973 {min-width: 200px; font-size: 16pt !important;}",
+        "#easysearch_field_4974 {min-width: 200px; font-size: 16pt !important;}",
+        "#easysearch_field_4975 {min-width: 200px; font-size: 16pt !important;}",
+        ".easysearch-vertical-mode .easysearch-btn-holder {width: 100% !important;}"
+      ],
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "dynamic_custom_liquid_fj6G8n": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": "<p>We pride ourselves on offering high-quality parts at affordable prices, with the added convenience of painting services to match your vehicle's color. Our commitment to accuracy and customer satisfaction makes us the go-to source for all your automotive part needs.</p>\n\n<p>Explore our selection and experience the convenience of our Year Make Model lookup tool today. Get your vehicle back in top shape with parts that fit perfectly, every time.</p>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "dynamic_custom_liquid_9hf7XH",
+    "1717424861dd36e838",
+    "dynamic_custom_liquid_fj6G8n"
+  ]
+}

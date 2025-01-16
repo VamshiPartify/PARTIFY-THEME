@@ -1,0 +1,151 @@
+<!-- Color Preview Box -->
+<label class="color-preview-title">Color Preview</label>
+<div id="color-preview-wrapper" style="width: 100%; height: 40px; display: none;">
+    <!-- Skeleton loader placeholder -->
+    <div id="color-preview-skeleton" style="width: 100%; height: 100%; background-color: #fafafa; border-radius: 9999px; border: 2px solid #ddd; animation: skeleton-loading 1.5s infinite ease-in-out;">
+    </div>
+    
+    <!-- Actual color preview box -->
+    <div id="color-preview-box" 
+         style="width: 100%; height: 100%; display: none; border-radius: 9999px; border: 2px solid #ddd; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer;"
+         title="">
+    </div>
+  </div>
+  
+  <style>
+
+    .color-preview-title {
+        margin-top: 10px;
+        color: #858585;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+     /* Skeleton loader animation */
+     #color-preview-skeleton {
+        position: relative;
+        background-color: #fdfdfd;
+        color: #adadad;
+        height: 100%;
+    }
+    
+    #color-preview-skeleton::after {
+        content: "Color Preview";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+  
+     /* Subtle Diagonal Stripe Pattern Overlay */
+     #color-preview-box::before {
+         content: "";
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 200%;
+         height: 200%;
+         background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);
+         background-size: 12px 12px; /* Adjusted for a slightly larger pattern */
+         pointer-events: none;
+         opacity: 0.15; /* Slightly less opacity for a more subtle effect */
+     }
+  
+     /* Shine Effect */
+     #color-preview-box::after {
+         content: "";
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 60%);
+         opacity: 0.4; /* Adjusted for a softer shine */
+         pointer-events: none;
+         transform: translateY(-100%) rotate(15deg);
+         transition: transform 0.5s ease-in-out;
+     }
+  </style>
+  
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const colorBox = document.getElementById("color-preview-box");
+        const colorWrapper = document.getElementById("color-preview-wrapper");
+        const colorSkeleton = document.getElementById("color-preview-skeleton");
+        const variantSelector = document.querySelector('[name="id"]');
+        const colorPreviewTitle = document.querySelector('.color-preview-title');
+        const colorPreviewContainer = document.querySelector('.color-preview-container-for-customizations');
+
+        let currentColor = '';
+    
+        // Get variant metafields from Liquid
+        const variantColors = {};
+        const variantNames = {};
+
+         {% for variant in product.variants %}
+            {% assign color = variant.metafields.custom.paint_preview_hex_code %}
+            variantColors[{{ variant.id }}] = "{{ color | escape }}";
+            variantNames[{{ variant.id }}] = "{{ variant.title | escape }}";
+        {% endfor %}
+    
+        function updateColorBox(variantId) {
+            const selectedColor = window.selectedProductColor;
+            const selectedTitle = window.selectedProductTitle;
+
+            const paintColor = variantColors[variantId];
+            const variantName = variantNames[variantId];
+
+
+
+            if (selectedColor) {
+                colorPreviewContainer.style.display = 'block';
+                colorBox.style.backgroundColor = selectedColor;
+                colorPreviewTitle.style.visibility = "visible";
+                colorBox.style.display = 'block';
+                colorSkeleton.style.display = 'none';
+                colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
+                currentColor = selectedColor;
+            } else if (paintColor) {
+                colorPreviewContainer.style.display = 'block';
+                colorBox.style.backgroundColor = paintColor;
+                colorPreviewTitle.style.visibility = "visible";
+                colorBox.style.display = 'block';
+                colorSkeleton.style.display = 'none';
+                colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
+            } else {
+                // Hide both the color preview and the skeleton if no metafield
+                colorPreviewContainer.style.display = 'none';
+                colorPreviewTitle.style.visibility = "hidden";
+                colorBox.style.display = 'none';
+                colorSkeleton.style.display = 'block';
+                colorBox.removeAttribute("title");
+            }
+        }
+    
+        // Handle variant change events
+        function handleVariantChange() {
+            if (variantSelector) {
+                const variantId = variantSelector.value;
+                colorWrapper.style.display = 'block';
+                updateColorBox(variantId);
+            }
+        }
+        // Makes the function globally accessible
+        window.handleVariantChange = handleVariantChange;
+    
+        // Attach event listeners for variant change
+        if (variantSelector) {
+            variantSelector.addEventListener('change', handleVariantChange);
+            variantSelector.addEventListener('input', handleVariantChange); // For immediate feedback on mobile
+            variantSelector.addEventListener('touchstart', handleVariantChange); // Immediate feedback on touch devices
+    
+            // Initialize on page load with the selected variant
+            const initialVariantId = variantSelector.value;
+            colorWrapper.style.display = 'block'; // Ensure wrapper is visible
+            updateColorBox(initialVariantId);
+        }
+    });
+    
+</script>

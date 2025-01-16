@@ -1,0 +1,370 @@
+<style>
+    .easysearch-fitment-search-widget {
+      border: none;
+    }
+      .option-dropdowns {
+          color: #0073e6;
+          font-weight: bold;
+          border-radius: 4px;
+          display: inline-block;
+          margin-top: 5px;
+          height: fit-content;
+          width: 100%;
+      }
+      .product-type-dropdown select {
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: block;
+        font-size: 16px;
+        padding: 10px;
+        width: 100%;
+        min-height: 45px;
+        margin-bottom: 10px;
+      }
+      .product-type-dropdown {
+          display: flex;
+          flex-direction: column;
+      }
+
+      .divider {
+        height: 1px;
+        width: 104%;
+        background-color: #ddd;
+        margin: 5px 0 8px 0;
+        opacity: 0.8;
+        position: relative;
+        left: -2%;
+    }
+      .option-title {
+          font-size: 1.2rem;
+          font-weight: 800;
+          margin-bottom: 3px;
+          color: #333;
+      }
+      .option-title-quality {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 3px;
+        color: #333;
+    }
+      .paint-code-wrapper {
+          margin-top: 3px;
+      }
+      .product-options .price-info {
+          font-size: 1.1rem;
+          font-weight: bold;
+          color: #333;
+          margin-top: 1rem;
+      }
+
+      .product-type-dropdown select[disabled]{
+        background-color: #f0f0f0;
+        color: #ccc;
+        pointer-events: none;
+        opacity: 0.6;
+      }
+    
+      .combined-variant-dropdown {
+          height: fit-content;
+      }
+      .combined-variant-dropdown select {
+          width: 100%;
+          padding: 0.75rem;
+          font-size: 1rem;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          pointer-events: auto;
+          opacity: 1;
+      }
+      .combined-variant-dropdown select[disabled] {
+          background-color: #f0f0f0;
+          color: #ccc;
+          pointer-events: none;
+          opacity: 0.6;
+      }
+
+      .find-paint-option-link-container {
+        display: flex;
+        justify-content: start;
+        width: 100%;
+        font-size: 14px;
+        color: #0000EE;
+      }
+
+      .paint-option-and-how-to-find-paint-code-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .find-paint-option-link-container {
+        order: 1;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #0000EE;
+        margin: 3px 0 8px 0;
+      }
+      
+      .option-title {
+        order: 2;
+      }
+      
+      @media only screen and (min-width: 769px) {
+        .paint-option-and-how-to-find-paint-code-wrapper {
+          flex-direction: row;
+          align-items: center;
+        }
+        
+        .find-paint-option-link-container {
+          order: 2;
+          margin-bottom: 0;
+          width: fit-content;
+        }
+      
+        .option-title {
+          order: 1;
+        }
+      }
+  </style>
+
+  <div class="option-dropdowns">
+    <!-- Main Product Type Dropdown -->
+    <div class="divider"></div>
+    <div class="product-type-dropdown">
+      <label class="option-title-quality" for="product-type-select">Quality</label>
+      <select id="product-type-select" disabled>
+        <option value="" disabled selected>Select Quality</option>
+        {% assign availableProductTypes = '' %}
+        
+        {% if product.metafields.custom.aftermarket_product %}
+          {% assign availableProductTypes = availableProductTypes | append: 'aftermarket,' %}
+        {% endif %}
+        {% if product.metafields.custom.capa_product %}
+          {% assign availableProductTypes = availableProductTypes | append: 'capa,' %}
+        {% endif %}
+        {% if product.metafields.custom.oem_product %}
+          {% assign availableProductTypes = availableProductTypes | append: 'oem,' %}
+        {% endif %}
+
+        {% if availableProductTypes contains 'aftermarket' %}
+          {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
+          {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
+          {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
+          {% if aftermarket_product.available %}
+            <option value="aftermarket">Aftermarket - {{ aftermarket_price }}</option>
+          {% else %}
+            <option value="aftermarket" disabled style="color: gray;">Aftermarket (Out of Stock)</option>
+          {% endif %}
+        {% endif %}
+        {% if availableProductTypes contains 'capa' %}
+          {% assign capa_product_handle = product.metafields.custom.capa_product %}
+          {% assign capa_product = all_products[capa_product_handle] %}
+          {% assign capa_price = capa_product.variants.first.price | money %}
+          {% if capa_product.available %}
+            <option value="capa">CAPA Certified - {{ capa_price }}</option>
+          {% else %}
+            <option value="capa" disabled style="color: gray;">CAPA Certified (Out of Stock)</option>
+          {% endif %}
+        {% endif %}
+        {% if availableProductTypes contains 'oem' %}
+          {% assign oem_product_handle = product.metafields.custom.oem_product %}
+          {% assign oem_product = all_products[oem_product_handle] %}
+          {% assign oem_price = oem_product.variants.first.price | money %}
+          {% if oem_product.available %}
+            <option value="oem">OEM - {{ oem_price }}</option>
+          {% else %}
+            <option value="oem" disabled style="color: gray;">OEM (Out of Stock)</option>
+          {% endif %}
+        {% endif %}
+      </select>
+    </div>
+    <div class="divider"></div>
+    <div class="combined-variant-dropdown">
+      <div class="paint-option-and-how-to-find-paint-code-wrapper">
+        <div class="find-paint-option-link-container">
+          <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+        </div>
+        <label class="option-title" for="product-type-select">Paint Option</label>
+      </div>
+      <div class="paint-code-wrapper">
+        <select id="variant-selector" name="id" disabled>
+          <option value="">Select Paint Code</option>
+        </select>
+      </div>
+    </div>
+  </div>  
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const productVariants = {
+          aftermarket: [
+            {% if product.metafields.custom.aftermarket_product %}
+              {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
+              {% if aftermarket_product_handle %}
+                {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
+          
+                {% if aftermarket_product and aftermarket_product.variants.size > 0 %}
+                  {% assign aftermarket_base_price = aftermarket_product.variants.first.price %} <!-- Price of the first variant -->
+          
+                  {% for variant in aftermarket_product.variants %}
+                    {% assign aftermarket_variant_price = variant.price %}
+                    {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
+                      { 
+                        "id": "{{ variant.id }}",
+                        "title": "{{ variant.title }} +{{ price_difference | money }}",
+                        "price": "{{ variant.price | money }}",
+                        "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                        "variantTitle": "{{ variant.title }}"
+                      },
+                  {% endfor %}
+                {% else %}
+                  <option value="" disabled>No Aftermarket Options Available</option>
+                {% endif %}
+              {% else %}
+                <option value="" disabled>No Aftermarket Product Assigned</option>
+              {% endif %}
+            {% endif %}
+          ],
+          capa: [
+            {% if product.metafields.custom.capa_product %}
+              {% assign capa_product_handle = product.metafields.custom.capa_product %}
+              {% if capa_product_handle %}
+                {% assign capa_product = all_products[capa_product_handle] %}
+          
+                {% if capa_product and capa_product.variants.size > 0 %}
+                  {% assign capa_base_price = capa_product.variants.first.price %} <!-- Price of the first variant -->
+          
+                  {% for variant in capa_product.variants %}
+                    {% assign capa_variant_price = variant.price %}
+                    {% assign price_difference = capa_variant_price | minus: capa_base_price %}
+                      { 
+                        "id": "{{ variant.id }}",
+                        "title": "{{ variant.title }} +{{ price_difference | money }}",
+                        "price": "{{ variant.price | money }}",
+                        "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                        "variantTitle": "{{ variant.title }}"
+                      },
+                  {% endfor %}
+                {% else %}
+                  <option value="" disabled>No CAPA Options Available</option>
+                {% endif %}
+              {% else %}
+                <option value="" disabled>No CAPA Product Assigned</option>
+              {% endif %}
+            {% endif %}
+          ],
+          oem: [
+            {% if product.metafields.custom.oem_product %}
+              {% assign oem_product_handle = product.metafields.custom.oem_product %}
+              {% if oem_product_handle %}
+                {% assign oem_product = all_products[oem_product_handle] %}
+          
+                {% if oem_product and oem_product.variants.size > 0 %}
+                  {% assign oem_base_price = oem_product.variants.first.price %} <!-- Price of the first variant -->
+          
+                  {% for variant in oem_product.variants %}
+                    {% assign oem_variant_price = variant.price %}
+                    {% assign price_difference = oem_variant_price | minus: oem_base_price %}
+                      { 
+                        "id": "{{ variant.id }}",
+                        "title": "{{ variant.title }} +{{ price_difference | money }}",
+                        "price": "{{ variant.price | money }}",
+                        "color": "{{ variant.metafields.custom.paint_preview_hex_code }}" ,
+                        "variantTitle": "{{ variant.title }}"
+                      },
+                  {% endfor %}
+                {% else %}
+                  <option value="" disabled>No OEM Options Available</option>
+                {% endif %}
+              {% else %}
+                <option value="" disabled>No OEM Product Assigned</option>
+              {% endif %}
+            {% endif %}
+          ]
+      };
+
+      {% comment %} window.selectedProductType = ''; {% endcomment %}
+
+      const productTypeSelect = document.getElementById('product-type-select');
+      const combinedVariantSelect = document.getElementById('variant-selector');
+      const selectVinVariantButton = document.getElementById('select-vin-variant');
+      {% comment %} const combinedVariantContainer = document.querySelector('.combined-variant-dropdown'); {% endcomment %}
+      const priceInfo = document.querySelector('.price-info');
+      const priceDisplay = document.getElementById('price-display');
+      const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
+
+      // 2. Populate the variant dropdown based on selected product type
+      function populateVariantDropdown(selectedType) {
+          combinedVariantSelect.innerHTML = '<option value="">Select Paint Code</option>';
+
+          // Get the relevant variants for selected product type
+          const variants = productVariants[selectedType] || [];
+          console.log('variants: ', variants);
+          
+          if (variants.length > 0) {
+              combinedVariantSelect.disabled = false;
+              if(selectVinVariantButton) {
+                selectVinVariantButton.disabled = false;
+              }
+
+              variants.forEach(function(variant) {
+                const option = document.createElement('option');
+                option.value = variant.id;
+                option.textContent = `${variant.title}`;
+                option.dataset.price = variant.price;
+                option.dataset.color = variant.color;
+                option.dataset.variantTitle = variant.variantTitle;
+                combinedVariantSelect.appendChild(option);
+              });
+          } else {
+              combinedVariantSelect.disabled = true;
+              if(selectVinVariantButton) {
+                selectVinVariantButton.disabled = true;
+              }
+          }
+      }
+
+      // 3. When product type is selected
+      productTypeSelect.addEventListener('change', function() {
+        const selectedType = productTypeSelect.value;
+        const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
+        const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
+        window.selectedProductType = selectedType;
+
+          if (selectedType) {
+              priceDisplay.textContent = priceMatch[0];
+              priceDisplaySmallScreen.textContent = priceMatch[0];
+              populateVariantDropdown(selectedType);
+          } else {
+              combinedVariantSelect.disabled = true;
+              if(selectVinVariantButton) {
+                selectVinVariantButton.disabled = true;
+              }
+          }
+      });
+
+      // 4. When a variant is selected, show the price
+      combinedVariantSelect.addEventListener('change', function() {
+          const selectedOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex];
+          const selectedPrice = selectedOption ? selectedOption.dataset.price : null;
+          const selectedColor = selectedOption ? selectedOption.dataset.color : null;
+          const selectedTitle = selectedOption ? selectedOption.dataset.variantTitle : null;
+
+  
+          if (selectedPrice) {
+              priceDisplay.textContent = selectedPrice;
+              priceDisplaySmallScreen.textContent = selectedPrice;
+          }
+          if (selectedColor) {
+            window.selectedProductColor = selectedColor;
+            window.selectedProductTitle = selectedTitle
+            {% comment %} window.dispatchEvent(new Event('colorUpdated')); {% endcomment %}
+        }
+      });
+  });
+</script>
