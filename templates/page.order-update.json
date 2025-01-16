@@ -46,11 +46,18 @@
       "settings": {
         "custom_liquid": "{% render 'order-status-lookup' %}"
       }
+    },
+    "dynamic_custom_liquid_8FMaqi": {
+      "type": "dynamic-custom-liquid",
+      "settings": {
+        "custom_liquid": "{% render 'aftership-test' %}"
+      }
     }
   },
   "order": [
     "main",
     "1733951802e735928d",
-    "dynamic_custom_liquid_nCWghX"
+    "dynamic_custom_liquid_nCWghX",
+    "dynamic_custom_liquid_8FMaqi"
   ]
 }

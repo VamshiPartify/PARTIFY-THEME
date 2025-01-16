@@ -85,7 +85,7 @@
     "continue_url_cart": false,
     "continue_url_404": true,
     "makes_list": "nissan, infiniti, mazda, kia, chrysler, jeep, fiat, dodge, ram, hyundai, genesis",
-    "excluded_makes_list": "honda",
+    "excluded_makes_list": "gmc, ford, toyota, honda, chevrolet",
     "product_show_sku": false,
     "product_social_sharing": false,
     "product_grid_show_quickshop": "always",
@@ -129,27 +129,9 @@
         "disabled": false,
         "settings": {}
       },
-      "124348908681409149": {
-        "type": "shopify://apps/simple-bundles-kits/blocks/simple-bundles-v2/e553276b-36b2-446d-b80a-aa47fe5f96ac",
-        "disabled": false,
-        "settings": {
-          "select_placeholder": "Please select an option",
-          "disable_oos_options": true
-        }
-      },
       "1877152918344802950": {
         "type": "shopify://apps/intelligems-a-b-testing/blocks/intelligems-script/fa83b64c-0c77-4c0c-b4b2-b94b42f5ef19",
         "disabled": true,
-        "settings": {}
-      },
-      "16216491870256628967": {
-        "type": "shopify://apps/bss-labels-badges/blocks/bss-pl-config-data/91bfe765-b604-49a1-805e-3599fa600b24",
-        "disabled": true,
-        "settings": {}
-      },
-      "17985673643287205206": {
-        "type": "shopify://apps/estimated-delivery-date-plus/blocks/app_setting/4a0685bc-c234-45b2-8382-5ad6a8e3e3fd",
-        "disabled": false,
         "settings": {}
       },
       "11599650373883811531": {
@@ -161,11 +143,6 @@
           "placement_ft_selector": "",
           "insert_method": "prepend"
         }
-      },
-      "18112848705471008363": {
-        "type": "shopify://apps/order-status-tracker/blocks/app/66c7eba3-dd2f-4580-9aa0-f17552f0b971",
-        "disabled": false,
-        "settings": {}
       },
       "5057006142565981955": {
         "type": "shopify://apps/affirm-pay-over-time-messaging/blocks/cart-drawer-embed-block/6dce54be-130d-4d13-9636-1e8f611b3071",
@@ -220,27 +197,10 @@
           "ref": true
         }
       },
-      "6334702640933891749": {
-        "type": "shopify://apps/textbox-by-textify/blocks/app-embed/b5626f69-87af-4a23-ada4-1674452f85d0",
-        "disabled": true,
-        "settings": {}
-      },
       "13070091535480640111": {
         "type": "shopify://apps/attrac/blocks/app-embed/b783956d-47a9-4434-91ad-4ec960bd74b0",
         "disabled": false,
         "settings": {}
-      },
-      "9776720720251544092": {
-        "type": "shopify://apps/helium-customer-fields/blocks/app-embed/bab58598-3e6a-4377-aaaa-97189b15f131",
-        "disabled": false,
-        "settings": {
-          "registration_form_id": "",
-          "edit_account_form_id": "",
-          "edit_account_link_text": "Edit account",
-          "edit_account_heading": "Edit account",
-          "edit_account_back_link_text": "Back to account",
-          "enable_js_api": false
-        }
       },
       "13768625480086291342": {
         "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",

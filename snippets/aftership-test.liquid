@@ -1,0 +1,38 @@
+<iframe
+  style="width: 100%;"
+  id="as-tracking-page"
+  src="https://username.aftership.com?username=partifyusa123&iframe=1"
+  scrolling="no"
+  frameborder="0"
+  >
+  </iframe>
+  <script>
+  // resize iframe to fit content
+  const iframe = document.querySelector("#as-tracking-page");
+  window.addEventListener("message", (event) => {
+    if (
+      event.data &&
+      event.data.type === "resize" &&
+      typeof event.data.scrollHeight === "number" &&
+      iframe
+    ) {
+      iframe.style.height = event.data.scrollHeight + "px";
+    }
+  });
+
+  // support widget float
+  window.addEventListener("message", (event) => {
+	if (
+		event.data &&
+		event.data.type === "widgetScriptLoad" &&
+		typeof event.data.scripts === "object"
+	) {
+		event.data.scripts.forEach((script) => {
+			const scriptDom = document.createElement("script");
+			scriptDom.innerHTML = script;
+			document.body.appendChild(scriptDom);
+			window.postMessage({ type: "hideAllWidget" }, "*");
+		});
+	}
+  });
+  </script>

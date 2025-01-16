@@ -1,0 +1,97 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {}
+    },
+    "connect_with_us_page_ERVRzN": {
+      "type": "Connect-With-Us-Page",
+      "blocks": {
+        "social_NbahQ4": {
+          "type": "social",
+          "settings": {
+            "social_platform": "facebook",
+            "social_link": "https://www.facebook.com/partifyusa"
+          }
+        },
+        "social_cPHDnw": {
+          "type": "social",
+          "settings": {
+            "social_platform": "instagram",
+            "social_link": "https://www.instagram.com/partifyusa/"
+          }
+        },
+        "social_dQzCdR": {
+          "type": "social",
+          "settings": {
+            "social_platform": "youtube",
+            "social_link": "https://www.youtube.com/@partify"
+          }
+        },
+        "social_He84wm": {
+          "type": "social",
+          "settings": {
+            "social_platform": "tiktok",
+            "social_link": "https://www.tiktok.com/@partifyusa"
+          }
+        },
+        "button_e7FRja": {
+          "type": "button",
+          "settings": {
+            "button_label": "Contact Us",
+            "button_link": "mailto:info@partify.store"
+          }
+        },
+        "button_tchqry": {
+          "type": "button",
+          "settings": {
+            "button_label": "Why is there White Powder On My Part",
+            "button_link": "https://partifyusa.com/blogs/the-more-you-know/whats-this-white-powder-on-my-painted-part-partify"
+          }
+        },
+        "button_egdRDW": {
+          "type": "button",
+          "settings": {
+            "button_label": "How To Install Your New Part",
+            "button_link": "https://partifyusa.com/blogs/how-to-install-parts"
+          }
+        },
+        "button_DgNKGP": {
+          "type": "button",
+          "settings": {
+            "button_label": "File A Claim",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "social_NbahQ4",
+        "social_cPHDnw",
+        "social_dQzCdR",
+        "social_He84wm",
+        "button_e7FRja",
+        "button_tchqry",
+        "button_egdRDW",
+        "button_DgNKGP"
+      ],
+      "settings": {
+        "header_title": "Connect with Partify",
+        "header_subtitle": "Stay in touch with us for updates, tips, and support."
+      }
+    }
+  },
+  "order": [
+    "main",
+    "connect_with_us_page_ERVRzN"
+  ]
+}
