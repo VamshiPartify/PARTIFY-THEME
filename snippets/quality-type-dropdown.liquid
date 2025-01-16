@@ -135,7 +135,9 @@
         <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
       </div>
     </div>
-    <div class="quality-description-container">
-      {% render 'quality-description-modal', qualityTypes: available_product_types %}
-    </div>
+    {% if is_only_oem == false %}
+      <div class="quality-description-container">
+        {% render 'quality-description-modal', qualityTypes: available_product_types %}
+      </div>
+    {% endif %}
   </div>
