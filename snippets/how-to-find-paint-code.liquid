@@ -434,6 +434,20 @@
 
 
   <script>
+    function hideShopifyChat() {
+        const shopifyChat = document.getElementById('shopify-chat');
+        if (shopifyChat) {
+          shopifyChat.style.display = 'none';
+        }
+      }
+    
+    function showShopifyChat() {
+      const shopifyChat = document.getElementById('shopify-chat');
+      if (shopifyChat) {
+        shopifyChat.style.display = 'block';
+      }
+    }
+    
     let noPaintSwatchImage = false;
     {% comment %} let isExcludedValue = '{{ is_excluded_make_found }}'; {% endcomment %}
     let isExcludedValue = false;

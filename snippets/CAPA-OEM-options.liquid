@@ -172,7 +172,11 @@
     <div class="option-dropdowns">
       <!-- Main Product Type Dropdown -->
       <div class="divider"></div>
-      {% render 'quality-type-dropdown' %}
+      {% if is_only_oem == true %}
+        {% render 'quality-type-dropdown', is_only_oem: true %}
+      {% else %}
+        {% render 'quality-type-dropdown', is_only_oem: false %}
+      {% endif %}
       {% if product.variants.size > 1 %}
         {% if is_make_found %}
           <div class="divider"></div>

@@ -755,7 +755,11 @@
                   {% endif %}
 
                   {% if meta_fields > 1 %}
-                      {% render 'CAPA-OEM-options' %}
+                      {% assign is_only_oem = false %}
+                      {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
+                  {% elsif product.title contains 'OEM' %}
+                      {% assign is_only_oem = true %}
+                      {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
                   {% elsif product.variants.size > 1 %}
                       <!-- Variant Dropdown if paint selection but no quality selection -->
                       <!-- For makes easily found with chromedata (e.g. Nissan) -->
@@ -793,7 +797,7 @@
                                     {{ variant.title }} + {{ price_diff }}
                                 </option>
                             {% endfor %}
-                      </select>
+                        </select>
 
                           {% render 'vin-decoder' %}
                         </div>
@@ -852,6 +856,9 @@
                               maxlength="17"
                           >
                           <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+                        <p id="vin-disclaimer" style="color: #666; font-size: 0.85rem; margin-top: 5px; font-style: italic;">
+            <strong>Disclaimer:</strong> VIN entry is for Paint Match purposes only. It is not used to verify fitment.
+        </p>
                         </div>
   
                         <!-- Button to select Match Paint by VIN variant -->
@@ -977,7 +984,7 @@
                 type="text"
                 id="vin-textbox"
                 name="properties[VIN]"
-                placeholder="Enter your VIN"
+                placeholder="Enter your VIN (We Do Not Use This To Check Fitment)"
                 maxlength="17"
             >
             <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
@@ -1124,7 +1131,9 @@
                         if(productTypeSelect) {
                           productTypeSelect.selectedIndex = 0;
                           productTypeSelect.disabled = true;
-                          qualityDescriptionBtn.disabled = true;
+                          if(qualityDescriptionBtn) {
+                            qualityDescriptionBtn.disabled = true;
+                          }
                         }
                     } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){
                         fitmentFailButton.style.display = 'none';
@@ -1147,7 +1156,9 @@
                         if(productTypeSelect) {
                           productTypeSelect.disabled = false;
                           productSelect = productTypeSelect.value;
-                          qualityDescriptionBtn.disabled = false;
+                          if(qualityDescriptionBtn) {
+                            qualityDescriptionBtn.disabled = false;
+                          }
                         }
                         fitmentSuccess = true;
                     } else {
@@ -1246,7 +1257,9 @@
                         if(productTypeSelect) {
                           productTypeSelect.selectedIndex = 0;
                           productTypeSelect.disabled = true;
-                          qualityDescriptionBtn.disabled = true;
+                          if(qualityDescriptionBtn) {
+                            qualityDescriptionBtn.disabled = true;
+                          }
                         }
                         combinedVariantSelect.selectedIndex = 0;
                         combinedVariantSelect.disabled = true;
@@ -1268,7 +1281,9 @@
                         if(productTypeSelect) {
                           productSelect = productTypeSelect.value;
                           productTypeSelect.disabled = false;
-                          qualityDescriptionBtn.disabled = false;
+                          if(qualityDescriptionBtn) {
+                            qualityDescriptionBtn.disabled = false;
+                          }
                         }
 
                         // This means if there is not a quality selection present
@@ -1293,7 +1308,9 @@
                         if(productTypeSelect) {
                           productTypeSelect.selectedIndex = 0;
                           productTypeSelect.disabled = true;
-                          qualityDescriptionBtn.disabled = true;
+                          if(qualityDescriptionBtn) {
+                            qualityDescriptionBtn.disabled = true;
+                          }
                         }
                         combinedVariantSelect.selectedIndex = 0;
                         combinedVariantSelect.disabled = true;
