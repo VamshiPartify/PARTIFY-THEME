@@ -150,8 +150,10 @@
 
     {% assign makes = settings.makes_list | split: ", " %}
     {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+    {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ", " %}
     {% assign is_make_found = false %}
     {% assign is_excluded_make_found = false %}
+    {% assign is_bumperdotcom_make_found = false %}
     {% assign downcase_handle = product.handle | downcase %}
 
     {% for make in makes %}
@@ -164,6 +166,13 @@
     {% for excluded_make in excluded_makes %}
       {% if downcase_handle contains excluded_make %}
         {% assign is_excluded_make_found = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+
+    {% for bumperdotcom_make in bumperdotcom_makes %}
+      {% if downcase_handle contains bumperdotcom_make %}
+        {% assign is_bumperdotcom_make_found = true %}
         {% break %}
       {% endif %}
     {% endfor %}
@@ -192,7 +201,8 @@
                   <option value="" disabled selected>Select Paint Code</option>
                 </select>
               </div>
-              {% render 'vin-decoder' %}
+              {% comment %} NOTE: the vin-decoder is the exact same as 'excluded-chromedata-makes.... maybe combine them and delete the other' {% endcomment %}
+              {% render 'vin-decoder' %} 
 
             </div>
           </div> 
@@ -215,6 +225,25 @@
 
           </div>
         </div>
+      {% elsif is_bumperdotcom_make_found %}
+        <div class="divider"></div>
+        <div class="combined-variant-dropdown">
+          <div class="paint-option-and-how-to-find-paint-code-wrapper">
+            <div class="find-paint-option-link-container" style="display: none;">
+              <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+            </div>
+            <label class="option-title" for="product-type-select">Paint Option</label>
+          </div>
+          <div class="paint-code-wrapper">
+            <select id="variant-selector" name="id" disabled>
+              <option value="" disabled selected>Select Paint Code</option>
+            </select>
+          </div>
+          {% comment %} Here is where i render the email/text input boxes for nonchromedata compatible makes {% endcomment %}
+          {% render 'vin-decoder' %}
+
+        </div>
+      </div>
         {% else %}
         <div class="divider"></div>
           <div class="combined-variant-dropdown">
@@ -256,7 +285,7 @@
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
-                        {% if is_make_found or is_excluded_make_found %}
+                        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
                           {% if variant.title contains "Match Paint by VIN" %}
                             {% continue %}
                           {% endif %}
@@ -300,7 +329,7 @@
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
-                        {% if is_make_found or is_excluded_make_found %}
+                        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
                           {% if variant.title contains "Match Paint by VIN" %}
                             {% continue %}
                           {% endif %}
@@ -344,7 +373,7 @@
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
-                        {% if is_make_found or is_excluded_make_found %}
+                        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
                           {% if variant.title contains "Match Paint by VIN" %}
                             {% continue %}
                           {% endif %}

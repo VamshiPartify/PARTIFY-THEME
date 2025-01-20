@@ -674,8 +674,10 @@
    
   {% assign makes = settings.makes_list | split: ", " %}
   {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+  {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ", " %}
   {% assign is_make_found = false %}
   {% assign is_excluded_make_found = false %}
+  {% assign is_bumperdotcom_make_found = false %}
   {% assign downcase_handle = product.handle | downcase %}
 
   {% for make in makes %}
@@ -689,6 +691,14 @@
   {% for excluded_make in excluded_makes %}
     {% if downcase_handle contains excluded_make %}
       {% assign is_excluded_make_found = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+
+  {% for bumperdotcom_make in bumperdotcom_makes %}
+    {% if downcase_handle contains bumperdotcom_make %}
+      {% assign is_bumperdotcom_make_found = true %}
       {% break %}
     {% endif %}
   {% endfor %}
@@ -838,10 +848,8 @@
 
                   <!-- Select VIN Option -->
                   {%- if product.variants[1].sku contains ".VIN" -%}
-                    {% if is_make_found or is_excluded_make_found %}
+                    {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
                       {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
-
-                    {% else %}
                       <div class="vin-options-container">
                         <div class="paint-or-vin">
                             <p>Or</p>
@@ -864,7 +872,7 @@
                         <!-- Button to select Match Paint by VIN variant -->
                         <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>   
                       </div> 
-                    {% endif %}
+                    {% endunless %}
                   {% endif %}
 
                   <div class="color-preview-container-for-customizations">
@@ -1214,7 +1222,7 @@
                   } else if(productTypeSelect && productTypeSelect.disabled === false && !combinedVariantSelect) {
                     qualityHeader.style.color = "#e61b24";
                   } else {
-                    qualityHeader.style.color = "#333";
+                    qualityHeader.style.color = "#ccc";
                   }
                 }
 
@@ -1231,12 +1239,13 @@
                 }
 
                 if(combinedVariantSelect && combinedVariantSelect.disabled === false) {
+                  qualityHeader.style.color = "#333";
                   if(optionTitle) {
                     optionTitle.style.color = "#e61b24";
                   }
                 } else {
                   if(optionTitle) {
-                    optionTitle.style.color = "#333";
+                    optionTitle.style.color = "#ccc";
                   }
                 }
 

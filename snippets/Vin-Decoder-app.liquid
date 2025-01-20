@@ -8,7 +8,9 @@
 
 <div>
     {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+    {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ", " %}
     {% assign is_excluded_make_found = false %}
+    {% assign is_bumperdotcom_make_found = false %}
     {% assign downcase_handle = product.handle | downcase %}
 
     {% for excluded_make in excluded_makes %}
@@ -17,9 +19,15 @@
             {% break %}
         {% endif %}
     {% endfor %}
+    {% for bumperdotcom_make in bumperdotcom_makes %}
+        {% if downcase_handle contains bumperdotcom_make %}
+            {% assign is_bumperdotcom_make_found = true %}
+            {% break %}
+        {% endif %}
+      {% endfor %}
 
 
-    {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+    {% comment %} {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
     {% assign is_excluded_make_found = false %}
     {% assign downcase_handle = product.handle | downcase %}
 
@@ -28,7 +36,7 @@
         {% assign is_excluded_make_found = true %}
         {% break %}
       {% endif %}
-    {% endfor %}
+    {% endfor %} {% endcomment %}
   
     <div id="product-details-for-app" data-product-title="{{ product.title }}" data-product-id="{{ product.id }}">
     </div>
@@ -51,21 +59,15 @@
         const parentUrl = window.location.href;
         const productDetailsElement = document.getElementById('product-details-for-app');
         let isExcludedValue = '{{ is_excluded_make_found }}';
+        let isBumperdotcom = '{{ is_bumperdotcom_make_found }}';
           window.addEventListener('message', function(event) {
             if (event.data.type === 'iframeReady') {
                 iframe.contentWindow.postMessage(
-                    { type: 'productPage', url: parentUrl, makeExcluded: isExcludedValue },
+                    { type: 'productPage', url: parentUrl, makeExcluded: isExcludedValue, bumperdotcomMake: isBumperdotcom },
                     'https://vin-to-paintcode-app-445858330997.us-east5.run.app'
                 );
             }
         });
-        // iframe.addEventListener('load', () => {
-        //     console.log('Sending message to iframe');
-        //     iframe.contentWindow.postMessage(
-        //         { type: 'parentUrl', url: parentUrl }, 
-        //         'https://vin-to-paintcode-app-445858330997.us-east5.run.app' // Specify your app's origin
-        //     );
-        // });
 
         
         // Listen for messages from the iframe
