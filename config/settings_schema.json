@@ -1070,5 +1070,16 @@
         "default": "honda"
       }
     ]
+  },
+  {
+    "name": "Bumper.com Makes",
+    "settings": [
+      {
+        "type": "text",
+        "id": "bumperdotcom_makes_list",
+        "label": "Bumper.com Makes",
+        "default": "toyota"
+      }
+    ]
   }
 ]
