@@ -1239,7 +1239,9 @@
                 }
 
                 if(combinedVariantSelect && combinedVariantSelect.disabled === false) {
-                  qualityHeader.style.color = "#333";
+                  if(qualityHeader) {
+                    qualityHeader.style.color = "#333";
+                  }
                   if(optionTitle) {
                     optionTitle.style.color = "#e61b24";
                   }

@@ -9,9 +9,12 @@
 <div>
     {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
     {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ", " %}
+    {% assign troublesome_makes = settings.troublesome_chromedata_makes_list | split: ", " %}
     {% assign is_excluded_make_found = false %}
     {% assign is_bumperdotcom_make_found = false %}
+    {% assign is_troublesome_make = false %}
     {% assign downcase_handle = product.handle | downcase %}
+
 
     {% for excluded_make in excluded_makes %}
         {% if downcase_handle contains excluded_make %}
@@ -25,18 +28,12 @@
             {% break %}
         {% endif %}
       {% endfor %}
-
-
-    {% comment %} {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
-    {% assign is_excluded_make_found = false %}
-    {% assign downcase_handle = product.handle | downcase %}
-
-    {% for excluded_make in excluded_makes %}
-      {% if downcase_handle contains excluded_make %}
-        {% assign is_excluded_make_found = true %}
-        {% break %}
-      {% endif %}
-    {% endfor %} {% endcomment %}
+    {% for troublesome_make in troublesome_makes %}
+        {% if downcase_handle contains troublesome_make %}
+            {% assign is_troublesome_make = true %}
+            {% break %}
+        {% endif %}
+    {% endfor %}
   
     <div id="product-details-for-app" data-product-title="{{ product.title }}" data-product-id="{{ product.id }}">
     </div>
@@ -60,15 +57,52 @@
         const productDetailsElement = document.getElementById('product-details-for-app');
         let isExcludedValue = '{{ is_excluded_make_found }}';
         let isBumperdotcom = '{{ is_bumperdotcom_make_found }}';
-          window.addEventListener('message', function(event) {
+        const getIpAddress = async () => {
+            try {
+              const response = await fetch('https://api.ipify.org?format=json');
+              const data = await response.json();
+              return data.ip; // Returns the client's public IP
+            } catch (error) {
+              console.error("Error fetching IP address:", error);
+              return null;
+            }
+          };
+
+
+          {% comment %} Getting the product variants with color names for subarus and other complicated ChromeData searches {% endcomment %}
+          const troublesomeMakesColors = {};
+        {% if is_troublesome_make == true %}
+          {% assign product_variants = product.variants %}
+            {% assign variant_count = product_variants | size %}
+            
+            {% if variant_count > 0 %}
+                {% for variant in product_variants %}
+                {% if variant.metafields.custom.chromedata_reference %}
+                    troublesomeMakesColors[{{ variant.metafields.custom.chromedata_reference }}] = '{{ variant.title }}';
+                {% endif %}
+                {% endfor %}
+          {% endif %}
+        {% endif %}
+
+          window.addEventListener('message', async function(event) {
             if (event.data.type === 'iframeReady') {
-                iframe.contentWindow.postMessage(
-                    { type: 'productPage', url: parentUrl, makeExcluded: isExcludedValue, bumperdotcomMake: isBumperdotcom },
-                    'https://vin-to-paintcode-app-445858330997.us-east5.run.app'
-                );
+                getIpAddress().then(ipAddress => {
+                    iframe.contentWindow.postMessage(
+                        {
+                            type: 'productPage',
+                            url: parentUrl,
+                            makeExcluded: isExcludedValue,
+                            bumperdotcomMake: isBumperdotcom,
+                            ipAddress: ipAddress,
+                            troublesomeMakesColors: troublesomeMakesColors
+                        },
+                        'https://vin-to-paintcode-app-445858330997.us-east5.run.app'
+                    );
+                }).catch(error => {
+                    console.error('Error in getIpAddress:', error);
+                });
             }
         });
-
         
         // Listen for messages from the iframe
         window.addEventListener('message', function(event) {

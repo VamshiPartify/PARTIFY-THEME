@@ -47,7 +47,33 @@
       class="gallery-navigation--scroller"
       data-gallery-scroller
     >
+    {% assign metafield_image = product.metafields.custom.site_primary_image %}
+    {% if metafield_image != blank %}
+      <button
+        class="
+          product-gallery--media-thumbnail
+          product-gallery--image-thumbnail
+        "
+        type="button"
+        tab-index="0"
+        aria-label="Primary Image Thumbnail"
+        data-gallery-thumbnail
+        data-gallery-index="0"
+        data-gallery-selected="true"
+        data-media="primary-image"
+        data-media-type="image"
+      >
+        <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+          <img src="{{ metafield_image | img_url: thumb_dimensions }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
+        </span>
+      </button>
+      {% assign first_image_skipped = true %}
+    {% endif %}
     {% for media in product.media %}
+      {% if first_image_skipped %}
+        {% assign first_image_skipped = false %}
+        {% continue %}
+      {% endif %}
       <button
         class="
           product-gallery--media-thumbnail

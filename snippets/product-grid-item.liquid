@@ -105,7 +105,7 @@
 {%- endcapture -%}
 
 {%- assign show_swatches = false -%}
-{% assign initial_image = product.featured_media.preview_image.src %}
+{% assign initial_image = product.metafields.custom.site_primary_image.value | default: product.featured_media.preview_image.src %}
 {%- if settings.swatches_enable and recently_viewed != true -%}
   {% comment %} Check if product should show swatches {% endcomment %}
   {%- for option in product.options_with_values -%}
