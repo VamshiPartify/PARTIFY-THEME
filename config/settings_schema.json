@@ -1081,5 +1081,16 @@
         "default": "toyota"
       }
     ]
+  },
+  {
+    "name": "Troublesome Chromedata Makes",
+    "settings": [
+      {
+        "type": "text",
+        "id": "troublesome_chromedata_makes_list",
+        "label": "Troublesome Chromedata Makes",
+        "default": "subaru"
+      }
+    ]
   }
 ]
