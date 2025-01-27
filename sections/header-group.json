@@ -17,7 +17,7 @@
       "settings": {
         "show_announcement": true,
         "homepage_announcement": false,
-        "announcement_text": "We sincerely apologize, but it seems checkout is unavailable at the moment. Please try again shortly or reach out to us",
+        "announcement_text": "Attention: Our Phone lines are down—please contact us via email or live chat. Thanks for your patience!",
         "announcement_text_mobile": "",
         "announcement_link": "",
         "announcement_color": "#000000",
