@@ -10,6 +10,7 @@
 
   .model-fitment-easysearch-container {
     width: 100%;
+    margin-top: 3px;
   }
 
   .verify-fitment-title {
@@ -669,6 +670,24 @@
         font-size: 14px;
         margin-top: 5px;
       }
+
+      #product-unavailable-alert {
+        background-color: #ffcc00; 
+        color: #000; 
+        padding: 15px; 
+        text-align: center; 
+        font-weight: bold; 
+        font-size: 18px;
+        margin: 10px 0;
+      }
+
+      .paint-code-wrapper {
+        margin-top: 3px;
+      }
+
+      {% comment %} .hidden-vin-option {
+        display: none;
+      } {% endcomment %}
   </style>
   {% comment %} {% render 'cart-swatch-checker' %} {% endcomment %}
   {% comment %} {% render 'black-friday-button' %} {% endcomment %}
@@ -779,39 +798,56 @@
                           <div class="divider-large-screen"></div>
                           <label for="variant-selector" class="variant-label">Paint Option</label>
                     
-                         <select id="variant-selector" name="id" class="variant-dropdown">
-                            <option value="" selected disabled>Paint Option</option>
-                            {% for variant in product.variants %}
-                                {% if variant.metafields.custom.hide_paint_code == true %}
-                                  {% continue %}
-                                {% endif %}
-                                {% if is_make_found %}
-                                    {% if variant.title contains "Match Paint by VIN" %}
-                                        {% continue %}
-                                    {% endif %}
-                                    {% if variant.title contains "Custom Paint Code" %}
-                                        {% continue %}
-                                    {% endif %}
-                                  {% if v.title == value and v.metafields.custom.hide_paint_code == true %}
+                          <div class="paint-code-wrapper">
+                            <select id="variant-selector" name="id" class="variant-dropdown">
+                              <option value="" selected disabled>Paint Option</option>
+                              {% for variant in product.variants %}
+                                  {% if variant.metafields.custom.hide_paint_code == true %}
                                     {% continue %}
-                                    {% endif %}
-                                {% endif %}
-                                {% assign price_diff = variant.price | minus: product.price_min | money %}  
-                                {% if price_diff == 0 %}
-                                    {{ '' }}
-                                {% else %}
-                                    {{ '+' }}{{ price_diff | money | remove: '.00' }}
-                                {% endif %}
-                                <option 
-                                    value="{{ variant.id }}" 
-                                    class="variant-option"
-                                    data-price="{{ variant.price }}">
-                                    {{ variant.title }} + {{ price_diff }}
-                                </option>
-                            {% endfor %}
-                          </select>
+                                  {% endif %}
+                                  {% if is_make_found %}
+                                      {% comment %} {% if variant.title contains "Match Paint by VIN" %}
+                                          {% continue %}
+                                      {% endif %} {% endcomment %}
+                                      {% if variant.title contains "Custom Paint Code" %}
+                                          {% continue %}
+                                      {% endif %}
+                                    {% if v.title == value and v.metafields.custom.hide_paint_code == true %}
+                                      {% continue %}
+                                      {% endif %}
+                                  {% endif %}
+                                  {% assign price_diff = variant.price | minus: product.price_min | money %}  
+                                  {% if price_diff == 0 %}
+                                      {{ '' }}
+                                  {% else %}
+                                      {{ '+' }}{{ price_diff | money | remove: '.00' }}
+                                  {% endif %}
+                                  {% unless variant.title contains "Match Paint by VIN" %}
+                                    <option 
+                                        value="{{ variant.id }}" 
+                                        class="variant-option"
+                                        data-price="{{ variant.price }}">
+                                        {{ variant.title }} + {{ price_diff }}
+                                    </option>
+                                {% endunless %}
+                              {% endfor %}
+                            </select>
 
-                          {% render 'vin-decoder' %}
+                            <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
+                            {% for variant in product.variants %}
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                <div 
+                                  data-value="{{ variant.id }}" 
+                                  class="hidden-vin-option-single-quality"
+                                  data-price="{{ variant.price }}"
+                                  style="display: none;">
+                                  {{ variant.title }} + {{ price_diff }}
+                                </div>
+                              {% endif %}
+                            {% endfor %}
+
+                            {% render 'vin-decoder' %}
+                          </div>
                         </div>
                         
 
@@ -819,30 +855,52 @@
                       {% else %}
                         <div id="variant-selector-container">
                           <div class="divider-large-screen"></div>
-                          <div class="how-to-find-paint-code-wrapper">
+                          {% comment %} <div class="how-to-find-paint-code-wrapper">
                             <div class="find-paint-option-link-container">
                               <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
                             </div>
-                          </div>
+                          </div> {% endcomment %}
                           <label for="variant-selector" class="variant-label">Paint Option</label>
-                          <select id="variant-selector" name="id" class="variant-dropdown">
-                            <option value="" selected disabled>Paint Option</option>
+                          <div class="paint-code-wrapper">
+                            <select id="variant-selector" name="id" class="variant-dropdown">
+                              <option value="" selected disabled>Paint Option</option>
+                              {% for variant in product.variants %}
+                                {% if variant.title contains "Custom Paint Code" %}
+                                  {% continue %}
+                                {% endif %}
+                                
+                                {% assign price_diff = variant.price | minus: product.price_min | money %}  
+                                {% if price_diff == 0 %}
+                                    {{ '' }}
+                                {% else %}
+                                    {{ '+' }}{{ price_diff | money | remove: '.00' }}
+                                {% endif %}
+                                {% unless variant.title contains "Match Paint by VIN" %}
+                                  <option 
+                                      value="{{ variant.id }}" 
+                                      class="variant-option"
+                                      data-price="{{ variant.price }}">
+                                      {{ variant.title }} + {{ price_diff }}
+                                  </option>
+                              {% endunless %}
+                              {% endfor %}
+                            </select>
+                            
+                            <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
                             {% for variant in product.variants %}
-                              
-                            {% assign price_diff = variant.price | minus: product.price_min | money %}  
-                            {% if price_diff == 0 %}
-                                {{ '' }}
-                            {% else %}
-                                {{ '+' }}{{ price_diff | money | remove: '.00' }}
-                            {% endif %}
-                            <option 
-                                value="{{ variant.id }}" 
-                                class="variant-option"
-                                data-price="{{ variant.price }}">
-                                {{ variant.title }} + {{ price_diff }}
-                            </option>
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                <div 
+                                  data-value="{{ variant.id }}" 
+                                  class="hidden-vin-option-single-quality"
+                                  data-price="{{ variant.price }}"
+                                  style="display: none;">
+                                  {{ variant.title }} + {{ price_diff }}
+                                </div>
+                              {% endif %}
                             {% endfor %}
-                          </select>
+
+                            {% render 'vin-decoder' %}
+                          </div>
                         </div>
                       {% endif %}
 
@@ -976,14 +1034,6 @@
 
 <!-- Products that are not available -->
     {% else %}
-      <div id="model-fitmentfail-button-container-oos">
-        <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
-        <div class="model-fitment-easysearch-container">
-          <div class="easysearch-embed-widget-fitment"></div>
-        </div>
-      </div>
-  <form id="product-form" method="post" action="/cart/add" data-weight-in-unit="{{ product.variants.first.weight_in_unit }}">
-    <div class="product-form-wrapper">
       {% assign meta_fields = 0 %}
       {% if product.metafields.custom.oem_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
@@ -996,14 +1046,31 @@
       {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
       {% endif %}
-    
-      {% if meta_fields > 1 %}
-        {% render 'CAPA-OEM-options' %}
-      {% endif %}
-    
 
+      {% if meta_fields <= 1 %}
+        <!-- Alert Banner -->
+          <div id="product-unavailable-alert">
+            This product is currently out of stock.
+          </div>
+      {% endif %}
+      <div id="model-fitmentfail-button-container-oos">
+        <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
+        <div class="model-fitment-easysearch-container">
+          <div class="easysearch-embed-widget-fitment"></div>
+        </div>
+      </div>
+  <form id="product-form" method="post" action="/cart/add" data-weight-in-unit="{{ product.variants.first.weight_in_unit }}">
+    <div class="product-form-wrapper">
+    
+    {% if meta_fields > 1 %}
+        {% assign is_only_oem = false %}
+        {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
+    {% endif %}
+    
     {%- if product.variants[1].sku contains ".VIN" -%}
-      {% if is_make_found == false %}
+
+      <!-- For API calls to either Chromedata or Bumper.com, the below is skipped -->
+      {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
         <div class="vin-options-container">
           <div class="paint-or-vin">
               <p>Or</p>
@@ -1014,18 +1081,38 @@
                 type="text"
                 id="vin-textbox"
                 name="properties[VIN]"
-                placeholder="Enter your VIN (We Do Not Use This To Check Fitment)"
+                placeholder="Enter your VIN"
                 maxlength="17"
             >
             <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+            <p id="vin-disclaimer" style="color: #666; font-size: 0.85rem; margin-top: 5px; font-style: italic;">
+                <strong>Disclaimer:</strong> VIN entry is for Paint Match purposes only. It is not used to verify fitment.
+            </p>
           </div>
+
           <!-- Button to select Match Paint by VIN variant -->
-          <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>
+          <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>   
+        </div> 
+      {% endunless %}
 
-          {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
+    <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
+      {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+        <div class="vin-options-container" style="display: none;">
 
-        </div>         
-    {% endif %}
+          <!-- Hidden Text box for VIN input -->
+          <div id="vin-textbox-container" >
+            <input
+                type="hidden"
+                id="vin-textbox"
+                name="properties[VIN]"
+                placeholder="Enter your VIN"
+                maxlength="17"
+                value="{{ vinValue | default: "" }}"
+            >
+            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+          </div>
+        </div> 
+      {% endif %}
     {% endif %}
 
     <div class="color-preview-container-for-customizations">
@@ -1067,8 +1154,10 @@
   
         // Renders the Add to Cart button on product page for non customizable products (e.g. swatch)
         document.addEventListener('DOMContentLoaded', function () {
-        const variantSelector = document.getElementById('variant-selector');
-        const addToCartButton = document.getElementById('add-to-cart');
+          const variantSelector = document.getElementById('variant-selector');
+          const addToCartButton = document.getElementById('add-to-cart');
+          window.failedVinDecode = false;
+
         
         // let vinSuccess = false;
           if(variantSelector) {
@@ -1354,8 +1443,10 @@
                             qualityDescriptionBtn.disabled = true;
                           }
                         }
-                        combinedVariantSelect.selectedIndex = 0;
-                        combinedVariantSelect.disabled = true;
+                        if(combinedVariantSelect) {
+                          combinedVariantSelect.selectedIndex = 0;
+                          combinedVariantSelect.disabled = true;
+                        }
                         //The following two are for the vin decoder button and how to find paint code button
                         if(howToFindPaintCodeBtn) {
                           howToFindPaintCodeBtn.disabled = true;
@@ -1572,7 +1663,7 @@
                       useVinButton.style.display = 'block'; // Show Use VIN button
                     }
                     if(!failedVinDecode) {
-                      vinTextBox.value = '';
+                      {% comment %} vinTextBox.value = ''; {% endcomment %}
                       vinSuccess = false;
                     }
                 }
@@ -1664,12 +1755,16 @@
               // Function to check if the selected variant is the VIN variant -- Displays VIN Input box if so
               function checkVariant() {
                   const selectedOption = variantSelector.options[variantSelector.selectedIndex].text;
+                  const vinMessageParagraph = document.querySelector('.vin-decoder-message');
                   if(vinTextBox) {
                     if (selectedOption.includes('Match Paint by VIN')) {
+                      //This check is if the vin decoder results in 'match paint by vin', then customer toggles off of it then back onto it
+                        if (vinMessageParagraph && vinMessageParagraph.innerHTML.includes("will be attached to this order and")) {
+                          vinMessageParagraph.style.display = 'block';
+                        }
                         vinTextBox.style.display = 'block';
                         addToCartButton.disabled = true;
                     } else {
-                      const vinMessageParagraph = document.querySelector('.vin-decoder-message');
                       if(checkerForVinMessageParagraph > 0) {
                         if (vinMessageParagraph) {
                           vinMessageParagraph.style.display = 'none';

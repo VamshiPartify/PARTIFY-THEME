@@ -50,7 +50,7 @@
         .option-title {
             font-size: 1.2rem;
             font-weight: 800;
-            margin-bottom: 3px;
+            {% comment %} margin-bottom: 3px; {% endcomment %}
             color: #333;
         }
         {% comment %} .option-title-quality {
@@ -303,7 +303,10 @@
                             "variantTitle": "{{ variant.title }}",
                             "productTitle": "{{ aftermarket_product.title | escape  }}",
                             "productDescription": {{ aftermarket_product.description | json }},
-                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% if variant.title contains "Match Paint by VIN" %}
+                              "class": "hidden-vin-option"
+                            {% endif %}
                           },
                       {% endfor %}
                     {% else %}
@@ -347,7 +350,10 @@
                             "variantTitle": "{{ variant.title }}",
                             "productTitle": "{{ capa_product.title | escape  }}",
                             "productDescription": {{ capa_product.description | json }},
-                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% if variant.title contains "Match Paint by VIN" %}
+                              "class": "hidden-vin-option"
+                            {% endif %}
                           },
                       {% endfor %}
                     {% else %}
@@ -391,7 +397,10 @@
                             "variantTitle": "{{ variant.title }}",
                             "productTitle": "{{ oem_product.title | escape  }}",
                             "productDescription": {{ oem_product.description | json }},
-                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}"
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% if variant.title contains "Match Paint by VIN" %}
+                              "class": "hidden-vin-option"
+                            {% endif %}
                           },
                       {% endfor %}
                     {% else %}
@@ -495,27 +504,47 @@
               }
 
                 variants.forEach(function(variant) {
-                  const option = document.createElement('option');
-                  window.selectedVariantId = variant.id;
-                  option.value = variant.id;
-                  option.textContent = `${variant.title}`;
-                  option.dataset.price = variant.price;
-                  option.dataset.color = variant.color;
-                  option.dataset.variantTitle = variant.variantTitle;
-                  option.dataset.productTitle = variant.productTitle;
+                  let option;
+                  const parentSelect = document.getElementById("variant-selector");
 
-                  //Display the option to select Match Paint by VIN if the vin decode couldn't return a paint code
+                  if (!parentSelect) {
+                    console.error("Error: <select> element not found.");
+                  }
+
+                  // Check if the variant is "Match Paint by VIN"
+                  if (variant.title.trim().startsWith("Match Paint by VIN")) {
+                    // Create a div instead of an option
+                    const div = document.createElement("div");
+                    div.classList.add("hidden-vin-option");
+
+                    // Copy attributes to div
+                    div.setAttribute("data-price", variant.price || "");
+                    div.setAttribute("data-color", variant.color || "");
+                    div.setAttribute("data-variant-title", variant.variantTitle || "");
+                    div.setAttribute("data-product-title", variant.productTitle || "");
+
+                    // Set text content
+                    div.dataset.value = variant.id || "";
+                    div.textContent = variant.title;
+                    div.style.display = "none";
+
+                    // Append div after select
+                    parentSelect.insertAdjacentElement("afterend", div);
+                    return;
+                  } else {
+                    // Create an option normally
+                    option = document.createElement("option");
+                    option.value = variant.id;
+                    option.textContent = `${variant.title}`;
+                    option.dataset.price = variant.price;
+                    option.dataset.color = variant.color;
+                    option.dataset.variantTitle = variant.variantTitle;
+                    option.dataset.productTitle = variant.productTitle;
+                  }
+
                   if(failedVinDecode === true) {
                     option.style.display = "block";
                   }
-
-                  //This if statement ensures that the VIN decoder did not fail, resulting in Match Paint by VIN being hidden
-                  if (!vinMessageParagraph && combinedVariantSelect) { 
-                    if (variant.title.startsWith("Match Paint by VIN")) {
-                      option.style.display = "none";
-                      option.classList.add('hidden-vin-option');
-                    }
-                   }
 
                   if(variant.productTitle.length > 0) {
                     const productTitle = decodeHtmlEntities(variant.productTitle);
@@ -582,7 +611,6 @@
         productTypeSelect.addEventListener('change', async function() {
           const selectedType = productTypeSelect.value;
           const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
-          const selectedProductOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex];
           const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
           window.selectedProductType = selectedType;
           const container = document.querySelector('.vin-options-container');
@@ -674,7 +702,9 @@
                     productPartDescription.innerHTML = tempElement.innerHTML;
                 }
 
+
                 if(!failedVinDecode) {
+
                   vinTextBox.value = '';
                 }
                 oem = selectedType;

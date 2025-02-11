@@ -69,7 +69,7 @@
         let isExcludedValue = '{{ is_excluded_make_found }}';
         let isBumperdotcom = '{{ is_bumperdotcom_make_found }}';
         let amountOfVINPostMessages = 0;
-        window.failedVinDecode = false;
+        {% comment %} window.failedVinDecode = false; {% endcomment %}
 
         const getIpAddress = async () => {
             try {
@@ -127,7 +127,7 @@
                     iframe.style.height = event.data.height + 50 + 'px';
                 }
 
-            //Automatically select the color in the variant-selector dropdown
+              //Automatically select the color in the variant-selector dropdown
                 if (event.data.type === "updatePaintCode") {
                   const paintCode = event.data.paintCode;
                   const vinSelected = event.data.vin;
@@ -137,8 +137,8 @@
                   let autoSelectedColor;
 
                   const variantSelector = document.getElementById('variant-selector');
-                  if (variantSelector) {
-                      const options = Array.from(variantSelector.options);
+                    if (variantSelector) {
+                        const options = Array.from(variantSelector.options);
                         options.find(option => {
                             if(option.label.split(" ")[0] === paintCode) {
                                 matchingOption = true;
@@ -146,13 +146,13 @@
                                 return;
                             }
                         });
-      
-                      if (matchingOption) {
-                          variantSelector.value = autoSelectedColor;
-                          document.body.classList.remove('no-scroll-paint-swatch');
-                          hideOverlay();
-                          hideModal();
-                          showShopifyChat();
+    
+                        if (matchingOption) {
+                            variantSelector.value = autoSelectedColor;
+                            document.body.classList.remove('no-scroll-paint-swatch');
+                            hideOverlay();
+                            hideModal();
+                            showShopifyChat();
 
                             // Create a new message to indicate the selected VIN
                             const vinMessage = document.createElement('div');
@@ -161,20 +161,20 @@
                             vinMessage.innerHTML = `
                             <strong style="color: #444;">The paint code</strong> 
                             <span style="color: #000; font-weight: 800;">${paintCode}</span> 
-                            <span style="color: #444;">has been auto-selected using the vin: ${vinSelected}</span> 
-                        `;
-                    
-                        // Append the message to the VIN textbox container
-                        paintCodeWrapper.appendChild(vinMessage);
-      
-                          // Trigger the change event programmatically
-                          variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
-                      } else {
-                          console.warn(`No matching option found for paint code: ${paintCode}`);
-                      }
-                  } else {
-                      console.warn('Variant selector dropdown not found.');
-                  }
+                            <span style="color: #444;">has been auto-selected using the VIN: ${vinSelected}</span> 
+                            `;
+                        
+                            // Append the message to the VIN textbox container
+                            paintCodeWrapper.appendChild(vinMessage);
+        
+                            // Trigger the change event programmatically
+                            variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
+                        } else {
+                            console.warn(`No matching option found for paint code: ${paintCode}`);
+                        }
+                    } else {
+                        console.warn('Variant selector dropdown not found.');
+                    }
                 }
 
                 if (event.data.type === "getPaintByVIN") {
@@ -182,31 +182,75 @@
                         return;
                     }
                     const vin = event.data.vin;
+                    const boolMatchByVIN = event.data.matchByVIN;
+                    window.usedVinDecoder = true;
 
-                    const hiddenOption = document.querySelector('.hidden-vin-option');
-                    if (hiddenOption) {
-                      hiddenOption.style.display = "block";
+                    let hiddenDiv;
+                    if(document.querySelector('.hidden-vin-option')) {
+                        hiddenDiv = document.querySelector('.hidden-vin-option');
+                    }
+                    if(document.querySelector('.hidden-vin-option-single-quality')) {
+                        hiddenDiv = document.querySelector('.hidden-vin-option-single-quality');
+                    }
+                    // Only display the option to select Match Paint by VIN in certain circumstances
+                    if(boolMatchByVIN) {
+                        if (hiddenDiv) {
+                            // I am here!! add the if for the div
+                            const div = document.querySelector('.hidden-vin-option');
+
+                            if (hiddenDiv) {
+                                const select = document.getElementById("variant-selector"); 
+                                if (!select) {
+                                    console.error("Error: Select element not found.");
+                                    return;
+                                }
+
+                                // Create a new option element
+                                const option = document.createElement("option");
+                                option.value = hiddenDiv.dataset.value;
+                                option.textContent = hiddenDiv.textContent;
+                                option.setAttribute("data-price", hiddenDiv.dataset.price || "");
+                                option.setAttribute("data-color", hiddenDiv.dataset.color || "");
+                                option.setAttribute("data-variant-title", hiddenDiv.dataset.variantTitle || "");
+                                option.setAttribute("data-product-title", hiddenDiv.dataset.productTitle || "");
+
+
+                                option.classList.add("hidden-vin-option");
+                                hiddenDiv.style.display = "block";
+
+                                // Add the option back to the select
+                                select.appendChild(option);
+
+                                // Remove the div
+                                hiddenDiv.remove();
+                            }
+                        }
                     }
 
                     const variantSelector = document.getElementById('variant-selector');
                     if (variantSelector) {
                         const options = Array.from(variantSelector.options);
+                        const vinInput = document.querySelector('#vin-textbox');
+                        const vinTextboxForOem = document.getElementById('vin-textbox-for-oem');
+                        const oemVinContainer = document.querySelector('.oem-vin-container');
+
+                        
+                        if (oemVinContainer && oemVinContainer.style.display === "block") {
+                            vinTextboxForOem.value = '';
+                            oemVinContainer.style.display = "none";
+                        }
+
+
+                        if (vinInput) {
+                            vinInput.value = vin;
+                          }
+
                           options.find(option => {
                               if(option.label.startsWith("Match Paint by VIN")) {
 
-                                const vinInput = document.querySelector('#vin-textbox');
-                                const oemVinContainer = document.querySelector('.oem-vin-container');
-                                const vinTextboxForOem = document.getElementById('vin-textbox-for-oem');
                                 const vinTextboxContainer = document.getElementById("vin-textbox-container");
                                 const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
 
-                                if (vinInput) {
-                                  vinInput.value = vin;
-                                }
-                                if (oemVinContainer.style.display === "block") {
-                                    vinTextboxForOem.value = '';
-                                    oemVinContainer.style.display = "none";
-                                }
                                 if (vinTextboxContainer) {
                                     vinTextboxContainer.style.display = "block";
                               
@@ -226,12 +270,12 @@
                                     <span style="color: #444;">will be attached to this order and</span> 
                                     <span style="color: #444; font-weight: bold;">matched with the correct paint code</span> 
                                     <span style="color: #444;">for this item.</span>
-                                  `;
+                                    `;
 
-                                  window.failedVinDecode = true;
+                                    window.failedVinDecode = true;
                               
-                                // Append the message to the VIN textbox container
-                                paintCodeWrapper.appendChild(vinMessage);
+                                    // Append the message to the VIN textbox container
+                                    paintCodeWrapper.appendChild(vinMessage);
                                 }                                
                                 variantSelector.value = option.value;
                                 document.body.classList.remove('no-scroll-paint-swatch');
