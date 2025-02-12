@@ -1,4 +1,4 @@
-**Steps to add update and merge new branches:**
+**If I made changes and want to make sure I am up to date with current Shopify theme code through merging branches:**
 1. git add .
 2. git commit -m "random message"
 3. git push -u origin <any branch>
