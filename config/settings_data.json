@@ -84,9 +84,9 @@
     "continue_shopping_url": "shopify://collections/all",
     "continue_url_cart": false,
     "continue_url_404": true,
-    "makes_list": "nissan, infiniti, mazda, kia, chrysler, jeep, fiat, dodge, ram, hyundai, genesis, subaru, gmc, cadillac, buick, chevrolet",
+    "makes_list": "nissan, infiniti, mazda, kia, chrysler, jeep, fiat, dodge, ram, hyundai, genesis, subaru, gmc, cadillac, buick, chevrolet, toyota, lexus, scion, lincoln, ford",
     "excluded_makes_list": "",
-    "bumperdotcom_makes_list": "toyota, ford, lexus, scion, lincoln",
+    "bumperdotcom_makes_list": "",
     "troublesome_chromedata_makes_list": "subaru, gmc, cadillac, buick, chevrolet",
     "product_show_sku": false,
     "product_social_sharing": false,
@@ -116,11 +116,6 @@
     "quickshop_show_vendor": true,
     "content_for_index": [],
     "blocks": {
-      "8764476057892802672": {
-        "type": "shopify://apps/restock-rocket/blocks/main/4bb73be2-b7c2-4870-949f-c528145452a3",
-        "disabled": false,
-        "settings": {}
-      },
       "7570552984445421165": {
         "type": "shopify://apps/yotpo-product-photo-reviews/blocks/settings/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
         "disabled": false,
@@ -207,6 +202,11 @@
       "13768625480086291342": {
         "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
         "disabled": false,
+        "settings": {}
+      },
+      "8764476057892802672": {
+        "type": "shopify://apps/stoq/blocks/main/4bb73be2-b7c2-4870-949f-c528145452a3",
+        "disabled": true,
         "settings": {}
       }
     }

@@ -79,6 +79,7 @@
         },
         "arrivesby_delivery_estimate_GtVWkc": {
           "type": "shopify://apps/arrivesby/blocks/delivery-estimate/b4f15d36-71f0-4a8c-954f-e485b7529360",
+          "disabled": true,
           "settings": {
             "show_offer": false,
             "show_countdown": true,
