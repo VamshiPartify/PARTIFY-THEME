@@ -591,7 +591,6 @@ const getIpAddress = async () => {
         }
   
         const dataRes = await response.json();
-        console.log('dataRes: ', dataRes);
         const data = dataRes.shopifyResponse;
         const aftershipData = dataRes.aftershipResponse;
         let isThereAftershipData = false;
