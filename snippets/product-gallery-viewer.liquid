@@ -15,19 +15,59 @@
     This is the hover zoom setting, which is either 'disabled', 'separate', or 'replace'
 {% endcomment %}
 
-{% assign primary_image = product.metafields.custom.site_primary_image %}
+{% assign primary_image = product.metafields.custom.site_primary_image | default: product.media.first %}
+{% assign lifestyle_reference = product.metafields.custom.lifestyle_image %}
+{% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
+{% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
+{% assign how_to_find_paint_code_reference = product.metafields.custom.how_to_find_your_paint_code_image.value.image %}
+{% assign reordered_counter = 0 %}
 
-<div
-  class="
-    product-gallery--viewer
-    {% if product.media.size > 0 %}
-      product-gallery--has-media
-    {% endif %}
-  "
-  data-gallery-viewer
->
-  {% for media in product.media %}
-    {% if forloop.first and primary_image != blank %}
+{% assign reordered_media = '' %}
+{% assign reordered_media = reordered_media | append: primary_image | append: ',' %}
+
+
+
+{%- comment -%}
+  Collect media images excluding the primary image to avoid duplication.
+{%- endcomment -%}
+
+<!-- Ensure lifestyle_reference is next -->
+{% if lifestyle_reference != blank %}
+  {% assign reordered_media = reordered_media | append: lifestyle_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure quality_reference is next -->
+{% if quality_reference != blank %}
+  {% assign reordered_media = reordered_media | append: quality_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure paint_infographic_reference is next -->
+{% if paint_infographic_reference != blank %}
+  {% assign reordered_media = reordered_media | append: paint_infographic_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure how_to_find_paint_code_reference is next -->
+{% if how_to_find_paint_code_reference != blank %}
+  {% assign reordered_media = reordered_media | append: how_to_find_paint_code_reference | append: ',' %}
+{% endif %}
+
+{% assign reordered_media = reordered_media | split: ',' %}
+
+<!-- Must be less than 2 because there will always be something in the first index of the reorder_media array -->
+{% if reordered_media.size < 2 or product.variants.size <= 1 %}
+
+  <div
+    class="
+      product-gallery--viewer
+      {% if product.media.size > 0 %}
+        product-gallery--has-media
+      {% endif %}
+    "
+    data-gallery-viewer
+    
+  >
+    <!-- If primary image exists and it is the only one, ensure it is first -->
+    {% if primary_image != blank %}
       <figure
         class="
           product-gallery--media
@@ -39,7 +79,7 @@
         data-gallery-index="0"
         data-gallery-selected="true"
         data-media-type="image"
-        data-zoom="{{ primary_image | img_url: '2400x' }}"
+        data-zoom="{{ primary_image | image_url: '2400x' }}"
         data-image-height="2400"
         data-image-width="2400"
       >
@@ -51,7 +91,12 @@
           }}
         </div>
       </figure>
-    {% else %}
+    {% endif %}
+    <!-- Loop through product.media and add images -->
+    {% for media in product.media %}
+      {% if forloop.index0 == 0 %}
+        {% continue %}
+      {% endif %}
       <figure
         class="
           product-gallery--media
@@ -69,7 +114,7 @@
         data-media="{{ media.id }}"
         data-media-type="{{ media.media_type }}"
         {% if media.media_type == 'image' %}
-          data-zoom="{{ media | img_url: '2400x' }}"
+          data-zoom="{{ media | image_url: '2400x' }}"
           data-image-height="{{ media.height }}"
           data-image-width="{{ media.width }}"
         {% endif %}
@@ -96,23 +141,176 @@
             {{ media | media_tag }}
         {% endcase %}
       </figure>
-    {% endif %}
-  {% else %}
-    <figure
-      class="
-        product-gallery--media
-        product-gallery--image
-        product-gallery--image-placeholder
-      "
-    >
-      {% if onboarding %}
-        {{ 'product-1' | placeholder_svg_tag: 'placeholder--image' }}
-      {% else %}
-        {{ 'image' | placeholder_svg_tag: 'placeholder--image' }}
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+
+<!-- This case is if there are metaobject references in the mefafields other than the primary image -->
+{% if reordered_media.size >= 2  and product.variants.size > 1 %}
+  <!-- Convert to array -->
+  {% comment %} {% assign reordered_media = reordered_media | split: ',' %} {% endcomment %}
+
+  <div
+    class="
+      product-gallery--viewer
+      {% if product.media.size > 0 %}
+        product-gallery--has-media
       {% endif %}
-    </figure>
-  {% endfor %}
-</div>
+    "
+    data-gallery-viewer
+    
+  >
+
+    <!-- For the first image, either render the primary_image if it exists, or the product.media.first image -->
+    {% if primary_image != blank %}
+      <figure
+        class="
+          product-gallery--media
+          product-gallery--image
+        "
+        tabindex="-1"
+        aria-hidden="false"
+        data-gallery-figure
+        data-gallery-index="0"
+        data-gallery-selected="true"
+        data-media-type="image"
+        data-zoom="{{ primary_image | image_url: '2400x' }}"
+        data-image-height="2400"
+        data-image-width="2400"
+      >
+        <div class="product-gallery--image-background">
+          {{
+            primary_image | image_url: width: 700 | image_tag: 
+            class: 'product-gallery--loaded-image', 
+            loading: 'lazy'
+          }}
+        </div>
+      </figure>
+      {% assign reordered_counter = reordered_counter | plus: 1 %}
+    {% endif %}
+
+
+
+    {% if lifestyle_reference != blank %}
+        <figure
+          class="
+            product-gallery--media
+            product-gallery--image
+          "
+          tabindex="-1"
+          aria-hidden="false"
+          data-gallery-figure
+          data-gallery-index={{ reordered_counter }}
+          data-gallery-selected="false"
+          data-media-type="image"
+          data-zoom="{{ lifestyle_reference | image_url: '2400x' }}"
+          data-image-height="2400"
+          data-image-width="2400"
+        >
+          <div class="product-gallery--image-background">
+            {{
+              lifestyle_reference | image_url: width: 700 | image_tag: 
+              class: 'product-gallery--loaded-image', 
+              loading: 'lazy'
+            }}
+          </div>
+        </figure>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+        {% comment %} Increment the current position {% endcomment %}
+    {% endif %}
+
+
+    {% if quality_reference != blank %}
+      <figure
+        class="
+          product-gallery--media
+          product-gallery--image
+        "
+        tabindex="-1"
+        aria-hidden="false"
+        data-gallery-figure
+        data-gallery-index={{ reordered_counter }}
+        data-gallery-selected="false"
+        data-media-type="image"
+        data-zoom="{{ quality_reference | image_url: '2400x' }}"
+        data-image-height="2400"
+        data-image-width="2400"
+      >
+        <div class="product-gallery--image-background">
+          {{
+            quality_reference | image_url: width: 700 | image_tag: 
+            class: 'product-gallery--loaded-image', 
+            loading: 'lazy'
+          }}
+        </div>
+      </figure>
+      {% assign reordered_counter = reordered_counter | plus: 1 %}
+      {% comment %} Increment the current position {% endcomment %}
+    {% endif %}
+
+
+    {% if paint_infographic_reference != blank %}
+      <figure
+        class="
+          product-gallery--media
+          product-gallery--image
+        "
+        tabindex="-1"
+        aria-hidden="false"
+        data-gallery-figure
+        data-gallery-index={{ reordered_counter }}
+        data-gallery-selected="false"
+        data-media-type="image"
+        data-zoom="{{ paint_infographic_reference | image_url: '2400x' }}"
+        data-image-height="2400"
+        data-image-width="2400"
+      >
+        <div class="product-gallery--image-background">
+          {{
+            paint_infographic_reference | image_url: width: 700 | image_tag: 
+            class: 'product-gallery--loaded-image', 
+            loading: 'lazy'
+          }}
+        </div>
+      </figure>
+      {% assign reordered_counter = reordered_counter | plus: 1 %}
+      {% comment %} Increment the current position {% endcomment %}
+    {% endif %}
+
+
+    {% if how_to_find_paint_code_reference != blank %}
+      <figure
+        class="
+          product-gallery--media
+          product-gallery--image
+        "
+        tabindex="-1"
+        aria-hidden="false"
+        data-gallery-figure
+        data-gallery-index={{ reordered_counter }}
+        data-gallery-selected="false"
+        data-media-type="image"
+        data-zoom="{{ how_to_find_paint_code_reference | image_url: '2400x' }}"
+        data-image-height="2400"
+        data-image-width="2400"
+      >
+        <div class="product-gallery--image-background">
+          {{
+            how_to_find_paint_code_reference | image_url: width: 700 | image_tag: 
+            class: 'product-gallery--loaded-image', 
+            loading: 'lazy'
+          }}
+        </div>
+      </figure>
+      {% assign reordered_counter = reordered_counter | plus: 1 %}
+      {% comment %} Increment the current position {% endcomment %}
+    {% endif %}
+
+
+  </div>
+{% endif %}
 
 {% if gallery_hover_zoom == 'separate' %}
   <div class="product-gallery--zoomed-image" data-zoomed-image></div>
