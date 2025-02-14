@@ -53,6 +53,8 @@
 
 {% assign reordered_media = reordered_media | split: ',' %}
 
+
+
 <!-- Must be less than 2 because there will always be something in the first index of the reorder_media array -->
 {% if reordered_media.size < 2 or product.variants.size <= 1 %}
 
