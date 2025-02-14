@@ -1492,16 +1492,16 @@
                 }
         
                 if (parseInt(variantSize) === 1 && variantTitle === "Default Title" && fitmentSuccess) {
-                  form.action = `/cart/add?id=${variantId}`;
+                    form.action = `/cart/add?id=${variantId}`;
                     addToCartButton.style.display = 'block';
                     addToCartButton.disabled = false;
                 } else {
                     if (variantSelected && !selectedOptionCheckingForVin && fitmentSuccess) {
-                      form.action = `/cart/add?id=${variantSelector.value}`;
+                        form.action = `/cart/add?id=${variantSelector.value}`;
                         addToCartButton.style.display = 'block';
                         addToCartButton.disabled = false;
                     } else if(selectedOptionCheckingForVin && fitmentSuccess && vinSuccess) {
-                      form.action = `/cart/add?id=${variantSelector.value}`;
+                    form.action = `/cart/add?id=${variantSelector.value}`;
                         addToCartButton.style.display = 'block';
                         addToCartButton.disabled = false;
 
