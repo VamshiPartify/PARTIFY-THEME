@@ -553,9 +553,6 @@ const getIpAddress = async () => {
       buttonText.style.display = "none";
       button.disabled = true;
       button.classList.add("button--loading");
-      {% comment %} trackOrderBtn.setAttribute("disabled", "true"); {% endcomment %}
-
-      {% comment %} email.removeEventListener("input", handleEmailInput); {% endcomment %}
       
       const submittedEmail = document.getElementById('email-input').value.toString();
       const orderNumber = document.getElementById('order-number').value.toString();
@@ -696,9 +693,6 @@ const getIpAddress = async () => {
                     }
                   }
                 }
-
-
-                {% comment %} shippingCompany = trackingInfo.company; {% endcomment %}
               }
 
 
@@ -859,8 +853,6 @@ const getIpAddress = async () => {
                     }
                   }
 
-
-                 {% comment %} 'checkpoints': aftershipData?.data?.tracking?.checkpoints {% endcomment %}
 
                   if(sku && !sku.includes(".")) {
                     unpainted = true
@@ -1488,7 +1480,6 @@ const getIpAddress = async () => {
 
                   orderDetails.appendChild(orderContainer);
                 };
-              {% comment %} } {% endcomment %}
             } else {
               document.getElementById('order-details').style.display = 'flex';
               document.getElementById('order-details').style.justifyContent = 'center';
@@ -1528,9 +1519,7 @@ const getIpAddress = async () => {
         }
 
         if (aftershipData.length) {
-          {% comment %} for (let data of aftershipData) { {% endcomment %}
-            createOrderComponents(aftershipData)
-          {% comment %} } {% endcomment %}
+          createOrderComponents(aftershipData)
         } else {
           createOrderComponents()
         }
@@ -1555,7 +1544,6 @@ const getIpAddress = async () => {
         }
       }
       button.classList.remove("button--loading");
-      {% comment %} button.disabled = false; {% endcomment %}
       buttonText.style.display = "inline-block";
     });
   });

@@ -20,11 +20,11 @@
 {% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
 {% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
 {% assign how_to_find_paint_code_reference = product.metafields.custom.how_to_find_your_paint_code_image.value.image %}
+{% assign additional_product_images = product.metafields.custom.additional_product_image_storage.value %}
 {% assign reordered_counter = 0 %}
 
 {% assign reordered_media = '' %}
 {% assign reordered_media = reordered_media | append: primary_image | append: ',' %}
-
 
 
 {%- comment -%}
@@ -51,12 +51,19 @@
   {% assign reordered_media = reordered_media | append: how_to_find_paint_code_reference | append: ',' %}
 {% endif %}
 
+{% if additional_product_images != blank %}
+  {% for current_image in additional_product_images %}
+    {% assign file_url_current_image = current_image.preview_image %}
+    {% assign reordered_media = reordered_media | append: file_url_current_image | append: ',' %}
+  {% endfor %}
+{% endif %}
+
 {% assign reordered_media = reordered_media | split: ',' %}
 
 
 
 <!-- Must be less than 2 because there will always be something in the first index of the reorder_media array -->
-{% if reordered_media.size < 2 or product.variants.size <= 1 %}
+{% if reordered_media.size < 2 %}
 
   <div
     class="
@@ -149,8 +156,8 @@
 
 
 
-<!-- This case is if there are metaobject references in the mefafields other than the primary image -->
-{% if reordered_media.size >= 2  and product.variants.size > 1 %}
+<!-- This case is if there are metaobject references in the metafields other than the primary image -->
+{% if reordered_media.size >= 2 %}
   <!-- Convert to array -->
   {% comment %} {% assign reordered_media = reordered_media | split: ',' %} {% endcomment %}
 
@@ -195,7 +202,7 @@
 
 
 
-    {% if lifestyle_reference != blank %}
+    {% if lifestyle_reference != blank and product.variants.size > 1 %}
         <figure
           class="
             product-gallery--media
@@ -253,7 +260,7 @@
     {% endif %}
 
 
-    {% if paint_infographic_reference != blank %}
+    {% if paint_infographic_reference != blank and product.variants.size > 1 %}
       <figure
         class="
           product-gallery--media
@@ -282,7 +289,7 @@
     {% endif %}
 
 
-    {% if how_to_find_paint_code_reference != blank %}
+    {% if how_to_find_paint_code_reference != blank and product.variants.size > 1 %}
       <figure
         class="
           product-gallery--media
@@ -307,6 +314,41 @@
         </div>
       </figure>
       {% assign reordered_counter = reordered_counter | plus: 1 %}
+      {% comment %} Increment the current position {% endcomment %}
+    {% endif %}
+
+    {% if additional_product_images != blank %}
+      {% for current_image in additional_product_images %}
+        {% if current_image == '' %}
+          {% continue %}
+        {% endif %}
+        {% assign file_url_current_image = current_image.preview_image %}
+
+        <figure
+          class="
+            product-gallery--media
+            product-gallery--image
+          "
+          tabindex="-1"
+          aria-hidden="false"
+          data-gallery-figure
+          data-gallery-index={{ reordered_counter }}
+          data-gallery-selected="false"
+          data-media-type="image"
+          data-zoom="{{ file_url_current_image | image_url: '2400x' }}"
+          data-image-height="2400"
+          data-image-width="2400"
+        >
+          <div class="product-gallery--image-background">
+            {{
+              file_url_current_image | image_url: width: 700 | image_tag: 
+              class: 'product-gallery--loaded-image', 
+              loading: 'lazy'
+            }}
+          </div>
+        </figure>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+      {% endfor %}
       {% comment %} Increment the current position {% endcomment %}
     {% endif %}
 
