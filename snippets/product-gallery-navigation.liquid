@@ -61,6 +61,7 @@
       {% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
       {% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
       {% assign how_to_find_paint_code_reference = product.metafields.custom.how_to_find_your_paint_code_image.value.image %}
+      {% assign additional_product_images = product.metafields.custom.additional_product_image_storage.value %}
       {% assign reordered_counter = 0 %}
 
     {%- comment -%}
@@ -89,11 +90,18 @@
       {% assign reordered_media = reordered_media | append: how_to_find_paint_code_reference | append: ',' %}
     {% endif %}
 
+    {% if additional_product_images != blank %}
+      {% for current_image in additional_product_images %}
+        {% assign file_url_current_image = current_image.preview_image %}
+        {% assign reordered_media = reordered_media | append: file_url_current_image | append: ',' %}
+      {% endfor %}
+    {% endif %}    
+
     {% assign reordered_media = reordered_media | split: ',' %}
 
 
     <!-- Must be less than 2 because there will always be something in the first index of the reorder_media array -->
-    {% if reordered_media.size < 2 or product.variants.size <= 1 %}
+    {% if reordered_media.size < 2 %}
       {% if primary_image != blank %}
         <button
           class="
@@ -110,7 +118,7 @@
           data-media-type="image"
         >
           <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
-            <img src="{{ primary_image | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image" width="{{ thumb_width }}" height="{{ thumb_height }}">
+            <img src="{{ primary_image | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
           </span>
         </button>
         {% assign first_image_skipped = true %}
@@ -154,7 +162,7 @@
 
 
     <!-- This case is if there are metaobject references in the mefafields other than the primary image -->
-    {% if reordered_media.size >= 2 and product.variants.size > 1 %}
+    {% if reordered_media.size >= 2 %}
       {% if primary_image != blank %}
         <button
           class="
@@ -171,7 +179,7 @@
           data-media-type="image"
         >
           <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
-            <img src="{{ primary_image | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image" width="{{ thumb_width }}" height="{{ thumb_height }}">
+            <img src="{{ primary_image | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
           </span>
         </button>
         {% assign reordered_counter = reordered_counter | plus: 1 %}
@@ -179,7 +187,7 @@
         {% assign first_image_skipped = true %}
       {% endif %}
 
-      {% if lifestyle_reference != blank %}
+      {% if lifestyle_reference != blank and product.variants.size > 1 %}
         <button
           class="
             product-gallery--media-thumbnail
@@ -195,7 +203,7 @@
           data-media-type="image"
         >
           <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
-            <img src="{{ lifestyle_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image" width="{{ thumb_width }}" height="{{ thumb_height }}">
+            <img src="{{ lifestyle_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
           </span>
         </button>
         {% assign reordered_counter = reordered_counter | plus: 1 %}
@@ -219,7 +227,7 @@
           data-media-type="image"
         >
           <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
-            <img src="{{ quality_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image" width="{{ thumb_width }}" height="{{ thumb_height }}">
+            <img src="{{ quality_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
           </span>
         </button>
         {% assign reordered_counter = reordered_counter | plus: 1 %}
@@ -227,7 +235,7 @@
         {% assign first_image_skipped = true %}
       {% endif %}
 
-      {% if paint_infographic_reference != blank %}
+      {% if paint_infographic_reference != blank and product.variants.size > 1 %}
         <button
           class="
             product-gallery--media-thumbnail
@@ -243,7 +251,7 @@
           data-media-type="image"
         >
           <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
-            <img src="{{ paint_infographic_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image" width="{{ thumb_width }}" height="{{ thumb_height }}">
+            <img src="{{ paint_infographic_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
           </span>
         </button>
         {% assign reordered_counter = reordered_counter | plus: 1 %}
@@ -251,7 +259,7 @@
         {% assign first_image_skipped = true %}
       {% endif %}
 
-      {% if how_to_find_paint_code_reference != blank %}
+      {% if how_to_find_paint_code_reference != blank and product.variants.size > 1 %}
         <button
           class="
             product-gallery--media-thumbnail
@@ -267,12 +275,42 @@
           data-media-type="image"
         >
           <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
-            <img src="{{ how_to_find_paint_code_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image" width="{{ thumb_width }}" height="{{ thumb_height }}">
+            <img src="{{ how_to_find_paint_code_reference | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
           </span>
         </button>
         {% assign reordered_counter = reordered_counter | plus: 1 %}
 
         {% assign first_image_skipped = true %}
+      {% endif %}
+
+      {% if additional_product_images != blank %}
+        {% for current_image in additional_product_images %}
+          {% if current_image == '' %}
+            {% continue %}
+          {% endif %}
+          {% assign file_url_current_image = current_image.preview_image %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--image-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="How To Find Paint Code Image Thumbnail"
+          data-gallery-thumbnail
+          data-gallery-index={{ reordered_counter }}
+          data-gallery-selected="false"
+          data-media="paint-code-finder-image"
+          data-media-type="image"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            <img src="{{ file_url_current_image | image_url: width: thumb_width, height: thumb_height }}" class="product-gallery--media-thumbnail-img" alt="Primary Image">
+          </span>
+        </button>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+
+        {% assign first_image_skipped = true %}
+        {% endfor %}
       {% endif %}
 
     {% endif %}
