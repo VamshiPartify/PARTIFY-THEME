@@ -301,7 +301,7 @@
     /* Variant selector styles */
     #variant-selector {
         border: 1px solid #ddd;
-        border-radius: 4px;
+        border-radius: 6px;
         box-sizing: border-box;
         display: block;
         font-size: 16px;
@@ -1227,7 +1227,6 @@
                 const qualityDescriptionBtn = document.getElementById('quality-description-vindecoder');
                 let productSelect;
         
-        
                 let failChecker = 0;
         
         
@@ -1235,8 +1234,10 @@
                 failChecker = easyFitmentFail.offsetWidth;
                 }
         
-                if(fitmentHeader.offsetWidth === 0) {
-                    if (easyFitmentFail && fitmentLink && failChecker !== 0) {
+                {% comment %} if(fitmentHeader.offsetWidth) { {% endcomment %}
+                    if (easyFitmentFail && failChecker !== 0) {
+                      {% comment %} if (easyFitmentFail && fitmentLink && failChecker !== 0) { {% endcomment %}
+
                         fitmentFailButton.style.display = 'block';
                         addToCartButtonForUnpaintedItems.disabled = true;
                         if (!document.getElementById('fitment-fail-button')) {
@@ -1254,7 +1255,8 @@
                             qualityDescriptionBtn.disabled = true;
                           }
                         }
-                    } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){
+                    {% comment %} } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){ {% endcomment %}
+                    } else if (easyFitmentSuccess && failChecker === 0){
                         fitmentFailButton.style.display = 'none';
                         
                         if(vinTextBoxOEM) {
@@ -1281,14 +1283,14 @@
                         fitmentSuccess = false;
                     }
                     handleFitmentSuccessChange(productSelect);
-                } else {
+                {% comment %} } else {
                   fitmentFailButton.style.display = 'none';
                   addToCartButtonForUnpaintedItems.style.display = 'block';
                   addToCartButtonForUnpaintedItems.disabled = true
                   if(vinTextBoxOEM) {
                     vinTextBoxOEM.disabled = true;
                   }
-                }
+                } {% endcomment %}
             }
         
         
@@ -1375,9 +1377,12 @@
         
 
 
+                {% comment %} if(fitmentHeader.offsetWidth === 0) { {% endcomment %}
+                  {% comment %} if(fitmentHeader.offsetWidth) { {% endcomment %}
 
-                if(fitmentHeader.offsetWidth === 0) {
-                    if (easyFitmentFail && fitmentLink) {
+                    {% comment %} if (easyFitmentFail && fitmentLink) { {% endcomment %}
+                      if (easyFitmentFail) {
+
                         // Fitment failed, hide Continue button and show "Parts That Fit" button
                         fitmentFailButton.style.display = 'block';
                         if (!document.getElementById('fitment-fail-button')) {
@@ -1405,7 +1410,9 @@
                           selectVinVariantButton.disabled = true;
                         }
                         fitmentSuccess = false;
-                    } else if (easyFitmentSuccess && fitmentLink){
+                    } else if (easyFitmentSuccess){
+                    {% comment %} } else if (easyFitmentSuccess && fitmentLink){ {% endcomment %}
+
                         fitmentFailButton.style.display = 'none';
                         let event = new Event('eventFitmentSuccess');
                         easyFitmentSuccess.dispatchEvent(event);
@@ -1461,10 +1468,10 @@
                     }
                     handleFitmentSuccessChange(productSelect);
                     checkBothConditions(); 
-                } else {
+                {% comment %} } else {
                     fitmentFailButton.style.display = 'none';
                     addToCartButton.disabled = true;
-                }        
+                }         {% endcomment %}
             }
         
             // Polling function to continuously check fitment status every 500ms
