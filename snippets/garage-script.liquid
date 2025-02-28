@@ -36,6 +36,12 @@
     color: #ff0000;
     font-weight: 500;
   }
+  .vehicle-selection-blurb {
+    font-size: 14px;
+    margin: 5px 0 10px 0;
+    color:#313131;
+    text-align: left;
+  }
   .clear-garage {
     border: none;
     background-color: #fff;
@@ -192,7 +198,7 @@
       if (garagePopupContainer) {
         let vehicleListHTML = `<ul class="vehicle-list">`;
             if (searchTerms && searchTerms.length) {
-                searchTerms.slice(0, 5).forEach((vehicle, index) => {
+              searchTerms.slice(0, 5).forEach((vehicle, index) => {
                 {% comment %} let currentVehicle = vehicle
                     ? vehicle
                         .toLowerCase()
@@ -212,11 +218,11 @@
                         </div>
                     </li>
                     `;
-                });
-              }
+              });
+            }
 
               vehicleListHTML += `</ul>`;
-              if (searchTerms && searchTerms.length) {
+            if (searchTerms && searchTerms.length) {
                 garagePopupContainer.innerHTML = `
                 <div class="garage-close-button" role="button">&times;</div>
                 <div class="select-your-vehicle-header" style="display: none;">
@@ -229,28 +235,50 @@
                         <h4>Clear All</h4>
                     </button> {% endcomment %}
                     </div>
+                    <p class="vehicle-selection-blurb">We need more information to help you find the right parts for your vehicle. Select a vehicle to narrow your results.</p>
                     ${vehicleListHTML}
                     </div>
                     <button id="add-vehicle-btn">Add Vehicle</button>
                 </div>
                 <div class="easyYMM">${document.querySelector(".easyYMM").innerHTML}</div>
                 `
-              } else {
+            } else {
                 garagePopupContainer.innerHTML = `
                 <div class="garage-close-button" role="button">&times;</div>
                 <div class="my-garage-header">
                     <h1>Select Your Vehicle</h1>
                 </div>
+                <p class="vehicle-selection-blurb">We need more information to help you find the right parts for your vehicle. Select a vehicle to narrow your results.</p>
                 <div>
                 ${easyYMMContent.outerHTML}
                 </div>
-            `
+              `
+              garagePopupContainer.style.paddingBottom = "0";
+              {% comment %} document.getElementById("vin-to-collection").style.padding = "10px 20px 10px 20px"; {% endcomment %}
+              {% comment %} document.getElementById("vin-to-collection").style.margin = "0"; {% endcomment %}
+              document.querySelector(".easyYMM").style.marginBottom = "15px";
+              const vinToCollection = document.getElementById("vin-to-collection-placeholder");
+              const vinToCollectionOr = document.getElementById("vin-to-collection-or");
+              const vinFormOr = `
+                <div style="display: flex; align-items: center; text-align: center; font-weight: 500; font-size: 14px; color: #555; background-color: #fff; margin: 0 16px;">
+                  <span style="flex: 1; border-bottom: 2px solid #ccc; margin: 0 20px;"></span>
+                  ${vinToCollectionOr.textContent.trim()}
+                  <span style="flex: 1; border-bottom: 2px solid #ccc; margin: 0 20px;"></span>
+                </div>
+              `;
+              vinToCollection.style.display = "block";
+              vinToCollectionOr.style.display = "flex";
+              {% comment %} garagePopupContainer.insertAdjacentHTML("beforeend", vinFormOr);
+              const vinForm = document.getElementById("vin-to-collection-placeholder").innerHTML;
+              garagePopupContainer.insertAdjacentHTML("beforeend", vinForm); {% endcomment %}
             }
         }
         const deleteButtons = document.querySelectorAll('.delete-trashbin');
         const vehicleCatalogButtons = document.querySelectorAll('.browse-catalog-btn');
         const addVehicleBtn = document.getElementById("add-vehicle-btn");
         const easyYMMElement = garagePopupContainer.querySelector(".easyYMM");
+        const vinToCollection = document.getElementById("vin-to-collection-placeholder");
+        const vinToCollectionOr = document.getElementById("vin-to-collection-or");
         const garageBlock = document.querySelector(".garage-block");
         const selectYourVehicleHeader = document.querySelector(".select-your-vehicle-header");
 
@@ -265,6 +293,8 @@
             addVehicleBtn.addEventListener("click", function () {
                 easyYMMElement.style.display = "block";
                 addVehicleBtn.style.display = "none";
+                vinToCollection.style.display = "block";
+                vinToCollectionOr.style.display = "flex";
 
                 garageBlock.style.display = "none";
                 selectYourVehicleHeader.style.display = "block";
@@ -370,6 +400,7 @@
                             <h4>Clear All</h4>
                         </button> {% endcomment %}
                     </div>
+                    <p class="vehicle-selection-blurb">We need more information to help you find the right parts for your vehicle. Select a vehicle to narrow your results.</p>
                     ${vehicleListHTML}
                     <button id="add-vehicle-btn">Add Vehicle</button>
                 </div>
@@ -387,6 +418,8 @@
             const addVehicleBtn = document.getElementById("add-vehicle-btn");
             const clearGarage = document.querySelector(".clear-garage");
             const easyYMMElement = document.querySelector(".easyYMM");
+            const vinToCollection = document.getElementById("vin-to-collection-placeholder");
+            const vinToCollectionOr = document.getElementById("vin-to-collection-or");
             const garageBlock = document.querySelector(".garage-block");
             const selectYourVehicleHeader = document.querySelector(".select-your-vehicle-header");
         
@@ -395,6 +428,8 @@
                 addVehicleBtn.addEventListener("click", function () {
                     easyYMMElement.style.display = "block";
                     addVehicleBtn.style.display = "none";
+                    vinToCollection.style.display = "block";
+                    vinToCollectionOr.style.display = "flex";
 
                     garageBlock.style.display = "none";
                     selectYourVehicleHeader.style.display = "block";

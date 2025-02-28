@@ -50419,6 +50419,8 @@ document.addEventListener('easysearch_loaded', function () {
   document.getElementById("easysearch-search").setAttribute('style', 'background: #334FB4 !important');
   const garagePopupContainer = document.querySelector(".garage-easyYMM-popup-container");
   const easyYMMElement = garagePopupContainer.querySelector(".easyYMM");
+  const vinToCollection = document.getElementById("vin-to-collection-placeholder");
+  const vinToCollectionOr = document.getElementById("vin-to-collection-or");
   const addVehicleBtn = document.getElementById("add-vehicle-btn");
   const closeGarageBtn = document.querySelector('.garage-close-button');
 
@@ -50493,6 +50495,8 @@ function showShopifyChat() {
     if (event.target === garageOverlay) {
       if(document.getElementById("add-vehicle-btn")) {
         easyYMMElement.style.display = "none";
+        vinToCollection.style.display = "none";
+        vinToCollectionOr.style.display = "none";
         document.getElementById("add-vehicle-btn").style.display = "flex";
         document.querySelector(".garage-block").style.display = "block";
         document.querySelector(".select-your-vehicle-header").style.display = "none";
@@ -50503,6 +50507,8 @@ function showShopifyChat() {
     if (event.target === document.querySelector('.garage-close-button')) {
       if(document.getElementById("add-vehicle-btn")) {
         easyYMMElement.style.display = "none";
+        vinToCollection.style.display = "none";
+        vinToCollectionOr.style.display = "none";
         document.getElementById("add-vehicle-btn").style.display = "flex";
         document.querySelector(".garage-block").style.display = "block";
         document.querySelector(".select-your-vehicle-header").style.display = "none";

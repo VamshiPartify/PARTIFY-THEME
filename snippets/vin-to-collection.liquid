@@ -1,0 +1,239 @@
+<style>
+  #vin-to-collection {
+    padding: 10px 20px 10px 20px;
+    background-color: #fff;
+    max-width: 440px;
+    margin: 0 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #vin-to-collection-input-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .vin-input-to-collection {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+
+  .errorMessage {
+    color: red;
+    text-align: start;
+    padding-top: 5px;
+  }
+
+  #vin-to-collection-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 90px;
+    min-width: 90px;
+    min-height: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 14px;
+  }
+
+  #vin-to-collection-btn:disabled {
+    background-color: #334FB4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: no-drop;
+    min-height: 40px;
+    opacity: 0.7;
+  }
+
+  .vin-to-collection-btn--loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    {% comment %} margin: auto; {% endcomment %}
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+  }
+
+  .disclaimer {
+    font-size: 12px;
+    color: #333;
+    margin-top: 10px;
+    font-style: italic;
+    text-align: start;
+  }
+  
+  @keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
+  }
+</style>
+
+
+<div>
+  <form id="vin-to-collection" class="vin-to-collection-form">
+    <div id="vin-to-collection-input-wrapper">
+      <input
+        type="text"
+        id="vin-to-collection-input"
+        name="vin"
+        class="vin-input-to-collection"
+        placeholder="Enter VIN"
+        onChange="handleVinChange(event)"
+        required
+      />
+      <button id="vin-to-collection-btn" type="button" disabled>Search</button>
+    </div>
+    <div class="errorMessage" style="visibility: hidden;">No results found. Please try a different VIN</div>
+    <div class="disclaimer">Disclaimer: Entering your VIN is a simplified way of submitting your year, make, and model. We do not use the VIN to verify fitment. Please use product fitment details for ordering the correct parts.</div>
+  </form>
+</div>
+
+<script>
+  let attemptedVins = [];
+  // Function to update garage and navigate
+  async function updateGarageAndNavigate(handle) {
+    const redirectUrl = `/collections/${handle}`;
+    window.location.href = redirectUrl;
+  }
+
+  // Function to handle VIN change
+  const handleVinChange = (event) => {
+    let vinInput = event.target.value.toUpperCase();
+    const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
+    const truncatedValue = filteredValue.slice(0, 17);
+    
+    event.target.value = truncatedValue;
+
+    if(attemptedVins.length) {
+      for(let i = 0; i < attemptedVins.length; i++) {
+        if(attemptedVins[i].toUpperCase() === truncatedValue.toUpperCase()) {
+          document.querySelector('.errorMessage').style.visibility = 'visible';
+          document.querySelector('.errorMessage').innerHTML = 'VIN already searched. Please try a different VIN';
+          document.getElementById('vin-to-collection-btn').disabled = true;
+          return;
+        } else {
+          document.querySelector('.errorMessage').style.visibility = 'hidden';
+        }
+      }
+    }
+
+    if(truncatedValue.length === 17) {
+      document.getElementById('vin-to-collection-btn').disabled = false;
+    } else {
+      document.getElementById('vin-to-collection-btn').disabled = true;
+    }
+
+    if (vinInput !== filteredValue) {
+      alert("Please enter valid characters. I, O, & Q and other special characters are not allowed in VINs.");
+    }
+  };
+
+  // Get reference to the form
+  document.addEventListener("DOMContentLoaded", function () {
+    const vinForm = document.getElementById("vin-to-collection");
+    const vinSearchBtn = document.getElementById("vin-to-collection-btn");
+    const vinInputField = document.getElementById("vin-to-collection-input");
+    const errorMessage = document.querySelector('.errorMessage');
+    let submissionBool = false;
+
+    vinInputField.addEventListener("input", handleVinChange);
+
+    vinForm.addEventListener("submit", async function (event) {
+      event.preventDefault(); // Prevent page reload
+      if (submissionBool || vinSearchBtn.disabled) {
+        return;
+      }
+
+      submissionBool = true;
+
+      vinSearchBtn.innerHTML = "";
+      vinSearchBtn.classList.add("vin-to-collection-btn--loading");
+      {% comment %} const vinInputField = document.getElementById("vin-to-collection-input"); {% endcomment %}
+      const vin = vinInputField.value.trim(); // Get VIN input value
+
+      if (vin.length !== 17) {
+        alert("VIN must be exactly 17 characters.");
+        return;
+      }
+
+      attemptedVins.push(vin);
+
+      try {
+        const response = await fetch('https://garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            vin: vin,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error fetching order details. Status: ${response.status}. Message: ${response.statusText}.`);
+        }
+        const data = await response.json();
+
+        // NOTE: The data returns the paint code here! No need to alter gcr function as I can 
+        // just use the paint code from the data object here.
+        {% comment %} console.log('data exteriorColors: ', data.exteriorColors); {% endcomment %}
+        if(data.handle === '') {
+          if (attemptedVins.length < 3) {
+            document.querySelector('.errorMessage').innerHTML = ('No results found. Please try a different VIN');
+          } else {
+            document.querySelector('.errorMessage').innerHTML = ('Please use the year, make, model dropdowns to find your vehicle');
+            document.getElementById('vin').disabled = true;
+            return;
+          }
+          submissionBool = false;
+          return;
+        } else {
+          // Don't add submissionBool here because there will be a time when the button
+          // is clickable between submission and page navigation.  Don't wan't anyone spamming
+          // the button.
+          updateGarageAndNavigate(data.handle);
+        }
+      } catch (error) {
+        if(errorMessage.style.visibility === 'hidden') {
+          errorMessage.style.visibility = 'visible';
+        }
+        vinSearchBtn.disabled = true;
+        if (attemptedVins.length < 3) {
+          document.querySelector('.errorMessage').innerHTML = ('No results found for this VIN');
+        } else {
+          document.querySelector('.errorMessage').innerHTML = ('Please use the year, make, model dropdowns to find your vehicle');
+          document.getElementById('vin').disabled = true;
+          return;
+        }
+        console.error("Error fetching vehicle data:", error);
+        submissionBool = false;
+      } finally {
+        vinSearchBtn.classList.remove("vin-to-collection-btn--loading");
+        vinSearchBtn.innerHTML = "Search";
+      }
+    });
+
+    vinSearchBtn.addEventListener("click", function () {
+      vinForm.dispatchEvent(new Event('submit'));
+    });
+  });
+</script>
