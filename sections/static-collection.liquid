@@ -140,7 +140,7 @@
   {% endif %}
 {%- endcapture -%}
 
-{% render 'breadcrumbs' %}
+{% comment %} {% render 'breadcrumbs' %} {% endcomment %}
 
 
 {% paginate collection.products by paginate_by %}

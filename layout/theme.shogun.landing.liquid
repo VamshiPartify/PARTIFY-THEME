@@ -9,7 +9,7 @@ This file can be re-written at any time.
   
 <head>
 <!-- Start of Shoplift scripts -->
-{% render 'shoplift' %}
+{% comment %} {% render 'shoplift' %} {% endcomment %}
 <!-- End of Shoplift scripts -->
 
   
@@ -189,7 +189,7 @@ This file can be re-written at any time.
       data-reduce-animations
     {% endif %}
   >
-  {{ 'ripple.css' | asset_url | stylesheet_tag }}
+    <link rel="preload" href="{{ 'ripple.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   
   {{ content_for_layout }}
   {{ 'shopify_common.js' | shopify_asset_url | script_tag }}

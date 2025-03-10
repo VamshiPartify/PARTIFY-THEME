@@ -115,11 +115,11 @@
     {% endfor %}
   {%- endif -%}
 
-  {%
+  {% comment %} {%
     render 'breadcrumbs',
     search_category: search_category,
     results: results,
-  %}
+  %} {% endcomment %}
 
   <div
     class="
