@@ -263,12 +263,24 @@
       {% endif %}
     {% endif %}
   
+  {% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      let selectedType = '';
+      let dataVariantTitle = '';
+      let dataVariantSku = '';
+      {% comment %} window.qualitySelectedType = ''; {% endcomment %}
       let unpainted = false;
       if('{{ product.variants.size }}' <= 1) {
         unpainted = true;
       };
+
+      let chromeDataMake = false;
+      if('{{ is_make_found }}' == 'true' || '{{ is_excluded_make_found }}' == "true" || '{{ is_bumperdotcom_make_found }}' == "true") {
+        chromeDataMake = true;
+      };
+      const productSku = '{{ product.variants.first.sku }}';
+
 
       const productVariants = {
             aftermarket: [
@@ -301,11 +313,15 @@
                             "price": "{{ variant.price | money }}",
                             "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
                             "variantTitle": "{{ variant.title }}",
+                            "variantSku": "{{ variant.sku }}",
+                            "variantInventory": "{{ variant.inventory_quantity }}",
                             "productTitle": "{{ aftermarket_product.title | escape  }}",
                             "productDescription": {{ aftermarket_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
-                            {% if variant.title contains "Match Paint by VIN" %}
-                              "class": "hidden-vin-option"
+                            {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                "class": "hidden-vin-option"
+                              {% endif %}
                             {% endif %}
                           },
                       {% endfor %}
@@ -348,11 +364,15 @@
                             "price": "{{ variant.price | money }}",
                             "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
                             "variantTitle": "{{ variant.title }}",
+                            "variantSku": "{{ variant.sku }}",
+                            "variantInventory": "{{ variant.inventory_quantity }}",
                             "productTitle": "{{ capa_product.title | escape  }}",
                             "productDescription": {{ capa_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
-                            {% if variant.title contains "Match Paint by VIN" %}
-                              "class": "hidden-vin-option"
+                            {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                "class": "hidden-vin-option"
+                              {% endif %}
                             {% endif %}
                           },
                       {% endfor %}
@@ -395,11 +415,15 @@
                             "price": "{{ variant.price | money }}",
                             "color": "{{ variant.metafields.custom.paint_preview_hex_code }}" ,
                             "variantTitle": "{{ variant.title }}",
+                            "variantSku": "{{ variant.sku }}",
+                            "variantInventory": "{{ variant.inventory_quantity }}",
                             "productTitle": "{{ oem_product.title | escape  }}",
                             "productDescription": {{ oem_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
-                            {% if variant.title contains "Match Paint by VIN" %}
-                              "class": "hidden-vin-option"
+                            {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                "class": "hidden-vin-option"
+                              {% endif %}
                             {% endif %}
                           },
                       {% endfor %}
@@ -432,6 +456,10 @@
 
         const howToFindPaintCodeBtn = document.getElementById('how-to-find-your-paint-code-vindecoder');
         const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
+
+        const asmSettings = document.getElementById("asm-settings");
+        const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === "Enabled";
+
         let matchingByVin = false;
         let oem;
 
@@ -441,6 +469,29 @@
           return tempElement.value;
         }
 
+
+        // For unpainted products that have multiple qualities available, need to query all possible etas 
+        // on DOM content load
+        if (isDeliveryCountdownEnabled) {
+          // The following is for unpainted products that have quality selection
+            if (!combinedVariantSelect) {
+              const variants = productVariants;
+              receivedProductVariants(variants);
+
+
+              let unpaintedSku;
+              for (let key in variants) {
+                if (variants.hasOwnProperty(key)) {
+                    let variant = variants[key];
+
+                    unpaintedSku = variant[0].variantSku;
+                    setProductSku(unpaintedSku);
+                    queryAllETAs(key, 0);
+                }
+              }
+            }
+          }
+
         function changingPaintOptions(matchPaintByVin) {
           let selectedOption;
 
@@ -449,7 +500,11 @@
            } else {
             selectedOption = combinedVariantSelect.options[2];
           };
-          const dataVariantTitle = selectedOption.getAttribute('data-variant-title');
+          dataVariantTitle = selectedOption.getAttribute('data-variant-title');
+          receivedDataVariantTitle(dataVariantTitle);
+          dataVariantSku = selectedOption.getAttribute('data-variant-sku');
+          receivedDataVariantSku(dataVariantSku);
+
           if(dataVariantTitle === 'Match Paint by VIN') {
             matchingByVin = true;
           } else {
@@ -468,6 +523,10 @@
           window.selectedProductColor = selectedColor;
           if (selectedColor) {
             window.selectedProductTitle = selectedTitle
+          }
+
+          if (isDeliveryCountdownEnabled) {
+            getCountdownAndGeoValues();
           }
         }
 
@@ -506,41 +565,51 @@
                 variants.forEach(function(variant) {
                   window.selectedVariantId = variant.id;
                   let option;
-                  const parentSelect = document.getElementById("variant-selector");
+                  const combinedVariantSelect = document.getElementById("variant-selector");
 
-                  if (!parentSelect) {
-                    console.error("Error: <select> element not found.");
-                  }
 
-                  // Check if the variant is "Match Paint by VIN"
-                  if (variant.title.trim().startsWith("Match Paint by VIN")) {
-                    // Create a div instead of an option
-                    const div = document.createElement("div");
-                    div.classList.add("hidden-vin-option");
+                  if(chromeDataMake) {
+                    // Check if the variant is "Match Paint by VIN"
+                    if (variant.title.trim().startsWith("Match Paint by VIN")) {
+                      // Create a div instead of an option
+                      const div = document.createElement("div");
+                      div.classList.add("hidden-vin-option");
 
-                    // Copy attributes to div
-                    div.setAttribute("data-price", variant.price || "");
-                    div.setAttribute("data-color", variant.color || "");
-                    div.setAttribute("data-variant-title", variant.variantTitle || "");
-                    div.setAttribute("data-product-title", variant.productTitle || "");
+                      // Copy attributes to div
+                      div.setAttribute("data-price", variant.price || "");
+                      div.setAttribute("data-color", variant.color || "");
+                      div.setAttribute("data-variant-title", variant.variantTitle || "");
+                      div.setAttribute("data-product-title", variant.productTitle || "");
+                      div.setAttribute("data-variant-sku", variant.variantSku || "");
 
-                    // Set text content
-                    div.dataset.value = variant.id || "";
-                    div.textContent = variant.title;
-                    div.style.display = "none";
+                      // Set text content
+                      div.dataset.value = variant.id || "";
+                      div.textContent = variant.title;
+                      div.style.display = "none";
 
-                    // Append div after select
-                    parentSelect.insertAdjacentElement("afterend", div);
-                    return;
+                      // Append div after select
+                      combinedVariantSelect.insertAdjacentElement("afterend", div);
+                      return;
+                    } else {
+                      // Create an option normally
+                      option = document.createElement("option");
+                      option.value = variant.id;
+                      option.textContent = `${variant.title}`;
+                      option.dataset.price = variant.price;
+                      option.dataset.color = variant.color;
+                      option.dataset.variantTitle = variant.variantTitle;
+                      option.dataset.productTitle = variant.productTitle;
+                      option.dataset.variantSku = variant.variantSku;
+                    }
                   } else {
-                    // Create an option normally
-                    option = document.createElement("option");
+                    option = document.createElement('option');
                     option.value = variant.id;
                     option.textContent = `${variant.title}`;
                     option.dataset.price = variant.price;
                     option.dataset.color = variant.color;
                     option.dataset.variantTitle = variant.variantTitle;
                     option.dataset.productTitle = variant.productTitle;
+                    option.dataset.variantSku = variant.variantSku;
                   }
 
                   if(failedVinDecode === true) {
@@ -567,6 +636,12 @@
                         capaImg.style.position = 'relative';
                         capaImg.style.height = "34px";
                         capaImg.style.margin = "0 0 0 10px";
+
+                        if(window.innerWidth > 720) {
+                          priceContainerLargeScreen.appendChild(capaImg);
+                        } else {
+                          priceContainerSmallScreen.appendChild(capaImg);
+                        }
                         
                       }
                     } else {  
@@ -610,10 +685,34 @@
 
         // 3. When product type is selected
         productTypeSelect.addEventListener('change', async function() {
-          const selectedType = productTypeSelect.value;
+          selectedType = productTypeSelect.value;
+          setQualitySelectedType(selectedType)
+
+
+
+          if(isDeliveryCountdownEnabled) {
+            // Only run the following if there is a paint variant select
+            if (combinedVariantSelect) {
+              // Send productVariants to the delivery-countdown.js script to be used there
+              receivedProductVariants(productVariants);
+              setProductSku(productSku);
+              queryAllETAs(selectedType, 0);
+            
+            // If there is no paint options to choose from, go ahead and display the countdown eta when quality type is selected
+            } else {
+              let unpaintedSelectedVariant = productVariants[selectedType];
+              let unpaintedSku = unpaintedSelectedVariant[0].variantSku;
+
+              receivedDataVariantTitle("Unpainted");
+              receivedDataVariantSku(unpaintedSku);
+              getCountdownAndGeoValues();
+            }
+          }
+    
+
           const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
           const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
-          window.selectedProductType = selectedType;
+          {% comment %} window.selectedProductType = selectedType; {% endcomment %}
           const container = document.querySelector('.vin-options-container');
           const vinMessageParagraph = document.querySelector('.vin-decoder-message');
           //If there is no vin decoder failure message and the combined variant select exists

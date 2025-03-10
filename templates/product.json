@@ -63,13 +63,13 @@
             "custom_liquid": "{%- if product.metafields.custom.product_fitment!= blank -%}Model Fitment: <b style=\"color:#00000\" line-height:3em;>{{product.metafields.custom.product_fitment}}</b>{% endif %}"
           }
         },
-        "61112cbc-8780-4d01-873f-9aa747212ed9": {
-          "type": "custom-liquid",
-          "disabled": true,
-          "settings": {
-            "custom_liquid": "{% render 'delivery-countdown' %}"
-          }
-        },
+        // "61112cbc-8780-4d01-873f-9aa747212ed9": {
+        //   "type": "custom-liquid",
+        //   "disabled": false,
+        //   "settings": {
+        //     "custom_liquid": "{% render 'delivery-countdown' %}"
+        //   }
+        // },
         "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6": {
           "type": "custom-liquid",
           "disabled": true,
@@ -260,7 +260,7 @@
         "custom_liquid_9kgHLn",
         "custom_liquid_W7THLx",
         "5006f5e7-554d-4cc1-a089-51bc9c37611e",
-        "61112cbc-8780-4d01-873f-9aa747212ed9",
+        // "61112cbc-8780-4d01-873f-9aa747212ed9",
         "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6",
         "arrivesby_delivery_estimate_GtVWkc",
         "arrivesby_delivery_time_CtCA7H",
