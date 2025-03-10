@@ -1,28 +1,32 @@
 {% if settings.asm_delivery_countdown == 'Enabled' %}
-<!-- Advanced Shipping Manager Delivery Countdown -->
-<link rel="stylesheet" type="text/css" href="{{ 'delivery-countdown.css' | asset_url }}" />
-<script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script>
-<div id="delivery-countdown">
-	
-	<div id="dc-info">
-		<div id="dc-top">Delivered by <span id="dc-weekday"></span>, <span id="dc-month-short"></span> <span id="dc-day"></span></div>
-		<div id="dc-bottom">if ordered within <span id="dc-hours"></span> hours and <span id="dc-minutes"></span> minutes</div>
-		<div id="dc-details" onclick="toggleCalc();">More Delivery Options</div>
-		<div id="dc-details-info"></div>
-        <div id="dc-ship">Delivery to <span id="dc-zip" onclick="toggleZipInput();"></span>?</div>
-		<div class="clear-both"></div>
-		<div id="dc-alt-zip-holder">
-		   <button id="dc-alt-zip-apply" onclick="deliveryRecalc(); return false;">Apply</button>
-		   <input type="text" id="dc-alt-zip" onkeydown="return activate_enter (event);" />
-		   <div class="clear-both"></div>
+	<!-- Advanced Shipping Manager Delivery Countdown -->
+	<link rel="stylesheet" type="text/css" href="{{ 'delivery-countdown.css' | asset_url }}" />
+	{% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
+	<div id="delivery-countdown-partify" class="delivery-countdown-hidden">
+		
+		<div id="dc-info-partify">
+			<div id="dc-incorrect-zip-message" style="display: none;">Please enter a valid zip code</div>
+			<div id="dc-top-partify">Arrives as early as <span id="dc-weekday-partify"></span>, <span id="dc-month-short-partify"></span> <span id="dc-day-partify"></span></div>
+			<div id="dc-bottom-partify">if ordered within <span id="dc-hours-partify"></span><span id="dc-hours-and">&nbsp;hours and </span><span id="dc-minutes-partify"></span><span id="dc-minutes-and">&nbsp;minutes</span></div>
+			<div id="dc-details-info-partify"></div>
+			<div id='dc-location-wrapper-partify'>
+				<svg stroke="#334FB4" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 48c-79.5 0-144 61.39-144 137 0 87 96 224.87 131.25 272.49a15.77 15.77 0 0 0 25.5 0C304 409.89 400 272.07 400 185c0-75.61-64.5-137-144-137z"></path><circle cx="256" cy="192" r="48" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></circle></svg>
+				<div id="dc-ship-partify" onclick="toggleZipInput();">Delivering to <span id="dc-zip-partify"></span>&nbsp;- Update location</div>
+			</div>
+
 		</div>
-		<div class="clear-both"></div>
-    </div>
-	<div class="clear-both"></div>
-</div>
-<div id="asm-ajax"></div>
-<script type="text/javascript">
-	deliveryCountdown ('{{ shop.permanent_domain }}', '{{ product.variants.first.sku }}');
-</script>
-<!-- Advanced Shipping Manager Delivery Countdown -->
-{% endif %}
+		<div class="clear-both-partify"></div>
+	</div>
+
+	<!-- Placeholder (Shown Until Data Loads) -->
+	<div id="delivery-countdown-placeholder">
+		<div class="skeleton-delivery-countdown countdown-skeleton-text"><span>Need it fast?</span> Expedited shipping available at checkout.</div>
+		<div class="skeleton-delivery-countdown countdown-skeleton-title">Shipping times vary based on location.</div>
+	</div>
+
+	<div id="asm-ajax-partify"></div>
+	<script type="text/javascript">
+		deliveryCountdown ('{{ shop.permanent_domain }}', '{{ product.variants.first.sku }}');
+	</script>
+	<!-- Advanced Shipping Manager Delivery Countdown -->
+	{% endif %}

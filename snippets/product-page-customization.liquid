@@ -11,6 +11,7 @@
   .model-fitment-easysearch-container {
     width: 100%;
     margin-top: 3px;
+    {% comment %} min-height: 195px; {% endcomment %}
   }
 
   .verify-fitment-title {
@@ -633,7 +634,14 @@
           margin: 5px 0 8px 0;
           opacity: 0.8;
           position: relative;
-      }
+        }
+
+        #asm-settings {
+          display: flex;
+          justify-content: start;
+          width: 100%;
+          min-height: 82px;
+        }
 
       .option-title-vin {
         font-size: 1.2rem;
@@ -732,7 +740,7 @@
             <div id="model-fitmentfail-button-container">
               <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
                 <div class="model-fitment-easysearch-container">
-                    <div class="easysearch-embed-widget-fitment"></div>
+                  <div class="easysearch-embed-widget-fitment"></div>
                 </div>
             </div>
             <!-- Variant Selector -->
@@ -749,9 +757,6 @@
               {% endfor %}
             </select>
             <div class="divider-small-screen"></div>
-            {% comment %} <div class="price-container">
-              <div id="price-display-small-screen">{{ product.price_min | money }}</div>
-            </div>  {% endcomment %}
             <!-- Add to Cart Button -->
               <button type="submit" class="btn full-width bold-text" id="add-to-cart" style="margin: 10px 0;" disabled>Add to Cart</button>
           </form>
@@ -759,12 +764,10 @@
     <!-- Form for either customizations or add to cart on product page -->
       {% comment %} <form> {% endcomment %}
       {% elsif product.variants.size > 1 %}
-          {% comment %} <div class="price-container-large-screen">
-              <div id="price-display">{{ product.price_min | money }}</div>
-          </div>  {% endcomment %}
           <div id="model-fitmentfail-button-container">
             <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
               <div class="model-fitment-easysearch-container">
+                  {% comment %} <div class="easysearch-skeleton"></div> {% endcomment %}
                   <div class="easysearch-embed-widget-fitment"></div>
               </div>
           </div>
@@ -792,117 +795,147 @@
                       {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
                   {% elsif product.variants.size > 1 %}
                       <!-- Variant Dropdown if paint selection but no quality selection -->
-                      <!-- For makes easily found with chromedata (e.g. Nissan) -->
-                      {% if is_make_found %}
-                        <div id="variant-selector-container">
-                          <div class="divider-large-screen"></div>
-                          <label for="variant-selector" class="variant-label">Paint Option</label>
-                    
-                          <div class="paint-code-wrapper">
-                            <select id="variant-selector" name="id" class="variant-dropdown">
-                              <option value="" selected disabled>Paint Option</option>
-                              {% for variant in product.variants %}
-                                  {% if variant.metafields.custom.hide_paint_code == true %}
+                        <!-- For makes easily found with chromedata (e.g. Nissan) -->
+                        {% if is_make_found %}
+                          <div id="variant-selector-container">
+                            <div class="divider-large-screen"></div>
+                            <label for="variant-selector" class="variant-label">Paint Option</label>
+                      
+                            <div class="paint-code-wrapper">
+                              <select id="variant-selector" name="id" class="variant-dropdown">
+                                <option value="" selected disabled>Paint Option</option>
+                                {% for variant in product.variants %}
+                                    {% if variant.metafields.custom.hide_paint_code == true %}
+                                      {% continue %}
+                                    {% endif %}
+                                    {% if is_make_found %}
+                                        {% comment %} {% if variant.title contains "Match Paint by VIN" %}
+                                            {% continue %}
+                                        {% endif %} {% endcomment %}
+                                        {% if variant.title contains "Custom Paint Code" %}
+                                            {% continue %}
+                                        {% endif %}
+                                      {% if v.title == value and v.metafields.custom.hide_paint_code == true %}
+                                        {% continue %}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% assign price_diff = variant.price | minus: product.price_min | money %}  
+                                    {% if price_diff == 0 %}
+                                        {{ '' }}
+                                    {% else %}
+                                        {{ '+' }}{{ price_diff | money | remove: '.00' }}
+                                    {% endif %}
+                                    {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                                      {% unless variant.title contains "Match Paint by VIN" %}
+                                        <option 
+                                            value="{{ variant.id }}"
+                                            title="{{ variant.title }}" 
+                                            sku="{{ variant.sku }}" 
+                                            class="variant-option"
+                                            data-price="{{ variant.price }}">
+                                            {{ variant.title }} + {{ price_diff }}
+                                        </option>
+                                      {% endunless %}
+                                    {% else %}
+                                      <option 
+                                        value="{{ variant.id }}"
+                                        title="{{ variant.title }}"
+                                        sku="{{ variant.sku }}"
+                                        class="variant-option"
+                                        data-price="{{ variant.price }}">
+                                        {{ variant.title }} + {{ price_diff }}
+                                      </option>
+                                    {% endif %}
+                                  {% endfor %}
+                              </select>
+
+                              {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                                  <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
+                                {% for variant in product.variants %}
+                                  {% if variant.title contains "Match Paint by VIN" %}
+                                    <div 
+                                      data-value="{{ variant.id }}" 
+                                      class="hidden-vin-option-single-quality"
+                                      data-price="{{ variant.price }}"
+                                      style="display: none;">
+                                      {{ variant.title }} + {{ price_diff }}
+                                    </div>
+                                  {% endif %}
+                                {% endfor %}
+                              {% endif %}
+
+                              {% render 'vin-decoder' %}
+                            </div>
+                          </div>
+                          
+
+                          <!-- Everything but nissans (and other chromedata make lookups)-->
+                        {% else %}
+                          <div id="variant-selector-container">
+                            <div class="divider-large-screen"></div>
+                            {% comment %} <div class="how-to-find-paint-code-wrapper">
+                              <div class="find-paint-option-link-container">
+                                <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+                              </div>
+                            </div> {% endcomment %}
+                            <label for="variant-selector" class="variant-label">Paint Option</label>
+                            <div class="paint-code-wrapper">
+                              <select id="variant-selector" name="id" class="variant-dropdown">
+                                <option value="" selected disabled>Paint Option</option>
+                                {% for variant in product.variants %}
+                                  {% if variant.title contains "Custom Paint Code" %}
                                     {% continue %}
                                   {% endif %}
-                                  {% if is_make_found %}
-                                      {% comment %} {% if variant.title contains "Match Paint by VIN" %}
-                                          {% continue %}
-                                      {% endif %} {% endcomment %}
-                                      {% if variant.title contains "Custom Paint Code" %}
-                                          {% continue %}
-                                      {% endif %}
-                                    {% if v.title == value and v.metafields.custom.hide_paint_code == true %}
-                                      {% continue %}
-                                      {% endif %}
-                                  {% endif %}
+                                  
                                   {% assign price_diff = variant.price | minus: product.price_min | money %}  
                                   {% if price_diff == 0 %}
                                       {{ '' }}
                                   {% else %}
                                       {{ '+' }}{{ price_diff | money | remove: '.00' }}
                                   {% endif %}
-                                  {% unless variant.title contains "Match Paint by VIN" %}
+                                  {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                                    {% unless variant.title contains "Match Paint by VIN" %}
+                                      <option 
+                                          value="{{ variant.id }}" 
+                                          title="{{ variant.title }}"
+                                          sku="{{ variant.sku }}"
+                                          class="variant-option"
+                                          data-price="{{ variant.price }}">
+                                          {{ variant.title }} + {{ price_diff }}
+                                      </option>                                  
+                                    {% endunless %}
+                                  {% else %}
                                     <option 
-                                        value="{{ variant.id }}" 
-                                        class="variant-option"
-                                        data-price="{{ variant.price }}">
-                                        {{ variant.title }} + {{ price_diff }}
-                                    </option>
-                                {% endunless %}
-                              {% endfor %}
-                            </select>
-
-                            <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
-                            {% for variant in product.variants %}
-                              {% if variant.title contains "Match Paint by VIN" %}
-                                <div 
-                                  data-value="{{ variant.id }}" 
-                                  class="hidden-vin-option-single-quality"
-                                  data-price="{{ variant.price }}"
-                                  style="display: none;">
-                                  {{ variant.title }} + {{ price_diff }}
-                                </div>
-                              {% endif %}
-                            {% endfor %}
-
-                            {% render 'vin-decoder' %}
-                          </div>
-                        </div>
-                        
-
-                        <!-- Everything but nissans -->
-                      {% else %}
-                        <div id="variant-selector-container">
-                          <div class="divider-large-screen"></div>
-                          {% comment %} <div class="how-to-find-paint-code-wrapper">
-                            <div class="find-paint-option-link-container">
-                              <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
-                            </div>
-                          </div> {% endcomment %}
-                          <label for="variant-selector" class="variant-label">Paint Option</label>
-                          <div class="paint-code-wrapper">
-                            <select id="variant-selector" name="id" class="variant-dropdown">
-                              <option value="" selected disabled>Paint Option</option>
-                              {% for variant in product.variants %}
-                                {% if variant.title contains "Custom Paint Code" %}
-                                  {% continue %}
-                                {% endif %}
-                                
-                                {% assign price_diff = variant.price | minus: product.price_min | money %}  
-                                {% if price_diff == 0 %}
-                                    {{ '' }}
-                                {% else %}
-                                    {{ '+' }}{{ price_diff | money | remove: '.00' }}
-                                {% endif %}
-                                {% unless variant.title contains "Match Paint by VIN" %}
-                                  <option 
                                       value="{{ variant.id }}" 
+                                      title="{{ variant.title }}"
+                                      sku="{{ variant.sku }}"
                                       class="variant-option"
                                       data-price="{{ variant.price }}">
                                       {{ variant.title }} + {{ price_diff }}
-                                  </option>
-                              {% endunless %}
+                                    </option>    
+                                  {% endif %}
+                                {% endfor %}
+                              </select>
+                              
+                              {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                              <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
+                              {% for variant in product.variants %}
+                                {% if variant.title contains "Match Paint by VIN" %}
+                                  <div 
+                                    data-value="{{ variant.id }}" 
+                                    class="hidden-vin-option-single-quality"
+                                    data-price="{{ variant.price }}"
+                                    style="display: none;">
+                                    {{ variant.title }} + {{ price_diff }}
+                                  </div>
+                                {% endif %}
                               {% endfor %}
-                            </select>
-                            
-                            <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
-                            {% for variant in product.variants %}
-                              {% if variant.title contains "Match Paint by VIN" %}
-                                <div 
-                                  data-value="{{ variant.id }}" 
-                                  class="hidden-vin-option-single-quality"
-                                  data-price="{{ variant.price }}"
-                                  style="display: none;">
-                                  {{ variant.title }} + {{ price_diff }}
-                                </div>
-                              {% endif %}
-                            {% endfor %}
+                            {% endif %}
 
-                            {% render 'vin-decoder' %}
+                              {% render 'vin-decoder' %}
+                            </div>
                           </div>
-                        </div>
-                      {% endif %}
+                        {% endif %}
 
                   {% endif %}
 
@@ -968,6 +1001,13 @@
                   <div class="divider-small-screen"></div>
 
 
+                  <!-- Delivery Countdown -->
+                  <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
+                    {% render 'delivery-countdown' %}
+                  </div>
+
+                                 
+
                   <!-- Fixed Add to cart and price container to bottom of mobile -->
                   <div class="conditional-small-screen">
                       {% comment %} <div class="price-container">
@@ -1005,23 +1045,33 @@
                   </div>
                 </div>
               </div>
-              {% comment %} {% if product.title contains 'OEM' %}
-                <div class="oem-vin-container" style="display: block; width: 100%; padding-top: 5px;">
-                  <label class="option-title-vin" for="product-type-select">VIN</label>
-                  <div id="vin-textbox-container-for-oem">
-                    <input
-                        type="text"
-                        id="vin-textbox-for-oem"
-                        name="properties[VIN]"
-                        placeholder="Enter your VIN"
-                        maxlength="17"
-                    >
-                    <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-                  </div>
-                </div>
-              {% endif %} {% endcomment %}
-              {% render 'CAPA-OEM-options' %}
+              {% assign meta_fields = 0 %}
+              {% if product.metafields.custom.oem_product != blank %}
+                  {% assign meta_fields = meta_fields | plus: 1 %}
+              {% endif %}
+
+              {% if product.metafields.custom.capa_product != blank %}
+                  {% assign meta_fields = meta_fields | plus: 1 %}
+              {% endif %}
+
+              {% if product.metafields.custom.aftermarket_product != blank %}
+                  {% assign meta_fields = meta_fields | plus: 1 %}
+              {% endif %}
+
+              {% if meta_fields > 1 %}
+                  {% assign is_only_oem = false %}
+                  {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
+              {% elsif product.title contains 'OEM' %}
+                  {% assign is_only_oem = true %}
+                  {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
+              {% endif %}
               <div class="divider-small-screen"></div>
+              
+              <!-- Delivery Countdown -->
+              <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
+                {% render 'delivery-countdown' %}
+              </div>
+
               <div class="unpainted-add-to-cart-btn-container">
                 <input type="hidden" name="id" value="{{ product.variants.first.id }}">
                 <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>Add to Cart</button>
@@ -1031,6 +1081,8 @@
       {% endif %}
     <!-- freight shipping popup -->
       {% render 'freight-shipping-popup' %}
+
+      {% render 'delivery-location-update-popup' %}
 
 <!-- Products that are not available -->
     {% else %}
@@ -1095,7 +1147,7 @@
         </div> 
       {% endunless %}
 
-    <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
+      <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
       {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
         <div class="vin-options-container" style="display: none;">
 
@@ -1115,9 +1167,16 @@
       {% endif %}
     {% endif %}
 
-    <div class="color-preview-container-for-customizations">
-        {% render 'color-preview-box' %}
-    </div>
+    <!-- if the meta_fields is greater than 1, then that means there is possiblity of being able to select other options
+    which could have paint options 
+    product.variants.size ensures that it only renders if there is a chance there could be color selection
+    -->
+    {% if meta_fields > 1 and product.variants.size > 1 %}
+      <div class="color-preview-container-for-customizations">
+          {% render 'color-preview-box' %}
+      </div>
+    {% endif %}
+
 
       <!-- How to find your paint code image-->
       <div id="paint-swatch-modal" class="modal-overlay" style="display: none;">
@@ -1127,17 +1186,32 @@
     </div>
     <div class="divider-small-screen"></div>
 
-
+    <!-- Delivery Countdown -->
+    {% if meta_fields > 1 %}
+      {% render 'delivery-location-update-popup' %}
+      <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
+        {% render 'delivery-countdown' %}
+      </div>
+    {% endif %}
+    
     <!-- Fixed Add to cart and price container to bottom of mobile -->
-    <div class="conditional-small-screen">
-        <div class="add-to-cart-button-wrapper">
-            <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>Add to Cart</button>
-        </div>
-    </div>
+    {% if product.variants.size > 1 %}
+      <div class="conditional-small-screen">
+          <div class="add-to-cart-button-wrapper">
+              <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>Add to Cart</button>
+          </div>
+      </div>
+    {% else %}
+      <div class="unpainted-add-to-cart-btn-container">
+        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+        <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>Add to Cart</button>
+      </div>
+    {% endif %}
+
   {% comment %} </div> {% endcomment %}
   </form>
 {% endif %}
-{% comment %} {% render 'black-friday-table' %} {% endcomment %}
+  {% comment %} {% render 'black-friday-table' %} {% endcomment %}
   
 
   <script>
@@ -1178,6 +1252,7 @@
           document.addEventListener('DOMContentLoaded', () => {
             const fitmentPage = document.getElementById('fitment-verification-page');
             const fitmentFailPage = document.getElementById('model-fitmentfail-button-container');
+            const fitmentFailPageOOS = document.getElementById('model-fitmentfail-button-container-oos');
             const addToCartPage = document.getElementById('add-to-cart-page');
             const fitmentFailButton = document.createElement('button');
             const variantSelector = document.getElementById('variant-selector');
@@ -1191,6 +1266,41 @@
 
             //Used for How to find Paint Code
             const paintSwatchImage = document.getElementById('paint-swatch-image');
+
+            // Used for adding ASM Delivery estimation on products with no quality selections
+            const asmSettings = document.getElementById("asm-settings");
+            const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === "Enabled";
+            const productTypeSelect = document.getElementById('product-type-select');
+
+            // The following is only for product pages with no quality selection
+            if(isDeliveryCountdownEnabled && !productTypeSelect && variantSelector) {
+              let singularProductVariants = {{ product.variants | json }};
+              let singularVariantsObj = { 'single': singularProductVariants };
+              let singularProductSku = {{ product.variants.first.sku | json }};
+              // Send productVariants to the delivery-countdown.js script to be used there
+              setQualitySelectedType('single');
+              receivedProductVariants(singularVariantsObj);
+              setProductSku(singularProductSku);
+              receivedDataVariantSku(singularProductSku);
+              queryAllETAs('single', 0);
+            }
+
+            
+            // The following is only for product pages (unpainted) with no quality selection and no paint option selection
+            if(isDeliveryCountdownEnabled && !productTypeSelect && !variantSelector) {
+              let singularProductVariants = {{ product.variants | json }};
+              let singularVariantsObj = { 'single': singularProductVariants };
+              let singularProductSku = {{ product.variants.first.sku | json }};
+              // Send productVariants to the delivery-countdown.js script to be used there
+              setQualitySelectedType('single');
+              receivedProductVariants(singularVariantsObj);
+              setProductSku(singularProductSku);
+              receivedDataVariantSku(singularProductSku);
+              receivedDataVariantTitle("Unpainted");
+              queryAllETAs('single', 0);
+              getCountdownAndGeoValues();
+            }
+        
         
         
         
@@ -1206,15 +1316,17 @@
             };
         
             let fitmentSuccessfromStorage;
-        
-        
             const addToCartButtonForUnpaintedItems = document.getElementById("add-to-cart-for-unpainted");
-        
-            if(addToCartButtonForUnpaintedItems !== null) {
+
+            // If there are no quality options for unpainted, handled elsewhere
+            if(productTypeSelect) {
+              if(addToCartButtonForUnpaintedItems !== null) {
                 addToCartButtonForUnpaintedItems.addEventListener("click", function () {
+                  console.log('windowsleedtedVAriant: ', window.selectedVariantId);
                     form.action = `/cart/add?id=${window.selectedVariantId}`;
                     {% comment %} form.submit(); {% endcomment %}
-            });
+                });
+              }
             }
         
         
@@ -1223,8 +1335,10 @@
                 const easyFitmentSuccess = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-icon-success');
                 const fitmentLink = document.querySelector('.easysearch-fitment-link');
                 const fitmentHeader = document.querySelector('.easysearch-fitment-header');
-                const productTypeSelect = document.getElementById('product-type-select');
+                {% comment %} const productTypeSelect = document.getElementById('product-type-select'); {% endcomment %}
                 const qualityDescriptionBtn = document.getElementById('quality-description-vindecoder');
+                let fitmentObject = JSON.parse(localStorage.getItem("easysearch-preselect-fitment"));
+
                 let productSelect;
         
                 let failChecker = 0;
@@ -1233,6 +1347,7 @@
                 if(easyFitmentFail !== null) {
                 failChecker = easyFitmentFail.offsetWidth;
                 }
+
         
                 {% comment %} if(fitmentHeader.offsetWidth) { {% endcomment %}
                     if (easyFitmentFail && failChecker !== 0) {
@@ -1241,7 +1356,12 @@
                         fitmentFailButton.style.display = 'block';
                         addToCartButtonForUnpaintedItems.disabled = true;
                         if (!document.getElementById('fitment-fail-button')) {
-                        fitmentFailPage.appendChild(fitmentFailButton);
+                          if(fitmentFailPage) {
+                            fitmentFailPage.appendChild(fitmentFailButton);
+                          }
+                          if(fitmentFailPageOOS) {
+                            fitmentFailPageOOS.appendChild(fitmentFailButton);
+                          }
                         }
                         fitmentFailButton.style.display = 'block';
                         fitmentSuccess = false;
@@ -1256,13 +1376,12 @@
                           }
                         }
                     {% comment %} } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){ {% endcomment %}
-                    } else if (easyFitmentSuccess && failChecker === 0){
+                    } else if (easyFitmentSuccess && failChecker === 0 && fitmentObject.value.length){
                         fitmentFailButton.style.display = 'none';
                         
                         if(vinTextBoxOEM) {
                           vinTextBoxOEM.disabled = false;
                         }
-                        
                         if(vinTextBox) {
                           addToCartButtonForUnpaintedItems.style.display = 'block';
                           addToCartButtonForUnpaintedItems.disabled = false;
@@ -1283,14 +1402,6 @@
                         fitmentSuccess = false;
                     }
                     handleFitmentSuccessChange(productSelect);
-                {% comment %} } else {
-                  fitmentFailButton.style.display = 'none';
-                  addToCartButtonForUnpaintedItems.style.display = 'block';
-                  addToCartButtonForUnpaintedItems.disabled = true
-                  if(vinTextBoxOEM) {
-                    vinTextBoxOEM.disabled = true;
-                  }
-                } {% endcomment %}
             }
         
         
@@ -1301,7 +1412,6 @@
                 const easyFitmentSuccess = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-icon-success');
                 const fitmentLink = document.querySelector('.easysearch-fitment-link'); // Get the dynamic link
                 const fitmentHeader = document.querySelector('.easysearch-fitment-header');
-                const productTypeSelect = document.getElementById('product-type-select');
                 const qualityDescriptionBtn = document.getElementById('quality-description-vindecoder');
                 const combinedVariantSelect = document.getElementById('variant-selector');
                 const selectVinVariantButton = document.getElementById('select-vin-variant');
@@ -1311,8 +1421,9 @@
                 const vinHeader = document.querySelector('.option-title-vin');
                 const oemVinContainer = document.querySelector('.oem-vin-container');
                 const optionTitle = document.querySelector('.option-title');
-
+                let fitmentObject = JSON.parse(localStorage.getItem("easysearch-preselect-fitment"));
                 let productSelect;
+                let previousQualitySelectUnpainted = '';
 
                 // If the quality selection is present but fitment is not yet verified
                   if(productTypeSelect && productTypeSelect.disabled === true) {
@@ -1386,8 +1497,12 @@
                         // Fitment failed, hide Continue button and show "Parts That Fit" button
                         fitmentFailButton.style.display = 'block';
                         if (!document.getElementById('fitment-fail-button')) {
-                            fitmentFailPage.appendChild(fitmentFailButton); // Append the button if it doesn't exist
-                        }
+                          if(fitmentFailPage) {
+                            fitmentFailPage.appendChild(fitmentFailButton);
+                          }
+                          if(fitmentFailPageOOS) {
+                            fitmentFailPageOOS.appendChild(fitmentFailButton);
+                          }                        }
                         fitmentFailButton.style.display = 'block';
                         if(productTypeSelect) {
                           productTypeSelect.selectedIndex = 0;
@@ -1410,7 +1525,7 @@
                           selectVinVariantButton.disabled = true;
                         }
                         fitmentSuccess = false;
-                    } else if (easyFitmentSuccess){
+                    } else if (easyFitmentSuccess && fitmentObject.value.length){
                     {% comment %} } else if (easyFitmentSuccess && fitmentLink){ {% endcomment %}
 
                         fitmentFailButton.style.display = 'none';
@@ -1488,6 +1603,7 @@
             const variantTitle = '{{ product.variants.first.title }}';
             const variantId = '{{ product.variants[0].id }}';
             
+            // This only applies to products with both quality select and paint variant select (not unpainted)
             function checkBothConditions() {
                 const variantSelected = variantSelector.value !== ""; // Check if a variant is selected
                 const selectedOptionText = variantSelector.options[variantSelector.selectedIndex].text;
@@ -1569,7 +1685,15 @@
         
             if(variantSelector) {
               variantSelector.addEventListener('change', function() {
-                const variantId = this.value;
+                const selectedOption = this.options[this.selectedIndex];
+
+
+                // Extract attributes
+                const variantId = selectedOption.value;
+                const selectedVariantTitle = selectedOption.getAttribute('title');
+                const selectedSku = selectedOption.getAttribute('sku');
+
+
                 if (variantId && fitmentSuccess) {
                     form.action = `/cart/add?id=${variantId}`;
                     addToCartButton.style.display = 'block';
@@ -1577,6 +1701,12 @@
                 } else {
                     form.action = '/cart/add';
                     addToCartButton.disabled = true;
+                }
+
+                if (isDeliveryCountdownEnabled && !productTypeSelect) {
+                  receivedDataVariantTitle(selectedVariantTitle);
+                  receivedDataVariantSku(selectedSku);
+                  getCountdownAndGeoValues();
                 }
               });
             }
@@ -1594,15 +1724,45 @@
                       addToCartButton.disabled = true;
                   }
                 } else if (addToCartButtonForUnpaintedItems) {
-                  const variantId = productSelect;
-                  if (variantId && fitmentSuccess) {
-                      form.action = `/cart/add?id=${variantId}`;
-                      addToCartButtonForUnpaintedItems.style.display = 'block';
-                      addToCartButtonForUnpaintedItems.disabled = false;
+                  let variantId;
+                  let noQualityOptions = false;
+                  // If there is a product select, then that means there is a quality option
+                  if(productSelect) {
+                    variantId = productSelect;
+                  } else {
+                    variantId = '{{ product.id }}';
+                    window.selectedVariantId = variantId;
+                  }
+
+                  // If there isn't a product type select, then there are no quality options
+                  if(!productTypeSelect) {
+                    noQualityOptions = true;
+                  }
+                  
+                  if (productSelect && fitmentSuccess) {
+                    const oemVinContainer = document.querySelector('.oem-vin-container');
+                    addToCartButtonForUnpaintedItems.style.display = 'block';
+
+
+                      // For unpainted items that have different quality selections, ensure that the add to cart button is disabled as soon
+                      // as a quality is selected that is not oem
+                      if(productSelect !== "oem") {
+                        console.log('wool she is disabled');
+                        addToCartButtonForUnpaintedItems.disabled = false;
+                      }
+                      if(previousQualitySelectUnpainted !== '' && productSelect === "oem" && previousQualitySelectUnpainted !== productSelect) {
+                        addToCartButtonForUnpaintedItems.disabled = true;
+                      }
+                  } else if(noQualityOptions) { 
+
+                    addToCartButtonForUnpaintedItems.style.display = 'block';
+                    addToCartButtonForUnpaintedItems.disabled = false;
                   } else {
                       form.action = '/cart/add';
                       addToCartButtonForUnpaintedItems.disabled = true;
                   }
+
+                  previousQualitySelectUnpainted = productSelect;
                 } else {
                     form.action = '/cart/add';
                 }
