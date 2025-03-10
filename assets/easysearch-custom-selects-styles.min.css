@@ -301,9 +301,10 @@
     display: block;
     position: initial;
 }
-/* .easysearch-slides-block>div>div {
+.easysearch-slides-block>div>div {
+    margin-top: 0!important;
     padding: 0 20px;
-} */
+}
 .easysearch-slides-block>div>div>span {
     padding: 13px 0 0;
     float: none;
@@ -726,7 +727,7 @@
   .easysearch-fitment-widget .easysearch-widget .easysearch-actions-holder {
     width: 100%;
   }
-}  
+}
 @media only screen and (max-width: 400px) {
   .easysearch-vertical-mode .easysearch-actions-holder {
       text-align: center !important;
