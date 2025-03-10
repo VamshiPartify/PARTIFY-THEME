@@ -1,7 +1,7 @@
 {% comment %} {% include 'shogun-content-handler' %} {% endcomment %}
 <!doctype html>
 <html class="no-js no-touch" lang="{{ request.locale.iso_code }}">
-<script>
+{% comment %} <script>
 window['_fs_host'] = 'fullstory.com';
 window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
 window['_fs_org'] = 'o-21W8N1-na1';
@@ -22,16 +22,16 @@ name:b,properties:d},j)},g.anonymize=function(){r(!1)},g.shutdown=function(){h("
 g.log=function(b,d){h("log",{level:b,msg:d})},g.consent=function(b){h("setIdentity",{consent:!arguments.length||b})}}(),s="fetch",
 f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){return g._w[s].apply(this,arguments)}),g._v="2.0.0")
 }(window,document,window._fs_namespace,"script",window._fs_script);
-</script>
+</script> {% endcomment %}
   <head>
     <meta name="format-detection" content="telephone=no">
 
-    <script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=59f380be"></script>
+    {% comment %} <script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=59f380be"></script> {% endcomment %}
     <!-- Start of Shoplift scripts -->
-    {% render 'shoplift' %}
+    {% comment %} {% render 'shoplift' %} {% endcomment %}
     <!-- End of Shoplift scripts -->
 
-    {% render 'visually_io_sdk' %}
+    {% comment %} {% render 'visually_io_sdk' %} {% endcomment %}
 
     <script>
       window.Shopify = window.Shopify || {theme: {id: {{ theme.id }}, role: '{{ theme.role }}' } };
@@ -42,8 +42,9 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
       };
     </script>
     <script src="https://cdn.intelligems.io/02ea28a367f5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+    <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}" defer></script>
 
     <style>
       #ReturnItemProposition-module_additionalCosts{
@@ -740,7 +741,7 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     </script>
 
     {% unless settings.reduce_animations %}
-      {{ 'ripple.css' | asset_url | stylesheet_tag }}
+      <link rel="preload" href="{{ 'ripple.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     {% endunless %}
 
     <script

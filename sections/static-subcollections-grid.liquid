@@ -20,9 +20,9 @@
   data-section-id="{{ section.id }}"
   data-section-type="static-subcollections-grid"
 >
-  {% if section.settings.show_breadcrumbs %}
+  {% comment %} {% if section.settings.show_breadcrumbs %}
     {% render 'breadcrumbs' %}
-  {% endif %}
+  {% endif %} {% endcomment %}
 
   {% 
     render 'subcollections-banner', 

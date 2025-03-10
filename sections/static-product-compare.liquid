@@ -10,7 +10,7 @@
     "filter_groups": {{ section.settings.filter_groups | json }},
     "filter_count": {{ 'product_grid.filters.title_count' | t: count: '** count **' | json }},
     "filter_count_zero": {{ 'product_grid.filters.title_count' | t: count: 0 | json }},
-    "breadcrumb": {{ 'product_compare.breadcrumb' | t: location: '** location **' | json }},
+    {% comment %} "breadcrumb": {{ 'product_compare.breadcrumb' | t: location: '** location **' | json }}, {% endcomment %}
     "context": {
       "see_more": {{ 'general.general.see_more' | t | json }},
       "see_less": {{ 'general.general.see_less' | t | json }}
@@ -18,7 +18,7 @@
   }
 </script>
 
-<nav
+{% comment %} <nav
   class="breadcrumbs-container"
   aria-label="{{ 'general.accessibility.nav_breadcrumbs' | t }}"
 >
@@ -28,7 +28,7 @@
     </span>
     <span data-compare-breadcrumb-text>{{ 'product_compare.breadcrumb_generic' | t }}</span>
   </a>
-</nav>
+</nav> {% endcomment %}
 
 {% assign translated_block_types = 'description,vendor,rating,availability' | split: ','%}
 
