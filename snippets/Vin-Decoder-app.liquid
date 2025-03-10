@@ -75,12 +75,13 @@
             try {
               const response = await fetch('https://api.ipify.org?format=json');
               const data = await response.json();
-              return data.ip;
+              return data.ip; // Returns the client's public IP
             } catch (error) {
               console.error("Error fetching IP address:", error);
               return null;
             }
-        };
+          };
+
 
           {% comment %} Getting the product variants with color names for subarus and other complicated ChromeData searches {% endcomment %}
           const troublesomeMakesColors = {};

@@ -33,17 +33,6 @@
           "disabled": true,
           "settings": {}
         },
-        "affirm_pay_over_time_messaging_product_block_ytR9C3": {
-          "type": "shopify://apps/affirm-pay-over-time-messaging/blocks/product-block/6dce54be-130d-4d13-9636-1e8f611b3071",
-          "settings": {
-            "logo_align": "left",
-            "font_size": 16,
-            "logo_color": "blue",
-            "logo_type": "logo",
-            "public_api_key": "",
-            "price_selector": ""
-          }
-        },
         "custom_liquid_9kgHLn": {
           "type": "custom-liquid",
           "settings": {
@@ -63,13 +52,13 @@
             "custom_liquid": "{%- if product.metafields.custom.product_fitment!= blank -%}Model Fitment: <b style=\"color:#00000\" line-height:3em;>{{product.metafields.custom.product_fitment}}</b>{% endif %}"
           }
         },
-        // "61112cbc-8780-4d01-873f-9aa747212ed9": {
-        //   "type": "custom-liquid",
-        //   "disabled": false,
-        //   "settings": {
-        //     "custom_liquid": "{% render 'delivery-countdown' %}"
-        //   }
-        // },
+       // "61112cbc-8780-4d01-873f-9aa747212ed9": {
+       // "type": "custom-liquid",
+       // "disabled": true,
+       // "settings": {
+       //   "custom_liquid": "{% render 'delivery-countdown' %}"
+       // }
+       //},
         "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6": {
           "type": "custom-liquid",
           "disabled": true,
@@ -85,12 +74,15 @@
             "show_countdown": true,
             "show_location": true,
             "show_shipping_policy": false,
+            "font_size": 16,
+            "text_align": "left",
+            "icon": "",
+            "date_format": "long",
+            "countdown_time_format": "long",
             "text_color": "#121212",
             "background_color": "",
             "countdown_color": "#32741e",
-            "icon": "",
             "offer_text": "<strong>FREE</strong> shipping",
-            "date_format": "long",
             "delivery_estimate_message": "Ships by",
             "countdown_message": "Order within",
             "deliver_to_message": "Deliver to"
@@ -157,10 +149,22 @@
             "custom_liquid": "<b>Find My Paint Code</b>"
           }
         },
-        "e663a24f-1006-459a-8a37-8f77bfe52850": {
-          "type": "shopify://apps/infinite-options/blocks/app-block/7e73b6f9-82b0-45f5-9b9b-04f446ba1a9b",
-          "disabled": true,
-          "settings": {}
+        "affirm_pay_over_time_messaging_product_block_ytR9C3": {
+          "type": "shopify://apps/affirm-pay-over-time-messaging/blocks/product-block/6dce54be-130d-4d13-9636-1e8f611b3071",
+          "settings": {
+            "logo_align": "left",
+            "font_size": 16,
+            "logo_color": "blue",
+            "logo_type": "logo",
+            "public_api_key": "",
+            "price_selector": ""
+          }
+        },
+        "custom_liquid_FGDLdL": {
+          "type": "custom-liquid",
+          "settings": {
+            "custom_liquid": "{% render 'Product Video Render' %}"
+          }
         },
         "custom_liquid_XyjxVd": {
           "type": "custom-liquid",
@@ -256,11 +260,10 @@
         "b0e438c8-4795-49ce-80cb-6a21e1798e46",
         "custom_liquid_JeCXVF",
         "price",
-        "affirm_pay_over_time_messaging_product_block_ytR9C3",
         "custom_liquid_9kgHLn",
         "custom_liquid_W7THLx",
         "5006f5e7-554d-4cc1-a089-51bc9c37611e",
-        // "61112cbc-8780-4d01-873f-9aa747212ed9",
+       // "61112cbc-8780-4d01-873f-9aa747212ed9",
         "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6",
         "arrivesby_delivery_estimate_GtVWkc",
         "arrivesby_delivery_time_CtCA7H",
@@ -270,7 +273,8 @@
         "custom_liquid_tBB8WB",
         "custom_liquid_EKKgEh",
         "custom_liquid_7ik3my",
-        "e663a24f-1006-459a-8a37-8f77bfe52850",
+        "affirm_pay_over_time_messaging_product_block_ytR9C3",
+        "custom_liquid_FGDLdL",
         "custom_liquid_XyjxVd",
         "custom_liquid_qMFNLp",
         "custom_liquid_cnnecd",

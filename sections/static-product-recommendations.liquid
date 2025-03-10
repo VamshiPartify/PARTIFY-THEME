@@ -1,5 +1,125 @@
+<style>
+/* Product Recommendations Section */
+.product-recommendations--container {
+  padding: 20px;
+}
+
+/* Title of the Recommendations */
+.product-recommendations--title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Product Grid Container */
+/* Product Grid Container */
+.product-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  justify-content: center; /* Center items horizontally */
+  max-width: 1200px; /* Adjust this to fit your layout */
+}
+
+/* Individual Product Item */
+.product-grid-item {
+  background-color: #fff;
+  padding: 0px 15px 0px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align:center;
+  margin-bottom: 5px !important;
+}
+
+.product-grid-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Image Styling */
+.product-grid-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 1px;
+}
+
+/* Links and Text Styling */
+.product-grid-item a,
+.product-grid-item p,
+.product-section--content .product-row a {
+  text-decoration: none !important;
+  color: inherit;
+  margin: 8px 0 8px 0 !important;
+  
+}
+
+/* Price Styling */
+.product-grid-item p:last-of-type {
+  font-size: 14px;
+  color: #1d1d1d;
+  text-align: center;
+}
+
+/* Product Image */
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+
+
+/* Recommended Price */
+.recommended-price{
+  font-size: 24px !important;
+  text-align: left !important;
+  color: #ea4335 !important;
+  font-weight: 600 !important;
+}
+
+/* Recommended Product Title */
+.rec-product-title {
+  font-size: 18px !important;
+  font-weight: 600;
+  text-align: left !important;
+}
+
+/* Product Fitment */
+.product-fitment {
+  font-size: 14px;
+  color: #666;
+  text-wrap: pretty;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .product-row {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-row {
+    grid-template-columns: 2fr;
+  }
+  .product-recommendations--title {
+    font-size: 20px;
+  }
+}
+  .yotpo.bottomLine {
+  margin-bottom: 0px !important;
+    text-align: center;
+}
+</style>
+
 {% if section.settings.show_product_recommendations %}
-  {% assign product_limit = 5 %}
+  {% assign product_limit = 4 %}
+  {% assign current_product = product %}
 
   <script
     type="application/json"
@@ -7,41 +127,285 @@
     data-section-id="{{ section.id }}"
     data-section-data
     >
-{
-  "settings": {
-    "limit": {{ product_limit }}
-  },
+  {
+    "settings": {
+      "limit": {{ product_limit }}
+    },
     "productId": {{ product.id | json }},
     "sectionId": {{ section.id | json }}
-}
+  }
   </script>
 
   <section
     class="product-section--container product-row--container product-recommendations--container"
     data-html
     data-product-recommendations
-    >
-    {% if recommendations.products_count > 0 %}
-      <h2 class="product-section--title product-recommendations--title">
-        {{ section.settings.product_recommendations_heading }}
-      </h2>
-
-    <ul
-      class="product-section--content product-row"
-      data-product-row
-      >
-      {% for product in recommendations.products limit: product_limit %}
-        {%
-          render 'product-grid-item',
-          product: product
-        %}
-      {% endfor %}
+>
+    <ul id="dynamic-recommendations" class="product-section--content product-row">
+        <!-- JavaScript dynamically injects recommendations here -->
     </ul>
-    {% endif %}
-  </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var searchTermRaw = localStorage.getItem("searchTerms") || "[]";
+
+        try {
+          var searchTermsArray = JSON.parse(searchTermRaw);
+          var searchTerm = Array.isArray(searchTermsArray) && searchTermsArray.length > 0 
+            ? searchTermsArray[0] 
+            : "";
+        } catch (e) {
+          var searchTerm = "";
+        }
+
+        searchTerm = searchTerm.replace(/[\[\]"]+/g, "").trim();
+
+        if (searchTerm) {
+          console.log("Fetching recommendations for:", searchTerm);
+          var formattedSearchTerm = searchTerm.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+          var collectionUrl = '/collections/' + formattedSearchTerm + '/products.json';
+
+          fetch(collectionUrl)
+            .then(response => {
+              if (!response.ok) {
+                console.log("Collection fetch failed");
+                return null;
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (!data || !data.products || data.products.length === 0) {
+                console.log("No products found in collection, falling back to Shopify recommendations");
+                loadShopifyRecommendations();
+                return;
+              }
+
+              var currentProductId = {{ product.id }};
+              var productList = data.products.filter(product => product.id !== currentProductId).slice(0, {{ product_limit }});
+              if (productList.length === 0) {
+                console.log("No suitable recommendations in collection, falling back to Shopify recommendations");
+                loadShopifyRecommendations();
+                return;
+              }
+
+              var recommendationsContainer = document.getElementById("dynamic-recommendations");
+              if (recommendationsContainer && productList.length > 0) {
+                var heading = document.querySelector(".product-recommendations--title");
+
+                if (!heading) {
+                  heading = document.createElement("h2");
+                  heading.classList.add("product-section--title", "product-recommendations--title");
+                  heading.textContent = "More Parts For The " + searchTerm.replace(/-/g, " ");
+                  var productfits = "Fits The " + searchTerm.replace(/-/g, " ");
+                  recommendationsContainer.insertAdjacentElement("beforebegin", heading);
+                } else {
+                  heading.textContent = "More Parts For The " + searchTerm.replace(/-/g, " ");
+                  var productfits = "Fits The " + searchTerm.replace(/-/g, " ");
+                }
+                console.log("Title updated:", heading.textContent);
+              }
+
+              productList.forEach(product => {
+                var shortSearchTerm = searchTerm.substring(0, 4); 
+                var productTitle = searchTerm ? `${shortSearchTerm} ${product.title}` : product.title;
+
+                var productHTML = `
+                  <li class="product-grid-item">
+                    <a href="{{ shop.url }}/products/${ product.handle }">
+                      <img src="${product.images[0].src}" alt="${productTitle}">
+                      <p class="recommended-price">${Shopify.formatMoney(product.variants[0].price)}</p>
+                      <p class="rec-product-title">${productTitle}</p>
+                      <p class="rec-fits">${productfits}</p>
+                    </a>
+                    
+                  </li>
+                `;
+                
+                recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
+                console.log("Added product:", product.title);
+              });
+
+              
+        });
+        } else {
+          loadShopifyRecommendations(); // Fallback to Shopify's own recommendations if no search term
+        }
+      });
+    
+
+async function loadShopifyRecommendations() {
+  console.log("Fetching best-selling products from collections with numeric prefixes.");
+
+  const collectionHandles = {{ product.collections | map: "handle" | json }};
+  const currentProductSku = {{ product.variants.first.sku | json }};
+  const skuPrefix = currentProductSku ? currentProductSku.substring(0, 9) : "";
+  const productLimit = {{ product_limit }};
+  const fetchLimit = productLimit * 3; // Fetch more products to account for filtering
+
+  if (!collectionHandles || collectionHandles.length === 0) {
+    console.log("No collections found for this product.");
+    fetchShopifyDefaultRecommendations();
+    return;
+  }
+
+  const numericCollections = collectionHandles.filter(handle => /^\d{4}/.test(handle));
+
+  if (numericCollections.length === 0) {
+    console.log("No matching collections found. Defaulting to Shopify recommendations.");
+    fetchShopifyDefaultRecommendations();
+    return;
+  }
+
+  const collectionHandle = numericCollections[0];
+
+  const storefrontQuery = `
+    query {
+      collection(handle: "${collectionHandle}") {
+        products(first: ${fetchLimit}) {
+          edges {
+            node {
+              id
+              title
+              handle
+              images(first: 1) {
+                edges {
+                  node {
+                    src
+                  }
+                }
+              }
+              variants(first: 1) {
+                edges {
+                  node {
+                    sku
+                    price {
+                      amount
+                    }
+                  }
+                }
+              }
+              metafield(namespace: "custom", key: "product_fitment") {
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetch("/api/2023-10/graphql.json", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": "7c001a82d9230747fd5895fcd9c0b721"
+      },
+      body: JSON.stringify({ query: storefrontQuery })
+    });
+
+    const result = await response.json();
+    console.log("Storefront API Response:", result);
+
+    let products = result?.data?.collection?.products?.edges || [];
+
+    if (!products.length) {
+      console.log("No best-selling products found. Defaulting to Shopify recommendations.");
+      fetchShopifyDefaultRecommendations();
+      return;
+    }
+
+    products = products.filter(({ node: product }) => {
+      const productSku = product.variants.edges[0]?.node?.sku || "";
+      return !productSku.startsWith(skuPrefix);
+    });
+
+    products = products.slice(0, productLimit);
+
+    const recommendationsContainer = document.getElementById("dynamic-recommendations");
+    recommendationsContainer.innerHTML = "";
+
+    if (products.length === 0) {
+      console.log("No valid products left after filtering. Defaulting to Shopify recommendations.");
+      fetchShopifyDefaultRecommendations();
+      return;
+    }
+
+    products.forEach(({ node: product }) => {
+      const fitment = product.metafield?.value;
+      const productHTML = `
+        <li class="product-grid-item">
+          <a href="{{ shop.url }}/products/${product.handle}" class="product-link">
+            <img src="${product.images.edges[0]?.node?.src || 'placeholder-image.jpg'}" 
+                 alt="${product.title}">
+            <p class="recommended-price">
+               $${product.variants.edges[0]?.node?.price.amount}
+            </p>
+          <div class="yotpo bottomLine" data-yotpo-product-id="${product.id.replace('gid://shopify/Product/', '')}">
+</div>
+            <p class="rec-product-title">${product.title}</p>
+            <p class="rec-fits">Fitment: ${fitment}</p>
+          </a>
+        
+
+
+        </li>
+      `;
+      console.log("Yotpo Product ID:", product.id.replace('gid://shopify/Product/', ''));
+
+      recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
+    });
+
+    // Ensure Yotpo re-renders the reviews
+   setTimeout(() => {
+  if (window.yotpo) {
+    console.log("Refreshing Yotpo after recommendations load...");
+    window.yotpo.refreshWidgets();
+  }
+}, 1500); // 1.5-second delay
+  } catch (error) {
+    console.error("Error fetching best-selling products:", error);
+    fetchShopifyDefaultRecommendations();
+  }
+}
+
+
+
+
+function fetchShopifyDefaultRecommendations() {
+  console.log("Fetching default Shopify recommendations...");
+  fetch('/recommendations/products.json?limit={{ product_limit }}')
+    .then(response => response.json())
+    .then(data => {
+      if (!data || !data.products) return;
+      var recommendationsContainer = document.getElementById("dynamic-recommendations");
+      data.products.forEach(product => {
+
+        var productHTML = `
+          <li class="product-grid-item">
+             <a href="{{ shop.url }}/products/${ product.handle }" class="product-link">
+              <img src="${product.images[0].src}" alt="${product.title}" class="product-image">
+              <p class="product-price">${Shopify.formatMoney(product.variants[0].price)}</p>
+              <p class="product-title">${product.title}</p>
+              <p class="product-fitment">{{product.metafields.custom.product_fitment}}</p>
+            </a>
+          </li>
+        `;
+        recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
+        console.log("Added Shopify recommendation:", product.title);
+      });
+    })
+    .catch(error => console.log("Failed to fetch Shopify recommendations:", error));
+}
+
+    </script>
+
+ 
 
   {% render 'quick-shop' %}
 {% endif %}
+
+
 
 {% schema %}
 {
