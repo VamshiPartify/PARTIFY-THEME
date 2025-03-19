@@ -84,9 +84,9 @@
     "continue_shopping_url": "shopify://collections/all",
     "continue_url_cart": false,
     "continue_url_404": true,
-    "makes_list": "nissan, infiniti, mazda, kia, chrysler, jeep, fiat, dodge, ram, hyundai, genesis, subaru, gmc, cadillac, buick, chevrolet, toyota, lexus, scion, lincoln, ford",
+    "makes_list": "nissan, infiniti, mazda, kia, chrysler, jeep, fiat, dodge, ram, hyundai, genesis, subaru, gmc, cadillac, buick, chevrolet",
     "excluded_makes_list": "",
-    "bumperdotcom_makes_list": "",
+    "bumperdotcom_makes_list": "toyota, lexus, scion, lincoln, ford",
     "troublesome_chromedata_makes_list": "subaru, gmc, cadillac, buick, chevrolet",
     "product_show_sku": false,
     "product_social_sharing": false,
@@ -207,6 +207,11 @@
       "8764476057892802672": {
         "type": "shopify://apps/stoq/blocks/main/4bb73be2-b7c2-4870-949f-c528145452a3",
         "disabled": true,
+        "settings": {}
+      },
+      "3847134708050210359": {
+        "type": "shopify://apps/transcy/blocks/switcher_embed_block/bce4f1c0-c18c-43b0-b0b2-a1aefaa44573",
+        "disabled": false,
         "settings": {}
       }
     }

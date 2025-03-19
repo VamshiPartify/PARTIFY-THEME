@@ -1350,7 +1350,7 @@
 
         
                 {% comment %} if(fitmentHeader.offsetWidth) { {% endcomment %}
-                    if (easyFitmentFail && failChecker !== 0) {
+                    if (easyFitmentFail && failChecker !== 0 && fitmentHeader.innerHTML.includes("DOES NOT FIT your")) {
                       {% comment %} if (easyFitmentFail && fitmentLink && failChecker !== 0) { {% endcomment %}
 
                         fitmentFailButton.style.display = 'block';
@@ -1376,7 +1376,7 @@
                           }
                         }
                     {% comment %} } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){ {% endcomment %}
-                    } else if (easyFitmentSuccess && failChecker === 0 && fitmentObject.value.length){
+                    } else if (easyFitmentSuccess && failChecker === 0 && fitmentHeader.innerHTML.includes("FITS your")){
                         fitmentFailButton.style.display = 'none';
                         
                         if(vinTextBoxOEM) {
@@ -1753,7 +1753,7 @@
                       if(previousQualitySelectUnpainted !== '' && productSelect === "oem" && previousQualitySelectUnpainted !== productSelect) {
                         addToCartButtonForUnpaintedItems.disabled = true;
                       }
-                  } else if(noQualityOptions) { 
+                  } else if(noQualityOptions && fitmentSuccess) { 
 
                     addToCartButtonForUnpaintedItems.style.display = 'block';
                     addToCartButtonForUnpaintedItems.disabled = false;
@@ -2043,7 +2043,17 @@
       
             if(matchOption) {
               variantSelector.value = matchOption.value;
+              const variantPrice = matchOption.getAttribute('data-price');
+
               window.handleVariantChange();
+      
+              // Format the price (assuming it's in cents, divide by 100 for dollars)
+              var formattedPrice = (variantPrice / 100).toFixed(2);
+      
+        
+              // Display the price
+              document.getElementById('price-display').innerText = '$' + formattedPrice;
+              document.getElementById('price-display-small-screen').innerText = '$' + formattedPrice;
             }
             popup.style.display = "none";
           })

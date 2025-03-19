@@ -11,8 +11,8 @@
   "404": {
     "general": {
       "title": "Página no encontrada",
-      "text": "La página que estaba buscando no existe.",
-      "continue_shopping": "Seguir comprando"
+      "text": "La página que estabas buscando no existe.",
+      "continue_shopping": "Continuar comprando"
     }
   },
   "product": {
@@ -232,6 +232,13 @@
       "now": "Ahora",
       "price_per_unit_html": "{{ total_quantity }} | {{ unit_price }} / {{ unit_measure }}",
       "view_details": "Ver el producto"
+    },
+    "pxs-newsletter": {
+      "form": {
+        "placeholder": "Dirección de correo electrónico",
+        "submit": "Suscribir",
+        "success": "¡Gracias por suscribirte!"
+      }
     }
   },
   "recipient": {
@@ -249,16 +256,16 @@
   },
   "age_gate": {
     "form": {
-      "confirm": "Confirmar la edad y proceder a {{ shop }}",
-      "error": "El acceso al taller se limita a la edad de los adultos {{ age }} y mayores.",
+      "confirm": "Confirmar edad y proceder {{ shop }}",
+      "error": "El acceso a la tienda está limitado a adultos. {{ age }} y mayores.",
       "day": "Día",
       "month": "Mes",
       "year": "Año",
-      "january": "enero",
+      "january": "Enero",
       "february": "Febrero",
       "march": "Marzo",
       "april": "Abril",
-      "may": "Mayo",
+      "may": "Puede",
       "june": "Junio",
       "july": "Julio",
       "august": "Agosto",
@@ -283,61 +290,61 @@
   },
   "blog": {
     "general": {
-      "empty_blog": "Lo sentimos, no hay artículos publicados para este blog",
+      "empty_blog": "Lo siento, no hay artículos publicados para este blog.",
       "read_more": "Leer ahora",
       "see_more": "Ver más"
     },
     "article": {
       "filed_in": "Archivado en:",
       "previous_article": "Artículo anterior",
-      "next_article": "Artículo siguiente"
+      "next_article": "Siguiente artículo"
     },
     "comments": {
-      "title": "Comentarios",
+      "title": "Comentario",
       "name": "Su nombre",
       "email": "Correo electrónico",
       "message": "Mensaje",
       "submit": "Publicar comentario",
       "moderated": "Los comentarios deben ser aprobados antes de aparecer",
-      "success": "¡Muy bien! Su comentario se publicó correctamente.",
-      "success_moderated": "¡Muy bien! Recibimos su comentario y será revisado en breve.",
+      "success": "¡Lindo! Su comentario ha sido publicado con éxito.",
+      "success_moderated": "¡Lindo! Hemos recibido su comentario y se revisará en breve.",
       "author_html": "{{ author }} - {{ date }}",
-      "leave_comment": "Dejar un comentario",
+      "leave_comment": "Deja un comentario",
       "required_fields": "* Campos requeridos"
     }
   },
   "cart": {
     "general": {
-      "your_cart": "Su carrito",
-      "continue_shopping": "Seguir comprando",
+      "your_cart": "Tu carrito",
+      "continue_shopping": "Continuar comprando",
       "price": "Precio",
-      "quantity": "Cant.",
-      "checkout": "Pagar",
+      "quantity": "Cantidad",
+      "checkout": "Verificar",
       "update": "Actualizar carrito",
-      "subtotal": "Subtotal",
+      "subtotal": "Total parcial",
       "enter_order_note": "Ingrese una nota de regalo o instrucciones especiales de entrega a continuación:",
       "special_instructions": "Instrucciones especiales",
-      "tax_and_shipping": "Los impuestos y gastos de envío se calculan en la pantalla de pagos",
-      "taxes_and_shipping_policy_at_checkout_html": "Los impuestos y <a href=\"{{ link }}\">gastos de envío</a> se calculan en la pantalla de pagos",
-      "taxes_included_but_shipping_at_checkout": "En la pantalla de pagos se incluye el impuesto y se calculan los gastos de envío",
-      "taxes_included_and_shipping_policy_html": "Impuesto incluido. Los <a href=\"{{ link }}\">gastos de envío</a> se calculan en la pantalla de pagos.",
+      "tax_and_shipping": "Impuestos y envíos calculados al finalizar",
+      "taxes_and_shipping_policy_at_checkout_html": "Impuestos y <a href=\"{{ link }}\">envío</a> calculado al finalizar la compra",
+      "taxes_included_but_shipping_at_checkout": "Impuestos incluidos y envíos calculados al finalizar",
+      "taxes_included_and_shipping_policy_html": "Impuesto incluido. <a href=\"{{ link }}\">Envío</a> Calculado al finalizar la compra.",
       "total_line_price": "Precio de línea total",
-      "cart_empty": "Su carrito está vacío"
+      "cart_empty": "Tu carro esta vacío"
     },
     "shipping": {
       "calculate_shipping": "Calcular el envío",
-      "hide_shipping_calculator": "Ocultar la calculadora de envíos",
+      "hide_shipping_calculator": "Ocultar calculadora de envío",
       "country": "País",
       "province": "Provincia",
-      "zip": "Código postal",
-      "calculating": "Calculando",
-      "multiple_rates": "Encontramos {{ number_of_rates }} tarifas de envío disponibles para {{ address }}, a partir de {{ rate }}.",
+      "zip": "Código postal / postal",
+      "calculating": "Calculador",
+      "multiple_rates": "Encontramos {{ number_of_rates }} Tarifas de envío disponibles para {{ address }}, a partir de {{ rate }}.",
       "one_rate": "Encontramos una tarifa de envío disponible para {{ address }}.",
-      "no_rates": "Lo sentimos, no hacemos envíos a este destino.",
+      "no_rates": "Lo siento, no enviamos a este destino.",
       "rate_value": "{{ rate_title }} en {{ rate }}",
-      "no_shipping_required": "Su carrito no necesita envío.",
-      "shipment_too_heavy": "Lo sentimos, pero este envío es demasiado pesado para enviarse.",
-      "error_general": "Lo sentimos, no podemos calcular su envío en este momento."
+      "no_shipping_required": "Su carrito no requiere envío.",
+      "shipment_too_heavy": "Lo siento, pero este envío es demasiado pesado para enviar.",
+      "error_general": "Lo siento, no podemos calcular su envío en este momento."
     }
   },
   "contact": {
@@ -347,7 +354,7 @@
       "phone": "Número de teléfono",
       "message": "Mensaje",
       "send": "Enviar",
-      "post_success": "Gracias por contactarnos. Le responderemos lo antes posible."
+      "post_success": "Gracias por contactarnos. Nos pondremos en contacto con usted lo antes posible."
     }
   },
   "customers": {
@@ -524,10 +531,10 @@
   },
   "add_to_cart_banner": {
     "general": {
-      "product_added": "Añadido a su carrito:",
-      "sub_total": "Subtotal del carrito",
+      "product_added": "Agregado a su carrito:",
+      "sub_total": "Carro subtotal",
       "view_cart_html": "Ver carrito ({{ count }})",
-      "checkout": "Proceso de pago"
+      "checkout": "Verificar"
     }
   },
   "search": {
@@ -565,7 +572,8 @@
       "posts_title": "Publicaciones",
       "pages_and_posts_title": "Páginas y Publicaciones",
       "view_all_results": "Busque \"{{ terms }}\"",
-      "no_results": "No se encontraron resultados coincidentes."
+      "no_results": "No se encontraron resultados coincidentes.",
+      "products_title": "Productos"
     }
   },
   "onboarding": {
@@ -667,6 +675,96 @@
       "signup_form_email_label": "Email",
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
+    }
+  },
+  "customer_accounts": {
+    "B2B": {
+      "account_information": {
+        "company_card_name_label": "Nombre de empresa",
+        "company_card_section_accessibility_label": "Compañía"
+      },
+      "addresses": {
+        "add_billing_address_button": "Agregar dirección de facturación",
+        "add_billing_address_section_accessibility_label": "Agregar dirección de facturación",
+        "add_shipping_address_button": "Agregar dirección de envío",
+        "add_shipping_address_section_accessibility_label": "Agregar dirección de envío",
+        "billing_address_card_title": "Dirección de Envio",
+        "cancel_adding_billing_address_accessibility_label": "Cancelar agregando la dirección de facturación",
+        "cancel_adding_shipping_address_accessibility_label": "Cancelar agregando dirección de envío",
+        "save_new_billing_address_accessibility_label": "Guardar dirección de facturación",
+        "save_new_shipping_address_accessibility_label": "Guardar dirección de envío",
+        "shipping_address_card_title": "Dirección de envío"
+      },
+      "draft_order_details": {
+        "draft_order_subtitle": "Confirmado {{date}} del pedido {{draftOrderName}}",
+        "loading": "Detalles del orden de carga",
+        "loading_finished_accessibility_message": "Los detalles del pedido se han cargado",
+        "order_timeline": {
+          "expand_events_accessibility_label": "Mostrar el borrador de detalles del pedido",
+          "expand_events_label": "Mostrar detalles",
+          "hide_events_accessibility_label": "Ocultar detalles del pedido",
+          "hide_events_label": "Ocultar detalles"
+        },
+        "payment_status": {
+          "canceled": {
+            "description": "No te acusaron.",
+            "title": "Pago cancelado"
+          },
+          "draft": {
+            "deposit": {
+              "due_later": "{{depositAmount}} Se deberá pagar cuando se confirme su pedido. El saldo se abonará en {{translatedName}} términos.",
+              "due_on_date": "{{depositAmount}} Se deberá pagar cuando se confirme su pedido. El saldo deberá pagarse el {{dueDate}}.",
+              "due_on_fulfillment": "{{depositAmount}} El pago se realizará al confirmar su pedido. El saldo restante se abonará al completarse el pedido.",
+              "due_on_receipt": "{{depositAmount}} Se deberá abonar al confirmar su pedido. El saldo restante se abonará posteriormente."
+            },
+            "description": "Los detalles del pago se deciden cuando se confirma el pedido.",
+            "in_review": {
+              "description": "Los detalles del pago se deciden cuando se confirma el pedido.",
+              "title": "Pago aún no vencido"
+            },
+            "submitted": {
+              "deposit": {
+                "due_later": "El equilibrio está en juego {{translatedName}} términos y vence el {{dueDate}}.",
+                "due_on_date": "El saldo debe pagarse el {{dueDate}}.",
+                "due_on_fulfillment": "El saldo se debe una vez que se cumplen todos los elementos en este orden.",
+                "due_on_receipt": "Recibirá una factura para el saldo restante.",
+                "title": "El pago se debe"
+              },
+              "description": "Envíe el pago para confirmar esta orden.",
+              "title": "Pagar para confirmar"
+            },
+            "title": "Pago aún no vencido"
+          },
+          "paid": {
+            "description": "Su pedido está completamente pagado.",
+            "title": "Pagado",
+            "title_with_date": "Pagado {{date}}"
+          },
+          "pay_now": "Pagar ahora",
+          "pay_now_accessibility_label": "Pagar ahora por el pedido {{orderName}}",
+          "pending": {
+            "banner_due": {
+              "one": "Su pago vence en {{count}} día",
+              "other": "Su pago vence en {{count}} días"
+            },
+            "banner_due_today": "Su pago vence hoy",
+            "banner_overdue": {
+              "one": "Su pago es {{count}} día de retraso",
+              "other": "Su pago es {{count}} días de retraso"
+            },
+            "description_authorized": "Su método de pago se cobrará en la fecha de vencimiento, o puede pagar ahora.",
+            "description_due_on_fulfillment": "El pago se debe una vez que se cumplen todos los artículos en este pedido.",
+            "description_due_on_fulfillment_partially_paid": "Esta orden se pagó parcialmente. Tienes un equilibrio restante. El pago se debe una vez que se cumplen todos los artículos en este pedido.",
+            "description_due_on_receipt": "Recibirá una factura cuando se debe el pago.",
+            "description_due_on_receipt_partially_paid": "Esta orden se pagó parcialmente. Tienes un equilibrio restante. Recibirá una factura cuando se debe el pago.",
+            "description_overdue": "Su pago llega tarde.",
+            "description_partially_paid": "Esta orden se pagó parcialmente. Tienes un equilibrio restante.",
+            "description_waiting_for_manual_payment": "Esta orden tiene un pago pendiente. El saldo se actualizará cuando se reciba el pago.",
+            "title": "Pago adeudado",
+            "title_due_on_fulfillment": "Pago adeudado en cumplimiento"
+          }
+        }
+      }
     }
   }
 }
