@@ -69,6 +69,7 @@
         let isExcludedValue = '{{ is_excluded_make_found }}';
         let isBumperdotcom = '{{ is_bumperdotcom_make_found }}';
         let amountOfVINPostMessages = 0;
+        let boolMatchByVIN = false;
         {% comment %} window.failedVinDecode = false; {% endcomment %}
 
         const getIpAddress = async () => {
@@ -170,6 +171,9 @@
                             // Trigger the change event programmatically
                             variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
                         } else {
+                            boolMatchByVIN = true;
+
+                            resortToGetPaintCodeByVin();
                             console.warn(`No matching option found for paint code: ${paintCode}`);
                         }
                     } else {
@@ -178,123 +182,133 @@
                 }
 
                 if (event.data.type === "getPaintByVIN") {
-                    if(amountOfVINPostMessages > 0) {
-                        return;
-                    }
-                    const vin = event.data.vin;
-                    const boolMatchByVIN = event.data.matchByVIN;
-                    window.usedVinDecoder = true;
-
-                    let hiddenDiv;
-                    if(document.querySelector('.hidden-vin-option')) {
-                        hiddenDiv = document.querySelector('.hidden-vin-option');
-                    }
-                    if(document.querySelector('.hidden-vin-option-single-quality')) {
-                        hiddenDiv = document.querySelector('.hidden-vin-option-single-quality');
-                    }
-                    // Only display the option to select Match Paint by VIN in certain circumstances
-                    if(boolMatchByVIN) {
-                        if (hiddenDiv) {
-                            // I am here!! add the if for the div
-                            const div = document.querySelector('.hidden-vin-option');
-
-                            if (hiddenDiv) {
-                                const select = document.getElementById("variant-selector"); 
-                                if (!select) {
-                                    console.error("Error: Select element not found.");
-                                    return;
-                                }
-
-                                // Create a new option element
-                                const option = document.createElement("option");
-                                option.value = hiddenDiv.dataset.value;
-                                option.textContent = hiddenDiv.textContent;
-                                option.setAttribute("data-price", hiddenDiv.dataset.price || "");
-                                option.setAttribute("data-color", hiddenDiv.dataset.color || "");
-                                option.setAttribute("data-variant-title", hiddenDiv.dataset.variantTitle || "");
-                                option.setAttribute("data-product-title", hiddenDiv.dataset.productTitle || "");
-
-
-                                option.classList.add("hidden-vin-option");
-                                hiddenDiv.style.display = "block";
-
-                                // Add the option back to the select
-                                select.appendChild(option);
-
-                                // Remove the div
-                                hiddenDiv.remove();
-                            }
-                        }
-                    }
-
-                    const variantSelector = document.getElementById('variant-selector');
-                    if (variantSelector) {
-                        const options = Array.from(variantSelector.options);
-                        const vinInput = document.querySelector('#vin-textbox');
-                        const vinTextboxForOem = document.getElementById('vin-textbox-for-oem');
-                        const oemVinContainer = document.querySelector('.oem-vin-container');
-
-                        
-                        if (oemVinContainer && oemVinContainer.style.display === "block") {
-                            vinTextboxForOem.value = '';
-                            oemVinContainer.style.display = "none";
-                        }
-
-
-                        if (vinInput) {
-                            vinInput.value = vin;
-                          }
-
-                          options.find(option => {
-                              if(option.label.startsWith("Match Paint by VIN")) {
-
-                                const vinTextboxContainer = document.getElementById("vin-textbox-container");
-                                const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
-
-                                if (vinTextboxContainer) {
-                                    vinTextboxContainer.style.display = "block";
-                              
-                                    // Remove any existing message to avoid duplication
-                                    const existingMessage = vinTextboxContainer.querySelector('.vin-selected-message');
-                                    if (existingMessage) {
-                                      existingMessage.remove();
-                                    }
-                              
-                                    // Create a new message to indicate the selected VIN
-                                    const vinMessage = document.createElement('div');
-                                    vinMessage.className = 'vin-decoder-message';
-                                    vinMessage.style.display = 'block';
-                                    vinMessage.innerHTML = `
-                                    <strong style="color: #444;">The VIN</strong> 
-                                    <span style="color: #000; font-weight: 800;">${vin}</span> 
-                                    <span style="color: #444;">will be attached to this order and</span> 
-                                    <span style="color: #444; font-weight: bold;">matched with the correct paint code</span> 
-                                    <span style="color: #444;">for this item.</span>
-                                    `;
-
-                                    window.failedVinDecode = true;
-                              
-                                    // Append the message to the VIN textbox container
-                                    paintCodeWrapper.appendChild(vinMessage);
-                                }                                
-                                variantSelector.value = option.value;
-                                document.body.classList.remove('no-scroll-paint-swatch');
-                                hideOverlay();
-                                hideModal();
-                                showShopifyChat();
-
-                                variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
-
-                                return;
-                              }
-                          });
-                    } else {
-                        console.warn('Variant selector dropdown not found.');
-                    }
-                    amountOfVINPostMessages++;
-
+                    resortToGetPaintCodeByVin();
                 }
             }
         });
+
+        function resortToGetPaintCodeByVin() {
+            if(amountOfVINPostMessages > 0) {
+                return;
+            }
+
+            const vin = event.data.vin;
+
+
+            // If boolMatchByVIN is true, then it has already been set in the case that a paint code has been returned for the vin decoder but a matching
+            // option has not been found for it
+            if(boolMatchByVIN === false) {
+                boolMatchByVIN = event.data.matchByVIN;
+            }
+            window.usedVinDecoder = true;
+
+            let hiddenDiv;
+            if(document.querySelector('.hidden-vin-option')) {
+                hiddenDiv = document.querySelector('.hidden-vin-option');
+            }
+            if(document.querySelector('.hidden-vin-option-single-quality')) {
+                hiddenDiv = document.querySelector('.hidden-vin-option-single-quality');
+            }
+            // Only display the option to select Match Paint by VIN in certain circumstances
+            if(boolMatchByVIN) {
+                if (hiddenDiv) {
+                    // I am here!! add the if for the div
+                    const div = document.querySelector('.hidden-vin-option');
+
+                    if (hiddenDiv) {
+                        const select = document.getElementById("variant-selector"); 
+                        if (!select) {
+                            console.error("Error: Select element not found.");
+                            return;
+                        }
+
+                        // Create a new option element
+                        const option = document.createElement("option");
+                        option.value = hiddenDiv.dataset.value;
+                        option.textContent = hiddenDiv.textContent;
+                        option.setAttribute("data-price", hiddenDiv.dataset.price || "");
+                        option.setAttribute("data-color", hiddenDiv.dataset.color || "");
+                        option.setAttribute("data-variant-title", hiddenDiv.dataset.variantTitle || "");
+                        option.setAttribute("data-product-title", hiddenDiv.dataset.productTitle || "");
+
+
+                        option.classList.add("hidden-vin-option");
+                        hiddenDiv.style.display = "block";
+
+                        // Add the option back to the select
+                        select.appendChild(option);
+
+                        // Remove the div
+                        hiddenDiv.remove();
+                    }
+                }
+            }
+
+            const variantSelector = document.getElementById('variant-selector');
+            if (variantSelector) {
+                const options = Array.from(variantSelector.options);
+                const vinInput = document.querySelector('#vin-textbox');
+                const vinTextboxForOem = document.getElementById('vin-textbox-for-oem');
+                const oemVinContainer = document.querySelector('.oem-vin-container');
+
+                
+                if (oemVinContainer && oemVinContainer.style.display === "block") {
+                    vinTextboxForOem.value = '';
+                    oemVinContainer.style.display = "none";
+                }
+
+
+                if (vinInput) {
+                    vinInput.value = vin;
+                  }
+
+                  options.find(option => {
+                      if(option.label.startsWith("Match Paint by VIN")) {
+
+                        const vinTextboxContainer = document.getElementById("vin-textbox-container");
+                        const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
+
+                        if (vinTextboxContainer) {
+                            vinTextboxContainer.style.display = "block";
+                      
+                            // Remove any existing message to avoid duplication
+                            const existingMessage = vinTextboxContainer.querySelector('.vin-selected-message');
+                            if (existingMessage) {
+                              existingMessage.remove();
+                            }
+                      
+                            // Create a new message to indicate the selected VIN
+                            const vinMessage = document.createElement('div');
+                            vinMessage.className = 'vin-decoder-message';
+                            vinMessage.style.display = 'block';
+                            vinMessage.innerHTML = `
+                            <strong style="color: #444;">The VIN</strong> 
+                            <span style="color: #000; font-weight: 800;">${vin}</span> 
+                            <span style="color: #444;">will be attached to this order and</span> 
+                            <span style="color: #444; font-weight: bold;">matched with the correct paint code</span> 
+                            <span style="color: #444;">for this item.</span>
+                            `;
+
+                            window.failedVinDecode = true;
+                      
+                            // Append the message to the VIN textbox container
+                            paintCodeWrapper.appendChild(vinMessage);
+                        }                                
+                        variantSelector.value = option.value;
+                        document.body.classList.remove('no-scroll-paint-swatch');
+                        hideOverlay();
+                        hideModal();
+                        showShopifyChat();
+
+                        variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
+
+                        return;
+                      }
+                  });
+            } else {
+                console.warn('Variant selector dropdown not found.');
+            }
+            amountOfVINPostMessages++;
+        }
     });
 </script>
