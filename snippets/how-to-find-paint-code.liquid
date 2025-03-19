@@ -413,7 +413,18 @@
             <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
           </ol>
         </div>
+      {% else %}
+        {%- if product.variants[1].sku contains ".VIN" -%}
+          <div id="paint-code-instructions">
+            <h4>There are two main ways to get a paint code.</h4>
+            <ol>
+              <li>You can submit your VIN below and it will be attached to the order.  We will use it to determine the paint code on our end.</li>
+              <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
+            </ol>
+          </div>
+        {% endif %}
       {% endif %}
+      {%- if product.variants[1].sku contains ".VIN" -%}
       <div class="accordion-section" id="vin-decoder-accordion">
         <div class="vin-decoder-accordion-container">
           <button type="button" class="accordion-button">
@@ -428,6 +439,7 @@
           {% render 'Vin-Decoder-app' %}
         </div>
       </div>
+    {%- endif -%}
       <div class="accordion-section" id="paint-code-accordion">
         <div class="how-to-find-paintcode-accordion-container">
           <button type="button" class="accordion-button">
@@ -473,15 +485,17 @@
 
 
   //Autoscrolls to paintcode section
-  document.getElementById('instructions-link').addEventListener('click', function(event) {
-    event.preventDefault();
-        let paintCodeSection = document.getElementById('paint-code-accordion');
-    
-    paintCodeSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+  if(document.getElementById('instructions-link')) {
+    document.getElementById('instructions-link').addEventListener('click', function(event) {
+      event.preventDefault();
+          let paintCodeSection = document.getElementById('paint-code-accordion');
+      
+      paintCodeSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+      });
     });
-  });
+  }
 
   //Clicking on the buttons will expand the accordion section
   const accordionButtons = document.querySelectorAll('.accordion-button');

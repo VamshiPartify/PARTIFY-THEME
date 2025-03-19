@@ -18,21 +18,29 @@
 </style>
 
 <div>
-    {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
+    {% assign makes_list = settings.makes_list | split: ", " %}
+    {% comment %} {% assign excluded_makes = settings.excluded_makes_list | split: ", " %} {% endcomment %}
     {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ", " %}
     {% assign troublesome_makes = settings.troublesome_chromedata_makes_list | split: ", " %}
+    {% assign is_makes_found = false %}
     {% assign is_excluded_make_found = false %}
     {% assign is_bumperdotcom_make_found = false %}
     {% assign is_troublesome_make = false %}
     {% assign downcase_handle = product.handle | downcase %}
 
 
-    {% for excluded_make in excluded_makes %}
+    {% for make in makes_list %}
+        {% if downcase_handle contains make %}
+            {% assign is_makes_found = true %}
+            {% break %}
+        {% endif %}
+    {% endfor %}
+    {% comment %} {% for excluded_make in excluded_makes %}
         {% if downcase_handle contains excluded_make %}
             {% assign is_excluded_make_found = true %}
             {% break %}
         {% endif %}
-    {% endfor %}
+    {% endfor %} {% endcomment %}
     {% for bumperdotcom_make in bumperdotcom_makes %}
         {% if downcase_handle contains bumperdotcom_make %}
             {% assign is_bumperdotcom_make_found = true %}
@@ -45,6 +53,11 @@
             {% break %}
         {% endif %}
     {% endfor %}
+
+    <!-- is_makes_found means chromedata, bumper is bumper.com, and troublesome is chromedata... so if none of this, then set it to excluded-->
+    {% unless is_makes_found == true or is_bumperdotcom_make_found == true or is_troublesome_make == true %}
+        {% assign is_excluded_make_found = true %}
+    {% endunless %}
   
     <div id="product-details-for-app" data-product-title="{{ product.title }}" data-product-id="{{ product.id }}">
     </div>

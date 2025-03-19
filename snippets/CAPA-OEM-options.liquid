@@ -248,9 +248,9 @@
         <div class="divider"></div>
           <div class="combined-variant-dropdown">
             <div class="paint-option-and-how-to-find-paint-code-wrapper">
-              <div class="find-paint-option-link-container">
+              {% comment %} <div class="find-paint-option-link-container">
                 <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
-              </div>
+              </div> {% endcomment %}
               <label class="option-title" for="product-type-select">Paint Option</label>
             </div>
             <div class="paint-code-wrapper">
@@ -275,10 +275,10 @@
         unpainted = true;
       };
 
-      let chromeDataMake = false;
-      if('{{ is_make_found }}' == 'true' || '{{ is_excluded_make_found }}' == "true" || '{{ is_bumperdotcom_make_found }}' == "true") {
+      let chromeDataMake = true;
+      {% comment %} if('{{ is_make_found }}' == 'true' || '{{ is_excluded_make_found }}' == "true" || '{{ is_bumperdotcom_make_found }}' == "true") {
         chromeDataMake = true;
-      };
+      }; {% endcomment %}
       const productSku = '{{ product.variants.first.sku }}';
 
 
@@ -318,11 +318,11 @@
                             "productTitle": "{{ aftermarket_product.title | escape  }}",
                             "productDescription": {{ aftermarket_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
-                            {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                            {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                               {% if variant.title contains "Match Paint by VIN" %}
                                 "class": "hidden-vin-option"
                               {% endif %}
-                            {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
                           },
                       {% endfor %}
                     {% else %}
@@ -369,11 +369,11 @@
                             "productTitle": "{{ capa_product.title | escape  }}",
                             "productDescription": {{ capa_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
-                            {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                            {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                               {% if variant.title contains "Match Paint by VIN" %}
                                 "class": "hidden-vin-option"
                               {% endif %}
-                            {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
                           },
                       {% endfor %}
                     {% else %}
@@ -420,11 +420,11 @@
                             "productTitle": "{{ oem_product.title | escape  }}",
                             "productDescription": {{ oem_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
-                            {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                            {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                               {% if variant.title contains "Match Paint by VIN" %}
                                 "class": "hidden-vin-option"
                               {% endif %}
-                            {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
                           },
                       {% endfor %}
                     {% else %}
