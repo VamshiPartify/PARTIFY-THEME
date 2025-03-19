@@ -129,13 +129,13 @@
             "custom_liquid": "<div id=\"button-row\">\n{%- if product.metafields.custom.howtofindpaintcodeurl!= blank -%}\n    <div id=\"buttons\">\n      {% render 'product-unfolded-popup' %}\n    </div>\n  {%- endif %}\n {%- if product.metafields.custom.vin_variant_id!= blank -%}\n    <!-- Custom Liquid Block -->\n    <!-- Button to select a specific variant -->\n    <button id=\"vin-url\" class=\"btn btn-primary\">Click Here to Use VIN Instead</button>\n  {%- endif %}  \n\n\n \n</div>\n\n<!-- JavaScript to search for the variant -->\n<script>\n  document.addEventListener('DOMContentLoaded', function() {\n    var searchButton = document.getElementById('vin-url');\n    var variantIdToSearch = {{ product.metafields.custom.vin_variant_id | json }};\n    searchButton.addEventListener('click', function() {\n      var currentUrl = new URL(window.location.href);\n      currentUrl.searchParams.set('variant', variantIdToSearch);\n      currentUrl.hash = 'details';\n      window.location.href = currentUrl.href;\n      console.log('Redirecting to:', currentUrl.href);\n    });\n  });\n</script>\n\n<script>\n  document.addEventListener('DOMContentLoaded', function() {\n    var searchButton = document.getElementById('vin-url');\n    var variantIdToSearch = {{ product.metafields.custom.vin_variant_id | json }}; // Replace with your desired variant ID\n    searchButton.addEventListener('click', function() {\n      // Get the current URL\n      var currentUrl = new URL(window.location.href);\n      \n      // Add the variant ID as a query parameter\n      currentUrl.searchParams.set('variant', variantIdToSearch);\n\n      // Append #vin-url to the end of the URL\n      currentUrl.hash = 'details';\n\n      // Redirect to the updated URL\n      window.location.href = currentUrl.href;\n\n      console.log('Redirecting to:', currentUrl.href);\n    });\n  });\n</script>\n\n<style>\n/* Desktop */\n#vin-url {\n  display: block;\n  color: #fff;\n  background-color: #0866ff;\n  border: none;\n  font-size: 18px;\n  padding: 10px 20px; /* Adjust padding */\n  max-width: 500px; /* Limit maximum width */\n  margin: 20px 0 ; /* Adjust margin */\n  text-align: left; /* Align text to left */\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n}\n#vin-url:hover {\n  background-color: #063175;\n\n}\n#button-row{display:flex; gap: 0 10px; /* Space between buttons */\n  flex-wrap: wrap; /* Wrap buttons on smaller screens */}\n/* Phone */\n@media only screen and (max-width: 590px) {\n#button-row{display:block; gap: 0px; /* Space between buttons */\n  flex-wrap: wrap; /* Wrap buttons on smaller screens */}\n  #vin-url {\n    color: #fff;\n    background-color: #0866ff;\n    border: none;\n    font-size: 16px;\n    padding: 12px 0; /* Adjust vertical padding */\n    width: 100%; /* Full width button\n    margin: 10px auto; /* Center button */\n    text-align: center;\n    cursor: pointer;\n    transition: background-color 0.3s ease;\n  }\n  #vin-url:hover {\n    background-color: #063175;\n  }\n}\n\n</style>"
           }
         },
-        "custom_liquid_tBB8WB": {
-          "type": "custom-liquid",
-          "disabled": true,
-          "settings": {
-            "custom_liquid": "{% if product.available == true or product.variants.first.inventory_policy == 'continue' %}<div id=\"buttons\">\n      {% render 'Customize Button' %}\n    </div>{% endif %}"
-          }
-        },
+        // "custom_liquid_tBB8WB": {
+        //   "type": "custom-liquid",
+        //   "disabled": true,
+        //   "settings": {
+        //     "custom_liquid": "{% if product.available == true or product.variants.first.inventory_policy == 'continue' %}<div id=\"buttons\">\n      {% render 'Customize Button' %}\n    </div>{% endif %}"
+        //   }
+        // },
         "custom_liquid_EKKgEh": {
           "type": "custom-liquid",
           "settings": {
@@ -270,7 +270,7 @@
         "custom_liquid_dzWzKA",
         "easysearch_ymm_easysearch_fitment_widget_nbATPE",
         "custom_liquid_eHTi9X",
-        "custom_liquid_tBB8WB",
+        // "custom_liquid_tBB8WB",
         "custom_liquid_EKKgEh",
         "custom_liquid_7ik3my",
         "affirm_pay_over_time_messaging_product_block_ytR9C3",

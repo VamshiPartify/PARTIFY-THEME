@@ -849,7 +849,7 @@
                                   {% endfor %}
                               </select>
 
-                              {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                              {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                                   <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
                                 {% for variant in product.variants %}
                                   {% if variant.title contains "Match Paint by VIN" %}
@@ -862,7 +862,7 @@
                                     </div>
                                   {% endif %}
                                 {% endfor %}
-                              {% endif %}
+                              {% comment %} {% endif %} {% endcomment %}
 
                               {% render 'vin-decoder' %}
                             </div>
@@ -917,20 +917,20 @@
                                 {% endfor %}
                               </select>
                               
-                              {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                              <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
-                              {% for variant in product.variants %}
-                                {% if variant.title contains "Match Paint by VIN" %}
-                                  <div 
-                                    data-value="{{ variant.id }}" 
-                                    class="hidden-vin-option-single-quality"
-                                    data-price="{{ variant.price }}"
-                                    style="display: none;">
-                                    {{ variant.title }} + {{ price_diff }}
-                                  </div>
-                                {% endif %}
-                              {% endfor %}
-                            {% endif %}
+                              {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
+                                <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
+                                {% for variant in product.variants %}
+                                  {% if variant.title contains "Match Paint by VIN" %}
+                                    <div 
+                                      data-value="{{ variant.id }}" 
+                                      class="hidden-vin-option-single-quality"
+                                      data-price="{{ variant.price }}"
+                                      style="display: none;">
+                                      {{ variant.title }} + {{ price_diff }}
+                                    </div>
+                                  {% endif %}
+                                {% endfor %}
+                              {% comment %} {% endif %} {% endcomment %}
 
                               {% render 'vin-decoder' %}
                             </div>
@@ -943,7 +943,7 @@
                   {%- if product.variants[1].sku contains ".VIN" -%}
 
                     <!-- For API calls to either Chromedata or Bumper.com, the below is skipped -->
-                    {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                    {% comment %} {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
                       <div class="vin-options-container">
                         <div class="paint-or-vin">
                             <p>Or</p>
@@ -966,10 +966,10 @@
                         <!-- Button to select Match Paint by VIN variant -->
                         <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>   
                       </div> 
-                    {% endunless %}
+                    {% endunless %} {% endcomment %}
 
                   <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-                    {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                    {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                       <div class="vin-options-container" style="display: none;">
 
                         <!-- Hidden Text box for VIN input -->
@@ -985,8 +985,13 @@
                           <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
                         </div>
                       </div> 
-                    {% endif %}
+                    {% comment %} {% endif %} {% endcomment %}
                   {% endif %}
+
+                  <!-- only render the vin-decoder(Not sure what you paint code is?) button here if it hasn't been rendered already for the below scenarios -->
+                  {% unless is_make_found or is_bumperdotcom_make_found %}
+                    {% render 'vin-decoder' %}
+                  {% endunless %}
 
                   <div class="color-preview-container-for-customizations">
                       {% render 'color-preview-box' %}
@@ -995,7 +1000,7 @@
                     <!-- How to find your paint code image-->
                     <div id="paint-swatch-modal" class="modal-overlay" style="display: none;">
                         <div id="close-paint-swatch" class="close-button" role="button">&times;</div>
-                        <img src="{{ product.metafields.custom.manufacturer_paint_match }}" alt="Paint Swatch" id="paint-swatch-image" width="{{ image.width }}" height="{{ image.height }}">
+                        <img src="{{ product.metafields.custom.manufacturer_paint_match | image_url: 'large'}}" loading="lazy" alt="Paint Swatch" id="paint-swatch-image" width="{{ image.width }}" height="{{ image.height }}">
                     </div>  
                   </div>
                   <div class="divider-small-screen"></div>
@@ -1122,7 +1127,7 @@
     {%- if product.variants[1].sku contains ".VIN" -%}
 
       <!-- For API calls to either Chromedata or Bumper.com, the below is skipped -->
-      {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+      {% comment %} {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
         <div class="vin-options-container">
           <div class="paint-or-vin">
               <p>Or</p>
@@ -1145,10 +1150,10 @@
           <!-- Button to select Match Paint by VIN variant -->
           <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>   
         </div> 
-      {% endunless %}
+      {% endunless %} {% endcomment %}
 
       <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-      {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+      {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
         <div class="vin-options-container" style="display: none;">
 
           <!-- Hidden Text box for VIN input -->
@@ -1164,14 +1169,19 @@
             <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
           </div>
         </div> 
-      {% endif %}
+      {% comment %} {% endif %} {% endcomment %}
     {% endif %}
+
+    {% unless is_make_found or is_bumperdotcom_make_found %}
+      {% render 'vin-decoder' %}
+    {% endunless %}
 
     <!-- if the meta_fields is greater than 1, then that means there is possiblity of being able to select other options
     which could have paint options 
     product.variants.size ensures that it only renders if there is a chance there could be color selection
     -->
     {% if meta_fields > 1 and product.variants.size > 1 %}
+      
       <div class="color-preview-container-for-customizations">
           {% render 'color-preview-box' %}
       </div>
