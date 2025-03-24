@@ -132,6 +132,18 @@
                 });
             }
         });
+
+        window.addEventListener('message', async function(event) {
+            if (event.data.type === 'iframeReady') {
+                iframe.contentWindow.postMessage(
+                    {
+                        type: 'language',
+                        locale: '{{ shop.locale }}'
+                    },
+                    'https://vin-to-paintcode-app-445858330997.us-east5.run.app'
+                );
+            }
+        });
         
         // Listen for messages from the iframe
         window.addEventListener('message', function(event) {
@@ -173,9 +185,9 @@
                             vinMessage.className = 'vin-decoder-message';
                             vinMessage.style.display = 'block';
                             vinMessage.innerHTML = `
-                            <strong style="color: #444;">The paint code</strong> 
-                            <span style="color: #000; font-weight: 800;">${paintCode}</span> 
-                            <span style="color: #444;">has been auto-selected using the VIN: ${vinSelected}</span> 
+                            <strong style="color: #444;">"{{ 'vin_decoder_product_page.first' | t }}"</strong> 
+                            <span style="color: #000; font-weight: 800;">&nbsp;${paintCode}</span> 
+                            <span style="color: #444;">"{{ 'vin_decoder_product_page.end' | t }}&nbsp;${vinSelected}</span> 
                             `;
                         
                             // Append the message to the VIN textbox container
@@ -295,11 +307,11 @@
                             vinMessage.className = 'vin-decoder-message';
                             vinMessage.style.display = 'block';
                             vinMessage.innerHTML = `
-                            <strong style="color: #444;">The VIN</strong> 
+                            <strong style="color: #444;">{{ 'vin_decoder_product_page.auto_attach_msg_strong' | t }}</strong> 
                             <span style="color: #000; font-weight: 800;">${vin}</span> 
-                            <span style="color: #444;">will be attached to this order and</span> 
-                            <span style="color: #444; font-weight: bold;">matched with the correct paint code</span> 
-                            <span style="color: #444;">for this item.</span>
+                            <span style="color: #444;">{{ 'vin_decoder_product_page.will_be_attached' | t }}</span> 
+                            <span style="color: #444; font-weight: bold;">{{ 'vin_decoder_product_page.bold' | t }}</span> 
+                            <span style="color: #444;">{{ 'vin_decoder_product_page.for_this_item' | t }}</span>
                             `;
 
                             window.failedVinDecode = true;

@@ -98,14 +98,14 @@
         id="vin-to-collection-input"
         name="vin"
         class="vin-input-to-collection"
-        placeholder="Enter VIN"
+        placeholder="{{ 'garage.placeholder' | t }}"
         onChange="handleVinChange(event)"
         required
       />
-      <button id="vin-to-collection-btn" type="button" disabled>Search</button>
+      <button id="vin-to-collection-btn" type="button" disabled>{{ 'garage.search_btn' | t }}</button>
     </div>
-    <div class="errorMessage" style="visibility: hidden;">No results found. Please try a different VIN</div>
-    <div class="disclaimer">Disclaimer: Entering your VIN is a simplified way of submitting your year, make, and model. We do not use the VIN to verify fitment. Please use product fitment details for ordering the correct parts.</div>
+    <div class="errorMessage" style="visibility: hidden;">{{ 'garage.failed_vin' | t }}</div>
+    <div class="disclaimer">{{ 'garage.disclaimer' | t }}</div>
   </form>
 </div>
 
@@ -145,7 +145,7 @@
     }
 
     if (vinInput !== filteredValue) {
-      alert("Please enter valid characters. I, O, & Q and other special characters are not allowed in VINs.");
+      alert("{{ 'garage.enter_valid_characters' | t }}");
     }
   };
 
@@ -173,7 +173,7 @@
       const vin = vinInputField.value.trim(); // Get VIN input value
 
       if (vin.length !== 17) {
-        alert("VIN must be exactly 17 characters.");
+        alert("{{ 'garage.exactly_17_characters' | t }}");
         return;
       }
 
@@ -198,9 +198,9 @@
         {% comment %} console.log('data exteriorColors: ', data.exteriorColors); {% endcomment %}
         if(data.handle === '') {
           if (attemptedVins.length < 3) {
-            document.querySelector('.errorMessage').innerHTML = ('No results found. Please try a different VIN');
+            document.querySelector('.errorMessage').innerHTML = "{{ 'garage.no_results' | t }}";
           } else {
-            document.querySelector('.errorMessage').innerHTML = ('Please use the year, make, model dropdowns to find your vehicle');
+            document.querySelector('.errorMessage').innerHTML = "{{ 'garage.use_YMM_dropdown' | t }}";
             document.getElementById('vin').disabled = true;
             return;
           }
@@ -218,9 +218,9 @@
         }
         vinSearchBtn.disabled = true;
         if (attemptedVins.length < 3) {
-          document.querySelector('.errorMessage').innerHTML = ('No results found for this VIN');
+          document.querySelector('.errorMessage').innerHTML = "{{ 'garage.no_results' | t }}";
         } else {
-          document.querySelector('.errorMessage').innerHTML = ('Please use the year, make, model dropdowns to find your vehicle');
+          document.querySelector('.errorMessage').innerHTML = "{{ 'garage.use_YMM_dropdown' | t }}";
           document.getElementById('vin').disabled = true;
           return;
         }
@@ -228,7 +228,7 @@
         submissionBool = false;
       } finally {
         vinSearchBtn.classList.remove("vin-to-collection-btn--loading");
-        vinSearchBtn.innerHTML = "Search";
+        vinSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
       }
     });
 

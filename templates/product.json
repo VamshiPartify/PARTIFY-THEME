@@ -49,7 +49,7 @@
         "5006f5e7-554d-4cc1-a089-51bc9c37611e": {
           "type": "custom-liquid",
           "settings": {
-            "custom_liquid": "{%- if product.metafields.custom.product_fitment!= blank -%}Model Fitment: <b style=\"color:#00000\" line-height:3em;>{{product.metafields.custom.product_fitment}}</b>{% endif %}"
+            "custom_liquid": "{%- if product.metafields.custom.product_fitment!= blank -%}{{ 'model_fitment' | t }}: <b style=\"color:#00000\" line-height:3em;>{{product.metafields.custom.product_fitment}}</b>{% endif %}"
           }
         },
        // "61112cbc-8780-4d01-873f-9aa747212ed9": {
@@ -111,7 +111,7 @@
         "custom_liquid_dzWzKA": {
           "type": "custom-liquid",
           "settings": {
-            "custom_liquid": "<div id=\"details\">{%- if product.metafields.custom.keystone_description!= blank -%}\n<div class=\"easysearch-custom-metafield\"><p>Additional Fitment Details</p><div>{{ product.metafields.custom.keystone_description }}</div></div>\n{%- endif -%}</div>"
+            "custom_liquid": "<div id=\"details\">{%- if product.metafields.custom.keystone_description!= blank -%}\n<div class=\"easysearch-custom-metafield\"><p>{{ 'additional_fitment_details' | t }}</p><div>{{ product.metafields.custom.keystone_description }}</div></div>\n{%- endif -%}</div>"
           }
         },
         "easysearch_ymm_easysearch_fitment_widget_nbATPE": {
@@ -129,13 +129,6 @@
             "custom_liquid": "<div id=\"button-row\">\n{%- if product.metafields.custom.howtofindpaintcodeurl!= blank -%}\n    <div id=\"buttons\">\n      {% render 'product-unfolded-popup' %}\n    </div>\n  {%- endif %}\n {%- if product.metafields.custom.vin_variant_id!= blank -%}\n    <!-- Custom Liquid Block -->\n    <!-- Button to select a specific variant -->\n    <button id=\"vin-url\" class=\"btn btn-primary\">Click Here to Use VIN Instead</button>\n  {%- endif %}  \n\n\n \n</div>\n\n<!-- JavaScript to search for the variant -->\n<script>\n  document.addEventListener('DOMContentLoaded', function() {\n    var searchButton = document.getElementById('vin-url');\n    var variantIdToSearch = {{ product.metafields.custom.vin_variant_id | json }};\n    searchButton.addEventListener('click', function() {\n      var currentUrl = new URL(window.location.href);\n      currentUrl.searchParams.set('variant', variantIdToSearch);\n      currentUrl.hash = 'details';\n      window.location.href = currentUrl.href;\n      console.log('Redirecting to:', currentUrl.href);\n    });\n  });\n</script>\n\n<script>\n  document.addEventListener('DOMContentLoaded', function() {\n    var searchButton = document.getElementById('vin-url');\n    var variantIdToSearch = {{ product.metafields.custom.vin_variant_id | json }}; // Replace with your desired variant ID\n    searchButton.addEventListener('click', function() {\n      // Get the current URL\n      var currentUrl = new URL(window.location.href);\n      \n      // Add the variant ID as a query parameter\n      currentUrl.searchParams.set('variant', variantIdToSearch);\n\n      // Append #vin-url to the end of the URL\n      currentUrl.hash = 'details';\n\n      // Redirect to the updated URL\n      window.location.href = currentUrl.href;\n\n      console.log('Redirecting to:', currentUrl.href);\n    });\n  });\n</script>\n\n<style>\n/* Desktop */\n#vin-url {\n  display: block;\n  color: #fff;\n  background-color: #0866ff;\n  border: none;\n  font-size: 18px;\n  padding: 10px 20px; /* Adjust padding */\n  max-width: 500px; /* Limit maximum width */\n  margin: 20px 0 ; /* Adjust margin */\n  text-align: left; /* Align text to left */\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n}\n#vin-url:hover {\n  background-color: #063175;\n\n}\n#button-row{display:flex; gap: 0 10px; /* Space between buttons */\n  flex-wrap: wrap; /* Wrap buttons on smaller screens */}\n/* Phone */\n@media only screen and (max-width: 590px) {\n#button-row{display:block; gap: 0px; /* Space between buttons */\n  flex-wrap: wrap; /* Wrap buttons on smaller screens */}\n  #vin-url {\n    color: #fff;\n    background-color: #0866ff;\n    border: none;\n    font-size: 16px;\n    padding: 12px 0; /* Adjust vertical padding */\n    width: 100%; /* Full width button\n    margin: 10px auto; /* Center button */\n    text-align: center;\n    cursor: pointer;\n    transition: background-color 0.3s ease;\n  }\n  #vin-url:hover {\n    background-color: #063175;\n  }\n}\n\n</style>"
           }
         },
-        // "custom_liquid_tBB8WB": {
-        //   "type": "custom-liquid",
-        //   "disabled": true,
-        //   "settings": {
-        //     "custom_liquid": "{% if product.available == true or product.variants.first.inventory_policy == 'continue' %}<div id=\"buttons\">\n      {% render 'Customize Button' %}\n    </div>{% endif %}"
-        //   }
-        // },
         "custom_liquid_EKKgEh": {
           "type": "custom-liquid",
           "settings": {
@@ -189,7 +182,7 @@
         "custom_liquid_QhiWpf": {
           "type": "custom-liquid",
           "settings": {
-            "custom_liquid": "{% if product.tags contains \"Unfolded Option\" %}\n<h6><p><b style=\"color:#FF000F\"> Unfolded Shipping:</b> This bumper ships unfolded. Ready to install on your vehicle immediately. Guaranteed to arrive with no damage. Not like our competitors who aggressively fold this bumper which causes deformity and paint cracking. </p></h6>{% endif %}"
+            "custom_liquid": "{% if product.tags contains \"Unfolded Option\" %}\n<h6><p><b style=\"color:#FF000F\"> {{ 'unfolded_shipping.bold' | t }}:</b> {{ 'unfolded_shipping.message' | t }}</p></h6>{% endif %}"
           }
         },
         "36419bf2-c0eb-45fa-8ebc-68487c89820c": {
@@ -270,7 +263,6 @@
         "custom_liquid_dzWzKA",
         "easysearch_ymm_easysearch_fitment_widget_nbATPE",
         "custom_liquid_eHTi9X",
-        // "custom_liquid_tBB8WB",
         "custom_liquid_EKKgEh",
         "custom_liquid_7ik3my",
         "affirm_pay_over_time_messaging_product_block_ytR9C3",
@@ -322,7 +314,7 @@
         "collapsible_text_8yaD9P": {
           "type": "collapsible_text",
           "settings": {
-            "block_title": "Description",
+            "block_title": "collapsing_description.description",
             "block_content": "<div class=\"product-description-collapsible-text\">{{product.description}} </div>"
           }
         },
@@ -330,21 +322,21 @@
           "type": "collapsible_text",
           "disabled": true,
           "settings": {
-            "block_title": "Capa Quality",
+            "block_title": "collapsing_description.capa_quality",
             "block_content": "{% if product.title contains 'CAPA' %}\n  <div class=\"capa-quality-description\">\n    <b>About Capa Quality</b>\n    <p>Capa products are known for their exceptional quality, crafted with precision and attention to detail. You can trust that every Capa item you purchase meets the highest standards of durability and performance.</p>\n  </div>\n{% endif %}"
           }
         },
         "collapsible_text_VPzttP": {
           "type": "collapsible_text",
           "settings": {
-            "block_title": "What Are Headlight Washers Holes?",
+            "block_title": "collapsing_description.headlight_washer_holes",
             "block_content": "{% if product.title contains 'Headlight Washer' %}\n  <div class=\"headlight-washer-description\">\n    <b>Does my vehicle have Headlight Washer Holes?</b>\n    <p>\nHeadlight washer holes are small openings near the headlights, usually found on the front bumper, that contain retractable nozzles for cleaning the headlight lenses. These washers are designed to spray high-pressure water or cleaning fluid to clear away dirt, grime, or snow, helping to maintain optimal visibility. Before ordering this product, it's important for you to double-check if your vehicle has headlight washer holes, as not all models are equipped with them. Ensuring compatibility will help avoid installation issues and ensure the product fits correctly.</p>\n  </div>\n{% endif %}"
           }
         },
         "collapsible_text_E6GKc7": {
           "type": "collapsible_text",
           "settings": {
-            "block_title": "What Are Sensor Holes?",
+            "block_title": "collapsing_description.sensor_holes",
             "block_content": "{% if product.title contains 'Sensor' %}\n  <div class=\"sensor-hole-description\">\n    <b>Does my vehicle have Sensor Holes?</b>\n    <p>\nSensor holes are small openings on a vehicle’s bumper or body panels that house sensors used for parking assistance, collision detection, or adaptive cruise control. These sensors help detect obstacles, measure distance, and enhance the vehicle's safety features. Before purchasing, be sure to double-check if your vehicle is equipped with sensor holes, as not all models have them. Confirming compatibility will help avoid any installation issues and ensure the product fits perfectly.</p>\n  </div>\n{% endif %}"
           }
         },
@@ -352,7 +344,7 @@
           "type": "collapsible_text",
           "disabled": true,
           "settings": {
-            "block_title": "OEM Part Numbers",
+            "block_title": "collapsing_description.oem_part_numbers",
             "block_content": "{%- if product.metafields.custom.product_oem_!= blank -%} <div class=\"oem-part-numbers\">\n    <b>{{ product.variants[0].sku }}'s OEM Part Number(s)?</b>\n    <p>\n{{product.metafields.custom.product_oem_}}</p>\n  </div>{% endif %}"
           }
         },
@@ -360,7 +352,7 @@
           "type": "collapsible_text",
           "disabled": true,
           "settings": {
-            "block_title": "Why Choose CAPA?",
+            "block_title": "collapsing_description.why_choose_capa",
             "block_content": "{%- if product.metafields.custom.capa_product!= blank -%}\n<p>CAPA-certified parts meet or exceed OEM standards, ensuring high-quality, reliable replacements at a more affordable price.</p>\n\n    <ul>\n        <li><strong>Quality Assurance:</strong> CAPA parts are rigorously tested to meet or exceed OEM performance standards.</li>\n        <li><strong>Exact Fit:</strong> Designed to fit your vehicle model seamlessly, just like OEM parts.</li>\n        <li><strong>Cost-Effective:</strong> Affordable replacements without compromising on quality or safety.</li>\n        <li><strong>Certified Safety:</strong> CAPA parts undergo safety and durability testing to meet industry standards.</li>\n    </ul>{% endif %}"
           }
         },
@@ -368,7 +360,7 @@
           "type": "collapsible_text",
           "disabled": true,
           "settings": {
-            "block_title": "Why Choose OEM?",
+            "block_title": "collapsing_description.why_choose_oem",
             "block_content": "{%- if product.metafields.custom.oem_product!= blank -%}\n<p>OEM parts are built to the exact specifications of your vehicle, ensuring a perfect fit, high performance, and reliability.</p>\n\n    <ul>\n        <li><strong>Exact Fit:</strong> Made specifically for your model, guaranteeing seamless installation and performance.</li>\n        <li><strong>Premium Materials:</strong> Crafted with high-quality materials for durability and longevity.</li>\n        <li><strong>Superior Paint Adhesion:</strong> Holds paint better for a lasting, high-quality finish.</li>\n        <li><strong>Safety:</strong> Meets original safety standards for peace of mind.</li>\n    </ul>{% endif %}"
           }
         }
@@ -415,7 +407,7 @@
         "table,th,td {border-collapse: collapse; border: 1px solid; word-wrap: break-word; table-layout: fixed;}"
       ],
       "settings": {
-        "custom_liquid": "{%- if product.metafields.custom.fitment_table!= blank -%}\n<h3>Fitment Data</h3>\n{{product.metafields.custom.fitment_table}}{%- endif -%}"
+        "custom_liquid": "{%- if product.metafields.custom.fitment_table!= blank -%}\n<h3>{{ 'fitment_data' | t }}</h3>\n{{product.metafields.custom.fitment_table}}{%- endif -%}"
       }
     },
     "dynamic_custom_liquid_yVjLBC": {

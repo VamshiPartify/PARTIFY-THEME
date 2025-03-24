@@ -1,12 +1,12 @@
 <div class="faq-container">
   <!-- Title of the FAQ Section -->
-  <h2 class="faq-title">Frequently Asked Questions</h2>
+  <h2 class="faq-title">{{ 'FAQ.title' | t }}</h2>
 
   <!-- Category Filter -->
   <div class="faq-filter">
-    <label for="faq-category-filter">Filter by Category: </label>
+    <label for="faq-category-filter">{{ 'FAQ.filter_title' | t }}&nbsp;</label>
     <select id="faq-category-filter">
-      <option value="all">All Categories</option>
+      <option value="all">{{ 'FAQ.all_categories' | t }}</option>
       {% assign category_list = '' %}
       {% for faq in shop.metaobjects.faq.values %}
         {% if faq.category.value != blank %}
@@ -37,7 +37,7 @@
         <div class="content">
           <p>{{ faq.answer.value }}</p>
           <!-- Display Category below the answer -->
-          <p class="faq-category">Category: <span>{{ faq.category.value }}</span></p>
+          <p class="faq-category">{{ 'FAQ.category' | t }}&nbsp;<span>{{ faq.category.value }}</span></p>
         </div>
       </div>
     {% endfor %}

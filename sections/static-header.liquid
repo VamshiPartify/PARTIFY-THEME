@@ -197,7 +197,7 @@
       <div class="easyContainer">
         <a href="javascript:void(0)" id="easyBtn">
           <div class="vehicleSelectionContainer">
-            <span id="vehicleSelection-desktop" class="ss_megamenu_title" style="color: #334FB4;">Select Your Vehicle</span>
+            <span id="vehicleSelection-desktop" class="ss_megamenu_title" style="color: #334FB4;">{{ 'garage.select_vehicle_title' | t }}</span>
           </div>
         </a>
       </div>
@@ -216,7 +216,7 @@
                 </div>
               </div>
             </div>
-            <div id="vin-to-collection-or" style="display:none;">or</div>
+            <div id="vin-to-collection-or" style="display:none;">{{ 'garage.or' | t }}</div>
             <!-- Preload the VIN-to-Collection form in a hidden div -->
             <div id="vin-to-collection-placeholder" style="display:none;">
               {% render "vin-to-collection" %}
@@ -253,7 +253,7 @@
     <a href="javascript:void(0)" id="easyBtn">
       <div class="vehicleSelectionContainer">
         <div class="vehicleSelection-mobile-select-your-vehicle">
-          <span id="vehicleSelection-mobile" class="ss_megamenu_title" style="color: #334FB4;">Select Your Vehicle</span>
+          <span id="vehicleSelection-mobile" class="ss_megamenu_title" style="color: #334FB4;">{{ 'garage.select_vehicle_title' | t }}</span>
         </div>
       </div>
     </a>

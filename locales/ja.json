@@ -669,5 +669,37 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "quality_popup": {
+    "heading": "品質が実際に何を意味するのかよく分からないですか?",
+    "subheading": "大丈夫です。私たちがお手伝いします。",
+    "aftermarket_title": "アフターマーケット",
+    "aftermarket_description_header": "アフターマーケット部品は、車両修理のための予算に優しい代替品を提供し、より手頃な価格で信頼性の高いフィット感と機能性を提供します。",
+    "aftermarket_listitem_1_bold": "手頃なソリューション:",
+    "aftermarket_listitem_1": "基本的な品質を犠牲にすることなく節約できる、予算に優しいオプションです。",
+    "aftermarket_listitem_2_bold": "信頼できるフィット感:",
+    "aftermarket_listitem_2": "OEM 標準に厳密に準拠するように設計されており、車両に信頼性と機能的なフィットを保証します。",
+    "aftermarket_listitem_3_bold": "日常のパフォーマンス:",
+    "aftermarket_listitem_3": "標準的な修理をサポートし、信頼性の高い車両操作を維持するように設計されています。",
+    "aftermarket_listitem_4_bold": "優れた価値:",
+    "aftermarket_listitem_4": "コスト削減と堅実なパフォーマンスを組み合わせ、ほとんどの修理ニーズに適した賢い選択を実現します。",
+    "capa_title": "層",
+    "capa_description_header": "CAPA 認定部品は OEM 基準を満たすか上回っており、より手頃な価格で高品質で信頼性の高い交換品を保証します。",
+    "capa_listitem_1_bold": "品質保証：",
+    "capa_listitem_1": "CAPA 部品は、OEM パフォーマンス基準を満たすかそれを上回るように厳密にテストされています。",
+    "capa_listitem_2_bold": "ぴったりフィット:",
+    "capa_listitem_2": "OEM 部品と同様に、車両モデルにシームレスにフィットするように設計されています。",
+    "capa_listitem_3_bold": "コスト効率が高い:",
+    "capa_listitem_3": "品質や安全性を損なうことなく、手頃な価格で交換できます。",
+    "capa_listitem_4_bold": "認定された安全性:",
+    "capa_listitem_4": "CAPA 部品は、業界標準を満たすために安全性と耐久性のテストを受けています。",
+    "oem_title": "メーカー",
+    "oem_description_header": "OEM 部品は、車両と同じ製造元によって製造されるため、完璧なフィットが保証されます。",
+    "oem_listitem_1_bold": "ぴったりフィット:",
+    "oem_listitem_1": "お使いのモデルに合わせて特別に作られており、シームレスなインストールとパフォーマンスを保証します。",
+    "oem_listitem_2_bold": "プレミアム素材:",
+    "oem_listitem_2": "耐久性と長寿命のために高品質の素材で作られています。",
+    "oem_listitem_3_bold": "安全性：",
+    "oem_listitem_3": "独自の安全基準を満たしているので安心です。"
   }
 }

@@ -636,5 +636,37 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "quality_popup": {
+    "heading": "Non sai esattamente cosa significhi qualità?",
+    "subheading": "Va bene. Siamo qui per aiutarti.",
+    "aftermarket_title": "Mercato dei ricambi",
+    "aftermarket_description_header": "I ricambi aftermarket rappresentano un'alternativa economica per le riparazioni dei veicoli, garantendo funzionalità e affidabilità a un prezzo più accessibile.",
+    "aftermarket_listitem_1_bold": "Soluzione conveniente:",
+    "aftermarket_listitem_1": "Un'opzione conveniente che ti aiuta a risparmiare senza rinunciare alla qualità essenziale.",
+    "aftermarket_listitem_2_bold": "Vestibilità affidabile:",
+    "aftermarket_listitem_2": "Progettati per essere strettamente conformi agli standard OEM, garantendo un adattamento affidabile e funzionale al tuo veicolo.",
+    "aftermarket_listitem_3_bold": "Prestazioni quotidiane:",
+    "aftermarket_listitem_3": "Progettato per supportare le riparazioni standard e mantenere affidabile il funzionamento del veicolo.",
+    "aftermarket_listitem_4_bold": "Valore eccezionale:",
+    "aftermarket_listitem_4": "Combina risparmio sui costi e prestazioni elevate, rappresentando una scelta intelligente per la maggior parte delle esigenze di riparazione.",
+    "capa_title": "STRATO",
+    "capa_description_header": "I ricambi certificati CAPA soddisfano o superano gli standard OEM, garantendo ricambi affidabili e di alta qualità a un prezzo più conveniente.",
+    "capa_listitem_1_bold": "Garanzia di qualità:",
+    "capa_listitem_1": "I componenti CAPA vengono rigorosamente testati per soddisfare o superare gli standard prestazionali OEM.",
+    "capa_listitem_2_bold": "Vestibilità esatta:",
+    "capa_listitem_2": "Progettati per adattarsi perfettamente al tuo modello di veicolo, proprio come i pezzi OEM.",
+    "capa_listitem_3_bold": "Conveniente:",
+    "capa_listitem_3": "Sostituzioni convenienti senza compromettere la qualità o la sicurezza.",
+    "capa_listitem_4_bold": "Sicurezza certificata:",
+    "capa_listitem_4": "I componenti CAPA vengono sottoposti a test di sicurezza e durata per soddisfare gli standard del settore.",
+    "oem_title": "OEM",
+    "oem_description_header": "I ricambi OEM sono realizzati dallo stesso produttore del tuo veicolo, garantendo una perfetta compatibilità.",
+    "oem_listitem_1_bold": "Vestibilità esatta:",
+    "oem_listitem_1": "Realizzato appositamente per il tuo modello, garantisce un'installazione e prestazioni impeccabili.",
+    "oem_listitem_2_bold": "Materiali di prima qualità:",
+    "oem_listitem_2": "Realizzato con materiali di alta qualità per garantire durata e longevità.",
+    "oem_listitem_3_bold": "Sicurezza:",
+    "oem_listitem_3": "Soddisfa gli standard di sicurezza originali per la massima tranquillità."
   }
 }

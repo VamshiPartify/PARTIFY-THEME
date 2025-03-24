@@ -83,14 +83,14 @@
         "custom_liquid": "{% render 'black-friday-table' %}"
       }
     },
-    "site_review_columns_HzfCA3": {
-      "type": "Site-review-columns",
-      "custom_css": [
-        "h1 {text-align: center; margin: 0 auto; padding-top: 40px; padding-bottom: 20px;}",
-        ".Review-Block {max-width: 80% !important; margin: 0 auto;}"
-      ],
-      "settings": {}
-    },
+    // "site_review_columns_HzfCA3": {
+    //   "type": "Site-review-columns",
+    //   "custom_css": [
+    //     "h1 {text-align: center; margin: 0 auto; padding-top: 40px; padding-bottom: 20px;}",
+    //     ".Review-Block {max-width: 80% !important; margin: 0 auto;}"
+    //   ],
+    //   "settings": {}
+    // },
     "356b94ad-78c0-440e-a0e8-a224ed3debf1": {
       "type": "dynamic-collection-list",
       "blocks": {
@@ -325,7 +325,7 @@
     "bb8bbd89-2fb0-44fa-b240-4c8162c0dc28",
     "17144074275bb62685",
     "dynamic_custom_liquid_kirR3Y",
-    "site_review_columns_HzfCA3",
+    // "site_review_columns_HzfCA3",
     "356b94ad-78c0-440e-a0e8-a224ed3debf1",
     "dynamic_blog_posts",
     "dc25b428-6fdb-4bea-b22c-750a75858f25",

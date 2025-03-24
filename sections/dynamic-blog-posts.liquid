@@ -27,10 +27,11 @@
   }
 </script>
 
+{% assign blog_posts_title = 'blog_posts_title' | t %}
 <section class="blogposts--container blogposts--count-{{ article_count }}">
   {% if section.settings.title != blank %}
     <h2 class="home-section--title">
-      {{ section.settings.title | escape }}
+      {{ blog_posts_title }}
     </h2>
   {% endif %}
 

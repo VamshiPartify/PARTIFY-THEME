@@ -29,38 +29,58 @@ function activate_enter (evt) {
     }
 }
 
-function deliveryRecalc (relocation) {
-	// var asm_country_code = 'US';
-	if (document.getElementById('dc-alt-country-partify'))
-		asm_country_code = document.getElementById('dc-alt-country-partify').value;
+function deliveryRecalc(relocation) {
+    let applyButton = document.getElementById('dc-alt-zip-apply-partify');
 
-	if (document.getElementById('dc-alt-zip-partify')) {
-		asm_zip_code = document.getElementById('dc-alt-zip-partify').value;
+    if (document.getElementById('dc-alt-country-partify'))
+        asm_country_code = document.getElementById('dc-alt-country-partify').value;
 
-		clearInterval(x_interval);
+    if (document.getElementById('dc-alt-zip-partify')) {
+        asm_zip_code = document.getElementById('dc-alt-zip-partify').value;
 
-		if (document.getElementById('dc-alt-zip-apply-partify'))
-			document.getElementById('dc-alt-zip-apply-partify').innerHTML = 'Applying...';
+        clearInterval(x_interval);
 
-		asmDataBackup = structuredClone(window.asmData); 
+        if (applyButton) {
+            applyButton.classList.add('vin-to-collection-btn--loading'); // Add spinner class
+            applyButton.innerHTML = ''; // Clear text to only show spinner
 
-		Object.keys(window.asmData).forEach(key => delete window.asmData[key]);
+			applyButton.style.display = 'flex';
+            applyButton.style.justifyContent = 'center';
+            applyButton.style.alignItems = 'center';
 
-		queryAllETAs(qualitySelectedType, relocation);
+            applyButton.disabled = true; // Disable button
+        }
 
-		// Clear any existing timeout if Apply is clicked again quickly
-		clearTimeout(applyButtonTimeout);
+        asmDataBackup = structuredClone(window.asmData);
 
-		// Set a timeout to force close the zip input elements after 5 seconds
-		applyButtonTimeout = setTimeout(function() {
-			const zipHolder = document.getElementById('dc-alt-zip-holder-partify');
-			if (zipHolder && zipHolder.style.display === 'block') { // Check if it's still visible
-				zipHolder.style.display = 'none';
-				document.body.classList.remove('delivery-popup-no-scroll');
-			}
-		}, 5000); 
-	}
+        Object.keys(window.asmData).forEach(key => delete window.asmData[key]);
+
+        queryAllETAs(qualitySelectedType, relocation);
+
+        clearTimeout(applyButtonTimeout);
+
+        applyButtonTimeout = setTimeout(function() {
+            const zipHolder = document.getElementById('dc-alt-zip-holder-partify');
+            if (zipHolder && zipHolder.style.display === 'block') {
+                zipHolder.style.display = 'none';
+                document.body.classList.remove('delivery-popup-no-scroll');
+            }
+
+            // Restore the button text and state after 5 seconds
+            if (applyButton) {
+                applyButton.classList.remove('vin-to-collection-btn--loading'); // Remove spinner class
+                applyButton.innerHTML = apply; // Restore button text
+
+				applyButton.style.display = '';
+				applyButton.style.justifyContent = '';
+				applyButton.style.alignItems = '';
+				
+                applyButton.disabled = false; // Enable button
+            }
+        }, 5000);
+    }
 }
+
 
 function qualityVariantRecalc (quality, variant, sku) {
 	if(asm_item_sku === '') {
@@ -235,41 +255,42 @@ function getCountdownTime (target_date) {
 		var countDownTime = countDownDate.getTime();
 
 		var defined_weekday = new Array();
-		defined_weekday[0] = 'Sunday';
-		defined_weekday[1] = 'Monday';
-		defined_weekday[2] = 'Tuesday';
-		defined_weekday[3] = 'Wednesday';
-		defined_weekday[4] = 'Thursday';
-		defined_weekday[5] = 'Friday';
-		defined_weekday[6] = 'Saturday';
+		
+		defined_weekday[0] = shopLocale === 'en' ? 'Sunday' : 'Domingo';
+		defined_weekday[1] = shopLocale === 'en' ? 'Monday' : 'Lunes';
+		defined_weekday[2] = shopLocale === 'en' ? 'Tuesday': 'Martes';
+		defined_weekday[3] = shopLocale === 'en' ? 'Wednesday' : 'Miércoles';
+		defined_weekday[4] = shopLocale === 'en' ? 'Thursday' : 'Jueves';
+		defined_weekday[5] = shopLocale === 'en' ? 'Friday' : 'Viernes';
+		defined_weekday[6] = shopLocale === 'en' ? 'Saturday' : 'Sábado';
 		
 		var defined_months = new Array();
-		defined_months[0] = 'January';
-		defined_months[1] = 'February';
-		defined_months[2] = 'March';
-		defined_months[3] = 'April';
-		defined_months[4] = 'May';
-		defined_months[5] = 'June';
-		defined_months[6] = 'July';
-		defined_months[7] = 'August';
-		defined_months[8] = 'September';
-		defined_months[9] = 'October';
-		defined_months[10] = 'November';
-		defined_months[11] = 'December';
+		defined_months[0] = shopLocale === 'en' ? 'January' : 'Enero';
+		defined_months[1] = shopLocale === 'en' ? 'February' : 'Febrero';
+		defined_months[2] = shopLocale === 'en' ? 'March' : 'Marzo';
+		defined_months[3] = shopLocale === 'en' ? 'April' : 'Abril';
+		defined_months[4] = shopLocale === 'en' ? 'May' : 'Mayo';
+		defined_months[5] = shopLocale === 'en' ? 'June' : 'Junio';
+		defined_months[6] = shopLocale === 'en' ? 'July' : 'Julio';
+		defined_months[7] = shopLocale === 'en' ? 'August' : 'Agosto';
+		defined_months[8] = shopLocale === 'en' ? 'September' : 'Septiembre';
+		defined_months[9] = shopLocale === 'en' ? 'October' : 'Octubre';
+		defined_months[10] = shopLocale === 'en' ? 'November' : 'Noviembre';
+		defined_months[11] = shopLocale === 'en' ? 'December' : 'Diciembre';
 
 		var defined_months_short = new Array();
-		defined_months_short[0] = 'Jan';
-		defined_months_short[1] = 'Feb';
-		defined_months_short[2] = 'Mar';
-		defined_months_short[3] = 'Apr';
-		defined_months_short[4] = 'May';
-		defined_months_short[5] = 'Jun';
-		defined_months_short[6] = 'Jul';
-		defined_months_short[7] = 'Aug';
-		defined_months_short[8] = 'Sep';
-		defined_months_short[9] = 'Oct';
-		defined_months_short[10] = 'Nov';
-		defined_months_short[11] = 'Dec';
+		defined_months_short[0] = shopLocale === 'en' ? 'Jan' : 'Ene';
+		defined_months_short[1] = shopLocale === 'en' ? 'Feb' : 'Feb';
+		defined_months_short[2] = shopLocale === 'en' ? 'Mar' : 'Mar';
+		defined_months_short[3] = shopLocale === 'en' ? 'Apr' : 'Abr';
+		defined_months_short[4] = shopLocale === 'en' ? 'May' : 'Mayo';
+		defined_months_short[5] = shopLocale === 'en' ? 'Jun' : 'Jun';
+		defined_months_short[6] = shopLocale === 'en' ? 'Jul' : 'Jul';
+		defined_months_short[7] = shopLocale === 'en' ? 'Aug' : 'Ago';
+		defined_months_short[8] = shopLocale === 'en' ? 'Sep' : 'Sep';
+		defined_months_short[9] = shopLocale === 'en' ? 'Oct' : 'Oct';
+		defined_months_short[10] = shopLocale === 'en' ? 'Nov' : 'Nov';
+		defined_months_short[11] = shopLocale === 'en' ? 'Dec' : 'Dic';
 
 		if (document.getElementById('dc-weekday-partify'))
 			document.getElementById('dc-weekday-partify').innerHTML = defined_weekday[countDownDate.getDay()];
@@ -361,7 +382,7 @@ window.getZipValue = function (zip) {
 		toggleZipInput();
 
 	if (document.getElementById('dc-alt-zip-apply-partify'))
-		document.getElementById('dc-alt-zip-apply-partify').innerHTML = 'Apply';
+		document.getElementById('dc-alt-zip-apply-partify').innerHTML = '';
 
 	if (document.getElementById('dc-zip-partify'))
 		document.getElementById('dc-zip-partify').innerHTML = zip;
@@ -631,7 +652,7 @@ async function relocationCalculation(selectedSku, attempts, maxAttempts) {
                     getGeoValues(geoValues.city, geoValues.state, geoValues.zip, geoValues.country);
 
                     if (document.getElementById('dc-alt-zip-apply-partify')) {
-                        document.getElementById('dc-alt-zip-apply-partify').innerHTML = 'Apply';
+                        document.getElementById('dc-alt-zip-apply-partify').innerHTML = apply;
                     }
 
 					// Only toggle the zip popup here if it currently is open.  If it is not, that means the 5 second timeout has triggered already
@@ -665,7 +686,7 @@ async function relocationCalculation(selectedSku, attempts, maxAttempts) {
             getGeoValues(geoValues.city, geoValues.state, geoValues.zip, geoValues.country);
 
             if (document.getElementById('dc-alt-zip-apply-partify')) {
-                document.getElementById('dc-alt-zip-apply-partify').innerHTML = 'Apply';
+                document.getElementById('dc-alt-zip-apply-partify').innerHTML = apply;
             }
 
 
@@ -678,6 +699,7 @@ async function relocationCalculation(selectedSku, attempts, maxAttempts) {
     });
 }
 
+const shopLocale = window.shopLocale || 'en'; // Default to 'en' if not set
 
 var asm_timeout;
 var asm_store_id = 'partify-usa-123';
@@ -698,5 +720,7 @@ let baseZipForRevert;
 let asmDataBackup;
 let countdownTimeExists = true;
 let applyButtonTimeout;
+
+let apply = shopLocale === 'en' ? 'Apply' : 'Aplicar';
 
 window.asmData = {};

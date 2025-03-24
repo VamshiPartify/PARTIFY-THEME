@@ -177,14 +177,14 @@
         vehicleSelectionElement.outerHTML = `
         <span class="ss_megamenu_title">${firstSearchTerm}</span> 
         <span class="change-divider">|</span> 
-        <span class="change-option">CHANGE</span>
+        <span class="change-option">{{ 'garage_changer' | t }}</span>
         `;
         const changeOption = document.querySelector('.change-option');
         if (changeOption) {
             changeOption.style.color = "#0c1a94";
           }
       } else {
-        vehicleSelectionElement.textContent = "Select Your Vehicle";
+        vehicleSelectionElement.textContent = "{{ 'garage.select_vehicle_title' | t }}";
         if (window.innerWidth < 900) {
             vehicleSelectionElement.style.color = "#fff";
         } else {
@@ -212,7 +212,7 @@
                         <div class="vehicle-item-container ${isFirstVehicle}">
                             <div class="vehicle-browse-catalog-container">
                                 <strong data-vehicle="${vehicle}">${vehicle}</strong>
-                                <button class="browse-catalog-btn">Browse Catalog</button>
+                                <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
                             </div>
                             <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
                         </div>
@@ -226,19 +226,19 @@
                 garagePopupContainer.innerHTML = `
                 <div class="garage-close-button" role="button">&times;</div>
                 <div class="select-your-vehicle-header" style="display: none;">
-                    <h1>Select Your Vehicle</h1>
+                    <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
                 </div>
                 <div class="garage-block">
                     <div class="my-garage-header">
-                    <h1>My Garage</h1>
+                    <h1>{{ 'garage.title' | t }}</h1>
                     {% comment %} <button class="clear-garage">
                         <h4>Clear All</h4>
                     </button> {% endcomment %}
                     </div>
-                    <p class="vehicle-selection-blurb">We need more information to help you find the right parts for your vehicle. Select a vehicle to narrow your results.</p>
+                    <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
                     ${vehicleListHTML}
                     </div>
-                    <button id="add-vehicle-btn">Add Vehicle</button>
+                    <button id="add-vehicle-btn">{{ 'garage.add_vehicle_btn' | t }}</button>
                 </div>
                 <div class="easyYMM">${document.querySelector(".easyYMM").innerHTML}</div>
                 `
@@ -246,9 +246,9 @@
                 garagePopupContainer.innerHTML = `
                 <div class="garage-close-button" role="button">&times;</div>
                 <div class="my-garage-header">
-                    <h1>Select Your Vehicle</h1>
+                    <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
                 </div>
-                <p class="vehicle-selection-blurb">We need more information to help you find the right parts for your vehicle. Select a vehicle to narrow your results.</p>
+                <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
                 <div>
                 ${easyYMMContent.outerHTML}
                 </div>
@@ -375,7 +375,7 @@
                             <div class="vehicle-item-container ${isFirstVehicle}">
                                 <div class="vehicle-browse-catalog-container">
                                     <strong data-vehicle="${vehicle}">${vehicle}</strong>
-                                    <button class="browse-catalog-btn">Browse Catalog</button>
+                                    <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
                                 </div>
                                 <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
                             </div>
@@ -391,18 +391,18 @@
                 garagePopupContainer.innerHTML = `
                 <div class="garage-close-button" role="button">&times;</div>
                 <div class="select-your-vehicle-header" style="display: none;">
-                    <h1>Select Your Vehicle</h1>
+                    <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
                 </div>
                 <div class="garage-block">
                     <div class="my-garage-header">
-                        <h1>My Garage</h1>
+                        <h1>{{ 'garage.title' | t }}</h1>
                         {% comment %} <button class="clear-garage">
                             <h4>Clear All</h4>
                         </button> {% endcomment %}
                     </div>
-                    <p class="vehicle-selection-blurb">We need more information to help you find the right parts for your vehicle. Select a vehicle to narrow your results.</p>
+                    <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
                     ${vehicleListHTML}
-                    <button id="add-vehicle-btn">Add Vehicle</button>
+                    <button id="add-vehicle-btn">{{ 'garage.add_vehicle_btn' | t }}</button>
                 </div>
                 `;
                 garagePopupContainer.appendChild(easyYMMElement);
