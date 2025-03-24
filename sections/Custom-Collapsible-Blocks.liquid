@@ -2,7 +2,7 @@
     {% for block in section.blocks %}
         {% if block.settings.block_content != blank %}
             <button class="collapsible">
-                <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title }}</b>
+                <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
             </button>
             <div class="content">
                 {{ block.settings.block_content | liquid }}  <!-- Render Liquid content -->

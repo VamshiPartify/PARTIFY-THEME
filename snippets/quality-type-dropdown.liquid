@@ -66,9 +66,9 @@
 </style>
 
 <div class="product-type-dropdown">
-    <label class="option-title-quality" for="product-type-select">Quality</label>
+    <label class="option-title-quality" for="product-type-select">{{ 'quality_options.title' | t }}</label>
     <select id="product-type-select" disabled>
-      <option value="" disabled selected>Select Quality</option>
+      <option value="" disabled selected>{{ 'quality_options.disabled_first_option' | t }}</option>
       {% assign available_product_types = '' %}
       
       {% if product.metafields.custom.aftermarket_product %}
@@ -89,9 +89,9 @@
         {% if aftermarket_variant_count > 0 %}
           {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
           {% if aftermarket_product.available %}
-            <option value="aftermarket">Aftermarket - {{ aftermarket_price }}</option>
+            <option value="aftermarket">{{ 'quality_options.aftermarket_in_stock' | t }}{{ aftermarket_price }}</option>
           {% else %}
-            <option value="aftermarket" disabled style="color: gray;">Aftermarket (Out of Stock)</option>
+            <option value="aftermarket" disabled style="color: gray;">{{ 'quality_options.aftermarket_oos' | t }}</option>
           {% endif %}
         {% endif %}
       {% endif %}
@@ -102,9 +102,9 @@
         {% if capa_variant_count > 0 %}
           {% assign capa_price = capa_product.variants.first.price | money %}
           {% if capa_product.available %}
-            <option value="capa">CAPA Certified - {{ capa_price }}</option>
+            <option value="capa">{{ 'quality_options.capa_in_stock' | t }}{{ capa_price }}</option>
           {% else %}
-            <option value="capa" disabled style="color: gray;">CAPA Certified (Out of Stock)</option>
+            <option value="capa" disabled style="color: gray;">{{ 'quality_options.capa_oos' | t }}</option>
           {% endif %}
         {% endif %}
       {% endif %}
@@ -116,9 +116,9 @@
         {% if oem_variant_count > 0 %}
           {% assign oem_price = oem_product.variants.first.price | money %}
           {% if oem_product.available %}
-            <option value="oem">OEM - {{ oem_price }}</option>
+            <option value="oem">{{ 'quality_options.oem_in_stock' | t }}{{ oem_price }}</option>
           {% else %}
-            <option value="oem" disabled style="color: gray;">OEM (Out of Stock)</option>
+            <option value="oem" disabled style="color: gray;">{{ 'quality_options.oem_oos' | t }}</option>
           {% endif %}
         {% endif %}
       {% endif %}

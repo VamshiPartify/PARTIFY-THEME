@@ -161,7 +161,6 @@
         searchTerm = searchTerm.replace(/[\[\]"]+/g, "").trim();
 
         if (searchTerm) {
-          console.log("Fetching recommendations for:", searchTerm);
           var formattedSearchTerm = searchTerm.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
           var collectionUrl = '/collections/' + formattedSearchTerm + '/products.json';
 
@@ -194,15 +193,16 @@
 
                 if (!heading) {
                   heading = document.createElement("h2");
+                  const morePartsText = '{{ "product_recommendations.heading" | t }}';
+                  const fitsTheText = '{{ "product_recommendations.fits_the" | t }}';
                   heading.classList.add("product-section--title", "product-recommendations--title");
-                  heading.textContent = "More Parts For The " + searchTerm.replace(/-/g, " ");
-                  var productfits = "Fits The " + searchTerm.replace(/-/g, " ");
+                  heading.textContent = morePartsText + " " + searchTerm.replace(/-/g, " ");
+                  var productfits = fitsTheText + " " + searchTerm.replace(/-/g, " ");
                   recommendationsContainer.insertAdjacentElement("beforebegin", heading);
                 } else {
-                  heading.textContent = "More Parts For The " + searchTerm.replace(/-/g, " ");
-                  var productfits = "Fits The " + searchTerm.replace(/-/g, " ");
+                  heading.textContent = morePartsText + " " + searchTerm.replace(/-/g, " ");
+                  var productfits = fitsTheText + " " + searchTerm.replace(/-/g, " ");
                 }
-                console.log("Title updated:", heading.textContent);
               }
 
               productList.forEach(product => {
@@ -212,7 +212,7 @@
                 var productHTML = `
                   <li class="product-grid-item">
                     <a href="{{ shop.url }}/products/${ product.handle }">
-                      <img src="${product.images[0].src}" alt="${productTitle}">
+                      <img src="${product.images[0].src}" alt="${productTitle}" loading="lazy">
                       <p class="recommended-price">${Shopify.formatMoney(product.variants[0].price)}</p>
                       <p class="rec-product-title">${productTitle}</p>
                       <p class="rec-fits">${productfits}</p>
@@ -222,7 +222,6 @@
                 `;
                 
                 recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
-                console.log("Added product:", product.title);
               });
 
               
@@ -234,8 +233,6 @@
     
 
 async function loadShopifyRecommendations() {
-  console.log("Fetching best-selling products from collections with numeric prefixes.");
-
   const collectionHandles = {{ product.collections | map: "handle" | json }};
   const currentProductSku = {{ product.variants.first.sku | json }};
   const skuPrefix = currentProductSku ? currentProductSku.substring(0, 9) : "";
@@ -305,7 +302,6 @@ async function loadShopifyRecommendations() {
     });
 
     const result = await response.json();
-    console.log("Storefront API Response:", result);
 
     let products = result?.data?.collection?.products?.edges || [];
 
@@ -337,7 +333,7 @@ async function loadShopifyRecommendations() {
         <li class="product-grid-item">
           <a href="{{ shop.url }}/products/${product.handle}" class="product-link">
             <img src="${product.images.edges[0]?.node?.src || 'placeholder-image.jpg'}" 
-                 alt="${product.title}">
+                 alt="${product.title}" loading="lazy">
             <p class="recommended-price">
                $${product.variants.edges[0]?.node?.price.amount}
             </p>
@@ -351,7 +347,6 @@ async function loadShopifyRecommendations() {
 
         </li>
       `;
-      console.log("Yotpo Product ID:", product.id.replace('gid://shopify/Product/', ''));
 
       recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
     });
@@ -373,7 +368,6 @@ async function loadShopifyRecommendations() {
 
 
 function fetchShopifyDefaultRecommendations() {
-  console.log("Fetching default Shopify recommendations...");
   fetch('/recommendations/products.json?limit={{ product_limit }}')
     .then(response => response.json())
     .then(data => {
@@ -384,7 +378,7 @@ function fetchShopifyDefaultRecommendations() {
         var productHTML = `
           <li class="product-grid-item">
              <a href="{{ shop.url }}/products/${ product.handle }" class="product-link">
-              <img src="${product.images[0].src}" alt="${product.title}" class="product-image">
+              <img src="${product.images[0].src}" alt="${product.title}" class="product-image" loading="lazy">
               <p class="product-price">${Shopify.formatMoney(product.variants[0].price)}</p>
               <p class="product-title">${product.title}</p>
               <p class="product-fitment">{{product.metafields.custom.product_fitment}}</p>
@@ -392,7 +386,6 @@ function fetchShopifyDefaultRecommendations() {
           </li>
         `;
         recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
-        console.log("Added Shopify recommendation:", product.title);
       });
     })
     .catch(error => console.log("Failed to fetch Shopify recommendations:", error));

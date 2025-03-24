@@ -40,7 +40,7 @@
       {%- if country_selector or locale_selector -%}
         {% comment %}Inject @pixelunion/shopify-cross-border/cross-border begin{% endcomment %}
         <div class="shopify-cross-border">
-          {% if locale_selector and localization.available_languages.size > 1 %}
+          {% if locale_selector and localization.available_languages.size > 2 %}
             {% comment %}Inject @pixelunion/shopify-cross-border/multi-language begin{% endcomment %}
             {% comment %} Generate a "random" number so ids are unique {% endcomment %}
             {% assign unique_id = "now" | date: "%N" | modulo: 1000 %}
@@ -238,7 +238,7 @@
 
         <!-- Center Column (Social List) -->
         <div class="site-footer__center-column">
-          <p><b>Follow Us</b></p>
+          <p><b>{{ 'follow_us' | t }}</b></p>
           {% render 'social-list' %}
         </div>
 

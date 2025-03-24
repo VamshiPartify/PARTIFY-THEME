@@ -668,5 +668,37 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "quality_popup": {
+    "heading": "Weet u niet zeker wat kwaliteit werkelijk betekent?",
+    "subheading": "Dat is oké. Wij zijn er om te helpen.",
+    "aftermarket_title": "Aftermarket",
+    "aftermarket_description_header": "Aftermarketonderdelen vormen een budgetvriendelijk alternatief voor voertuigreparaties. Ze zijn betrouwbaar en functioneel, maar wel tegen een betaalbare prijs.",
+    "aftermarket_listitem_1_bold": "Betaalbare oplossing:",
+    "aftermarket_listitem_1": "Een budgetvriendelijke optie waarmee u geld kunt besparen zonder dat dit ten koste gaat van de essentiële kwaliteit.",
+    "aftermarket_listitem_2_bold": "Betrouwbare pasvorm:",
+    "aftermarket_listitem_2": "Ontworpen om nauw aan te sluiten bij OEM-normen, waardoor een betrouwbare en functionele pasvorm voor uw voertuig wordt gegarandeerd.",
+    "aftermarket_listitem_3_bold": "Dagelijkse prestaties:",
+    "aftermarket_listitem_3": "Ontworpen om standaardreparaties te ondersteunen en een betrouwbare werking van het voertuig te garanderen.",
+    "aftermarket_listitem_4_bold": "Uitzonderlijke waarde:",
+    "aftermarket_listitem_4": "Combineert kostenbesparing met solide prestaties en is een slimme keuze voor de meeste reparatiebehoeften.",
+    "capa_title": "LAAG",
+    "capa_description_header": "CAPA-gecertificeerde onderdelen voldoen aan of overtreffen de OEM-normen, waardoor u verzekerd bent van hoogwaardige, betrouwbare vervangingen tegen een betaalbare prijs.",
+    "capa_listitem_1_bold": "Kwaliteitsborging:",
+    "capa_listitem_1": "CAPA-onderdelen worden streng getest om te voldoen aan de OEM-prestatienormen of deze te overtreffen.",
+    "capa_listitem_2_bold": "Exacte pasvorm:",
+    "capa_listitem_2": "Ontworpen om naadloos op uw voertuigmodel te passen, net als OEM-onderdelen.",
+    "capa_listitem_3_bold": "Kosteneffectief:",
+    "capa_listitem_3": "Betaalbare vervangingen zonder concessies te doen aan kwaliteit of veiligheid.",
+    "capa_listitem_4_bold": "Gecertificeerde veiligheid:",
+    "capa_listitem_4": "CAPA-onderdelen ondergaan veiligheids- en duurzaamheidstests om te voldoen aan de industrienormen.",
+    "oem_title": "OEM",
+    "oem_description_header": "OEM-onderdelen worden door dezelfde fabrikant als uw voertuig gemaakt, waardoor ze perfect passen.",
+    "oem_listitem_1_bold": "Exacte pasvorm:",
+    "oem_listitem_1": "Speciaal gemaakt voor uw model, waardoor een naadloze installatie en prestaties gegarandeerd zijn.",
+    "oem_listitem_2_bold": "Premium materialen:",
+    "oem_listitem_2": "Gemaakt van hoogwaardige materialen voor duurzaamheid en een lange levensduur.",
+    "oem_listitem_3_bold": "Veiligheid:",
+    "oem_listitem_3": "Voldoet aan de originele veiligheidsnormen voor een gerust gevoel."
   }
 }

@@ -647,5 +647,37 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "quality_popup": {
+    "heading": "Não tem certeza do que qualidade realmente significa?",
+    "subheading": "Tudo bem. Estamos aqui para ajudar.",
+    "aftermarket_title": "Pós-venda",
+    "aftermarket_description_header": "Peças de reposição oferecem uma alternativa econômica para reparos de veículos, proporcionando ajuste confiável e funcionalidade a um preço mais acessível.",
+    "aftermarket_listitem_1_bold": "Solução acessível:",
+    "aftermarket_listitem_1": "Uma opção econômica que ajuda você a economizar sem comprometer a qualidade essencial.",
+    "aftermarket_listitem_2_bold": "Ajuste confiável:",
+    "aftermarket_listitem_2": "Projetado para se alinhar estreitamente aos padrões OEM, garantindo um ajuste confiável e funcional para seu veículo.",
+    "aftermarket_listitem_3_bold": "Desempenho diário:",
+    "aftermarket_listitem_3": "Projetado para suportar reparos padrão e manter a operação confiável do veículo.",
+    "aftermarket_listitem_4_bold": "Valor excepcional:",
+    "aftermarket_listitem_4": "Combina economia de custos com desempenho sólido, oferecendo uma escolha inteligente para a maioria das necessidades de reparo.",
+    "capa_title": "CAMADA",
+    "capa_description_header": "As peças certificadas pela CAPA atendem ou excedem os padrões OEM, garantindo substituições confiáveis e de alta qualidade a um preço mais acessível.",
+    "capa_listitem_1_bold": "Garantia de qualidade:",
+    "capa_listitem_1": "As peças CAPA são rigorosamente testadas para atender ou exceder os padrões de desempenho do OEM.",
+    "capa_listitem_2_bold": "Ajuste exato:",
+    "capa_listitem_2": "Projetado para se adaptar perfeitamente ao modelo do seu veículo, assim como as peças OEM.",
+    "capa_listitem_3_bold": "Custo-benefício:",
+    "capa_listitem_3": "Substituições acessíveis sem comprometer a qualidade ou a segurança.",
+    "capa_listitem_4_bold": "Segurança Certificada:",
+    "capa_listitem_4": "As peças CAPA passam por testes de segurança e durabilidade para atender aos padrões da indústria.",
+    "oem_title": "Fabricante original de equipamento original",
+    "oem_description_header": "As peças OEM são feitas pelo mesmo fabricante do seu veículo, garantindo um encaixe perfeito.",
+    "oem_listitem_1_bold": "Ajuste exato:",
+    "oem_listitem_1": "Feito especificamente para o seu modelo, garantindo instalação e desempenho perfeitos.",
+    "oem_listitem_2_bold": "Materiais Premium:",
+    "oem_listitem_2": "Feito com materiais de alta qualidade para maior durabilidade e longevidade.",
+    "oem_listitem_3_bold": "Segurança:",
+    "oem_listitem_3": "Atende aos padrões de segurança originais para sua tranquilidade."
   }
 }

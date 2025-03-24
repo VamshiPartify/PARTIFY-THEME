@@ -154,14 +154,14 @@
   }
   
   /* Paint swatch image styling */
-  #paint-swatch-image {
+  {% comment %} #paint-swatch-image {
     max-width: 500px;
     width: 95%;
     border: 1.5px solid #fff;
     border-radius: 0.375rem;
     position: relative;
     display: none;
-  }
+  } {% endcomment %}
   
   /* Close button for how to find your paint code */
   .close-button {
@@ -224,7 +224,7 @@
       padding: 10px;
       transition: background-color 0.3s, transform 0.2s;
       width: 100%;
-      border-radius: 9999px;
+      border-radius: 12px;
     }
   
     #add-to-cart-for-unpainted {
@@ -237,7 +237,7 @@
       padding: 10px;
       transition: background-color 0.3s, transform 0.2s;
       width: 100%;
-      border-radius: 9999px;
+      border-radius: 12px;
     }
   
     #add-to-cart:disabled {
@@ -433,9 +433,10 @@
   }
   #fitment-fail-button {
     width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    background-color: #e61b24;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid #000000;
+    background-color: #f4534d;
     color: #fff;
     font-weight: 700;
     font-size: large;
@@ -708,6 +709,8 @@
   {% assign is_bumperdotcom_make_found = false %}
   {% assign downcase_handle = product.handle | downcase %}
 
+  {% assign rendered_vindecoder = false %}
+
   {% for make in makes %}
     {% if downcase_handle contains make %}
       {% assign is_make_found = true %}
@@ -738,7 +741,7 @@
         <!-- Form for Swatches -->
           <form id="product-form-swatches" method="post" action="/cart/add">
             <div id="model-fitmentfail-button-container">
-              <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
+              <label class="verify-fitment-title" for="product-type-select">{{ 'verify_fitment' | t }}</label>
                 <div class="model-fitment-easysearch-container">
                   <div class="easysearch-embed-widget-fitment"></div>
                 </div>
@@ -758,14 +761,14 @@
             </select>
             <div class="divider-small-screen"></div>
             <!-- Add to Cart Button -->
-              <button type="submit" class="btn full-width bold-text" id="add-to-cart" style="margin: 10px 0;" disabled>Add to Cart</button>
+              <button type="submit" class="btn full-width bold-text" id="add-to-cart" style="margin: 10px 0;" disabled>{{ 'add_to_cart_text' | t }}</button>
           </form>
 
     <!-- Form for either customizations or add to cart on product page -->
       {% comment %} <form> {% endcomment %}
       {% elsif product.variants.size > 1 %}
           <div id="model-fitmentfail-button-container">
-            <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
+            <label class="verify-fitment-title" for="product-type-select">{{ 'verify_fitment' | t }}</label>
               <div class="model-fitment-easysearch-container">
                   {% comment %} <div class="easysearch-skeleton"></div> {% endcomment %}
                   <div class="easysearch-embed-widget-fitment"></div>
@@ -865,6 +868,7 @@
                               {% comment %} {% endif %} {% endcomment %}
 
                               {% render 'vin-decoder' %}
+                              {% assign rendered_vindecoder = true %}
                             </div>
                           </div>
                           
@@ -933,6 +937,7 @@
                               {% comment %} {% endif %} {% endcomment %}
 
                               {% render 'vin-decoder' %}
+                              {% assign rendered_vindecoder = true %}
                             </div>
                           </div>
                         {% endif %}
@@ -941,33 +946,6 @@
 
                   <!-- Select VIN Option -->
                   {%- if product.variants[1].sku contains ".VIN" -%}
-
-                    <!-- For API calls to either Chromedata or Bumper.com, the below is skipped -->
-                    {% comment %} {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                      <div class="vin-options-container">
-                        <div class="paint-or-vin">
-                            <p>Or</p>
-                        </div>
-                        <!-- Text box for VIN input -->
-                        <div id="vin-textbox-container" style="display: none;">
-                          <input
-                              type="text"
-                              id="vin-textbox"
-                              name="properties[VIN]"
-                              placeholder="Enter your VIN"
-                              maxlength="17"
-                          >
-                          <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-                          <p id="vin-disclaimer" style="color: #666; font-size: 0.85rem; margin-top: 5px; font-style: italic;">
-                              <strong>Disclaimer:</strong> VIN entry is for Paint Match purposes only. It is not used to verify fitment.
-                          </p>
-                        </div>
-  
-                        <!-- Button to select Match Paint by VIN variant -->
-                        <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>   
-                      </div> 
-                    {% endunless %} {% endcomment %}
-
                   <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
                     {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                       <div class="vin-options-container" style="display: none;">
@@ -989,8 +967,9 @@
                   {% endif %}
 
                   <!-- only render the vin-decoder(Not sure what you paint code is?) button here if it hasn't been rendered already for the below scenarios -->
-                  {% unless is_make_found or is_bumperdotcom_make_found %}
+                  {% unless is_make_found or is_bumperdotcom_make_found or rendered_vindecoder == true %}
                     {% render 'vin-decoder' %}
+                    {% assign rendered_vindecoder = true %}
                   {% endunless %}
 
                   <div class="color-preview-container-for-customizations">
@@ -998,10 +977,10 @@
                   </div>
 
                     <!-- How to find your paint code image-->
-                    <div id="paint-swatch-modal" class="modal-overlay" style="display: none;">
+                    {% comment %} <div id="paint-swatch-modal" class="modal-overlay" style="display: none;">
                         <div id="close-paint-swatch" class="close-button" role="button">&times;</div>
                         <img src="{{ product.metafields.custom.manufacturer_paint_match | image_url: 'large'}}" loading="lazy" alt="Paint Swatch" id="paint-swatch-image" width="{{ image.width }}" height="{{ image.height }}">
-                    </div>  
+                    </div>   {% endcomment %}
                   </div>
                   <div class="divider-small-screen"></div>
 
@@ -1015,12 +994,9 @@
 
                   <!-- Fixed Add to cart and price container to bottom of mobile -->
                   <div class="conditional-small-screen">
-                      {% comment %} <div class="price-container">
-                          <div id="price-display-small-screen">{{ product.price_min | money }}</div>
-                      </div>          {% endcomment %}
                       <!-- Add to Cart Button for correct fitment and selected paint option-->
                       <div class="add-to-cart-button-wrapper">
-                          <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>Add to Cart</button>
+                          <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>{{ 'add_to_cart_text' | t }}</button>
                       </div>
                   </div>
               </form>
@@ -1030,10 +1006,10 @@
               <div id="color-mismatch-popup" style="display: none;">
                   <div class="customize-color-mismatch-popup-overlay">
                     <div class="color-mismatch-container">
-                      <p id="mismatch-message">The color you selected is different from items already in your cart. Do you want to continue with this color?</p>
+                      <p id="mismatch-message">{{ 'mismatch_color_msgs.keep_color' | t }}</p>
                       <div id="mismatch-buttons-container">
-                        <button id="continue-btn">No</button>
-                        <button id="cancel-btn">Yes</button>
+                        <button id="continue-btn">{{ 'mismatch_color_msgs.no' | t }}</button>
+                        <button id="cancel-btn">{{ 'mismatch_color_msgs.yes' | t }}</button>
                       </div>
                     </div>
                   </div>
@@ -1044,7 +1020,7 @@
             <div class="unpainted-fitment-container">
               <div id="fitment-verification-page-for-unpainted" class="popup-page active">
                 <div id="model-fitmentfail-button-container">
-                  <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
+                  <label class="verify-fitment-title" for="product-type-select">{{ 'verify_fitment' | t }}</label>
                   <div class="model-fitment-easysearch-container">
                     <div class="easysearch-embed-widget-fitment"></div>
                   </div>
@@ -1079,7 +1055,7 @@
 
               <div class="unpainted-add-to-cart-btn-container">
                 <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-                <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>Add to Cart</button>
+                <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>{{ 'add_to_cart_text' | t }}</button>
               </div>
             </div>
           </form>
@@ -1111,7 +1087,7 @@
           </div>
       {% endif %}
       <div id="model-fitmentfail-button-container-oos">
-        <label class="verify-fitment-title" for="product-type-select">Verify Fitment</label>
+        <label class="verify-fitment-title" for="product-type-select">{{ 'verify_fitment' | t }}</label>
         <div class="model-fitment-easysearch-container">
           <div class="easysearch-embed-widget-fitment"></div>
         </div>
@@ -1125,33 +1101,6 @@
     {% endif %}
     
     {%- if product.variants[1].sku contains ".VIN" -%}
-
-      <!-- For API calls to either Chromedata or Bumper.com, the below is skipped -->
-      {% comment %} {% unless is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-        <div class="vin-options-container">
-          <div class="paint-or-vin">
-              <p>Or</p>
-          </div>
-          <!-- Text box for VIN input -->
-          <div id="vin-textbox-container" style="display: none;">
-            <input
-                type="text"
-                id="vin-textbox"
-                name="properties[VIN]"
-                placeholder="Enter your VIN"
-                maxlength="17"
-            >
-            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-            <p id="vin-disclaimer" style="color: #666; font-size: 0.85rem; margin-top: 5px; font-style: italic;">
-                <strong>Disclaimer:</strong> VIN entry is for Paint Match purposes only. It is not used to verify fitment.
-            </p>
-          </div>
-
-          <!-- Button to select Match Paint by VIN variant -->
-          <button id="select-vin-variant" class="btn full-width bold-text" type="button" disabled>Use VIN Instead</button>   
-        </div> 
-      {% endunless %} {% endcomment %}
-
       <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
       {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
         <div class="vin-options-container" style="display: none;">
@@ -1172,8 +1121,9 @@
       {% comment %} {% endif %} {% endcomment %}
     {% endif %}
 
-    {% unless is_make_found or is_bumperdotcom_make_found %}
+    {% unless is_make_found or is_bumperdotcom_make_found or rendered_vindecoder == true %}
       {% render 'vin-decoder' %}
+      {% assign rendered_vindecoder = true %}
     {% endunless %}
 
     <!-- if the meta_fields is greater than 1, then that means there is possiblity of being able to select other options
@@ -1189,10 +1139,10 @@
 
 
       <!-- How to find your paint code image-->
-      <div id="paint-swatch-modal" class="modal-overlay" style="display: none;">
+      {% comment %} <div id="paint-swatch-modal" class="modal-overlay" style="display: none;">
           <div id="close-paint-swatch" class="close-button" role="button">&times;</div>
           <img src="{{ product.metafields.custom.manufacturer_paint_match }}" alt="Paint Swatch" id="paint-swatch-image" width="{{ image.width }}" height="{{ image.height }}">
-      </div>  
+      </div>   {% endcomment %}
     </div>
     <div class="divider-small-screen"></div>
 
@@ -1208,13 +1158,13 @@
     {% if product.variants.size > 1 %}
       <div class="conditional-small-screen">
           <div class="add-to-cart-button-wrapper">
-              <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>Add to Cart</button>
+              <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>{{ 'add_to_cart_text' | t }}</button>
           </div>
       </div>
     {% else %}
       <div class="unpainted-add-to-cart-btn-container">
         <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-        <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>Add to Cart</button>
+        <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>{{ 'add_to_cart_text' | t }}</button>
       </div>
     {% endif %}
 
@@ -1275,7 +1225,7 @@
             const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
 
             //Used for How to find Paint Code
-            const paintSwatchImage = document.getElementById('paint-swatch-image');
+            {% comment %} const paintSwatchImage = document.getElementById('paint-swatch-image'); {% endcomment %}
 
             // Used for adding ASM Delivery estimation on products with no quality selections
             const asmSettings = document.getElementById("asm-settings");
@@ -1314,8 +1264,9 @@
         
         
         
+            redirectBtn = '{{ 'parts_that_fit_your_vehicle' | t }}';
             fitmentFailButton.id = 'fitment-fail-button';
-            fitmentFailButton.textContent = 'Parts That Fit Your Vehicle';
+            fitmentFailButton.textContent = redirectBtn;
             fitmentFailButton.onclick = () => {
                 const fitmentLink = document.querySelector('.easysearch-fitment-link');
                 if (fitmentLink) {
@@ -1658,30 +1609,30 @@
             }
         
             // How to find your paint code section
-                const paintSwatchModal = document.getElementById('paint-swatch-modal');
-                let scrollPosition = 0;
+                {% comment %} const paintSwatchModal = document.getElementById('paint-swatch-modal');
+                let scrollPosition = 0; {% endcomment %}
             
                 // Close the modal when the "X" button is clicked
-                if(document.getElementById('close-paint-swatch')) {
+                {% comment %} if(document.getElementById('close-paint-swatch')) {
                   document.getElementById('close-paint-swatch').onclick = function(event) {
                       paintSwatchModal.style.display = 'none';
                       document.body.classList.remove('no-scroll');
                       document.body.style.top = '';
                       window.scrollTo(0, scrollPosition);
                   }
-                }
+                } {% endcomment %}
             
                 // Close the modal when clicking outside the image
-                window.onclick = function(event) {
+                {% comment %} window.onclick = function(event) {
                     if (event.target === paintSwatchModal) {
                     paintSwatchModal.style.display = 'none';
                     document.body.classList.remove('no-scroll');
                     document.body.style.top = '';
                     window.scrollTo(0, scrollPosition);
                     }
-                }
+                } {% endcomment %}
 
-                if(document.getElementById('open-paint-code-modal')) {
+                {% comment %} if(document.getElementById('open-paint-code-modal')) {
                   document.getElementById('open-paint-code-modal').onclick = function() {
                     if(paintSwatchImage) {
                       scrollPosition = window.scrollY;
@@ -1691,7 +1642,7 @@
                       document.body.style.top = `-${scrollPosition}px`;
                     }
                   }
-                }
+                } {% endcomment %}
         
             if(variantSelector) {
               variantSelector.addEventListener('change', function() {
@@ -1784,7 +1735,7 @@
   
   
         // This is for the Use VIN Instead button
-            document.addEventListener('DOMContentLoaded', () => {
+            {% comment %} document.addEventListener('DOMContentLoaded', () => {
                 const variantSelector = document.getElementById('variant-selector');
                 if(!variantSelector) return;
                 const selectVinVariantButton = document.getElementById('select-vin-variant');
@@ -1805,7 +1756,7 @@
                     }
                 });
               };
-            });
+            }); {% endcomment %}
   
   
         document.addEventListener('DOMContentLoaded', function() {
@@ -1936,7 +1887,7 @@
                   if(vinTextBox) {
                     if (selectedOption.includes('Match Paint by VIN')) {
                       //This check is if the vin decoder results in 'match paint by vin', then customer toggles off of it then back onto it
-                        if (vinMessageParagraph && vinMessageParagraph.innerHTML.includes("will be attached to this order and")) {
+                        if (vinMessageParagraph && (vinMessageParagraph.innerHTML.includes("will be attached to this order and") || vinMessageParagraph.innerHTML.includes("se adjuntará a esta orden"))) {
                           vinMessageParagraph.style.display = 'block';
                         }
                         vinTextBox.style.display = 'block';
@@ -2023,12 +1974,12 @@
               if(firstItem && firstItem !== selectedVariantColor) {
                 const matchArray = variantSelectorArray.find(option => option.label.split(' ')[0] === firstItem);
                 if(matchArray) {
-                  mismatchMessageBtn.textContent = `The color you selected is different from items already in your cart. Would you like to switch to ${firstItem}?`;
-                  cancelBtn.textContent = `Yes, Update Color`;
+                  mismatchMessageBtn.textContent = "{{ 'mismatch_color_msgs.change_color' | t }}" + " " + `${firstItem}?`;
+                  cancelBtn.textContent = "{{ 'mismatch_color_msgs.update_color' | t }}";
                 } else {
-                  mismatchMessageBtn.textContent = "The color you selected is different from the color of items already in your cart."
+                  mismatchMessageBtn.textContent = "{{ 'mismatch_color_msgs.just_notify' | t }}";
                   mismatchBtnContainer.style.justifyContent = "center";
-                  continueBtn.textContent = "Continue Anyway";
+                  continueBtn.textContent = "{{ 'mismatch_color_msgs.continue_anyway' | t }}";
                   continueBtn.style.width = "fit-content";
                   cancelBtn.style.display = "none";
                 }

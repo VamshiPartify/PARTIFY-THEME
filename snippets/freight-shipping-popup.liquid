@@ -123,10 +123,10 @@
 <div id="freight-item-popup" style="display: none;">
     <div class="freight-item-popup-overlay">
       <div class="freight-item-popup-container">
-        <p id="free-shipping-message"><span><b>🎉 Congratulations! 🎉</b></span><br>You’ve just added a part to your cart that will ship by freight truck. Any other parts you add to your cart will ship for <br><b>NO ADDITIONAL COST!</b><br> Take advantage of this great offer today!</p>
+        <p id="free-shipping-message"><span><b>🎉&nbsp;{{ 'freight_shipping_popup.congratulations' | t }}&nbsp;🎉</b></span><br>{{ 'freight_shipping_popup.message_first_part' | t }}&nbsp;<br><b>{{ 'freight_shipping_popup.no_additional_cost' | t }}</b><br>&nbsp;{{ 'freight_shipping_popup.message_second_part' | t }}</p>
         <div id="free-shipping-button-container">
-          <button id="continue-shopping-btn">Continue Shopping</button>
-          <button id="go-to-cart-btn">Go To Cart</button>
+          <button id="continue-shopping-btn">{{ 'freight_shipping_popup.continue_shopping' | t }}</button>
+          <button id="go-to-cart-btn">{{ 'freight_shipping_popup.go_to_cart' | t }}</button>
         </div>
       </div>
     </div>

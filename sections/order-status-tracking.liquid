@@ -436,7 +436,7 @@
       </div> {% endcomment %}
 
   <header class="page-masthead">
-    <h1 class="page-title">Track Your Order</h1>
+    <h1 class="page-title">{{ 'order_status_tracking.title' | t }}</h1>
   </header>
 
   <div class="order-form-wrapper">
@@ -447,11 +447,11 @@
         <input 
           type="text" 
           id="email-input" 
-          placeholder="Email" 
+          placeholder={{ 'order_status_tracking.email_placeholder' | t }} 
           required 
         />
         <button type="submit" class="button" id="track-order-btn" disabled>
-          <span class="button__text">Track Order</span>
+          <span class="button__text">{{ 'order_status_tracking.track_order' | t }}</span>
         </button>
       </form>
     </div>
@@ -459,7 +459,7 @@
 
 
   <div id="order-details" style="display: none;">
-    <h2>Order Details</h2>
+    <h2>{{ 'order_status_tracking.order_details' | t }}</h2>
     <div id="order-metadata"></div>
   </div>
 </article>
@@ -739,7 +739,7 @@ const getIpAddress = async () => {
         
                 // Clear previous content in orderDetails before appending new data
                 if(orderDetails) {
-                  orderDetails.innerHTML = '<h2>Order Details</h2>';
+                  orderDetails.innerHTML = '<h2>{{ 'order_status_tracking.order_details' | t }}</h2>';
                 }
 
                 // Some orders will have removed items that get refunded
@@ -788,7 +788,7 @@ const getIpAddress = async () => {
                   document.getElementById('order-details').style.alignItems = 'center';
                   
                   if (orderDetails) {
-                    orderDetails.innerHTML = 'This order has been cancelled.';
+                    orderDetails.innerHTML = '{{ 'order_status_tracking.cancelled_order' | t }}';
                     orderDetails.style.padding = '1rem 1.5rem';
                     orderDetails.style.background = 'white';
                     orderDetails.style.borderRadius = '12px';
@@ -910,15 +910,15 @@ const getIpAddress = async () => {
                     }
                     if(localPickup) {
                       labels = [
-                      { message: 'Ready For Pickup', location: null, production: true, status: 'Partify' }, 
-                      { message: 'Packaged', location: null, production: true, status: 'Partify' },
-                      { message: 'Ordered', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.ready_for_pickup' | t }}', location: null, production: true, status: 'Partify' }, 
+                      { message: '{{ 'order_status_tracking.packaged' | t }}', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.ordered' | t }}', location: null, production: true, status: 'Partify' },
                       ];
                     } else {
                       labels = [
-                        { message: 'Awaiting Courier', location: null, production: true, status: 'Partify' }, 
-                        { message: 'Packaged', location: null, production: true, status: 'Partify' },
-                        { message: 'Ordered', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.awaiting_courier' | t }}', location: null, production: true, status: 'Partify' }, 
+                        { message: '{{ 'order_status_tracking.packaged' | t }}', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.ordered' | t }}', location: null, production: true, status: 'Partify' },
                       ];
                     }
                     dotLength = 3;
@@ -929,9 +929,9 @@ const getIpAddress = async () => {
                     let initialCheckpointCounter = -1;
                     let shippingSoon = true;
                     labels = [
-                      { message: 'Awaiting Courier', location: null, production: true, status: 'Partify' }, 
-                      { message: 'Packaged', location: null, production: true, status: 'Partify' },
-                      { message: 'Ordered', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.awaiting_courier' | t }}', location: null, production: true, status: 'Partify' }, 
+                      { message: '{{ 'order_status_tracking.packaged' | t }}', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.ordered' | t }}', location: null, production: true, status: 'Partify' },
                     ];
 
                     let originalCheckpointsArr;
@@ -1033,20 +1033,20 @@ const getIpAddress = async () => {
                     }
                     if(localPickup) {
                       labels = [
-                        { message: 'Ready For Pickup', location: null, production: true, status: 'Partify' }, 
-                        { message: 'Packaged', location: null, production: true, status: 'Partify' },
-                        { message: 'Painted', location: null, production: true, status: 'Partify' },
-                        { message: 'Prepped For Painting', location: null, production: true, status: 'Partify' },
-                        { message: 'Ordered', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.ready_for_pickup' | t }}', location: null, production: true, status: 'Partify' }, 
+                        { message: '{{ 'order_status_tracking.packaged' | t }}', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.painted' | t }}', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.prepped_for_painting' | t }}', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.ordered' | t }}', location: null, production: true, status: 'Partify' },
                       ];
                       
                     } else {
                       labels = [
-                        { message: 'Awaiting Courier', location: null, production: true, status: 'Partify' }, 
-                        { message: 'Packaged', location: null, production: true, status: 'Partify' },
-                        { message: 'Painted', location: null, production: true, status: 'Partify' },
-                        { message: 'Prepped For Painting', location: null, production: true, status: 'Partify'},
-                        { message: 'Ordered', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.awaiting_courier' | t }}', location: null, production: true, status: 'Partify' }, 
+                        { message: '{{ 'order_status_tracking.packaged' | t }}', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.painted' | t }}', location: null, production: true, status: 'Partify' },
+                        { message: '{{ 'order_status_tracking.prepped_for_painting' | t }}', location: null, production: true, status: 'Partify'},
+                        { message: '{{ 'order_status_tracking.ordered' | t }}', location: null, production: true, status: 'Partify' },
                       ];
                     }
                     dotLength = 5;
@@ -1058,11 +1058,11 @@ const getIpAddress = async () => {
                     let initialCheckpointCounter = -1;
                     let shippingSoon = true;
                     labels = [
-                      { message: 'Awaiting Courier', location: null, production: true, status: 'Partify' }, 
-                      { message: 'Packaged', location: null, production: true, status: 'Partify' },
-                      { message: 'Painted', location: null, production: true, status: 'Partify' },
-                      { message: 'Prepped For Painting', location: null, production: true, status: 'Partify' },
-                      { message: 'Ordered', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.awaiting_courier' | t }}', location: null, production: true, status: 'Partify' }, 
+                      { message: '{{ 'order_status_tracking.packaged' | t }}', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.painted' | t }}', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.prepped_for_painting' | t }}', location: null, production: true, status: 'Partify' },
+                      { message: '{{ 'order_status_tracking.ordered' | t }}', location: null, production: true, status: 'Partify' },
                     ];
 
                     const originalCheckpointsArr = localTrackingInfo?.checkpoints;
@@ -1207,7 +1207,7 @@ const getIpAddress = async () => {
                           if(time.startsWith('0')) {
                             time = time.substring(1);
                           }
-                          codeP.innerHTML = `<span>Completed</span>`;
+                          codeP.innerHTML = `<span>{{ 'order_status_tracking.completed' | t }}</span>`;
                           
                           prevIndexOfRawKey++;
                           
@@ -1240,9 +1240,9 @@ const getIpAddress = async () => {
                   let allRowContainers = [];
                   let presentLabels = [];
                   const statusTags = {
-                    'InTransit': "In Transit",
-                    'OutForDelivery': "Out For Delivery",
-                    'Delivered': 'Delivered'
+                    'InTransit': "{{ 'order_status_tracking.in_transit' | t }}",
+                    'OutForDelivery': "{{ 'order_status_tracking.out_for_delivery' | t }}",
+                    'Delivered': '{{ 'order_status_tracking.delivered' | t }}',
                   };
 
                  // Making the divs and other containers for the displayed content
@@ -1260,7 +1260,7 @@ const getIpAddress = async () => {
                       const codeP = row || document.createElement('p');
                       codeP.classList.add('code-p');
                       if (!row) {
-                        codeP.innerHTML = `<span style="font-weight: 500;">Pending Completion</span><br><p style="font-size: 14px">TBD</p>`;
+                        codeP.innerHTML = `<span style="font-weight: 500;">{{ 'order_status_tracking.pending_completion' | t }}</span><br><p style="font-size: 14px">TBD</p>`;
                       }
                       codeContainer.appendChild(codeP);
                       rowContainer.appendChild(codeContainer);
@@ -1307,7 +1307,7 @@ const getIpAddress = async () => {
                             if (labels[index].location) {
                               statusLabel.innerHTML = `<span>${messageToDisplay}</span><br><p>${labels[index].location}</p>`;
                             } else {
-                              if(codeP.innerHTML.includes("Pending Completion")) {
+                              if(codeP.innerHTML.includes("Pending Completion") || codeP.innerHTML.includes("Pendiente de finalización")) {
                                 statusLabel.innerHTML = `<span style="font-weight: 500;">${messageToDisplay}</span>`;
                               } else {
                                 statusLabel.innerHTML = `<span>${messageToDisplay}</span>`;
@@ -1317,7 +1317,7 @@ const getIpAddress = async () => {
                             if (labels[index].location) {
                               statusLabel.innerHTML = `<span>${messageToDisplay}</span><br><p>${labels[index].location}</p>`;
                             } else {
-                              if(codeP.innerHTML.includes("Pending Completion")) {
+                              if(codeP.innerHTML.includes("Pending Completion") || codeP.innerHTML.includes("Pendiente de finalización")) {
                                 statusLabel.innerHTML = `<span style="font-weight: 500;">${messageToDisplay}</span>`;
                               } else {
                                 statusLabel.innerHTML = `<span>${messageToDisplay}</span>`;
@@ -1398,7 +1398,7 @@ const getIpAddress = async () => {
                   // Expand for more details section
                   const expandForDetailsContainer = document.createElement('div');
                   expandForDetailsContainer.classList.add('expand-for-details-container');
-                  expandForDetailsContainer.innerHTML = `<p>Expand For Details</p>`;
+                  expandForDetailsContainer.innerHTML = `<p>{{ 'order_status_tracking.expand_for_details' | t }}</p>`;
 
                   // Initialize the details as just the first and last index visible if collapseAccordion is true
                   if(collapseAccordion) {
@@ -1486,7 +1486,7 @@ const getIpAddress = async () => {
               document.getElementById('order-details').style.alignItems = 'center';
               
               if (orderDetails) {
-                orderDetails.innerHTML = 'Order not found.';
+                orderDetails.innerHTML = '{{ 'order_status_tracking.not_found' | t }}';
                 orderDetails.style.padding = '1rem 1.5rem';
                 orderDetails.style.background = 'white';
                 orderDetails.style.borderRadius = '12px';
@@ -1504,7 +1504,7 @@ const getIpAddress = async () => {
             document.getElementById('order-details').style.alignItems = 'center';
             
             if (orderDetails) {
-              orderDetails.innerHTML = 'The email provided does not match our records for this order.';
+              orderDetails.innerHTML = '{{ 'order_status_tracking.invalid_email' | t }}';
               orderDetails.style.padding = '1rem 1.5rem';
               orderDetails.style.background = 'white';
               orderDetails.style.borderRadius = '12px';
@@ -1531,7 +1531,7 @@ const getIpAddress = async () => {
         console.error('Error fetching order details: ', error);
         
         if (orderDetails) {
-          orderDetails.innerHTML = 'Error fetching order details.';
+          orderDetails.innerHTML = '{{ 'order_status_tracking.error_fetching' | t }}';
           orderDetails.style.padding = '1rem 1.5rem';
           orderDetails.style.background = 'white';
           orderDetails.style.borderRadius = '12px';

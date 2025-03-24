@@ -163,14 +163,14 @@
     <div class="delivery-location-popup-overlay">
       <div class="delivery-location-popup-container">
         <div class="delivery-location-header-wrapper">
-            <h1 id="delivery-location-message-h1">Choose your location</h1>
+            <h1 id="delivery-location-message-h1">{{ 'asm_eta.eta_choose_location' | t }}</h1>
             <div class="delivery-location-close-btn" onclick="toggleZipInput();">
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="22px" width="22px" xmlns="http://www.w3.org/2000/svg"><path d="m289.94 256 95-95A24 24 0 0 0 351 127l-95 95-95-95a24 24 0 0 0-34 34l95 95-95 95a24 24 0 1 0 34 34l95-95 95 95a24 24 0 0 0 34-34z"></path></svg>
             </div>
         </div>
         <div class="delivery-location-body-wrapper">
-            <h4 id="delivery-location-message-h4">Delivery options and delivery speeds may vary for different locations</h4>
-            <p id="delivery-location-message-p">Enter a US zip code</p>
+            <h4 id="delivery-location-message-h4">{{ 'asm_eta.delivery_location_msg' | t }}</h4>
+            <p id="delivery-location-message-p">{{ 'asm_eta.enter_zip' | t }}</p>
             <div id="delivery-location-button-container">
                 <input type="text" id="dc-alt-zip-partify" />
                 <button 
@@ -178,7 +178,7 @@
                   onclick="deliveryRecalc(1); return false;"
                   disabled
                 >
-                  Apply
+                  {{ 'asm_eta.apply' | t }}
                 </button>
             </div>
         </div>

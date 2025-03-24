@@ -668,5 +668,37 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "quality_popup": {
+    "heading": "Sie sind sich nicht sicher, was Qualität wirklich bedeutet?",
+    "subheading": "Das ist okay. Wir sind hier, um zu helfen.",
+    "aftermarket_title": "Ersatzteilmarkt",
+    "aftermarket_description_header": "Ersatzteile stellen eine kostengünstige Alternative für Fahrzeugreparaturen dar und bieten zuverlässige Passform und Funktionalität zu einem günstigeren Preis.",
+    "aftermarket_listitem_1_bold": "Kostengünstige Lösung:",
+    "aftermarket_listitem_1": "Eine budgetfreundliche Option, mit der Sie sparen können, ohne Kompromisse bei der grundlegenden Qualität einzugehen.",
+    "aftermarket_listitem_2_bold": "Zuverlässige Passform:",
+    "aftermarket_listitem_2": "Entwickelt, um den OEM-Standards genau zu entsprechen und so eine zuverlässige und funktionale Passform für Ihr Fahrzeug zu gewährleisten.",
+    "aftermarket_listitem_3_bold": "Leistung im Alltag:",
+    "aftermarket_listitem_3": "Entwickelt, um Standardreparaturen zu unterstützen und einen zuverlässigen Fahrzeugbetrieb aufrechtzuerhalten.",
+    "aftermarket_listitem_4_bold": "Außergewöhnlicher Wert:",
+    "aftermarket_listitem_4": "Kombiniert Kosteneinsparungen mit solider Leistung und bietet eine intelligente Wahl für die meisten Reparaturanforderungen.",
+    "capa_title": "SCHICHT",
+    "capa_description_header": "CAPA-zertifizierte Teile erfüllen oder übertreffen die OEM-Standards und gewährleisten hochwertigen, zuverlässigen Ersatz zu einem günstigeren Preis.",
+    "capa_listitem_1_bold": "Qualitätssicherung:",
+    "capa_listitem_1": "CAPA-Teile werden strengen Tests unterzogen, um die Leistungsstandards des OEM zu erfüllen oder zu übertreffen.",
+    "capa_listitem_2_bold": "Genaue Passform:",
+    "capa_listitem_2": "Passt nahtlos zu Ihrem Fahrzeugmodell, genau wie OEM-Teile.",
+    "capa_listitem_3_bold": "Kostengünstig:",
+    "capa_listitem_3": "Kostengünstiger Ersatz ohne Kompromisse bei Qualität oder Sicherheit.",
+    "capa_listitem_4_bold": "Zertifizierte Sicherheit:",
+    "capa_listitem_4": "CAPA-Teile werden Sicherheits- und Haltbarkeitstests unterzogen, um den Industriestandards zu entsprechen.",
+    "oem_title": "OEM",
+    "oem_description_header": "OEM-Teile werden vom selben Hersteller wie Ihr Fahrzeug hergestellt, wodurch eine perfekte Passform gewährleistet wird.",
+    "oem_listitem_1_bold": "Genaue Passform:",
+    "oem_listitem_1": "Speziell für Ihr Modell hergestellt, garantiert reibungslose Installation und Leistung.",
+    "oem_listitem_2_bold": "Hochwertige Materialien:",
+    "oem_listitem_2": "Hergestellt aus hochwertigen Materialien für Haltbarkeit und Langlebigkeit.",
+    "oem_listitem_3_bold": "Sicherheit:",
+    "oem_listitem_3": "Erfüllt die ursprünglichen Sicherheitsstandards für ein beruhigendes Gefühl."
   }
 }

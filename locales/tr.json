@@ -668,5 +668,37 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "quality_popup": {
+    "heading": "Kalitenin gerçekte ne anlama geldiğinden emin değil misiniz?",
+    "subheading": "Önemli değil. Yardım etmek için buradayız.",
+    "aftermarket_title": "Satış Sonrası",
+    "aftermarket_description_header": "Yan sanayi parçalar, araç onarımları için bütçe dostu bir alternatif sunarak, daha uygun bir fiyata güvenilir bir uyum ve işlevsellik sağlar.",
+    "aftermarket_listitem_1_bold": "Uygun Fiyatlı Çözüm:",
+    "aftermarket_listitem_1": "Temel kaliteden ödün vermeden tasarruf etmenize yardımcı olan bütçe dostu bir seçenek.",
+    "aftermarket_listitem_2_bold": "Güvenilir Uyum:",
+    "aftermarket_listitem_2": "Aracınız için güvenilir ve işlevsel bir uyum sağlamak amacıyla OEM standartlarına uygun olarak tasarlanmıştır.",
+    "aftermarket_listitem_3_bold": "Günlük Performans:",
+    "aftermarket_listitem_3": "Standart onarımları desteklemek ve aracın güvenilir şekilde çalışmasını sağlamak için tasarlanmıştır.",
+    "aftermarket_listitem_4_bold": "Olağanüstü Değer:",
+    "aftermarket_listitem_4": "Maliyet tasarrufunu sağlam performansla birleştirerek çoğu onarım ihtiyacı için akıllı bir seçim sunar.",
+    "capa_title": "KATMAN",
+    "capa_description_header": "CAPA sertifikalı parçalar OEM standartlarını karşılar veya aşar, böylece daha uygun bir fiyata yüksek kaliteli, güvenilir yedek parçalar sağlanır.",
+    "capa_listitem_1_bold": "Kalite Güvencesi:",
+    "capa_listitem_1": "CAPA parçaları, OEM performans standartlarını karşılamak veya aşmak için titizlikle test edilir.",
+    "capa_listitem_2_bold": "Tam Uyum:",
+    "capa_listitem_2": "OEM parçalar gibi aracınızın modeline kusursuz uyum sağlayacak şekilde tasarlanmıştır.",
+    "capa_listitem_3_bold": "Maliyet Etkin:",
+    "capa_listitem_3": "Kalite ve güvenlikten ödün vermeden uygun fiyatlı yedek parçalar.",
+    "capa_listitem_4_bold": "Sertifikalı Güvenlik:",
+    "capa_listitem_4": "CAPA parçaları, endüstri standartlarını karşılamak için güvenlik ve dayanıklılık testlerinden geçer.",
+    "oem_title": "OEM",
+    "oem_description_header": "OEM parçalar aracınızın üreticisi tarafından üretilir ve bu sayede mükemmel bir uyum sağlanır.",
+    "oem_listitem_1_bold": "Tam Uyum:",
+    "oem_listitem_1": "Modelinize özel olarak üretilmiş olup, kusursuz montaj ve performans garantisi sunar.",
+    "oem_listitem_2_bold": "Birinci Sınıf Malzemeler:",
+    "oem_listitem_2": "Dayanıklılık ve uzun ömür için yüksek kaliteli malzemelerle üretilmiştir.",
+    "oem_listitem_3_bold": "Emniyet:",
+    "oem_listitem_3": "İçinizin rahat olması için orijinal güvenlik standartlarını karşılar."
   }
 }

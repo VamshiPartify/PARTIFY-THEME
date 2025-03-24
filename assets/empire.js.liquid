@@ -35052,7 +35052,31 @@ var Disclosure = /*#__PURE__*/function () {
       for (var i = 0; i < options.length; i++) {
         var option = options[i];
         this.events.register(option, 'click', function (e) {
-          return _this2._submitForm(e.currentTarget.dataset.value);
+          e.preventDefault();
+          
+          const localeCode = e.currentTarget.dataset.value;
+          let currentPath = window.location.pathname; // Get current page URL
+          // Extract the first part of the path (locale) to check if it's a language prefix
+          const pathParts = currentPath.split('/').filter(part => part); // Remove empty segments
+          const currentLocale = pathParts[0] || '/'; // First part of the path
+
+
+          // Check if the first part of the path is a language code (like 'es' or 'fr')
+          const supportedLocales = ['es']; // Add all supported languages here
+          if (supportedLocales.includes(currentLocale)) {
+            pathParts.shift(); // Remove the locale part from the path
+          }
+
+          // Reconstruct the correct path without the old locale
+          currentPath = '/' + pathParts.join('/');
+
+          document.cookie = `selectedLocale=${localeCode}; path=/; max-age=31536000`; // 1 year
+          // Apply the new locale
+          if (localeCode === 'en') {
+            window.location.href = currentPath; // English does not need a locale prefix
+          } else {
+            window.location.href = `/${localeCode}${currentPath}`;
+          }
         });
       }
     }

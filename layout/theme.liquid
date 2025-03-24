@@ -32,6 +32,31 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     <!-- End of Shoplift scripts -->
 
     {% comment %} {% render 'visually_io_sdk' %} {% endcomment %}
+    <script>
+      (function() {
+        const localeCookie = document.cookie.replace(/(?:(?:^|.*;\s*)selectedLocale\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        const supportedLocales = ['es']; // Add all supported languages here
+    
+        if (localeCookie && supportedLocales.includes(localeCookie)) {
+          const currentPath = window.location.pathname;
+          const pathParts = currentPath.split('/').filter(part => part);
+          const currentLocale = pathParts[0];
+    
+          if (supportedLocales.includes(currentLocale)) {
+            pathParts.shift(); // Remove old locale
+          }
+
+          const newPath = '/' + pathParts.join('/');
+    
+          if (!currentPath.startsWith(`/${localeCookie}/`) && !(localeCookie === 'en' && currentLocale !== 'en')) {
+            window.location.replace(localeCookie === 'en' ? newPath : `/${localeCookie}${newPath}`);
+          }
+        }
+      })();
+
+      window.shopLocale = "{{ shop.locale }}";
+    </script>
+    
 
     <script>
       window.Shopify = window.Shopify || {theme: {id: {{ theme.id }}, role: '{{ theme.role }}' } };
@@ -43,7 +68,6 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     </script>
     <script src="https://cdn.intelligems.io/02ea28a367f5.js"></script>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
     <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}" defer></script>
 
     <style>
@@ -160,7 +184,20 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     {{ 'theme.css' | asset_url | stylesheet_tag }}
 
     {{ 'easysearch-custom-selects-styles.min.css' | asset_url | stylesheet_tag }}
-    {{ 'easysearch-custom-selects.min.js' | asset_url | script_tag }}
+    {% comment %} <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "{{ 'easysearch-custom-selects-styles.min.css' | asset_url }}";
+        link.type = "text/css";
+        link.media = "print";
+        link.onload = function() { this.media = "all"; };
+        document.head.appendChild(link);
+      });
+    </script> {% endcomment %}
+    
+    <script defer src="{{ 'easysearch-custom-selects.min.js' | asset_url }}"></script>
+   
 
     {% comment %}Inject theme-object begin{% endcomment %}
     <script>
@@ -725,6 +762,7 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     ></script>
 
     <script src="{{ 'custom_script.js' | asset_url }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
     {% render 'structured-data' %}
     {% render 'garage-data' %}
 

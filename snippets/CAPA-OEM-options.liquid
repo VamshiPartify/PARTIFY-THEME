@@ -194,11 +194,11 @@
                 <div class="find-paint-option-link-container" style="display: none;">
                   <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
                 </div>
-                <label class="option-title" for="product-type-select">Paint Option</label>
+                <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
               </div>
               <div class="paint-code-wrapper">
                 <select id="variant-selector" name="id" disabled>
-                  <option value="" disabled selected>Select Paint Code</option>
+                  <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
                 </select>
               </div>
               {% comment %} NOTE: the vin-decoder is the exact same as 'excluded-chromedata-makes.... maybe combine them and delete the other' {% endcomment %}
@@ -213,11 +213,11 @@
               <div class="find-paint-option-link-container" style="display: none;">
                 <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
               </div>
-              <label class="option-title" for="product-type-select">Paint Option</label>
+              <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
             </div>
             <div class="paint-code-wrapper">
               <select id="variant-selector" name="id" disabled>
-                <option value="" disabled selected>Select Paint Code</option>
+                <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
               </select>
             </div>
             {% comment %} Here is where i render the email/text input boxes for nonchromedata compatible makes {% endcomment %}
@@ -232,11 +232,11 @@
             <div class="find-paint-option-link-container" style="display: none;">
               <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
             </div>
-            <label class="option-title" for="product-type-select">Paint Option</label>
+            <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
           </div>
           <div class="paint-code-wrapper">
             <select id="variant-selector" name="id" disabled>
-              <option value="" disabled selected>Select Paint Code</option>
+              <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
             </select>
           </div>
           {% comment %} Here is where i render the email/text input boxes for nonchromedata compatible makes {% endcomment %}
@@ -251,11 +251,11 @@
               {% comment %} <div class="find-paint-option-link-container">
                 <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
               </div> {% endcomment %}
-              <label class="option-title" for="product-type-select">Paint Option</label>
+              <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
             </div>
             <div class="paint-code-wrapper">
               <select id="variant-selector" name="id" disabled>
-                <option value="" disabled selected>Select Paint Code</option>
+                <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
               </select>
             </div>
           </div>
@@ -535,7 +535,7 @@
         async function populateVariantDropdown(selectedType) {
           const vinMessageParagraph = document.querySelector('.vin-decoder-message');
             if (combinedVariantSelect) {
-              combinedVariantSelect.innerHTML = '<option value="">Select Paint Code</option>';
+              combinedVariantSelect.innerHTML = '<option value="">{{ 'paint_options.disabled_first_option' | t }}</option>';
             }
 
 
@@ -621,7 +621,7 @@
                     if(selectedType !== "oem") {
                       titleElement.textContent = productTitle;
                     }
-                    if(productTitle.includes("CAPA Certified")) {
+                    if(productTitle.includes("CAPA")) {
                       const oemImg = document.getElementById('oem-badge');
                       if (oemImg) {
                         oemImg.remove();

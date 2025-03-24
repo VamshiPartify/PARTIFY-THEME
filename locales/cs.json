@@ -668,5 +668,37 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "quality_popup": {
+    "heading": "Nejste si jisti, co skutečně znamená kvalita?",
+    "subheading": "To je v pořádku. Jsme tu, abychom vám pomohli.",
+    "aftermarket_title": "Aftermarket",
+    "aftermarket_description_header": "Náhradní díly nabízejí cenově výhodnou alternativu pro opravy vozidel a poskytují spolehlivé přizpůsobení a funkčnost za přijatelnější cenu.",
+    "aftermarket_listitem_1_bold": "Cenově dostupné řešení:",
+    "aftermarket_listitem_1": " Rozpočtová možnost, která vám pomůže ušetřit, aniž byste museli slevit ze základní kvality.",
+    "aftermarket_listitem_2_bold": "Spolehlivý fit:",
+    "aftermarket_listitem_2": " Navrženo tak, aby bylo v souladu s normami OEM a zajistilo spolehlivé a funkční přizpůsobení vašemu vozidlu.",
+    "aftermarket_listitem_3_bold": "Každodenní výkon:",
+    "aftermarket_listitem_3": " Navrženo pro podporu standardních oprav a udržení spolehlivého provozu vozidla.",
+    "aftermarket_listitem_4_bold": "Výjimečná hodnota:",
+    "aftermarket_listitem_4": " Kombinuje úsporu nákladů se solidním výkonem a poskytuje chytrou volbu pro většinu potřeb oprav.",
+    "capa_title": "VRSTVA",
+    "capa_description_header": "Díly s certifikací CAPA splňují nebo překračují standardy OEM a zajišťují vysoce kvalitní a spolehlivé výměny za přijatelnější cenu.",
+    "capa_listitem_1_bold": "Zajištění kvality:",
+    "capa_listitem_1": " Díly CAPA jsou přísně testovány, aby splňovaly nebo překračovaly výkonnostní normy OEM.",
+    "capa_listitem_2_bold": "Přesné přizpůsobení:",
+    "capa_listitem_2": " Navrženo tak, aby bezproblémově pasovalo na váš model vozidla, stejně jako díly OEM.",
+    "capa_listitem_3_bold": "Nákladově efektivní:",
+    "capa_listitem_3": " Cenově dostupné náhrady bez kompromisů v oblasti kvality nebo bezpečnosti.",
+    "capa_listitem_4_bold": "Certifikovaná bezpečnost:",
+    "capa_listitem_4": " Díly CAPA procházejí testováním bezpečnosti a odolnosti, aby splňovaly průmyslové standardy.",
+    "oem_title": "OEM",
+    "oem_description_header": "OEM díly jsou vyrobeny stejným výrobcem vašeho vozidla, což zajišťuje dokonalé přizpůsobení.",
+    "oem_listitem_1_bold": "Přesné přizpůsobení:",
+    "oem_listitem_1": " Vyrobeno speciálně pro váš model, zaručující bezproblémovou instalaci a výkon.",
+    "oem_listitem_2_bold": "Prémiové materiály:",
+    "oem_listitem_2": " Vyrobeno z vysoce kvalitních materiálů pro odolnost a dlouhou životnost.",
+    "oem_listitem_3_bold": "Bezpečnost:",
+    "oem_listitem_3": " Splňuje původní bezpečnostní normy pro klid duše."
   }
 }
