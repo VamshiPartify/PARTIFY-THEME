@@ -162,7 +162,7 @@
 
         if (searchTerm) {
           var formattedSearchTerm = searchTerm.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-          var collectionUrl = '/collections/' + formattedSearchTerm + '/products.json';
+          var collectionUrl = '/collections/' + formattedSearchTerm + '/products.json?locale=es';
 
           fetch(collectionUrl)
             .then(response => {
@@ -204,24 +204,34 @@
                   var productfits = fitsTheText + " " + searchTerm.replace(/-/g, " ");
                 }
               }
-
+              
+              
               productList.forEach(product => {
-                var shortSearchTerm = searchTerm.substring(0, 4); 
-                var productTitle = searchTerm ? `${shortSearchTerm} ${product.title}` : product.title;
+                const translatedTitleResult = getTranslatedProducts(product.handle, "{{ shop.locale }}").then(translatedProducts => {
+                  let translation;
+                  if (translatedProducts && translatedProducts?.data?.product) {
+                    translation = product.title = translatedProducts?.data.product.title;
+                  } else {
+                    translation = product.title;
+                  }
+                  var shortSearchTerm = searchTerm.substring(0, 4); //Extracts year
 
-                var productHTML = `
-                  <li class="product-grid-item">
-                    <a href="{{ shop.url }}/products/${ product.handle }">
-                      <img src="${product.images[0].src}" alt="${productTitle}" loading="lazy">
-                      <p class="recommended-price">${Shopify.formatMoney(product.variants[0].price)}</p>
-                      <p class="rec-product-title">${productTitle}</p>
-                      <p class="rec-fits">${productfits}</p>
-                    </a>
-                    
-                  </li>
-                `;
-                
-                recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
+                  var productTitle = searchTerm ? `${shortSearchTerm} ${translation}` : product.title;
+  
+                  var productHTML = `
+                    <li class="product-grid-item">
+                      <a href="{{ shop.url }}/products/${ product.handle }">
+                        <img src="${product.images[0].src}" alt="${productTitle}" loading="lazy">
+                        <p class="recommended-price">${Shopify.formatMoney(product.variants[0].price)}</p>
+                        <p class="rec-product-title">${productTitle}</p>
+                        <p class="rec-fits">${productfits}</p>
+                      </a>
+                      
+                    </li>
+                  `;
+                  
+                  recommendationsContainer.insertAdjacentHTML("beforeend", productHTML);
+                });
               });
 
               
@@ -230,6 +240,34 @@
           loadShopifyRecommendations(); // Fallback to Shopify's own recommendations if no search term
         }
       });
+
+async function getTranslatedProducts(handle, locale) {
+  const capsLocale = locale.toUpperCase();
+  const translateQuery = `
+        query Localization($handle: String!) @inContext(country: US, language: ${capsLocale}) {
+          product(handle: $handle) {
+        title
+      }
+    }
+  `
+
+  try {
+    const response = await fetch("/api/2023-10/graphql.json", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": "7c001a82d9230747fd5895fcd9c0b721"
+      },
+      body: JSON.stringify({ query: translateQuery, variables: { handle: handle } })
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error fetching translated products:", error);
+    return [];
+  }
+}
     
 
 async function loadShopifyRecommendations() {

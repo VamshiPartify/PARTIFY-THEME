@@ -144,15 +144,20 @@
       {{ product.title }}
     </h2>
 
+    {% assign translated_appending = product.metafields.custom.title_collection_appending | t %}
+    {% if translated_appending == product.metafields.custom.title_collection_appending %}
+      {% assign metafield_appending = translatedAppending %}
+    {% else %}
+      {% assign metafield_appending = product.metafields.custom.title_collection_appending %}
+    {% endif %}
+
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         var searchTermRaw = localStorage.getItem("searchTerms") || "[]";
-        console.log("Raw Search Term from localStorage:", searchTermRaw);
 
         try {
           var searchTermsArray = JSON.parse(searchTermRaw); // Parse as JSON
-          console.log("Parsed Search Terms Array:", searchTermsArray);
 
           var searchTerm = Array.isArray(searchTermsArray) && searchTermsArray.length > 0 
             ? searchTermsArray[0] // Get first value
@@ -164,7 +169,6 @@
 
         // Clean and format the search term
         searchTerm = searchTerm.replace(/[\[\]"]/g, "").trim();
-        console.log("Using First Search Term (Cleaned):", searchTerm);
 
         var matchedCollectionTitle = "";
         var productCollections = [
@@ -172,7 +176,8 @@
             "{{ collection.title | escape }}",
           {% endfor %}
         ];
-        console.log("Product Collections:", productCollections);
+
+        console.log('productCollections: ', productCollections);
 
         // Find a matching collection
         productCollections.forEach(function(collectionTitle) {
@@ -181,14 +186,12 @@
           }
         });
 
-        console.log("Matched Collection Title:", matchedCollectionTitle);
-
+console.log('matchedCollectionTitle: ', matchedCollectionTitle);
         // Get metafield value (ensure it's properly passed)
-        var metafieldAppending = "{{ product.metafields.custom.title_collection_appending | escape }}".trim();
+        var metafieldAppending = "{{ metafield_appending | escape }}".trim();
         if (!metafieldAppending || metafieldAppending === "undefined") {
           metafieldAppending = ""; // Default to empty string
         }
-        console.log("Metafield Appending:", metafieldAppending);
 
         // Ensure the title element exists before modifying it
         var titleElement = document.getElementById("product-title");
@@ -196,12 +199,9 @@
           // If a match is found and metafield is not empty, update the title
           if (matchedCollectionTitle !== "" && metafieldAppending !== "" && metafieldAppending !== "undefined") {
             titleElement.innerHTML = matchedCollectionTitle + " " + metafieldAppending;
-            console.log("Updated Title:", titleElement.innerHTML);
-                  } else if (matchedCollectionTitle !== "" && (metafieldAppending === "" || metafieldAppending === "undefined")) {
+          } else if (matchedCollectionTitle !== "" && (metafieldAppending === "" || metafieldAppending === "undefined")) {
             var shortCollectionTitle = matchedCollectionTitle.substring(0, 4); // Get first 4 characters
             titleElement.innerHTML = shortCollectionTitle + " " + titleElement.innerHTML;
-            console.log("Updated Title with Short Collection:", titleElement.innerHTML);          
-
           } else {
             console.log("Title not updated - Conditions not met");
           }

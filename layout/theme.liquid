@@ -819,7 +819,13 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
 </script>
 
 
-
+{% if  shop.locale == "es" %}
+  <style>
+  div#shopify-chat {
+      display: none !important;
+  }
+  </style>
+{% endif %}
 
 
 
