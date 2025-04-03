@@ -346,6 +346,8 @@
   {% assign is_bumperdotcom_make_found = false %}
   {% assign downcase_handle = product.handle | downcase %}
 
+  {% assign current_locale = shop.locale %}
+
   {% for make in makes %}
     {% if downcase_handle contains make %}
       {% assign is_make_found = true %}
@@ -589,8 +591,19 @@
 
     // Function to fetch content from Shopify page using Liquid
     const fetchPageContent = async () => {
+      let url = '{{ product.metafields.custom.howtofindpaintcodeurl | escape }}';
+
+      if('{{ current_locale }}' === 'es') {
+        let parts = url.split(".com/");
+
+        if (parts.length === 2) {
+            url = `${parts[0]}.com/es/${parts[1]}`;
+        }
+      }
+
+
       try {
-        const response = await fetch('{{ product.metafields.custom.howtofindpaintcodeurl | escape }}.json');
+        const response = await fetch(`${url}.json`);
         if (!response.ok) {
           throw new Error('Failed to fetch content');
         }
