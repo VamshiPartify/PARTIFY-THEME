@@ -1,8 +1,13 @@
 <div class="collapsible-container">
+    {% assign current_locale = shop.locale %}
     {% for block in section.blocks %}
         {% if block.settings.block_content != blank %}
             <button class="collapsible">
-                <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
+                {% if current_locale == 'es' %}
+                    <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t}}</b>
+                  {% else %}
+                    <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
+                {% endif %}
             </button>
             <div class="content">
                 {{ block.settings.block_content | liquid }}  <!-- Render Liquid content -->

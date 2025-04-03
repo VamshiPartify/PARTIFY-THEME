@@ -1708,7 +1708,6 @@
                       // For unpainted items that have different quality selections, ensure that the add to cart button is disabled as soon
                       // as a quality is selected that is not oem
                       if(productSelect !== "oem") {
-                        console.log('wool she is disabled');
                         addToCartButtonForUnpaintedItems.disabled = false;
                       }
                       if(previousQualitySelectUnpainted !== '' && productSelect === "oem" && previousQualitySelectUnpainted !== productSelect) {
