@@ -185,9 +185,9 @@
                             vinMessage.className = 'vin-decoder-message';
                             vinMessage.style.display = 'block';
                             vinMessage.innerHTML = `
-                            <strong style="color: #444;">"{{ 'vin_decoder_product_page.first' | t }}"</strong> 
+                            <strong style="color: #444;">{{ 'vin_decoder_product_page.first' | t }}</strong> 
                             <span style="color: #000; font-weight: 800;">&nbsp;${paintCode}</span> 
-                            <span style="color: #444;">"{{ 'vin_decoder_product_page.end' | t }}&nbsp;${vinSelected}</span> 
+                            <span style="color: #444;">{{ 'vin_decoder_product_page.end' | t }}&nbsp;${vinSelected}</span> 
                             `;
                         
                             // Append the message to the VIN textbox container
@@ -288,7 +288,7 @@
                   }
 
                   options.find(option => {
-                      if(option.label.startsWith("Match Paint by VIN")) {
+                      if(option.label.startsWith("Match Paint by VIN") || option.label.startsWith("Pintura de combinación por VIN")) {
 
                         const vinTextboxContainer = document.getElementById("vin-textbox-container");
                         const paintCodeWrapper = document.querySelector('.paint-code-wrapper');

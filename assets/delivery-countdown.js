@@ -514,7 +514,7 @@ async function queryAllETAs (selectedType, relocation) {
 	productVariant.forEach((variant) => {
 		let variantTitle = selectedType !== 'single' ? variant.variantTitle : variant.title;
 
-		if(variantTitle === "Match Paint by VIN") return;
+		if(variantTitle === "Match Paint by VIN" || variantTitle === "Pintura de combinación por VIN") return;
 		if(variantTitle.includes("Custom Paint Code")) return;
 
 
@@ -589,7 +589,7 @@ async function queryAllETAs (selectedType, relocation) {
 
 		// Countdown has gone below 0, need to recalculate
 		if(relocation === 2) {
-			if (dataVariantTitle && dataVariantTitle !== "Match Paint by VIN") {
+			if (dataVariantTitle && dataVariantTitle !== "Match Paint by VIN" && dataVariantTitle !== "Pintura de combinación por VIN") {
 				if(!selectedSku) {
 					const checkAsmData = setInterval(() => {
 						selectedSku = window.asmData[dataVariantSku];
@@ -613,7 +613,7 @@ async function queryAllETAs (selectedType, relocation) {
 
 		// User changed the zip code, need to recalculate
 		if(relocation === 1) {
-			if (dataVariantTitle && dataVariantTitle !== "Match Paint by VIN") {
+			if (dataVariantTitle && dataVariantTitle !== "Match Paint by VIN" && dataVariantTitle !== "Pintura de combinación por VIN") {
 
 				const currentCountdownTime = await relocationCalculation(selectedSku, attempts, maxAttempts);
 

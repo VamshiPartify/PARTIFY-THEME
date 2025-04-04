@@ -808,6 +808,16 @@
                               <select id="variant-selector" name="id" class="variant-dropdown">
                                 <option value="" selected disabled>Paint Option</option>
                                 {% for variant in product.variants %}
+                                  {% if variant.title contains "Unpainted" and shop.locale == "es"%}
+                                    {% assign translated_title = "Sin pintar" %}
+                                  {% elsif variant.title contains "Custom Paint Code" and shop.locale == "es" %}
+                                    {% assign translated_title = "Código de pintura personalizado (Te contactaremos)" %}
+                                  {% elsif variant.title contains "Match Paint by VIN" and shop.locale == "es" %}
+                                    {% assign translated_title = "Pintura de combinación por VIN" %}
+                                  {% else %}
+                                    {% assign translated_title = variant.title %}
+                                  {% endif %}
+
                                     {% if variant.metafields.custom.hide_paint_code == true %}
                                       {% continue %}
                                     {% endif %}
@@ -829,24 +839,24 @@
                                         {{ '+' }}{{ price_diff | money | remove: '.00' }}
                                     {% endif %}
                                     {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                                      {% unless variant.title contains "Match Paint by VIN" %}
+                                      {% unless variant.title contains "Match Paint by VIN" or variant.title contains "Pintura de combinación por VIN" %}
                                         <option 
                                             value="{{ variant.id }}"
-                                            title="{{ variant.title }}" 
+                                            title="{{ translated_title }}" 
                                             sku="{{ variant.sku }}" 
                                             class="variant-option"
                                             data-price="{{ variant.price }}">
-                                            {{ variant.title }} + {{ price_diff }}
+                                            {{ translated_title }} + {{ price_diff }}
                                         </option>
                                       {% endunless %}
                                     {% else %}
                                       <option 
                                         value="{{ variant.id }}"
-                                        title="{{ variant.title }}"
+                                        title="{{ translated_title }}"
                                         sku="{{ variant.sku }}"
                                         class="variant-option"
                                         data-price="{{ variant.price }}">
-                                        {{ variant.title }} + {{ price_diff }}
+                                        {{ translated_title }} + {{ price_diff }}
                                       </option>
                                     {% endif %}
                                   {% endfor %}
@@ -856,12 +866,17 @@
                                   <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
                                 {% for variant in product.variants %}
                                   {% if variant.title contains "Match Paint by VIN" %}
+                                    {% if shop.locale == "es" %}
+                                      {% assign translated_title = "Pintura de combinación por VIN" %}
+                                    {% else %}
+                                      {% assign translated_title = variant.title %}
+                                    {% endif %}
                                     <div 
                                       data-value="{{ variant.id }}" 
                                       class="hidden-vin-option-single-quality"
                                       data-price="{{ variant.price }}"
                                       style="display: none;">
-                                      {{ variant.title }} + {{ price_diff }}
+                                      {{ translated_title }} + {{ price_diff }}
                                     </div>
                                   {% endif %}
                                 {% endfor %}
@@ -890,6 +905,13 @@
                                   {% if variant.title contains "Custom Paint Code" %}
                                     {% continue %}
                                   {% endif %}
+                                  {% if variant.title contains "Unpainted" and shop.locale == "es"%}
+                                    {% assign translated_title = "Sin pintar" %}
+                                  {% elsif variant.title contains "Match Paint by VIN" and shop.locale == "es" %}
+                                    {% assign translated_title = "Pintura de combinación por VIN" %}
+                                  {% else %}
+                                    {% assign translated_title = variant.title %}
+                                  {% endif %}
                                   
                                   {% assign price_diff = variant.price | minus: product.price_min | money %}  
                                   {% if price_diff == 0 %}
@@ -898,24 +920,24 @@
                                       {{ '+' }}{{ price_diff | money | remove: '.00' }}
                                   {% endif %}
                                   {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                                    {% unless variant.title contains "Match Paint by VIN" %}
+                                    {% unless variant.title contains "Match Paint by VIN" or variant.title contains "Pintura de combinación por VIN" %}
                                       <option 
                                           value="{{ variant.id }}" 
-                                          title="{{ variant.title }}"
+                                          title="{{ translated_title }}"
                                           sku="{{ variant.sku }}"
                                           class="variant-option"
                                           data-price="{{ variant.price }}">
-                                          {{ variant.title }} + {{ price_diff }}
+                                          {{ translated_title }} + {{ price_diff }}
                                       </option>                                  
                                     {% endunless %}
                                   {% else %}
                                     <option 
                                       value="{{ variant.id }}" 
-                                      title="{{ variant.title }}"
+                                      title="{{ translated_title }}"
                                       sku="{{ variant.sku }}"
                                       class="variant-option"
                                       data-price="{{ variant.price }}">
-                                      {{ variant.title }} + {{ price_diff }}
+                                      {{ translated_title }} + {{ price_diff }}
                                     </option>    
                                   {% endif %}
                                 {% endfor %}
@@ -925,12 +947,17 @@
                                 <!-- This is to make the Match Paint by VIN present on the DOM but not initially as an option -->
                                 {% for variant in product.variants %}
                                   {% if variant.title contains "Match Paint by VIN" %}
+                                    {% if shop.locale == "es" %}
+                                      {% assign translated_title = "Pintura de combinación por VIN" %}
+                                    {% else %}
+                                      {% assign translated_title = variant.title %}
+                                    {% endif %}
                                     <div 
                                       data-value="{{ variant.id }}" 
                                       class="hidden-vin-option-single-quality"
                                       data-price="{{ variant.price }}"
                                       style="display: none;">
-                                      {{ variant.title }} + {{ price_diff }}
+                                      {{ translated_title }} + {{ price_diff }}
                                     </div>
                                   {% endif %}
                                 {% endfor %}
@@ -1568,7 +1595,7 @@
             function checkBothConditions() {
                 const variantSelected = variantSelector.value !== ""; // Check if a variant is selected
                 const selectedOptionText = variantSelector.options[variantSelector.selectedIndex].text;
-                const selectedOptionCheckingForVin = selectedOptionText.includes("Match Paint by VIN");
+                const selectedOptionCheckingForVin = selectedOptionText.includes("Match Paint by VIN") || selectedOptionText.includes("Pintura de combinación por VIN");
                 const oemVinContainer = document.querySelector('.oem-vin-container');
         
                 if (parseInt(variantSize) === 1 && variantTitle === "Default Title") {
@@ -1884,7 +1911,7 @@
                   const selectedOption = variantSelector.options[variantSelector.selectedIndex].text;
                   const vinMessageParagraph = document.querySelector('.vin-decoder-message');
                   if(vinTextBox) {
-                    if (selectedOption.includes('Match Paint by VIN')) {
+                    if (selectedOption.includes('Match Paint by VIN') || selectedOption.includes('Pintura de combinación por VIN')) {
                       //This check is if the vin decoder results in 'match paint by vin', then customer toggles off of it then back onto it
                         if (vinMessageParagraph && (vinMessageParagraph.innerHTML.includes("will be attached to this order and") || vinMessageParagraph.innerHTML.includes("se adjuntará a esta orden"))) {
                           vinMessageParagraph.style.display = 'block';
@@ -1957,7 +1984,14 @@
           const selectedLabel = selectedOption.label;
           const selectedVariantColor = selectedLabel.split(' ')[0];
         
-          if (selectedLabel.startsWith("Match Paint by VIN") || selectedLabel.startsWith("Unpainted") || selectedLabel.startsWith("Custom Paint Code")) {
+          if (
+            selectedLabel.startsWith("Match Paint by VIN") || 
+            selectedLabel.startsWith("Unpainted") || 
+            selectedLabel.startsWith("Custom Paint Code") ||
+            selectedLabel.startsWith("Pintura de combinación por VIN") ||
+            selectedLabel.startsWith("Sin pintar") ||
+            selectedLabel.startsWith("Código de pintura personalizado") ||
+          ) {
             return;
           }
     
