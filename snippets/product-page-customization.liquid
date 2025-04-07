@@ -1364,7 +1364,7 @@
                           }
                         }
                     {% comment %} } else if (easyFitmentSuccess && fitmentLink && failChecker === 0){ {% endcomment %}
-                    } else if (easyFitmentSuccess && failChecker === 0 && fitmentHeader.innerHTML.includes("FITS your")){
+                    } else if (easyFitmentSuccess && failChecker === 0 && (fitmentHeader.innerHTML.includes("FITS your") || fitmentHeader.innerHTML.includes("SE ADAPTA"))) {
                         fitmentFailButton.style.display = 'none';
                         
                         if(vinTextBoxOEM) {
