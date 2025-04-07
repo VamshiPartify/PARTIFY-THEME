@@ -712,7 +712,8 @@
   {% assign rendered_vindecoder = false %}
 
   {% for make in makes %}
-    {% if downcase_handle contains make %}
+    {% assign downcase_make = make | downcase %}
+    {% if downcase_handle contains downcase_make %}
       {% assign is_make_found = true %}
       {% break %}
     {% endif %}
@@ -720,7 +721,8 @@
 
 
   {% for excluded_make in excluded_makes %}
-    {% if downcase_handle contains excluded_make %}
+    {% assign downcase_excluded_make = excluded_make | downcase %}
+    {% if downcase_handle contains downcase_excluded_make %}
       {% assign is_excluded_make_found = true %}
       {% break %}
     {% endif %}
@@ -728,7 +730,8 @@
 
 
   {% for bumperdotcom_make in bumperdotcom_makes %}
-    {% if downcase_handle contains bumperdotcom_make %}
+    {% assign downcase_bumperdotcom_make = bumperdotcom_make | downcase %}
+    {% if downcase_handle contains downcase_bumperdotcom_make %}
       {% assign is_bumperdotcom_make_found = true %}
       {% break %}
     {% endif %}
@@ -748,7 +751,7 @@
             </div>
             <!-- Variant Selector -->
             <select id="variant-selector" name="id">
-              <option value="" selected disabled>Select Paint Option*</option>
+              <option value="" selected disabled>{{'paint_options.select_paint_options' | t }}*</option>
               {% for variant in product.variants %}
                 <option
                   value="{{ variant.id }}"
@@ -802,11 +805,11 @@
                         {% if is_make_found %}
                           <div id="variant-selector-container">
                             <div class="divider-large-screen"></div>
-                            <label for="variant-selector" class="variant-label">Paint Option</label>
+                            <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
                       
                             <div class="paint-code-wrapper">
                               <select id="variant-selector" name="id" class="variant-dropdown">
-                                <option value="" selected disabled>Paint Option</option>
+                                <option value="" selected disabled>{{ 'paint_options.title' | t }}</option>
                                 {% for variant in product.variants %}
                                   {% if variant.title contains "Unpainted" and shop.locale == "es"%}
                                     {% assign translated_title = "Sin pintar" %}
@@ -897,10 +900,10 @@
                                 <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
                               </div>
                             </div> {% endcomment %}
-                            <label for="variant-selector" class="variant-label">Paint Option</label>
+                            <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
                             <div class="paint-code-wrapper">
                               <select id="variant-selector" name="id" class="variant-dropdown">
-                                <option value="" selected disabled>Paint Option</option>
+                                <option value="" selected disabled>{{ 'paint_options.title' | t }}</option>
                                 {% for variant in product.variants %}
                                   {% if variant.title contains "Custom Paint Code" %}
                                     {% continue %}
@@ -1990,7 +1993,7 @@
             selectedLabel.startsWith("Custom Paint Code") ||
             selectedLabel.startsWith("Pintura de combinación por VIN") ||
             selectedLabel.startsWith("Sin pintar") ||
-            selectedLabel.startsWith("Código de pintura personalizado") ||
+            selectedLabel.startsWith("Código de pintura personalizado")
           ) {
             return;
           }

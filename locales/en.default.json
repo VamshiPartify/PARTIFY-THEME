@@ -765,6 +765,7 @@
   "model_fitment": "Model Fitment",
   "verify_fitment": "Verify Fitment",
   "paint_options": {
+    "select_paint_options": "Select Paint Options",
     "title": "Paint Option",
     "disabled_first_option": "Select Paint Code"
   },

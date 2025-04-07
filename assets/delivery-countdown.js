@@ -12,8 +12,9 @@ function deliveryCountdown (store_id, item_sku) {
 		jsel.type = 'text/javascript';
 		jsel.src = 'https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si='+ asm_store_id +'&is='+ asm_item_sku;
 		document.getElementById('asm-ajax').appendChild (jsel);
-	} else
+	} else {
 		asm_timeout = setTimeout ('deliveryCountdown()', 100);
+	}
 }
 
 function activate_enter (evt) {
