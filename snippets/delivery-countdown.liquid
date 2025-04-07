@@ -26,7 +26,11 @@
 
 	<div id="asm-ajax-partify"></div>
 	<script type="text/javascript">
-		deliveryCountdown ('{{ shop.permanent_domain }}', '{{ product.variants.first.sku }}');
+		try {
+			deliveryCountdown ('{{ shop.permanent_domain }}', '{{ product.variants.first.sku }}');
+		} catch (e) {
+			console.warn('Await deliveryCountdown...');
+		}
 	</script>
 	<!-- Advanced Shipping Manager Delivery Countdown -->
 	{% endif %}

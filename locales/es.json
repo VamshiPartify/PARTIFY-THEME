@@ -853,6 +853,7 @@
     "model_fitment": "Montaje del modelo",
     "verify_fitment": "Verificar ajuste",
     "paint_options": {
+      "select_paint_options": "Seleccionar opciones de pintura",
       "title": "Opción de pintura",
       "disabled_first_option": "Seleccionar código de pintura"
     },

@@ -349,7 +349,8 @@
   {% assign current_locale = shop.locale %}
 
   {% for make in makes %}
-    {% if downcase_handle contains make %}
+    {% assign downcase_make = make | downcase %}
+    {% if downcase_handle contains downcase_make %}
       {% assign is_make_found = true %}
       {% break %}
     {% endif %}
@@ -357,14 +358,17 @@
 
 
   {% for excluded_make in excluded_makes %}
-    {% if downcase_handle contains excluded_make %}
+    {% assign downcase_excluded_make = excluded_make | downcase %}
+    {% if downcase_handle contains downcase_excluded_make %}
       {% assign is_excluded_make_found = true %}
       {% break %}
     {% endif %}
   {% endfor %}
 
+
   {% for bumperdotcom_make in bumperdotcom_makes %}
-    {% if downcase_handle contains bumperdotcom_make %}
+    {% assign downcase_bumperdotcom_make = bumperdotcom_make | downcase %}
+    {% if downcase_handle contains downcase_bumperdotcom_make %}
       {% assign is_bumperdotcom_make_found = true %}
       {% break %}
     {% endif %}
@@ -656,7 +660,7 @@
         const pageContent = await fetchPageContent();
         showModal(pageContent);
       } catch (error) {
-        console.error('Error fetching page content:', error);
+        console.error('Error fetching page content how-to-find-paint-code:', error);
       }
     };
 
