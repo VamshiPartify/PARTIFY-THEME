@@ -464,6 +464,46 @@
                   <option value="" disabled>No OEM Product Assigned</option>
                 {% endif %}
               {% endif %}
+            ],
+            current: [
+              {% assign current_base_price = product.variants.first.price %}
+              {% for variant in product.variants %}
+                {% if variant.metafields.custom.hide_paint_code == true %}
+                  {% continue %}
+                {% endif %}
+                {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                  {% if variant.title contains "Custom Paint Code" %}
+                    {% continue %}
+                  {% endif %}
+                {% endif %}
+                {% assign current_variant_price = variant.price %}
+                {% assign price_difference = current_variant_price | minus: current_base_price %}
+                { 
+                  "id": "{{ variant.id }}",
+                  {% if variant.title contains "Unpainted" and shop.locale == "es" %}
+                    "title": "Sin pintar +{{ price_difference | money }}",
+                  {% elsif variant.title contains "Custom Paint Code" and shop.locale == "es" %}
+                    "title": "Código de pintura personalizado (Te contactaremos) +{{ price_difference | money }}",
+                  {% elsif variant.title contains "Match Paint by VIN" and shop.locale == "es" %}
+                    "title": "Pintura de combinación por VIN +{{ price_difference | money }}",
+                  {% else %}
+                    "title": "{{ variant.title }} +{{ price_difference | money }}",
+                  {% endif %} 
+                  "price": "{{ variant.price | money }}",
+                  "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                  "variantTitle": "{{ variant.title }}",
+                  "variantSku": "{{ variant.sku }}",
+                  "variantInventory": "{{ variant.inventory_quantity }}",
+                  "productTitle": "{{ product.title | escape }}",
+                  "productDescription": {{ product.description | json }},
+                  "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                  {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                    {% if variant.title contains "Match Paint by VIN" %}
+                      "class": "hidden-vin-option"
+                    {% endif %}
+                  {% endif %}
+                },
+              {% endfor %}
             ]
       };
 
@@ -573,7 +613,10 @@
           }
 
             // Get the relevant variants for selected product type
-            const variants = productVariants[selectedType] || [];
+            let variants = productVariants[selectedType] || [];
+            if(variants.length === 0) {
+              variants = productVariants.current;
+            }
             const variantsUpdateEvent = new CustomEvent('variantsUpdated', { detail: { variants } });
             document.dispatchEvent(variantsUpdateEvent);
             
@@ -713,176 +756,178 @@
         }
 
         // 3. When product type is selected
-        productTypeSelect.addEventListener('change', async function() {
-          selectedType = productTypeSelect.value;
-          setQualitySelectedType(selectedType)
+        if(productTypeSelect) {
+          productTypeSelect.addEventListener('change', async function() {
+            selectedType = productTypeSelect.value;
+            setQualitySelectedType(selectedType)
 
 
 
-          if(isDeliveryCountdownEnabled) {
-            // Only run the following if there is a paint variant select
-            if (combinedVariantSelect) {
-              // Send productVariants to the delivery-countdown.js script to be used there
-              receivedProductVariants(productVariants);
-              setProductSku(productSku);
-              queryAllETAs(selectedType, 0);
-            
-            // If there is no paint options to choose from, go ahead and display the countdown eta when quality type is selected
-            } else {
-              let unpaintedSelectedVariant = productVariants[selectedType];
-              let unpaintedSku = unpaintedSelectedVariant[0].variantSku;
+            if(isDeliveryCountdownEnabled) {
+              // Only run the following if there is a paint variant select
+              if (combinedVariantSelect) {
+                // Send productVariants to the delivery-countdown.js script to be used there
+                receivedProductVariants(productVariants);
+                setProductSku(productSku);
+                queryAllETAs(selectedType, 0);
+              
+              // If there is no paint options to choose from, go ahead and display the countdown eta when quality type is selected
+              } else {
+                let unpaintedSelectedVariant = productVariants[selectedType];
+                let unpaintedSku = unpaintedSelectedVariant[0].variantSku;
 
-              receivedDataVariantTitle("Unpainted");
-              receivedDataVariantSku(unpaintedSku);
-              getCountdownAndGeoValues();
-            }
-          }
-    
-
-          const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
-          const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
-          {% comment %} window.selectedProductType = selectedType; {% endcomment %}
-          const container = document.querySelector('.vin-options-container');
-          const vinMessageParagraph = document.querySelector('.vin-decoder-message');
-          //If there is no vin decoder failure message and the combined variant select exists
-          if (!vinMessageParagraph && combinedVariantSelect) {
-            if(vinTextBoxForPaintOption) {
-              vinTextBoxForPaintOption.value = '';
-              vinTextBoxForPaintOption.style.display = 'none';
-            }
-          }
-          if(selectVinVariantButton) {
-            selectVinVariantButton.style.display = 'block'; // Show Use VIN button
-          }
-
-          if(selectedType === "oem") {
-            if(!failedVinDecode && !matchingByVin) {
-              oemVinContainer.style.display = "block";
-            }
-            if (container) {
-              container.style.display = "none"; // Remove the container from the DOM
-            }
-          } else {
-            oemVinContainer.style.display = "none";
-            if(container) {
-              if (container.style.display = "none") {
-                container.style.display = "flex"; //
+                receivedDataVariantTitle("Unpainted");
+                receivedDataVariantSku(unpaintedSku);
+                getCountdownAndGeoValues();
               }
             }
-          }
+      
 
-          //If selected type for quality
-          if (selectedType) {
-              priceDisplay.textContent = priceMatch[0];
-              priceDisplaySmallScreen.textContent = priceMatch[0];
-              if(selectedType !== "oem") {
-                //Prevents vin text box from clearing if vin decoder failed and customer decided to 
-                //select a different quality
-                if(!failedVinDecode) {
-                  vinTextBox.value = '';
+            const selectedTypeText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
+            const priceMatch = selectedTypeText.match(/\$[\d,]+\.\d{2}/);
+            {% comment %} window.selectedProductType = selectedType; {% endcomment %}
+            const container = document.querySelector('.vin-options-container');
+            const vinMessageParagraph = document.querySelector('.vin-decoder-message');
+            //If there is no vin decoder failure message and the combined variant select exists
+            if (!vinMessageParagraph && combinedVariantSelect) {
+              if(vinTextBoxForPaintOption) {
+                vinTextBoxForPaintOption.value = '';
+                vinTextBoxForPaintOption.style.display = 'none';
+              }
+            }
+            if(selectVinVariantButton) {
+              selectVinVariantButton.style.display = 'block'; // Show Use VIN button
+            }
+
+            if(selectedType === "oem") {
+              if(!failedVinDecode && !matchingByVin) {
+                oemVinContainer.style.display = "block";
+              }
+              if (container) {
+                container.style.display = "none"; // Remove the container from the DOM
+              }
+            } else {
+              oemVinContainer.style.display = "none";
+              if(container) {
+                if (container.style.display = "none") {
+                  container.style.display = "flex"; //
                 }
+              }
+            }
 
-                oem = null;
-                 await populateVariantDropdown(selectedType);
-                 //This means that the vin decoder failed and the result is Match Paint by VIN
-                if(matchingByVin) {
-                  changingPaintOptions(true);
-                }
-
-                
-              } else {
-              //Because populateVariantDropdown isn't called here, the title, badge, and description updates must be made here for OEM
-                const variants = productVariants[selectedType];
-
-                if (combinedVariantSelect) {
-                  combinedVariantSelect.selectedIndex = 0; // Reset to first option (Select Paint Code)
-                }
-
-                if(variants.length > 0) {
-                  titleElement.textContent = decodeHtmlEntities(variants[0].productTitle);
-                }
-                if(variants[0].productTitle.includes("OEM")) {
-                  const capaImg = document.getElementById('capa-certified-badge');
-                  if (capaImg) {
-                    capaImg.remove();
+            //If selected type for quality
+            if (selectedType) {
+                priceDisplay.textContent = priceMatch[0];
+                priceDisplaySmallScreen.textContent = priceMatch[0];
+                if(selectedType !== "oem") {
+                  //Prevents vin text box from clearing if vin decoder failed and customer decided to 
+                  //select a different quality
+                  if(!failedVinDecode) {
+                    vinTextBox.value = '';
                   }
-                  const oemImgId = document.getElementById('oem-badge');
-                  if(!oemImgId) {
-                    const oemImg = document.createElement('img');
-                    oemImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png';
-                    oemImg.alt = 'OEM Certified';
-                    oemImg.id = 'oem-badge';
 
-                    oemImg.style.position = 'relative';
-                    oemImg.style.height = "34px";
-                    oemImg.style.margin = "0 0 0 10px";
-
-                    if(window.innerWidth > 720) {
-                      priceContainerLargeScreen.appendChild(oemImg);
-                    } else {
-                      priceContainerSmallScreen.appendChild(oemImg);
-                    }
-                  }
-                }
-
-                const tempElement = document.createElement('div');
-                tempElement.innerHTML = variants[0].productDescription;
-                if (productPartDescription) {
-                    productPartDescription.innerHTML = tempElement.innerHTML;
-                }
-
-
-                if(!failedVinDecode) {
-
-                  vinTextBox.value = '';
-                }
-                oem = selectedType;
-
-
-                if(combinedVariantSelect) {
-    
-                  //Only ran if vin decoder did not fail and match by vin is not selected
-                  if(!failedVinDecode && !matchingByVin) {
-                    combinedVariantSelect.disabled = true;
-                    combinedVariantSelect.selectedIndex = 0;
-
-                    if(howToFindPaintCodeBtn) {
-                      howToFindPaintCodeBtn.disabled = true;
-                    }
-                    if(getPaintCodeUsingVin) {
-                      getPaintCodeUsingVin.disabled = true;
-                    }
-                  }
-                }
-                //This is necessary to populate the variant dropdowns for the case of failed vin decode and match by vin is selected
-                //then the customer decides to select OEM
-                if(failedVinDecode) {
-                  await populateVariantDropdown(oem);
+                  oem = null;
+                  await populateVariantDropdown(selectedType);
+                  //This means that the vin decoder failed and the result is Match Paint by VIN
                   if(matchingByVin) {
                     changingPaintOptions(true);
-                  } else {
-                    changingPaintOptions(false);
                   }
-                }
 
-              }
-          // No selected type for quality
-          } else {
-              if(combinedVariantSelect) {
-                combinedVariantSelect.disabled = true;
-                combinedVariantSelect.selectedIndex = 0;
-              }
-              if(howToFindPaintCodeBtn) {
-                howToFindPaintCodeBtn.disabled = true;
-              }
-              if(getPaintCodeUsingVin) {
-                getPaintCodeUsingVin.disabled = true;
-              }
-              if(selectVinVariantButton) {
-                selectVinVariantButton.disabled = true;
-              }
-          }
-        });
+                  
+                } else {
+                //Because populateVariantDropdown isn't called here, the title, badge, and description updates must be made here for OEM
+                  const variants = productVariants[selectedType];
+
+                  if (combinedVariantSelect) {
+                    combinedVariantSelect.selectedIndex = 0; // Reset to first option (Select Paint Code)
+                  }
+
+                  if(variants.length > 0) {
+                    titleElement.textContent = decodeHtmlEntities(variants[0].productTitle);
+                  }
+                  if(variants[0].productTitle.includes("OEM")) {
+                    const capaImg = document.getElementById('capa-certified-badge');
+                    if (capaImg) {
+                      capaImg.remove();
+                    }
+                    const oemImgId = document.getElementById('oem-badge');
+                    if(!oemImgId) {
+                      const oemImg = document.createElement('img');
+                      oemImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png';
+                      oemImg.alt = 'OEM Certified';
+                      oemImg.id = 'oem-badge';
+
+                      oemImg.style.position = 'relative';
+                      oemImg.style.height = "34px";
+                      oemImg.style.margin = "0 0 0 10px";
+
+                      if(window.innerWidth > 720) {
+                        priceContainerLargeScreen.appendChild(oemImg);
+                      } else {
+                        priceContainerSmallScreen.appendChild(oemImg);
+                      }
+                    }
+                  }
+
+                  const tempElement = document.createElement('div');
+                  tempElement.innerHTML = variants[0].productDescription;
+                  if (productPartDescription) {
+                      productPartDescription.innerHTML = tempElement.innerHTML;
+                  }
+
+
+                  if(!failedVinDecode) {
+
+                    vinTextBox.value = '';
+                  }
+                  oem = selectedType;
+
+
+                  if(combinedVariantSelect) {
+      
+                    //Only ran if vin decoder did not fail and match by vin is not selected
+                    if(!failedVinDecode && !matchingByVin) {
+                      combinedVariantSelect.disabled = true;
+                      combinedVariantSelect.selectedIndex = 0;
+
+                      if(howToFindPaintCodeBtn) {
+                        howToFindPaintCodeBtn.disabled = true;
+                      }
+                      if(getPaintCodeUsingVin) {
+                        getPaintCodeUsingVin.disabled = true;
+                      }
+                    }
+                  }
+                  //This is necessary to populate the variant dropdowns for the case of failed vin decode and match by vin is selected
+                  //then the customer decides to select OEM
+                  if(failedVinDecode) {
+                    await populateVariantDropdown(oem);
+                    if(matchingByVin) {
+                      changingPaintOptions(true);
+                    } else {
+                      changingPaintOptions(false);
+                    }
+                  }
+
+                }
+            // No selected type for quality
+            } else {
+                if(combinedVariantSelect) {
+                  combinedVariantSelect.disabled = true;
+                  combinedVariantSelect.selectedIndex = 0;
+                }
+                if(howToFindPaintCodeBtn) {
+                  howToFindPaintCodeBtn.disabled = true;
+                }
+                if(getPaintCodeUsingVin) {
+                  getPaintCodeUsingVin.disabled = true;
+                }
+                if(selectVinVariantButton) {
+                  selectVinVariantButton.disabled = true;
+                }
+            }
+          });
+        }
 
         // 4. When a variant is selected, show the price
         if(combinedVariantSelect) { 

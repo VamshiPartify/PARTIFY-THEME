@@ -50448,7 +50448,6 @@ document.addEventListener('easysearch_loaded', function () {
   const addVehicleBtn = document.getElementById("add-vehicle-btn");
   const closeGarageBtn = document.querySelector('.garage-close-button');
 
-
   function hideShopifyChat() {
     const shopifyChat = document.getElementById('shopify-chat');
     if (shopifyChat) {
@@ -50464,37 +50463,46 @@ function showShopifyChat() {
   }
 }
 
-  window.toggleGaragePopup = function () {
-    const garagePopupStyleId = 'garage-popup-style';
+    window.toggleGaragePopup = function () {
+      const garagePopupStyleId = 'garage-popup-style';
+      const scrollY = window.scrollY;
+  
+      garageEasyPopup.classList.toggle("hidden");
 
-    garageEasyPopup.classList.toggle("hidden");
-    if (!garageEasyPopup.classList.contains("hidden")) {
-       if (!document.getElementById(garagePopupStyleId)) {
-        const style = document.createElement('style');
-        style.id = garagePopupStyleId;
-        style.textContent = `
-          body.no-scroll {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden !important;
-          }
-        `;
-        document.head.appendChild(style);
-      }
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
 
-      const style = document.getElementById(garagePopupStyleId);
-      if (style) {
-        style.remove();
+      if (!garageEasyPopup.classList.contains("hidden")) {
+
+        document.body.dataset.scrollY = scrollY;
+
+         if (!document.getElementById(garagePopupStyleId)) {
+          const style = document.createElement('style');
+          style.id = garagePopupStyleId;
+          style.textContent = `
+            body.no-scroll-garage-popup {
+              position: fixed;
+              top: -${scrollY}px;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              overflow: hidden !important;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+        document.body.classList.add('no-scroll-garage-popup');
+      } else {
+        const savedScrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+        delete document.body.dataset.scrollY;
+  
+        const style = document.getElementById(garagePopupStyleId);
+        if (style) {
+          style.remove();
+        }
+
+        window.scrollTo(0, savedScrollY);
       }
     }
-  }
-
+    
   // Attach event listener to the container
   easyBtn.addEventListener("click", function (event) {
     // Check if "Change" or the container was clicked
@@ -50514,7 +50522,7 @@ function showShopifyChat() {
     hideShopifyChat();
   });
 
-  //close window when cliced outside of window
+  //close window when clicked outside of window
   window.onclick = function(event) {
     if (event.target === garageOverlay) {
       if(document.getElementById("add-vehicle-btn")) {
@@ -50540,35 +50548,15 @@ function showShopifyChat() {
       toggleGaragePopup();
       showShopifyChat();
     }
-  //clow window when 'X' is clicked
-  // closeGarageBtn.addEventListener("click", function() {
-  //   if(addVehicleBtn) {
-  //     easyYMMElement.style.display = "none";
-  //     addVehicleBtn.style.display = "flex";
-  //   }
-  //   toggleGaragePopup();
-  //   showShopifyChat();
-  // })
-}
+  };
 
-  // function easyClickBtn(el) {
-  //   el.addEventListener("click", function () {
-  //     console.log('clicked');
-  //     // easyContainer.classList.toggle("hidden");
-  //     garageEasyPopup.classList.toggle("hidden");
-  //     // garageEasyPopupOverlay.classList.toggle("hidden");
-  //     // garageEasyPopupContainer.classList.toggle("hidden");
-  //   });
-  // }
-
-  // if (easyContainer && easyBtn && easyBtnMobile) {
-  //   easyClickBtn(easyBtn);
-  //   easyClickBtn(easyBtnMobile);
-  // }
-  // if (easyContainer && easyBtnSlideshow) {
-  //   easyClickBtn(easyBtnSlideshow);
-  // }
-
+  // Add event listener for keydown (Esc key) to close the modal
+  window.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {  // Escape key
+      toggleGaragePopup();
+      showShopifyChat();
+    }
+  });
 
   let easyCustomMetafield = document.querySelector('.easysearch-custom-metafield');
   let easyFitDetails = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-details');
