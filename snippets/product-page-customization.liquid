@@ -922,7 +922,7 @@
                                   {% else %}
                                       {{ '+' }}{{ price_diff | money | remove: '.00' }}
                                   {% endif %}
-                                  {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                                  {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                                     {% unless variant.title contains "Match Paint by VIN" or variant.title contains "Pintura de combinación por VIN" %}
                                       <option 
                                           value="{{ variant.id }}" 
@@ -933,7 +933,8 @@
                                           {{ translated_title }} + {{ price_diff }}
                                       </option>                                  
                                     {% endunless %}
-                                  {% else %}
+                                  {% comment %} {% else %}
+                                    <script>console.log('wool are we here?', '{{ variant.title }}')</script>
                                     <option 
                                       value="{{ variant.id }}" 
                                       title="{{ translated_title }}"
@@ -942,7 +943,7 @@
                                       data-price="{{ variant.price }}">
                                       {{ translated_title }} + {{ price_diff }}
                                     </option>    
-                                  {% endif %}
+                                  {% endif %} {% endcomment %}
                                 {% endfor %}
                               </select>
                               
