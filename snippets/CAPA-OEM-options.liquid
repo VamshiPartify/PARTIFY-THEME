@@ -553,9 +553,11 @@
                 if (variants.hasOwnProperty(key)) {
                     let variant = variants[key];
 
-                    unpaintedSku = variant[0].variantSku;
-                    setProductSku(unpaintedSku);
-                    queryAllETAs(key, 0);
+                    if(variant.length) {
+                      unpaintedSku = variant[0].variantSku;
+                      setProductSku(unpaintedSku);
+                      queryAllETAs(key, 0);
+                    }
                 }
               }
             }

@@ -1755,7 +1755,7 @@
                     addToCartButtonForUnpaintedItems.style.display = 'block';
 
 
-                      // For unpainted items that have different quality selections, ensure that the add to cart button is disabled as soon
+                      // For unpainted items that have different quality selections, ensure that the add to cart button is clickable as soon
                       // as a quality is selected that is not oem
                       if(productSelect !== "oem") {
                         addToCartButtonForUnpaintedItems.disabled = false;
@@ -1764,9 +1764,19 @@
                         addToCartButtonForUnpaintedItems.disabled = true;
                       }
                   } else if(noQualityOptions && fitmentSuccess) { 
+                    let oemProduct = false;
 
-                    addToCartButtonForUnpaintedItems.style.display = 'block';
-                    addToCartButtonForUnpaintedItems.disabled = false;
+                    const productTitle = document.querySelector('.product-title').innerHTML;
+                    if(productTitle.includes("OEM")) {
+                      oemProduct = true;
+                    }
+
+                    // For unpainted items that do not have quality options, ensure the add to cart button is clickable as soon as fitment is verified
+                    // NOTE: This is only for non-OEM products
+                    if(!oemProduct) {
+                      addToCartButtonForUnpaintedItems.style.display = 'block';
+                      addToCartButtonForUnpaintedItems.disabled = false;
+                    }
                   } else {
                       form.action = '/cart/add';
                       addToCartButtonForUnpaintedItems.disabled = true;
