@@ -66,79 +66,93 @@
 </style>
 
 <div class="product-type-dropdown">
-    <label class="option-title-quality" for="product-type-select">{{ 'quality_options.title' | t }}</label>
-    <select id="product-type-select" disabled>
-      <option value="" disabled selected>{{ 'quality_options.disabled_first_option' | t }}</option>
-      {% assign available_product_types = '' %}
-      
-      {% if product.metafields.custom.aftermarket_product %}
-        {% assign available_product_types = available_product_types | append: 'aftermarket,' %}
-      {% endif %}
-      {% if product.metafields.custom.capa_product %}
-        {% assign available_product_types = available_product_types | append: 'capa,' %}
-      {% endif %}
-      {% if product.metafields.custom.oem_product %}
-        {% assign available_product_types = available_product_types | append: 'oem,' %}
-      {% endif %}
+  {% if is_only_oem == false %}
+      <label class="option-title-quality" for="product-type-select">{{ 'quality_options.title' | t }}</label>
+      <select id="product-type-select" disabled>
+        <option value="" disabled selected>{{ 'quality_options.disabled_first_option' | t }}</option>
+        {% assign available_product_types = '' %}
+        
+        {% if product.metafields.custom.aftermarket_product %}
+          {% assign available_product_types = available_product_types | append: 'aftermarket,' %}
+        {% endif %}
+        {% if product.metafields.custom.capa_product %}
+          {% assign available_product_types = available_product_types | append: 'capa,' %}
+        {% endif %}
+        {% if product.metafields.custom.oem_product %}
+          {% assign available_product_types = available_product_types | append: 'oem,' %}
+        {% endif %}
 
-      {% if available_product_types contains 'aftermarket' %}
-        {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
-        {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
-        {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+        {% if available_product_types contains 'aftermarket' %}
+          {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
+          {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
+          {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
 
-        {% if aftermarket_variant_count > 0 %}
-          {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
-          {% if aftermarket_product.available %}
-            <option value="aftermarket">{{ 'quality_options.aftermarket_in_stock' | t }}{{ aftermarket_price }}</option>
-          {% else %}
-            <option value="aftermarket" disabled style="color: gray;">{{ 'quality_options.aftermarket_oos' | t }}</option>
+          {% if aftermarket_variant_count > 0 %}
+            {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
+            {% if aftermarket_product.available %}
+              <option value="aftermarket">{{ 'quality_options.aftermarket_in_stock' | t }}{{ aftermarket_price }}</option>
+            {% else %}
+              <option value="aftermarket" disabled style="color: gray;">{{ 'quality_options.aftermarket_oos' | t }}</option>
+            {% endif %}
           {% endif %}
         {% endif %}
-      {% endif %}
-      {% if available_product_types contains 'capa' %}
-        {% assign capa_product_handle = product.metafields.custom.capa_product %}
-        {% assign capa_product = all_products[capa_product_handle] %}
-        {% assign capa_variant_count = capa_product.variants | size %}
-        {% if capa_variant_count > 0 %}
-          {% assign capa_price = capa_product.variants.first.price | money %}
-          {% if capa_product.available %}
-            <option value="capa">{{ 'quality_options.capa_in_stock' | t }}{{ capa_price }}</option>
-          {% else %}
-            <option value="capa" disabled style="color: gray;">{{ 'quality_options.capa_oos' | t }}</option>
+        {% if available_product_types contains 'capa' %}
+          {% assign capa_product_handle = product.metafields.custom.capa_product %}
+          {% assign capa_product = all_products[capa_product_handle] %}
+          {% assign capa_variant_count = capa_product.variants | size %}
+          {% if capa_variant_count > 0 %}
+            {% assign capa_price = capa_product.variants.first.price | money %}
+            {% if capa_product.available %}
+              <option value="capa">{{ 'quality_options.capa_in_stock' | t }}{{ capa_price }}</option>
+            {% else %}
+              <option value="capa" disabled style="color: gray;">{{ 'quality_options.capa_oos' | t }}</option>
+            {% endif %}
           {% endif %}
         {% endif %}
-      {% endif %}
-      {% if available_product_types contains 'oem' %}
-        {% assign oem_product_handle = product.metafields.custom.oem_product %}
-        {% assign oem_product = all_products[oem_product_handle] %}
-        {% assign oem_variant_count = oem_product.variants | size %}
+        {% if available_product_types contains 'oem' %}
+          {% assign oem_product_handle = product.metafields.custom.oem_product %}
+          {% assign oem_product = all_products[oem_product_handle] %}
+          {% assign oem_variant_count = oem_product.variants | size %}
 
-        {% if oem_variant_count > 0 %}
-          {% assign oem_price = oem_product.variants.first.price | money %}
-          {% if oem_product.available %}
-            <option value="oem">{{ 'quality_options.oem_in_stock' | t }}{{ oem_price }}</option>
-          {% else %}
-            <option value="oem" disabled style="color: gray;">{{ 'quality_options.oem_oos' | t }}</option>
+          {% if oem_variant_count > 0 %}
+            {% assign oem_price = oem_product.variants.first.price | money %}
+            {% if oem_product.available %}
+              <option value="oem">{{ 'quality_options.oem_in_stock' | t }}{{ oem_price }}</option>
+            {% else %}
+              <option value="oem" disabled style="color: gray;">{{ 'quality_options.oem_oos' | t }}</option>
+            {% endif %}
           {% endif %}
         {% endif %}
-      {% endif %}
-    </select>
-    <div class="oem-vin-container" style="display: none;">
-      <label class="option-title-vin" for="product-type-select">VIN</label>
-      <div id="vin-textbox-container-for-oem">
-        <input
-            type="text"
-            id="vin-textbox-for-oem"
-            name="properties[Vin]"
-            placeholder="Enter your VIN"
-            maxlength="17"
-        >
-        <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+      </select>
+      <div class="oem-vin-container" style="display: none;">
+        <label class="option-title-vin" for="product-type-select">VIN</label>
+        <div id="vin-textbox-container-for-oem">
+          <input
+              type="text"
+              id="vin-textbox-for-oem"
+              name="properties[Vin]"
+              placeholder="Enter your VIN"
+              maxlength="17"
+          >
+          <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+        </div>
       </div>
-    </div>
-    {% if is_only_oem == false %}
       <div class="quality-description-container">
         {% render 'quality-description-modal', qualityTypes: available_product_types %}
+      </div>
+    {% else %}
+      <div class="oem-vin-container" style="display: block;">
+        <label class="option-title-vin" for="product-type-select">VIN</label>
+        <div id="vin-textbox-container-for-oem">
+          <input
+              type="text"
+              id="vin-textbox-for-oem"
+              name="properties[Vin]"
+              placeholder="Enter your VIN"
+              maxlength="17"
+          >
+          <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+        </div>
       </div>
     {% endif %}
   </div>

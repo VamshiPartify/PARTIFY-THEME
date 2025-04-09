@@ -1445,8 +1445,19 @@
                     //Sets vin input box header to red because it is not filled out with 17 characters
                     if(!failedVinDecode && oemVinContainer.style.display === "block" && combinedVariantSelect.disabled === true) {
                       addToCartButton.disabled = true;
-                      qualityHeader.style.color = "#333";
-                      vinHeader.style.color = "#e61b24";
+                      if(qualityHeader) {
+                        qualityHeader.style.color = "#333";
+                        vinHeader.style.color = "#e61b24";
+                      } else {
+                        // This should only be the case for if there is only OEM product available... there will be no quality selection but vin input is a must
+                        if(vinTextBoxOEM.disabled === true) {
+                          verifyFitmentHeader.style.color = "#e61b24";
+                          vinHeader.style.color = "#ccc";
+                        } else {
+                          verifyFitmentHeader.style.color = "#333";
+                          vinHeader.style.color = "#e61b24";
+                        }
+                      }
                     }
                     //Sets vin input box header to black because it is filled out with 17 characters
                     if(!failedVinDecode && oemVinContainer.style.display === "block" && combinedVariantSelect.disabled === false) {
@@ -1516,6 +1527,9 @@
                           selectVinVariantButton.disabled = true;
                         }
                         fitmentSuccess = false;
+                        if(vinTextBoxOEM) {
+                          vinTextBoxOEM.disabled = true;
+                        }
                     } else if (easyFitmentSuccess && fitmentObject.value.length){
                     {% comment %} } else if (easyFitmentSuccess && fitmentLink){ {% endcomment %}
 
@@ -1547,6 +1561,9 @@
 
                         }
                         fitmentSuccess = true;
+                        if(vinTextBoxOEM) {
+                          vinTextBoxOEM.disabled = false;
+                        }
                     } else {
                         fitmentFailButton.style.display = 'none';
                         if(productTypeSelect) {
@@ -1571,6 +1588,9 @@
                           selectVinVariantButton.disabled = true;
                         }
                         fitmentSuccess = false;
+                        if(vinTextBoxOEM) {
+                          vinTextBoxOEM.disabled = true;
+                        }
                     }
                     handleFitmentSuccessChange(productSelect);
                     checkBothConditions(); 

@@ -1,8 +1,8 @@
 <style>
     body.no-scroll-quality {
-      position: fixed;
+      {% comment %} position: fixed;
       top: 0;
-      left: 0;
+      left: 0; {% endcomment %}
       width: 100%;
       height: 100%;
       overflow: hidden !important;
@@ -433,7 +433,6 @@
 
 
   <script>
-    {% comment %} let noPaintSwatchImage = false; {% endcomment %}
     function hideShopifyChat() {
       const shopifyChat = document.getElementById('shopify-chat');
       if (shopifyChat) {
@@ -448,17 +447,6 @@
     }
   }
 
-  //Autoscrolls to paintcode section
-  {% comment %} document.getElementById('instructions-link').addEventListener('click', function(event) {
-    event.preventDefault();
-        let paintCodeSection = document.getElementById('paint-code-accordion');
-    
-    paintCodeSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-    });
-  }); {% endcomment %}
-
   //Clicking on the buttons will expand that one and then close the other
   const qualityAccordionButtons = document.querySelectorAll('.quality-accordion-button');
   qualityAccordionButtons.forEach(button => {
@@ -471,21 +459,6 @@
       // Check if the clicked accordion is already open
       const isOpen = content.classList.contains('open');
   
-      // Close all accordion content sections and reset icons
-      {% comment %} document.querySelectorAll('.quality-accordion-section').forEach(section => {
-        const sectionContent = section.querySelector('.accordion-content');
-        const sectionCirclePlus = section.querySelector('.circle_plus');
-        const sectionCircleNone = section.querySelector('.circle_none');
-  
-        if (sectionContent) {
-          sectionContent.style.maxHeight = null; // Reset height
-          sectionContent.classList.remove('open');
-        }
-        if (sectionCirclePlus && sectionCircleNone) {
-          sectionCirclePlus.style.display = 'block';
-          sectionCircleNone.style.display = 'none';
-        }
-      }); {% endcomment %}
       if (isOpen) {
         // Open the clicked accordion
         content.classList.remove('open');
@@ -532,122 +505,61 @@
     };
 
 
-    // Function to fetch content from Shopify page using Liquid
-    {% comment %} const fetchPageContent = async () => {
-      try {
-        const response = await fetch('{{ product.metafields.custom.howtofindpaintcodeurl | escape }}.json');
-        if (!response.ok) {
-          throw new Error('Failed to fetch content');
-        }
-        const data = await response.json();
-        console.log('data: ', data);
-        return data.page.body_html; // Assuming the content is in the body_html of the page
-      } catch (error) {
-        {% comment %} noPaintSwatchImage = true;
-        if (noPaintSwatchImage) {
-          const accordion = document.getElementById("paint-code-accordion");
-          if (accordion) {
-              accordion.style.display = "none";
-              updatePaintCodeInstructions();
-          }
-      } {% endcomment %}
-        console.error('Fetch error:', error);
-        {% comment %} throw error; {% endcomment %}
-      }
-    }; {% endcomment %}
+    let scrollPosition = 0;
 
+    const openQualityModal = () => {
+      // Save current scroll position
+      scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    
+      // Add class to prevent scroll
+      document.body.classList.add('no-scroll-quality');
+    
+      // Lock scroll by offsetting the body position
+      document.body.style.top = `-${scrollPosition}px`;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    
+      // Show overlay and modal
+      document.querySelector('.quality-description-popup-dark-overlay').style.display = 'block';
+      document.querySelector('.quality-description-popup-container').style.display = 'block';
+    };
+    
+    const closeQualityModal = () => {
+      // Remove scroll lock classes and styles
+      document.body.classList.remove('no-scroll-quality');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+    
+      // Restore scroll position
+      window.scrollTo(0, scrollPosition);
+    
+      // Hide overlay and modal
+      document.querySelector('.quality-description-popup-dark-overlay').style.display = 'none';
+      document.querySelector('.quality-description-popup-container').style.display = 'none';
+    };
+   
     // Open Modal
-    document.querySelector("#quality-description-vindecoder").onclick = async function() {
-      hideShopifyChat();
-      showQualityOverlay();
-      const accordionSection = document.querySelectorAll('.quality-accordion-section');
-      accordionSection.forEach(section => {
-        const content = section.querySelector('.accordion-content');
-        const circlePlus = section.querySelector('.circle_plus');
-        const circleNone = section.querySelector('.circle_none');
-
-        {% comment %} const isOpen = content.classList.contains('open');
-        //auto expands the accordion
-        if (!isOpen) {
-          // Open the clicked accordion
-          content.classList.add('open');
-          content.style.maxHeight = 'fit-content';
+    document.getElementById("quality-description-vindecoder")?.addEventListener("click", openQualityModal);
     
-          // Show the minus icon and hide the plus icon for the active accordion
-          circlePlus.style.display = 'none';
-          circleNone.style.display = 'block';
-        } {% endcomment %}
-
-      });
-
-
-      try {
-        document.body.classList.add('no-scroll-quality');
-        {% comment %} const pageContent = await fetchPageContent(); {% endcomment %}
-        showQualityModal();
-      } catch (error) {
-        console.error('Error fetching page content:', error);
-      }
-    };
-
-    // Close Modal
-    document.getElementById("quality-modal-exit").onclick = function() {
-        document.body.classList.remove('no-scroll-quality');
-      showShopifyChat();
-      hideQualityOverlay();
-      hideQualityModal();
-    };
+    // Close Modal (exit button)
+    document.getElementById("quality-modal-exit")?.addEventListener("click", closeQualityModal);
     
-    window.onclick = function(event) {
-      if(event.target === document.querySelector('.quality-description-popup-container')){
-        document.body.classList.remove('no-scroll-quality');
-        showShopifyChat();
-        hideQualityOverlay();
-        {% comment %} hideQualityModal(); {% endcomment %}
-      }
-    };
-
+    // Close Modal (click outside)
+    document.querySelector('.quality-description-popup-dark-overlay')?.addEventListener("click", () => {
+      closeQualityModal();
+    });
     
-    function updatePaintCodeInstructions() {
-      {% comment %} const instructionsContainer = document.getElementById("capa-quality-explanations"); {% endcomment %}
-  
-      {% comment %} if (noPaintSwatchImage === false) { {% endcomment %}
-          {% comment %} instructionsContainer.innerHTML = `
-              <h4>There are two main ways to get a paint code.</h4>
-              <ol>
-                <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
-                <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
-              </ol>
-          `; {% endcomment %}
-      {% comment %} } else {
-          instructionsContainer.innerHTML = `
-              <h5>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</h5>
-          `;
-      } {% endcomment %}
-    }
-
-    {% comment %} function updateButtonText() {
-      const buttonText = document.getElementById("quality-button-text");
-  
-      // Check screen size
-      if (window.matchMedia("(max-width: 768px)").matches) {
-        // Small screen text
-        buttonText.innerHTML = `
-          <b>Unsure of your paint code?</b><br />
-          Learn how to find it.
-        `;
-      } else {
-        // Default text for larger screens
-        buttonText.innerHTML = `
-          <b>Not sure what your paint code is?</b><br />
-          Explore the different ways you can get your paint code.
-        `;
+    
+    // Close Modal (ESC key)
+    document.addEventListener("keydown", (event) => {
+      event.stopPropagation();
+      const modal = document.querySelector('.quality-description-popup-container');
+      const isModalOpen = modal && modal.style.display === 'block';
+      if (event.key === "Escape" && isModalOpen) {
+        closeQualityModal();
       }
-    }
-  
-    // Run the function on page load
-    updateButtonText(); {% endcomment %}
-  
-    // Add an event listener to handle screen size changes
-    {% comment %} window.addEventListener("resize", updateButtonText); {% endcomment %}
+    });
+    
+    
   </script>
