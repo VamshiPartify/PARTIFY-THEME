@@ -298,7 +298,7 @@
         ".arrivesby-dt-timer {font-family: lato; font-weight: medium; font-size: 16px;}",
         ".delivery-date-earliest-value {color: #01a601; font-family: lato; font-size: 16px;}",
         ".quantity-selector {display: none !important;}",
-        ".product-title { font-family: 'Lato', system-ui, sans-serif; font-size: 18px; font-size-adjust: 0.52; overflow-wrap: anywhere; }",
+        ".product-title { font-family: 'Lato', system-ui, sans-serif; font-size: 18px; font-size-adjust: 0.52; overflow-wrap: anywhere;}",
       ],
       "settings": {
         "gallery_aspect_ratio": "square",

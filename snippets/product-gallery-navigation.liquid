@@ -33,6 +33,60 @@
     {% endcase %}
   {% endif %}
 
+
+  
+  {% assign primary_image = product.metafields.custom.site_primary_image | default: product.media.first %}
+  {% assign lifestyle_reference = product.metafields.custom.lifestyle_image %}
+  {% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
+  {% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
+  {% assign how_to_find_paint_code_reference = product.metafields.custom.how_to_find_your_paint_code_image.value.image %}
+  {% assign additional_product_images = product.metafields.custom.additional_product_image_storage.value %}
+  {% assign reordered_counter = 0 %}
+
+{%- comment -%}
+  Collect media images excluding the primary image to avoid duplication.
+{%- endcomment -%}
+{% assign reordered_media = '' %}
+{% assign reordered_media = reordered_media | append: primary_image | append: ',' %}
+
+<!-- Ensure lifestyle_reference is next -->
+{% if lifestyle_reference != blank %}
+  {% assign reordered_media = reordered_media | append: lifestyle_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure quality_reference is next -->
+{% if quality_reference != blank %}
+  {% assign reordered_media = reordered_media | append: quality_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure paint_infographic_reference is next -->
+{% if paint_infographic_reference != blank %}
+  {% assign reordered_media = reordered_media | append: paint_infographic_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure how_to_find_paint_code_reference is next -->
+{% if how_to_find_paint_code_reference != blank %}
+  {% assign reordered_media = reordered_media | append: how_to_find_paint_code_reference | append: ',' %}
+{% endif %}
+
+{% if additional_product_images != blank %}
+  {% for current_image in additional_product_images %}
+    {% assign file_url_current_image = current_image.preview_image %}
+    {% assign reordered_media = reordered_media | append: file_url_current_image | append: ',' %}
+  {% endfor %}
+{% endif %}    
+
+{% assign reordered_media = reordered_media | split: ',' %}
+
+{% assign gallery_size = reordered_media.size %}
+
+<!-- gallery skeleton -->
+  <div class="product-gallery--skeleton-thumbnails">
+    {% for i in (1..gallery_size) %}
+      <div class="product-gallery--media-thumbnail-img-wrapper skeleton"></div>
+    {% endfor %}
+  </div>
+
   <div
     class="product-gallery--navigation loading"
     data-gallery-navigation
@@ -55,50 +109,6 @@
       class="gallery-navigation--scroller"
       data-gallery-scroller
     >
-
-      {% assign primary_image = product.metafields.custom.site_primary_image | default: product.media.first %}
-      {% assign lifestyle_reference = product.metafields.custom.lifestyle_image %}
-      {% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
-      {% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
-      {% assign how_to_find_paint_code_reference = product.metafields.custom.how_to_find_your_paint_code_image.value.image %}
-      {% assign additional_product_images = product.metafields.custom.additional_product_image_storage.value %}
-      {% assign reordered_counter = 0 %}
-
-    {%- comment -%}
-      Collect media images excluding the primary image to avoid duplication.
-    {%- endcomment -%}
-    {% assign reordered_media = '' %}
-    {% assign reordered_media = reordered_media | append: primary_image | append: ',' %}
-
-    <!-- Ensure lifestyle_reference is next -->
-    {% if lifestyle_reference != blank %}
-      {% assign reordered_media = reordered_media | append: lifestyle_reference | append: ',' %}
-    {% endif %}
-
-    <!-- Ensure quality_reference is next -->
-    {% if quality_reference != blank %}
-      {% assign reordered_media = reordered_media | append: quality_reference | append: ',' %}
-    {% endif %}
-
-    <!-- Ensure paint_infographic_reference is next -->
-    {% if paint_infographic_reference != blank %}
-      {% assign reordered_media = reordered_media | append: paint_infographic_reference | append: ',' %}
-    {% endif %}
-
-    <!-- Ensure how_to_find_paint_code_reference is next -->
-    {% if how_to_find_paint_code_reference != blank %}
-      {% assign reordered_media = reordered_media | append: how_to_find_paint_code_reference | append: ',' %}
-    {% endif %}
-
-    {% if additional_product_images != blank %}
-      {% for current_image in additional_product_images %}
-        {% assign file_url_current_image = current_image.preview_image %}
-        {% assign reordered_media = reordered_media | append: file_url_current_image | append: ',' %}
-      {% endfor %}
-    {% endif %}    
-
-    {% assign reordered_media = reordered_media | split: ',' %}
-
 
     <!-- Must be less than 2 because there will always be something in the first index of the reorder_media array -->
     {% if reordered_media.size < 2 %}

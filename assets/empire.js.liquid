@@ -32175,7 +32175,7 @@ class ProductGallery {
   }
 
   _setSlideHeight() {
-    this.navigation.classList.remove('loading'); // Use the stored image height for situations where the DOM is in a midway state.
+    // this.navigation.classList.remove('loading'); // Use the stored image height for situations where the DOM is in a midway state.
 
     const containerHeight = this.storedImageHeight || this.selected.figure.getBoundingClientRect().height;
     this.storedImageHeight = null;

@@ -424,6 +424,7 @@
     }
   
   #model-fitmentfail-button-container {
+    min-height: 187px;
     padding: 15px 15px 0 15px;
     width: inherit;
   }
@@ -2107,4 +2108,29 @@
       observer.observe(document.body, { childList: true, subtree: true });
     });
   </script>
+
+  <!-- For product gallery skeleton -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const skeletonContainer = document.querySelector(".product-gallery--skeleton-thumbnails");
+      const galleryThumbnails = document.querySelectorAll("[data-gallery-thumbnail]");
+      const navigation = document.querySelector(".product-gallery--navigation");
   
+      if (!skeletonContainer || galleryThumbnails.length === 0) return;
+  
+      const firstImage = galleryThumbnails[0].querySelector("img");
+  
+      const cleanup = () => {
+        skeletonContainer.remove();
+        if (navigation?.classList.contains("loading")) {
+          navigation.classList.remove("loading");
+        }
+      };
+  
+      if (firstImage && firstImage.complete) {
+        cleanup();
+      } else {
+        firstImage.addEventListener("load", cleanup);
+      }
+    });
+  </script>  
