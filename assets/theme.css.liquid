@@ -24237,3 +24237,24 @@ body:not(.user-is-tabbing) .rte .tabs .grouped-content-trigger {
 }
 
 #yotpo_testimonials_btn{display:none;}
+
+.yotpo-skeleton {
+  height: 25px;
+  margin-top: 0;
+  width: 187px;
+  background: #eee;
+  border-radius: 4px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  animation: yotpo-pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes yotpo-pulse {
+  0%, 100% {
+    background-color: #eee;
+  }
+  50% {
+    background-color: #ddd;
+  }
+}
+

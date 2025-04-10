@@ -2089,3 +2089,22 @@
       });
     }
   </script>
+
+
+  <!-- For yotpo stars skeleton -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const skeleton = document.getElementById('yotpo-skeleton');
+  
+      const observer = new MutationObserver(() => {
+        const yotpoStars = document.querySelector('[class*="yotpo-sr-bottom-line-summary"]'); // Adjust if needed
+        if (yotpoStars && skeleton) {
+          skeleton.remove();
+          observer.disconnect();
+        }
+      });
+  
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  </script>
+  
