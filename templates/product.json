@@ -22,6 +22,13 @@
             "product": "{{product}}"
           }
         },
+        "custom_liquid_xMaq8e": {
+          "type": "custom-liquid",
+          "disabled": false,
+          "settings": {
+            "custom_liquid": "<div id=\"yotpo-skeleton\" class=\"yotpo-skeleton\">\n  <div class=\"skeleton-stars\"></div>\n</div>"
+          }
+        },
         "custom_liquid_JeCXVF": {
           "type": "custom-liquid",
           "settings": {
@@ -251,6 +258,7 @@
       "block_order": [
         "title",
         "b0e438c8-4795-49ce-80cb-6a21e1798e46",
+        "custom_liquid_xMaq8e",
         "custom_liquid_JeCXVF",
         "price",
         "custom_liquid_9kgHLn",
@@ -290,7 +298,7 @@
         ".arrivesby-dt-timer {font-family: lato; font-weight: medium; font-size: 16px;}",
         ".delivery-date-earliest-value {color: #01a601; font-family: lato; font-size: 16px;}",
         ".quantity-selector {display: none !important;}",
-        ".product-title {font-size: 18px; overflow-wrap: anywhere;}"
+        ".product-title { font-family: 'Lato', system-ui, sans-serif; font-size: 18px; font-size-adjust: 0.52; overflow-wrap: anywhere; }",
       ],
       "settings": {
         "gallery_aspect_ratio": "square",
