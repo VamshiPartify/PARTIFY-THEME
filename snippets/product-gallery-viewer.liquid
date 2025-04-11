@@ -96,7 +96,10 @@
           {{
             primary_image | image_url: width: 700, format: 'webp' | image_tag: 
             class: 'product-gallery--loaded-image',
-            loading: 'eager'
+            loading: 'eager',
+            fetchpriority: 'high',
+            width: 700,
+            height: 700
           }}
         </div>
       </figure>
@@ -134,7 +137,9 @@
               {{
                 media | image_url: width: 700 | image_tag: 
                 class: 'product-gallery--loaded-image',
-                loading: 'lazy'
+                loading: 'lazy',
+                width: 700,
+                height: 700
               }}
             </div>
           {% when 'external_video' %}
@@ -193,7 +198,10 @@
           {{
             primary_image | image_url: width: 700, format: 'webp' | image_tag: 
             class: 'product-gallery--loaded-image',
-            loading: 'eager'
+            loading: 'eager',
+            fetchpriority: 'high',
+            width: 700,
+            height: 700
           }}
         </div>
       </figure>
@@ -222,7 +230,9 @@
             {{
               lifestyle_reference | image_url: width: 700 | image_tag: 
               class: 'product-gallery--loaded-image',
-              loading: 'lazy'
+              loading: 'lazy',
+              width: 700,
+              height: 700
             }}
           </div>
         </figure>
@@ -251,7 +261,9 @@
           {{
             quality_reference | image_url: width: 700 | image_tag: 
             class: 'product-gallery--loaded-image',
-            loading: 'lazy'
+            loading: 'lazy',
+            width: 700,
+            height: 700
           }}
         </div>
       </figure>
@@ -280,7 +292,9 @@
           {{
             paint_infographic_reference | image_url: width: 700 | image_tag: 
             class: 'product-gallery--loaded-image',
-            loading: 'lazy'
+            loading: 'lazy',
+            width: 700,
+            height: 700
           }}
         </div>
       </figure>
@@ -309,7 +323,9 @@
           {{
             how_to_find_paint_code_reference | image_url: width: 700 | image_tag: 
             class: 'product-gallery--loaded-image',
-            loading: 'lazy'
+            loading: 'lazy',
+            width: 700,
+            height: 700
           }}
         </div>
       </figure>
@@ -343,7 +359,9 @@
             {{
               file_url_current_image | image_url: width: 700 | image_tag: 
               class: 'product-gallery--loaded-image',
-              loading: 'lazy'
+              loading: 'lazy',
+              width: 700,
+              height: 700
             }}
           </div>
         </figure>

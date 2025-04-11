@@ -1,7 +1,16 @@
 {% if settings.asm_delivery_countdown == 'Enabled' %}
 	<!-- Advanced Shipping Manager Delivery Countdown -->
-	<link rel="stylesheet" type="text/css" href="{{ 'delivery-countdown.css' | asset_url }}" />
-	{% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
+	<link
+		rel="stylesheet"
+		href="{{ 'delivery-countdown.css' | asset_url }}"
+		media="print"
+		onload="this.media='all'"
+	  >
+	  <noscript>
+		<link rel="stylesheet" href="{{ 'delivery-countdown.css' | asset_url }}">
+	  </noscript>
+
+	  {% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
 	<div id="delivery-countdown-partify" class="delivery-countdown-hidden">
 		
 		<div id="dc-info-partify">
