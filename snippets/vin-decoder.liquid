@@ -68,16 +68,20 @@
         const appBtn = document.querySelector(".get-paint-code-using-vin");
 
 
-        appBtn.addEventListener("click", () => {
-            vindecoderAppContainer.style.display = "block";
-            closeVinDecoderBtn.style.display = "block";
-            appBtn.style.display = "none";
-        });
+        if(appBtn) {
+            appBtn.addEventListener("click", () => {
+                vindecoderAppContainer.style.display = "block";
+                closeVinDecoderBtn.style.display = "block";
+                appBtn.style.display = "none";
+            });
+        }
 
-        closeVinDecoderBtn.addEventListener("click", () => {
-            vindecoderAppContainer.style.display = "none";
-            closeVinDecoderBtn.style.display = "none";
-            appBtn.style.display = "block";
-        })
+        if(closeVinDecoderBtn) {
+            closeVinDecoderBtn.addEventListener("click", () => {
+                vindecoderAppContainer.style.display = "none";
+                closeVinDecoderBtn.style.display = "none";
+                appBtn.style.display = "block";
+            })
+        }
     })
 </script>
