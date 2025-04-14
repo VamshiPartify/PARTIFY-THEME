@@ -961,5 +961,12 @@
       "continue_shopping": "Seguir comprando",
       "go_to_cart": "Ir al carrito"
     },
-    "follow_us": "Síganos"
+    "follow_us": "Síganos",
+    "testimonials": {
+      "title": "Lo que dicen nuestros clientes",
+      "overall_rating": "Calificación general",
+      "message_1": "“Siempre soy un poco escéptico al pedir piezas como esta por internet (guardabarros delantero para Nissan Rogue), pero como los talleres me cotizaban un precio de más de $1700, decidí arriesgarme. ¡Me alegro mucho de haberlo hecho! El guardabarros encajaba bien y el color combinaba a la perfección.”",
+      "message_2": "“Ford Escape 2012. Me sorprendió gratamente lo bien que le quedó este guardabarros al vehículo y lo bien que combinaba la pintura. Se ve genial. Además, lo enviaron a casa rapidísimo. ¡Excelente relación calidad-precio!”",
+      "message_3": "“La coincidencia de color fue increíblemente precisa. ¡¡¡99.9%!!! Creo que es una coincidencia de color del 100%. Compré el parachoques con certificación Capa, que es la única opción. El parachoques llegó desplegado y en perfecto estado, sin problemas con la pintura. ¡La pintura quedó increíble! No tuve ningún problema al colocarlo y quedó perfecto.”"
+    }
 }
