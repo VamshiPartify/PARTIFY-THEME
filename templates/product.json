@@ -24,7 +24,6 @@
         },
         "custom_liquid_xMaq8e": {
           "type": "custom-liquid",
-          "disabled": false,
           "settings": {
             "custom_liquid": "<div id=\"yotpo-skeleton\" class=\"yotpo-skeleton\">\n  <div class=\"skeleton-stars\"></div>\n</div>"
           }
@@ -59,13 +58,6 @@
             "custom_liquid": "{%- if product.metafields.custom.product_fitment!= blank -%}{{ 'model_fitment' | t }}: <b style=\"color:#00000\" line-height:3em;>{{product.metafields.custom.product_fitment}}</b>{% endif %}"
           }
         },
-       // "61112cbc-8780-4d01-873f-9aa747212ed9": {
-       // "type": "custom-liquid",
-       // "disabled": true,
-       // "settings": {
-       //   "custom_liquid": "{% render 'delivery-countdown' %}"
-       // }
-       //},
         "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6": {
           "type": "custom-liquid",
           "disabled": true,
@@ -99,20 +91,20 @@
           "type": "shopify://apps/arrivesby/blocks/delivery-time/b4f15d36-71f0-4a8c-954f-e485b7529360",
           "disabled": true,
           "settings": {
+            "show_delivery_cutoff": true,
+            "show_shipping_policy": false,
             "font_size": 16,
             "text_align": "left",
+            "icon": "",
+            "date_format": "long",
+            "cutoff_time_format": "timer",
             "text_color": "#121212",
             "background_color": "#fafafa",
-            "icon": "",
-            "heading": "",
             "prefix": "Ships By",
             "separator": "-",
             "suffix": "From Michigan",
-            "date_format": "long",
-            "show_shipping_policy": false,
-            "show_delivery_cutoff": true,
-            "cutoff_time_format": "timer",
-            "cutoff_message": "Order within"
+            "cutoff_message": "Order within",
+            "show_explainer": false
           }
         },
         "custom_liquid_dzWzKA": {
@@ -264,7 +256,6 @@
         "custom_liquid_9kgHLn",
         "custom_liquid_W7THLx",
         "5006f5e7-554d-4cc1-a089-51bc9c37611e",
-       // "61112cbc-8780-4d01-873f-9aa747212ed9",
         "dd9f7fe1-f1e4-477c-94e3-593cf67e75f6",
         "arrivesby_delivery_estimate_GtVWkc",
         "arrivesby_delivery_time_CtCA7H",
@@ -298,7 +289,7 @@
         ".arrivesby-dt-timer {font-family: lato; font-weight: medium; font-size: 16px;}",
         ".delivery-date-earliest-value {color: #01a601; font-family: lato; font-size: 16px;}",
         ".quantity-selector {display: none !important;}",
-        ".product-title { font-family: 'Lato', system-ui, sans-serif; font-size: 18px; font-size-adjust: 0.52; overflow-wrap: anywhere;}",
+        ".product-title { font-family: 'Lato', system-ui, sans-serif; font-size: 18px; font-size-adjust: 0.52; overflow-wrap: anywhere; }"
       ],
       "settings": {
         "gallery_aspect_ratio": "square",
