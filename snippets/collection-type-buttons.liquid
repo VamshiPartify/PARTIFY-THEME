@@ -1,11 +1,30 @@
 <div class="product-type-buttons" id="product-type-id">
   {% assign all_product_types = '' %}
-  {%- for product in collection.all_products -%}
-    {%- unless all_product_types contains product.type or product.title contains 'Sample' -%}
-      {%- assign all_product_types = all_product_types | append: product.type | append: ',' -%}
-    {%- endunless -%}
-  {%- endfor -%}
+  {% assign product_types_array = '' %}
+  {% assign product_counter = 0 %}
 
+  {% paginate collection.products by 1000 %}
+    {%- for product in collection.products -%}
+      {% assign product_counter = product_counter | plus:1 %}
+
+      {% unless product.title contains 'Sample' %}
+        {% assign current_type = product.type %}
+        {% assign product_types_array = all_product_types | split: ',' %}
+    
+        {% assign is_duplicate = false %}
+        {% for existing_type in product_types_array %}
+          {% if existing_type == current_type %}
+            {% assign is_duplicate = true %}
+          {% endif %}
+        {% endfor %}
+    
+        {% unless is_duplicate %}
+          {% assign all_product_types = all_product_types | append: current_type | append: ',' %}
+        {% endunless %}
+      {% endunless %}
+    {%- endfor -%}
+  {% endpaginate %}
+  
   {% assign product_types_array = all_product_types | split: ',' | uniq %}
 
   {% for type in product_types_array %}
@@ -30,12 +49,14 @@
 
       {%- comment -%} If no predefined image, find the first product with this type and use its image {%- endcomment -%}
       {% if image_url == '' %}
-        {% for product in collection.all_products %}
-          {% if product.type == type and product.featured_image %}
-            {% assign image_url = product.featured_image | img_url: 'medium' %}
-            {% break %}
-          {% endif %}
-        {% endfor %}
+        {% paginate collection.products by 1000 %}
+          {% for product in collection.products %}
+            {% if product.type == type and product.featured_image %}
+              {% assign image_url = product.featured_image | img_url: 'medium' %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+        {% endpaginate %}
       {% endif %}
 
       <div class="product-type-item">
@@ -60,7 +81,7 @@
           >
             <div class="image-container">
               {% if image_url != '' %}
-                <img src="{{ image_url }}" alt="{{ type }} image" class="product-type-image">
+                <img src="{{ image_url }}" alt="{{ type }} image" class="product-type-image" height="150" width="150">
               {% endif %}
             </div>
           </a>
@@ -72,7 +93,8 @@
 </div>
 {% assign available_aspirations = '' %}
 
-{%- for product in collection.all_products -%}
+{% paginate collection.products by 1000 %}
+{%- for product in collection.products -%}
   {%- assign aspiration_list = product.metafields.custom.aspiration -%}
   {%- if aspiration_list != blank -%}
     {%- assign aspiration = aspiration_list | remove: '["' | remove: '"]' | split: '","' -%}
@@ -83,6 +105,7 @@
     {%- endfor -%}
   {%- endif -%}
 {%- endfor -%}
+{% endpaginate %}
 
 {% assign aspiration_array = available_aspirations | split: ',' | uniq %}
 
@@ -163,6 +186,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100%;
 }
 
 .product-type-buttons .btn {
