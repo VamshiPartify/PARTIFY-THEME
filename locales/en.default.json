@@ -760,7 +760,7 @@
   },
   "product_recommendations": {
     "heading": "More Parts For The",
-    "fits_the": "Fits The"
+    "fits_the": "Fits The:"
   },
   "model_fitment": "Model Fitment",
   "verify_fitment": "Verify Fitment",
@@ -880,5 +880,6 @@
     "message_1": "“I’m always a little skeptical about ordering parts like this online (front fender for Nissan Rogue) but, with body shops quoting me a price upwards of $1.7k, I decided to take a chance. I’m so glad I did! The fender fit well and the color was a perfect match.”",
     "message_2": "“2012 Ford Escape. I was pleasantly surprised how well this fender fit the vehicle, and how well the paint matched. It looks great. Also, it shipped to my house very fast. Great price for the value!”",
     "message_3": "“The color match was amazingly on point. 99.9%!!! I really think it’s a 100% color match. I bought the capa-certified bumper that’s the only way to go. The bumper came unfolded and in perfect condition no problems with the paint. The paint was awesome! I didn’t have any trouble putting it on and it lined up pretty good.”"
-  }
+  },
+  "fitment": "Fitment:"
 }
