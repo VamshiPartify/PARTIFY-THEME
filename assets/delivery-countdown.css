@@ -10,10 +10,10 @@
 	display: none;
  	float: left;
 	width: 100%;
-	font-size: 15px;
+	font-size: 16px;
 	line-height: normal;
     margin-bottom: 10px;
-	padding-left: 10px;
+	/* padding-left: 10px; */
 }
 
 #delivery-countdown-partify span {
@@ -273,13 +273,13 @@
 /* Skeleton Loader Styles */
 #delivery-countdown-placeholder {
 	width: 100%;
-	font-size: 15px;
+	font-size: 16px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	/* line-height: 25px; */
-	padding-left: 10px;
 	color: #000000;
+	margin-bottom: 10px;
 }
 
 .countdown-skeleton-text {
@@ -287,16 +287,38 @@
 	font-weight: normal;
 }
 
-
+.countdown-skeleton-text::before {
+	font-size: 18px;
+  }
+  
 .countdown-skeleton-text span {
-	font-weight: bold;
+font-weight: 700;
+color: #003f70;
 }
+
 
 .countdown-skeleton-title {
-	line-height: 25px;
-	margin-top: 2px;
+	margin-top: 8px;
+	font-size: 15px;
+	color: #6a7a89;
+	font-weight: 500;
+	font-style: italic;
+	padding-bottom: 10px;
+	line-height: 1.5;
+  }
+
+  .countdown-skeleton-title span {
+	margin-top: 8px;
+	font-size: 16px;
+	color: #000000;
 	font-weight: normal;
-}
+	padding-bottom: 10px;
+	font-style: normal;
+	/* line-height: 40px; */
+  }
+  
+  
+  
 
 /* Hide countdown initially */
 .delivery-countdown-hidden {
