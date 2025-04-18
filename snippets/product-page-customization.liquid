@@ -825,7 +825,7 @@
                             <div class="divider-large-screen"></div>
                             <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
                             <div class="painted-stock-key" style="display: none;">
-                              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+                              {{  'variant_instock_message' | t }}
                             </div> 
 
                             <div class="paint-code-wrapper">
@@ -960,7 +960,7 @@
                             </div> {% endcomment %}
                             <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
                             <div class="painted-stock-key" style="display: none;">
-                              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+                              {{  'variant_instock_message' | t }}
                             </div> 
                             <div class="paint-code-wrapper">
                               <select id="variant-selector" name="id" class="variant-dropdown">
