@@ -832,7 +832,8 @@
     "asm_eta": {
       "skeleton_text_header_bold": "¿Lo necesitas rápido?",
       "skeleton_text_header": "Envío acelerado disponible al finalizar la compra.",
-      "skeleton_title": "Los tiempos de envío varían según la ubicación.",
+      "skeleton_title": "(Fecha de entrega disponible después de seleccionar una opción de pintura).",
+      "skeleton_title_beg": "Llega tan temprano como",
       "eta_incorrect_zip_message": "Por favor, introduzca un código postal válido",
       "eta_top_beg": "Llega tan temprano como",
       "eta_bottom_beg": "Si se ordena dentro de",

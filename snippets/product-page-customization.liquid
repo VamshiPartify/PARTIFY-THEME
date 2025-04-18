@@ -779,6 +779,13 @@
     <!-- Form for either customizations or add to cart on product page -->
       {% comment %} <form> {% endcomment %}
       {% elsif product.variants.size > 1 %}
+
+        <!-- Delivery Countdown -->
+        <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
+          {% render 'delivery-countdown' %}
+        </div>
+
+
           <div id="model-fitmentfail-button-container">
             <label class="verify-fitment-title" for="product-type-select">{{ 'verify_fitment' | t }}</label>
               <div class="model-fitment-easysearch-container">
@@ -809,17 +816,27 @@
                       {% assign is_only_oem = true %}
                       {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
                   {% elsif product.variants.size > 1 %}
+                    {% assign base_variant_inventory = 0 %}
+                    {% assign any_available_options = false %}
                       <!-- Variant Dropdown if paint selection but no quality selection -->
                         <!-- For makes easily found with chromedata (e.g. Nissan) -->
                         {% if is_make_found %}
                           <div id="variant-selector-container">
                             <div class="divider-large-screen"></div>
                             <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
-                      
+                            <div class="painted-stock-key" style="display: none;">
+                              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+                            </div> 
+
                             <div class="paint-code-wrapper">
                               <select id="variant-selector" name="id" class="variant-dropdown">
                                 <option value="" selected disabled>{{ 'paint_options.title' | t }}</option>
                                 {% for variant in product.variants %}
+                                  {% if variant.title contains "Unpainted" %}
+                                    {% assign base_variant_inventory = variant.inventory_quantity %}
+                                  {% endif %}
+
+
                                   {% if variant.title contains "Unpainted" and shop.locale == "es"%}
                                     {% assign translated_title = "Sin pintar" %}
                                   {% elsif variant.title contains "Custom Paint Code" and shop.locale == "es" %}
@@ -828,6 +845,16 @@
                                     {% assign translated_title = "Pintura de combinación por VIN" %}
                                   {% else %}
                                     {% assign translated_title = variant.title %}
+                                  {% endif %}
+
+                                  
+                                  {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                                  {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                                  {% if extra_inventory > 0 %}
+                                    {% assign has_extra_inventory = true %}
+                                    {% assign any_available_options = true %}
+                                  {% else %}
+                                    {% assign has_extra_inventory = false %}
                                   {% endif %}
 
                                     {% if variant.metafields.custom.hide_paint_code == true %}
@@ -852,24 +879,46 @@
                                     {% endif %}
                                     {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
                                       {% unless variant.title contains "Match Paint by VIN" or variant.title contains "Pintura de combinación por VIN" %}
-                                        <option 
+                                        {% if has_extra_inventory == true %}
+                                          <option 
+                                              value="{{ variant.id }}"
+                                              title="{{ translated_title }}" 
+                                              sku="{{ variant.sku }}" 
+                                              class="variant-option"
+                                              data-price="{{ variant.price }}">
+                                              {{ translated_title }} + {{ price_diff }} 🚚
+                                          </option>
+                                        {% else %}
+                                          <option 
                                             value="{{ variant.id }}"
                                             title="{{ translated_title }}" 
                                             sku="{{ variant.sku }}" 
                                             class="variant-option"
                                             data-price="{{ variant.price }}">
                                             {{ translated_title }} + {{ price_diff }}
-                                        </option>
+                                          </option>
+                                        {% endif %}
                                       {% endunless %}
                                     {% else %}
-                                      <option 
-                                        value="{{ variant.id }}"
-                                        title="{{ translated_title }}"
-                                        sku="{{ variant.sku }}"
-                                        class="variant-option"
-                                        data-price="{{ variant.price }}">
-                                        {{ translated_title }} + {{ price_diff }}
-                                      </option>
+                                      {% if has_extra_inventory == true %}
+                                        <option 
+                                          value="{{ variant.id }}"
+                                          title="{{ translated_title }}"
+                                          sku="{{ variant.sku }}"
+                                          class="variant-option"
+                                          data-price="{{ variant.price }}">
+                                          {{ translated_title }} + {{ price_diff }} 🚚
+                                        </option>
+                                      {% else %}
+                                        <option 
+                                          value="{{ variant.id }}"
+                                          title="{{ translated_title }}"
+                                          sku="{{ variant.sku }}"
+                                          class="variant-option"
+                                          data-price="{{ variant.price }}">
+                                          {{ translated_title }} + {{ price_diff }}
+                                        </option>
+                                      {% endif %}
                                     {% endif %}
                                   {% endfor %}
                               </select>
@@ -910,10 +959,20 @@
                               </div>
                             </div> {% endcomment %}
                             <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
+                            <div class="painted-stock-key" style="display: none;">
+                              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+                            </div> 
                             <div class="paint-code-wrapper">
                               <select id="variant-selector" name="id" class="variant-dropdown">
                                 <option value="" selected disabled>{{ 'paint_options.title' | t }}</option>
+
+
                                 {% for variant in product.variants %}
+                                  {% if variant.title contains "Unpainted" %}
+                                    {% assign base_variant_inventory = variant.inventory_quantity %}
+                                  {% endif %}
+
+
                                   {% if variant.title contains "Custom Paint Code" %}
                                     {% continue %}
                                   {% endif %}
@@ -924,6 +983,16 @@
                                   {% else %}
                                     {% assign translated_title = variant.title %}
                                   {% endif %}
+
+                                
+                                  {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                                  {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                                  {% if extra_inventory > 0 %}
+                                    {% assign has_extra_inventory = true %}
+                                    {% assign any_available_options = true %}
+                                  {% else %}
+                                    {% assign has_extra_inventory = false %}
+                                  {% endif %}
                                   
                                   {% assign price_diff = variant.price | minus: product.price_min | money %}  
                                   {% if price_diff == 0 %}
@@ -933,14 +1002,25 @@
                                   {% endif %}
                                   {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                                     {% unless variant.title contains "Match Paint by VIN" or variant.title contains "Pintura de combinación por VIN" %}
+                                      {% if has_extra_inventory == true %}
                                       <option 
                                           value="{{ variant.id }}" 
                                           title="{{ translated_title }}"
                                           sku="{{ variant.sku }}"
                                           class="variant-option"
                                           data-price="{{ variant.price }}">
-                                          {{ translated_title }} + {{ price_diff }}
-                                      </option>                                  
+                                          {{ translated_title }} + {{ price_diff }} 🚚
+                                      </option>
+                                    {% else %}
+                                      <option 
+                                        value="{{ variant.id }}" 
+                                        title="{{ translated_title }}"
+                                        sku="{{ variant.sku }}"
+                                        class="variant-option"
+                                        data-price="{{ variant.price }}">
+                                        {{ translated_title }} + {{ price_diff }}
+                                      </option>
+                                    {% endif %}                               
                                     {% endunless %}
                                   {% comment %} {% else %}
                                     <script>console.log('wool are we here?', '{{ variant.title }}')</script>
@@ -1023,12 +1103,6 @@
                     </div>   {% endcomment %}
                   </div>
                   <div class="divider-small-screen"></div>
-
-
-                  <!-- Delivery Countdown -->
-                  <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
-                    {% render 'delivery-countdown' %}
-                  </div>
 
                                  
 
@@ -2142,3 +2216,16 @@
       }
     });
   </script>  
+
+
+  <!-- For the painted stock disclaimer -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if('{{ any_available_options }}' === 'true') {
+        const paintedStockKey = document.querySelector('.painted-stock-key');
+        if (paintedStockKey) {
+          paintedStockKey.style.display = 'block';
+        }
+      }
+    });
+  </script>

@@ -110,12 +110,12 @@
           width: 100%;
           font-size: 14px;
           color: #0000EE;
-        }
+        }      
 
         .paint-option-and-how-to-find-paint-code-wrapper {
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          justify-content: start;
         }
 
         .find-paint-option-link-container {
@@ -133,8 +133,8 @@
         
         @media only screen and (min-width: 769px) {
           .paint-option-and-how-to-find-paint-code-wrapper {
-            flex-direction: row;
-            align-items: center;
+            flex-direction: column;
+            align-items: start;
           }
           
           .find-paint-option-link-container {
@@ -199,9 +199,12 @@
               <div class="paint-option-and-how-to-find-paint-code-wrapper">
                 <div class="find-paint-option-link-container" style="display: none;">
                   <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
-                </div>
+                </div>               
                 <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
               </div>
+              <div class="painted-stock-key" style="display: none;">
+                Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+              </div> 
               <div class="paint-code-wrapper">
                 <select id="variant-selector" name="id" disabled>
                   <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
@@ -221,6 +224,9 @@
               </div>
               <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
             </div>
+            <div class="painted-stock-key" style="display: none;">
+              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+            </div> 
             <div class="paint-code-wrapper">
               <select id="variant-selector" name="id" disabled>
                 <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
@@ -240,6 +246,9 @@
             </div>
             <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
           </div>
+          <div class="painted-stock-key" style="display: none;">
+            Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+          </div> 
           <div class="paint-code-wrapper">
             <select id="variant-selector" name="id" disabled>
               <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
@@ -259,6 +268,9 @@
               </div> {% endcomment %}
               <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
             </div>
+            <div class="painted-stock-key" style="display: none;">
+              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+            </div> 
             <div class="paint-code-wrapper">
               <select id="variant-selector" name="id" disabled>
                 <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
@@ -271,7 +283,7 @@
   
   {% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
       let selectedType = '';
       let dataVariantTitle = '';
       let dataVariantSku = '';
@@ -297,9 +309,15 @@
                   {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
                   {% if aftermarket_variant_count > 0 %}
                     {% if aftermarket_product %}
-                      {% assign aftermarket_base_price = aftermarket_product.variants.first.price %} <!-- Price of the first variant -->
+                      {% assign aftermarket_base_price = aftermarket_product.variants.first.price %}
+                      {% assign base_variant_inventory = 0 %}
+                      {% assign aftermarket_any_available_options = false %}
+
               
                       {% for variant in aftermarket_product.variants %}
+                        {% if variant.title contains "Unpainted" %}
+                          {% assign base_variant_inventory = variant.inventory_quantity %}
+                        {% endif %}
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
@@ -313,6 +331,16 @@
                         {% endif %}
                         {% assign aftermarket_variant_price = variant.price %}
                         {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
+
+                        
+                        {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                        {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                        {% if extra_inventory > 0 %}
+                          {% assign aftermarket_any_available_options = true %}
+                          {% assign has_extra_inventory = true %}
+                        {% else %}
+                          {% assign has_extra_inventory = false %}
+                        {% endif %}
                           { 
                             "id": "{{ variant.id }}",
                             {% if variant.title contains "Unpainted" and shop.locale == "es"%}
@@ -329,6 +357,9 @@
                             "variantTitle": "{{ variant.title }}",
                             "variantSku": "{{ variant.sku }}",
                             "variantInventory": "{{ variant.inventory_quantity }}",
+                            "extraInventory": {{ extra_inventory }},
+                            "baseInventory": {{ base_variant_inventory }},
+                            "hasExtraInventory": {{ has_extra_inventory }},
                             "productTitle": "{{ aftermarket_product.title | escape  }}",
                             "productDescription": {{ aftermarket_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
@@ -356,9 +387,15 @@
                   {% assign capa_variant_count = capa_product.variants | size %}
                   {% if capa_variant_count > 0 %}
                     {% if capa_product %}
-                      {% assign capa_base_price = capa_product.variants.first.price %} <!-- Price of the first variant -->
+                      {% assign capa_base_price = capa_product.variants.first.price %}
+                      {% assign base_variant_inventory = 0 %}
+                      {% assign capa_any_available_options = false %}
+
               
                       {% for variant in capa_product.variants %}
+                        {% if variant.title contains "Unpainted" %}
+                          {% assign base_variant_inventory = variant.inventory_quantity %}
+                        {% endif %}
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
@@ -372,6 +409,16 @@
                         {% endif %}
                         {% assign capa_variant_price = variant.price %}
                         {% assign price_difference = capa_variant_price | minus: capa_base_price %}
+                        
+                        
+                        {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                        {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                        {% if extra_inventory > 0 %}
+                          {% assign capa_any_available_options = true %}
+                          {% assign has_extra_inventory = true %}
+                        {% else %}
+                          {% assign has_extra_inventory = false %}
+                        {% endif %}
                           { 
                             "id": "{{ variant.id }}",
                             {% if variant.title contains "Unpainted" and shop.locale == "es"%}
@@ -387,6 +434,9 @@
                             "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
                             "variantTitle": "{{ variant.title }}",
                             "variantSku": "{{ variant.sku }}",
+                            "extraInventory": {{ extra_inventory }},
+                            "baseInventory": {{ base_variant_inventory }},
+                            "hasExtraInventory": {{ has_extra_inventory }},
                             "variantInventory": "{{ variant.inventory_quantity }}",
                             "productTitle": "{{ capa_product.title | escape  }}",
                             "productDescription": {{ capa_product.description | json }},
@@ -415,9 +465,15 @@
                   {% assign oem_variant_count = oem_product.variants | size %}
                   {% if oem_variant_count > 0 %}
                     {% if oem_product %}
-                      {% assign oem_base_price = oem_product.variants.first.price %} <!-- Price of the first variant -->
+                      {% assign oem_base_price = oem_product.variants.first.price %}
+                      {% assign base_variant_inventory = 0 %}
+                      {% assign oem_any_available_options = false %}
+
               
                       {% for variant in oem_product.variants %}
+                        {% if variant.title contains "Unpainted" %}
+                          {% assign base_variant_inventory = variant.inventory_quantity %}
+                        {% endif %}
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
@@ -431,6 +487,15 @@
                         {% endif %}
                         {% assign oem_variant_price = variant.price %}
                         {% assign price_difference = oem_variant_price | minus: oem_base_price %}
+
+                        {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                        {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                        {% if extra_inventory > 0 %}
+                          {% assign oem_any_available_options = true %}
+                          {% assign has_extra_inventory = true %}
+                        {% else %}
+                          {% assign has_extra_inventory = false %}
+                        {% endif %}
                           { 
                             "id": "{{ variant.id }}",
                             {% if variant.title contains "Unpainted" and shop.locale == "es" %}
@@ -446,6 +511,9 @@
                             "color": "{{ variant.metafields.custom.paint_preview_hex_code }}" ,
                             "variantTitle": "{{ variant.title }}",
                             "variantSku": "{{ variant.sku }}",
+                            "extraInventory": {{ extra_inventory }},
+                            "baseInventory": {{ base_variant_inventory }},
+                            "hasExtraInventory": {{ has_extra_inventory }},
                             "variantInventory": "{{ variant.inventory_quantity }}",
                             "productTitle": "{{ oem_product.title | escape  }}",
                             "productDescription": {{ oem_product.description | json }},
@@ -617,6 +685,8 @@
 
             // Get the relevant variants for selected product type
             let variants = productVariants[selectedType] || [];
+            console.log('variants: ', variants);
+
             if(variants.length === 0) {
               variants = productVariants.current;
             }
@@ -641,6 +711,14 @@
                   window.selectedVariantId = variant.id;
                   let option;
                   const combinedVariantSelect = document.getElementById("variant-selector");
+
+                  // Compose base label
+                  let optionLabel = `${variant.title}`;
+
+                  // If it has extra inventory, append the tag to the text
+                  if (variant.hasExtraInventory) {
+                    optionLabel += " 🚚";
+                  }
 
 
                   if(chromeDataMake) {
@@ -669,7 +747,7 @@
                       // Create an option normally
                       option = document.createElement("option");
                       option.value = variant.id;
-                      option.textContent = `${variant.title}`;
+                      option.textContent = optionLabel;
                       option.dataset.price = variant.price;
                       option.dataset.color = variant.color;
                       option.dataset.variantTitle = variant.variantTitle;
@@ -679,7 +757,7 @@
                   } else {
                     option = document.createElement('option');
                     option.value = variant.id;
-                    option.textContent = `${variant.title}`;
+                    option.textContent = optionLabel;
                     option.dataset.price = variant.price;
                     option.dataset.color = variant.color;
                     option.dataset.variantTitle = variant.variantTitle;
@@ -732,6 +810,12 @@
                       }
                     }
                   }
+
+                  // Optionally add class to selected item or add tooltip
+                  if (variant.hasExtraInventory) {
+                    option.dataset.status = "ready-to-ship";
+                    option.title = "Ready to ship"; // Tooltip when hovering
+                  }
                   const tempElement = document.createElement('div');
                   tempElement.innerHTML = variant.productDescription;
                   if (productPartDescription) {
@@ -762,7 +846,27 @@
         if(productTypeSelect) {
           productTypeSelect.addEventListener('change', async function() {
             selectedType = productTypeSelect.value;
-            setQualitySelectedType(selectedType)
+            setQualitySelectedType(selectedType);
+
+            if(document.querySelector('.painted-stock-key')) {
+              const aftermarketHasAvailableOptions = {{ aftermarket_any_available_options | default: false | json }};
+              const capaHasAvailableOptions = {{ capa_any_available_options | default: false | json }};
+              const oemHasAvailableOptions = {{ oem_any_available_options | default: false | json }};
+              
+              if (aftermarketHasAvailableOptions && selectedType === 'aftermarket') {
+                console.log('we in here...');
+                document.querySelector('.painted-stock-key').style.display = 'block';
+              } else if (capaHasAvailableOptions && selectedType === 'capa') {
+                console.log('we in here capa...');
+                document.querySelector('.painted-stock-key').style.display = 'block';
+              } else if (oemHasAvailableOptions && selectedType === 'oem') {
+                console.log('we in here oem...');
+                document.querySelector('.painted-stock-key').style.display = 'block';
+              } else {
+                console.log('we out here...');
+                document.querySelector('.painted-stock-key').style.display = 'none';
+              }
+            }
 
 
 
