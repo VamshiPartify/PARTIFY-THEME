@@ -203,7 +203,7 @@
                 <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
               </div>
               <div class="painted-stock-key" style="display: none;">
-                Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+                {{  'variant_instock_message' | t }}
               </div> 
               <div class="paint-code-wrapper">
                 <select id="variant-selector" name="id" disabled>
@@ -225,7 +225,7 @@
               <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
             </div>
             <div class="painted-stock-key" style="display: none;">
-              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+              {{  'variant_instock_message' | t }}
             </div> 
             <div class="paint-code-wrapper">
               <select id="variant-selector" name="id" disabled>
@@ -247,7 +247,7 @@
             <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
           </div>
           <div class="painted-stock-key" style="display: none;">
-            Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+            {{  'variant_instock_message' | t }}
           </div> 
           <div class="paint-code-wrapper">
             <select id="variant-selector" name="id" disabled>
@@ -269,7 +269,7 @@
               <label class="option-title" for="product-type-select">{{ 'paint_options.title' | t }}</label>
             </div>
             <div class="painted-stock-key" style="display: none;">
-              Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.
+              {{  'variant_instock_message' | t }}
             </div> 
             <div class="paint-code-wrapper">
               <select id="variant-selector" name="id" disabled>
@@ -315,7 +315,7 @@
 
               
                       {% for variant in aftermarket_product.variants %}
-                        {% if variant.title contains "Unpainted" %}
+                        {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
                           {% assign base_variant_inventory = variant.inventory_quantity %}
                         {% endif %}
                         {% if variant.metafields.custom.hide_paint_code == true %}
@@ -393,7 +393,7 @@
 
               
                       {% for variant in capa_product.variants %}
-                        {% if variant.title contains "Unpainted" %}
+                        {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
                           {% assign base_variant_inventory = variant.inventory_quantity %}
                         {% endif %}
                         {% if variant.metafields.custom.hide_paint_code == true %}
@@ -471,7 +471,7 @@
 
               
                       {% for variant in oem_product.variants %}
-                        {% if variant.title contains "Unpainted" %}
+                        {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
                           {% assign base_variant_inventory = variant.inventory_quantity %}
                         {% endif %}
                         {% if variant.metafields.custom.hide_paint_code == true %}
@@ -685,7 +685,6 @@
 
             // Get the relevant variants for selected product type
             let variants = productVariants[selectedType] || [];
-            console.log('variants: ', variants);
 
             if(variants.length === 0) {
               variants = productVariants.current;
