@@ -847,22 +847,22 @@
             selectedType = productTypeSelect.value;
             setQualitySelectedType(selectedType);
 
+            const aftermarketHasAvailableOptions = {{ aftermarket_any_available_options | default: false | json }};
+            const capaHasAvailableOptions = {{ capa_any_available_options | default: false | json }};
+            const oemHasAvailableOptions = {{ oem_any_available_options | default: false | json }};
+            
             if(document.querySelector('.painted-stock-key')) {
               const aftermarketHasAvailableOptions = {{ aftermarket_any_available_options | default: false | json }};
               const capaHasAvailableOptions = {{ capa_any_available_options | default: false | json }};
               const oemHasAvailableOptions = {{ oem_any_available_options | default: false | json }};
               
               if (aftermarketHasAvailableOptions && selectedType === 'aftermarket') {
-                console.log('we in here...');
                 document.querySelector('.painted-stock-key').style.display = 'block';
               } else if (capaHasAvailableOptions && selectedType === 'capa') {
-                console.log('we in here capa...');
                 document.querySelector('.painted-stock-key').style.display = 'block';
               } else if (oemHasAvailableOptions && selectedType === 'oem') {
-                console.log('we in here oem...');
                 document.querySelector('.painted-stock-key').style.display = 'block';
               } else {
-                console.log('we out here...');
                 document.querySelector('.painted-stock-key').style.display = 'none';
               }
             }

@@ -825,7 +825,7 @@
                             <div class="divider-large-screen"></div>
                             <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
                             <div class="painted-stock-key" style="display: none;">
-                              {{  'variant_instock_message' | t }}
+                                {{  'variant_instock_message' | t }}
                             </div> 
 
                             <div class="paint-code-wrapper">
@@ -960,7 +960,7 @@
                             </div> {% endcomment %}
                             <label for="variant-selector" class="variant-label">{{ 'paint_options.title' | t }}</label>
                             <div class="painted-stock-key" style="display: none;">
-                              {{  'variant_instock_message' | t }}
+                                {{  'variant_instock_message' | t }}
                             </div> 
                             <div class="paint-code-wrapper">
                               <select id="variant-selector" name="id" class="variant-dropdown">
@@ -1132,6 +1132,7 @@
         <!-- Form for Unpainted Items -->
           <form id="product-form" method="post" action="/cart/add" data-weight-in-unit="{{ product.variants.first.weight_in_unit}}">
             <div class="unpainted-fitment-container">
+        
               <div id="fitment-verification-page-for-unpainted" class="popup-page active">
                               <!-- Delivery Countdown -->
               <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
@@ -1165,7 +1166,7 @@
                   {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
               {% endif %}
               <div class="divider-small-screen"></div>
-              
+            
 
               <div class="unpainted-add-to-cart-btn-container">
                 <input type="hidden" name="id" value="{{ product.variants.first.id }}">

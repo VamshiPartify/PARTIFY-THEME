@@ -11,7 +11,7 @@
 	  </noscript>
   
       {% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
-	<div id="delivery-countdown-partify" class="delivery-countdown-hidden" style="display: none;">
+	<div id="delivery-countdown-partify" class="delivery-countdown-hidden"  style="display: none;">
 		
 		<div id="dc-info-partify">
 			<div id="dc-incorrect-zip-message" style="display: none;">{{ 'asm_eta.eta_incorrect_zip_message' | t }}</div>
@@ -29,12 +29,12 @@
 
 	<!-- Placeholder (Shown Until Data Loads) -->
 	<div id="delivery-countdown-placeholder">
-		{% if product.variants.size > 1 %}
-		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title' | t }}</div>
-		 {% else %}
-		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title_unpainted' | t }}</div>
-		 {% endif %}
-		<div class="skeleton-delivery-countdown countdown-skeleton-text"><span>{{ 'asm_eta.skeleton_text_header_bold' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_text_header' | t }}</div>
+         {% if product.variants.size > 1 %}
+      		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title' | t }}</div>
+         {% else %}
+      		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title_unpainted' | t }}</div>
+         {% endif %}
+        <div class="skeleton-delivery-countdown countdown-skeleton-text"><span>{{ 'asm_eta.skeleton_text_header_bold' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_text_header' | t }}</div>
 	</div>
 
 	<div id="asm-ajax-partify"></div>
