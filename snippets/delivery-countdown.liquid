@@ -29,7 +29,11 @@
 
 	<!-- Placeholder (Shown Until Data Loads) -->
 	<div id="delivery-countdown-placeholder">
+		{% if product.variants.size > 1 %}
 		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title' | t }}</div>
+		 {% else %}
+		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title_unpainted' | t }}</div>
+		 {% endif %}
 		<div class="skeleton-delivery-countdown countdown-skeleton-text"><span>{{ 'asm_eta.skeleton_text_header_bold' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_text_header' | t }}</div>
 	</div>
 

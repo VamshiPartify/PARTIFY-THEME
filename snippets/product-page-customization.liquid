@@ -1133,6 +1133,10 @@
           <form id="product-form" method="post" action="/cart/add" data-weight-in-unit="{{ product.variants.first.weight_in_unit}}">
             <div class="unpainted-fitment-container">
               <div id="fitment-verification-page-for-unpainted" class="popup-page active">
+                              <!-- Delivery Countdown -->
+              <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
+                {% render 'delivery-countdown' %}
+              </div>
                 <div id="model-fitmentfail-button-container">
                   <label class="verify-fitment-title" for="product-type-select">{{ 'verify_fitment' | t }}</label>
                   <div class="model-fitment-easysearch-container">
@@ -1162,10 +1166,6 @@
               {% endif %}
               <div class="divider-small-screen"></div>
               
-              <!-- Delivery Countdown -->
-              <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
-                {% render 'delivery-countdown' %}
-              </div>
 
               <div class="unpainted-add-to-cart-btn-container">
                 <input type="hidden" name="id" value="{{ product.variants.first.id }}">
