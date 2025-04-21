@@ -675,7 +675,7 @@
         async function populateVariantDropdown(selectedType) {
           const vinMessageParagraph = document.querySelector('.vin-decoder-message');
             if (combinedVariantSelect) {
-              combinedVariantSelect.innerHTML = '<option value="">{{ 'paint_options.disabled_first_option' | t }}</option>';
+              combinedVariantSelect.innerHTML = '<option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>';
             }
 
 

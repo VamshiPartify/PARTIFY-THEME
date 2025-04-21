@@ -745,6 +745,7 @@
     "skeleton_text_header_bold": "Need it fast?",
     "skeleton_text_header": "Expedited shipping available at checkout.",
     "skeleton_title": "(Delivery date available after selecting a paint option.)",
+    "skeleton_title_unpainted": "(Delivery date available after selecting a quality.)",
     "skeleton_title_beg": "Arrives as early as",
     "eta_incorrect_zip_message": "Please enter a valid zip code",
     "eta_top_beg": "Arrives as early as",
