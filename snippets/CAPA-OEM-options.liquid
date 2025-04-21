@@ -847,10 +847,6 @@
             selectedType = productTypeSelect.value;
             setQualitySelectedType(selectedType);
 
-            const aftermarketHasAvailableOptions = {{ aftermarket_any_available_options | default: false | json }};
-            const capaHasAvailableOptions = {{ capa_any_available_options | default: false | json }};
-            const oemHasAvailableOptions = {{ oem_any_available_options | default: false | json }};
-            
             if(document.querySelector('.painted-stock-key')) {
               const aftermarketHasAvailableOptions = {{ aftermarket_any_available_options | default: false | json }};
               const capaHasAvailableOptions = {{ capa_any_available_options | default: false | json }};
