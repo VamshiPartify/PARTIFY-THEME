@@ -151,12 +151,9 @@ function isVinVerified() {
     const hasProductType = !!productTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
 
-    console.log('wool hasProductType', hasProductType);
-    console.log('wool hasCombinedVariant', hasCombinedVariant);
 
     let addToCartBtnDisabled = true;
     if(currentAddToCartBtn) addToCartBtnDisabled = currentAddToCartBtn.disabled;
-    console.log('wool addToCartBtnDisabled', addToCartBtnDisabled);
 
     if (hasProductType && hasCombinedVariant) {
         if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
@@ -168,18 +165,15 @@ function isVinVerified() {
         if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
         if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
     } else if (!hasProductType && !hasCombinedVariant) {
-        console.log('wool we should be here');
         if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
         if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
     }
-    console.log('wool are we here tho?');
     return COLORS.gray;
 }
 
 
     // Progressive header colors main function
 function updateProgressHeaderColors() {
-    console.log('wool we are updating the header colors');
     resetAllHeaderColors(false);
     
     if (!isFitmentVerified()) {

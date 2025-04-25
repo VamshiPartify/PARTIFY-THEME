@@ -143,13 +143,14 @@
           {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
           {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
           {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+          {% assign aftermarket_sku = aftermarket_product.variants.first.sku %}
 
           {% if aftermarket_variant_count > 0 %}
             {% assign aftermarket_price = aftermarket_product.variants.first.price | money %}
             {% if aftermarket_product.available %}
-              <option value="aftermarket">{{ 'quality_options.aftermarket_in_stock' | t }}{{ aftermarket_price }}</option>
+              <option value="aftermarket" quality-sku="{{ aftermarket_sku }}">{{ 'quality_options.aftermarket_in_stock' | t }}{{ aftermarket_price }}</option>
             {% else %}
-              <option value="aftermarket" disabled style="color: gray;">{{ 'quality_options.aftermarket_oos' | t }}</option>
+              <option value="aftermarket" quality-sku="{{ aftermarket_sku }}" disabled style="color: gray;">{{ 'quality_options.aftermarket_oos' | t }}</option>
             {% endif %}
           {% endif %}
         {% endif %}
@@ -157,12 +158,14 @@
           {% assign capa_product_handle = product.metafields.custom.capa_product %}
           {% assign capa_product = all_products[capa_product_handle] %}
           {% assign capa_variant_count = capa_product.variants | size %}
+          {% assign capa_sku = capa_product.variants.first.sku %}
+
           {% if capa_variant_count > 0 %}
             {% assign capa_price = capa_product.variants.first.price | money %}
             {% if capa_product.available %}
-              <option value="capa">{{ 'quality_options.capa_in_stock' | t }}{{ capa_price }}</option>
+              <option value="capa" quality-sku="{{ capa_sku }}">{{ 'quality_options.capa_in_stock' | t }}{{ capa_price }}</option>
             {% else %}
-              <option value="capa" disabled style="color: gray;">{{ 'quality_options.capa_oos' | t }}</option>
+              <option value="capa" quality-sku="{{ capa_sku }}" disabled style="color: gray;">{{ 'quality_options.capa_oos' | t }}</option>
             {% endif %}
           {% endif %}
         {% endif %}
@@ -170,13 +173,14 @@
           {% assign oem_product_handle = product.metafields.custom.oem_product %}
           {% assign oem_product = all_products[oem_product_handle] %}
           {% assign oem_variant_count = oem_product.variants | size %}
+          {% assign oem_sku = oem_product.variants.first.sku %}
 
           {% if oem_variant_count > 0 %}
             {% assign oem_price = oem_product.variants.first.price | money %}
             {% if oem_product.available %}
-              <option value="oem">{{ 'quality_options.oem_in_stock' | t }}{{ oem_price }}</option>
+              <option value="oem" quality-sku="{{ oem_sku }}">{{ 'quality_options.oem_in_stock' | t }}{{ oem_price }}</option>
             {% else %}
-              <option value="oem" disabled style="color: gray;">{{ 'quality_options.oem_oos' | t }}</option>
+              <option value="oem" quality-sku="{{ oem_sku }}" disabled style="color: gray;">{{ 'quality_options.oem_oos' | t }}</option>
             {% endif %}
           {% endif %}
         {% endif %}

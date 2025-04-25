@@ -340,7 +340,7 @@
 <script>
     //41104835379285
         document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('form[action^="/cart/add"]');
+            {% comment %} const form = document.querySelector('form[action^="/cart/add"]'); {% endcomment %}
             const fitmentYes = document.getElementById('fitment-yes');
             const addToCartButton = document.getElementById('add-to-cart');
             const addToCartForUnpainted = document.getElementById('add-to-cart-for-unpainted');
@@ -348,9 +348,11 @@
             const vinInput = document.getElementById('vin-textbox-for-verification');
             const vinVerificationService = 'vin-verification-service';
             const fitmentVariantId = '41104835379285';
+            const productForm = document.getElementById('product-form');
+            let productSku = '';
+
             let price = 0;
             let yesRadioWasLastSelected = null;
-            const productSku = '{{ product.variants.first.sku }}';
 
             //For sanity: Establishes one cart variable for multiple different add to cart buttons
             let currentAddToCartBtn;
@@ -396,14 +398,11 @@
                         } else {
                             newTotal = (originalPriceValue).toFixed(2);
                         }
-                        console.log('wool newTotal', newTotal);
-                        console.log('wool originalPriceValue: ', originalPriceValue);
-                        console.log('wool price: ', price);
                         priceDisplayElement.textContent = `$${newTotal}`;
                         yesRadioWasLastSelected = true;
                         currentAddToCartBtn.disabled = true;
+                        window.checkedYes = true;
                     } else {
-                        console.log('wool clearing radio');
                         vinInputWrapper.classList.remove('show');
                         vinInput.value = '';
                         let newTotal;
@@ -417,43 +416,67 @@
                         priceDisplayElement.textContent = newTotal;
                         yesRadioWasLastSelected = false;
                         currentAddToCartBtn.disabled = false;
+                        window.checkedYes = false;
                     }
                 });                
             });
-    
-            if (form && fitmentYes) {
-                form.addEventListener('submit', function (event) {
-                    // if "Yes" is checked, add fitment guarantee product first
-                    if (fitmentYes.checked) {
-                        event.preventDefault(); // stop original submission
-    
-                        const mainFormData = new FormData(form);
-    
-                        // Add the fitment guarantee product first
-                        fetch('/cart/add.js', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                id: fitmentVariantId,
-                                quantity: 1,
-                                properties: {
-                                    "VIN": document.getElementById('vin-textbox-for-verification').value.toUpperCase(),
-                                    "SKU": productSku,
+
+            if (productForm && fitmentYes) {
+            productForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                if(selectedProductSku) {
+                    productSku = selectedProductSku;
+                } else {
+                    productSku = '{{ product.variants.first.sku }}';
+                }
+                
+                const weightInUnit = parseInt(productForm.getAttribute('data-weight-in-unit') || 0);
+                console.log('wool weightInUnit', weightInUnit);
+                        console.log('wool in the form');
+
+                        // if "Yes" is checked, add fitment guarantee product first
+                        if (fitmentYes.checked) {
+                            event.preventDefault(); // stop original submission
+        
+                            const mainFormData = new FormData(productForm);
+        
+                            // Add the fitment guarantee product first
+                            fetch('/cart/add.js', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    id: fitmentVariantId,
+                                    quantity: 1,
+                                    properties: {
+                                        "VIN": document.getElementById('vin-textbox-for-verification').value.toUpperCase(),
+                                        "SKU": productSku,
+                                    }
+                                })
+                            }).then(response => {
+                                if (response.ok) {
+                                    // Now submit the original product form
+                                    console.log('wool weightInUnit', weightInUnit);
+                                    if (weightInUnit < 10) {
+                                        productForm.submit();
+                                    } else {
+                                        // Dispatch custom event so freight logic can continue
+                                        productForm.dispatchEvent(new CustomEvent('fitment:done', {
+                                            bubbles: true,
+                                            detail: { weightInUnit }
+                                        }));
+                                        console.log('wool she is large...');
+                                    }
+                                    
+                                } else {
+                                    console.error('Failed to add fitment guarantee');
                                 }
-                            })
-                        }).then(response => {
-                            if (response.ok) {
-                                // Now submit the original product form
-                                form.submit();
-                            } else {
-                                console.error('Failed to add fitment guarantee');
-                            }
-                        }).catch(err => {
-                            console.error('Error:', err);
-                        });
-                    }
-                });
-            }
+                            }).catch(err => {
+                                console.error('Error:', err);
+                            });
+                        }
+            });
+        }
 
             document.getElementById('vin-textbox-for-verification').addEventListener('input', function(event) {
                 const originalValue = event.target.value;
