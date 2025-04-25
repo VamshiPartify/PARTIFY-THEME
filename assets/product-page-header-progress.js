@@ -1,0 +1,205 @@
+
+const verifyFitmentHeader = document.querySelector('.verify-fitment-title');
+const qualityHeader = document.querySelector('.option-title-quality');
+const vinHeader = document.querySelector('.option-title-vin');
+const optionTitle = document.querySelector('.option-title');
+const fitmentVerificationTitle = document.querySelector('.fitment-guarantee');
+const oemVinContainer = document.querySelector('.oem-vin-container');
+const productTypeSelect = document.getElementById('product-type-select');
+const combinedVariantSelect = document.getElementById('variant-selector');
+const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
+const vinVerifyCheckbboxYes = document.getElementById('fitment-yes');
+const vinVerifyCheckboxNo = document.getElementById('fitment-no');
+const addToCartButton = document.getElementById('add-to-cart');
+const addToCartForUnpainted = document.getElementById('add-to-cart-for-unpainted');
+
+let currentAddToCartBtn;
+if(addToCartButton) {
+    currentAddToCartBtn = addToCartButton;
+}
+if(addToCartForUnpainted) {
+    currentAddToCartBtn = addToCartForUnpainted;
+}
+
+//HiddenEl means that the user is currently going through the fitment process -- it not verified or unverified
+let hiddenEl;
+const fitmentHolder = document.querySelector('.easysearch-fitment-holder');
+if (fitmentHolder && fitmentHolder.classList.contains('easysearch-hidden')) {
+  hiddenEl = true;
+} else {
+  hiddenEl = false;
+}
+
+const COLORS = {
+    red: '#e61b24',
+    gray: '#ccc',
+    black: '#333'
+  };  
+
+
+
+// Progressive header colors -- STEPS
+function resetAllHeaderColors(fail) {
+    // fail is a bool that determines color of fitment header based on whether or not the fitment is in focus
+    if (fail) {
+        if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
+    } else {
+        if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.black;
+    }
+    if (qualityHeader) qualityHeader.style.color = COLORS.gray;
+    if (vinHeader) vinHeader.style.color = COLORS.gray;
+    if (optionTitle) optionTitle.style.color = COLORS.gray;
+    if (fitmentVerificationTitle) fitmentVerificationTitle.style.color = COLORS.gray;
+}            
+function isFitmentVerified() {
+    // No need for checks here as the fitment checker is present on all product pages
+    const failEl = document.querySelector('.easysearch-fitment-fail');
+    const successEl = document.querySelector('.easysearch-fitment-icon-success');
+    return !!successEl && !failEl;
+}
+function getQualityHeaderColor() {
+    const hasProductType = !!productTypeSelect;
+    const hasCombinedVariant = !!combinedVariantSelect;
+    const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+    const needsVin = oemVinContainer && oemVinContainer.style.display === "block";
+
+
+    //If it does not needsVin, then the OEM option was not selected
+    if(!needsVin) {
+        if (hasProductType && hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
+        }
+        if(hasProductType && !hasCombinedVariant && hasFitmentVerification) {
+            if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        }
+        if (hasProductType && !hasCombinedVariant && !hasFitmentVerification) {
+            if(productTypeSelect.disabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
+        }
+    }
+    //If it needsVin, then the OEM option was selected
+    if(needsVin) {
+        if (hasProductType) {
+            if(productTypeSelect.disabled === false) return COLORS.black;
+        }
+    }
+    return COLORS.gray; // gray
+}
+    
+    
+function isValidVin() {
+    const hasCombinedVariant = !!combinedVariantSelect;
+    const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+
+    //If it is present, deem if it is true or not... if it is not present, then it is not applicable so set it to true
+    if(oemVinContainer) {
+        const needsVin = oemVinContainer && oemVinContainer.style.display === "block";
+        if(!failedVinDecode) {
+            if(needsVin && hasCombinedVariant) {
+                if(combinedVariantSelect.disabled === true) return COLORS.red;
+                if(combinedVariantSelect.disabled === false) return COLORS.black;
+            }
+            if(needsVin && !hasCombinedVariant && hasFitmentVerification) {
+                if(vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+                if(vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+            }
+            if(needsVin && !hasCombinedVariant && !hasFitmentVerification) {
+                if(currentAddToCartBtn.disabled === true) return COLORS.red;
+                if(currentAddToCartBtn.disabled === false) return COLORS.black;
+            }
+        }
+        return COLORS.gray;
+    } else {
+        return COLORS.black;
+    }
+}
+function isPaintOptionSelected() {
+    const hasProductType = !!productTypeSelect;
+    const hasCombinedVariant = !!combinedVariantSelect;
+    const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+
+
+    
+    let addToCartBtnDisabled = true;
+    if(currentAddToCartBtn) addToCartBtnDisabled = currentAddToCartBtn.disabled;
+
+
+    //If it is present, deem if it is true or not... if it is not present, then it is not applicable so set it to true
+    if(hasFitmentVerification) {
+        if (hasProductType && hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        } else if (!hasProductType && hasCombinedVariant) {
+            if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        }
+    } else {
+        if (hasProductType && hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        } else if (!hasProductType && hasCombinedVariant) {
+            if(combinedVariantSelect.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(combinedVariantSelect.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        }
+    }
+    return COLORS.gray;
+}
+
+function isVinVerified() {
+    const hasProductType = !!productTypeSelect;
+    const hasCombinedVariant = !!combinedVariantSelect;
+
+    console.log('wool hasProductType', hasProductType);
+    console.log('wool hasCombinedVariant', hasCombinedVariant);
+
+    let addToCartBtnDisabled = true;
+    if(currentAddToCartBtn) addToCartBtnDisabled = currentAddToCartBtn.disabled;
+    console.log('wool addToCartBtnDisabled', addToCartBtnDisabled);
+
+    if (hasProductType && hasCombinedVariant) {
+        if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+        if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+    } else if (!hasProductType && hasCombinedVariant) {
+        if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+        if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+    } else if (hasProductType && !hasCombinedVariant) {
+        if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+        if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+    } else if (!hasProductType && !hasCombinedVariant) {
+        console.log('wool we should be here');
+        if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+        if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+    }
+    console.log('wool are we here tho?');
+    return COLORS.gray;
+}
+
+
+    // Progressive header colors main function
+function updateProgressHeaderColors() {
+    console.log('wool we are updating the header colors');
+    resetAllHeaderColors(false);
+    
+    if (!isFitmentVerified()) {
+        if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
+        return;
+    }
+    
+    const qualityHeaderColor = getQualityHeaderColor();
+    if (qualityHeader) qualityHeader.style.color = qualityHeaderColor;
+    
+    const needsVin = oemVinContainer && oemVinContainer.style.display === "block";
+    const vinHeaderColor = isValidVin(); 
+    if (needsVin) {
+        if (vinHeader) vinHeader.style.color = vinHeaderColor;
+    }
+    
+    const paintOptionHeaderColor = isPaintOptionSelected();
+    if (optionTitle) optionTitle.style.color = paintOptionHeaderColor;
+
+    const vinVerificationHeaderColor = isVinVerified();
+    if (fitmentVerificationTitle) fitmentVerificationTitle.style.color = vinVerificationHeaderColor;
+
+}

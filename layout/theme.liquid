@@ -829,6 +829,33 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
 
 
 
+{% comment %}
+This forces localization to the US market with USD currency when running in dev mode
+{% endcomment %}
+{% comment %} {% if request.host contains 'localhost' or request.host contains '.myshopify.com' %}
+  <script>
+    fetch('/localization.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'xmlhttprequest'
+      },
+      body: JSON.stringify({
+        country: 'US',
+        currency: 'USD',
+        locale: 'en'
+      })
+    }).then(() => {
+      // Optional: reload only if country wasn't already US
+      {% comment %} if (!document.cookie.includes('country=US')) {
+        location.reload();
+      } {% endcomment %}
+    });
+  </script>
+{% endif %} {% endcomment %}
+
+
+
 
   </body>
 </html>
