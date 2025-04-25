@@ -806,6 +806,12 @@
       "button_description": "Explora las diferentes formas en que puedes obtener tu código de pintura.",
       "heading": "¿No estás seguro de cuál es tu código de pintura?",
       "subheading": "No te preocupes. Estamos aquí para ayudarte.",
+      "two_tone_message_beg": "Usamos el código de pintura principal de su VIN. Para",
+      "two_tone_two_tone": "dos tonos",
+      "two_tone_mid": "vehículos, contacto",
+      "two_tone_message_bold": "info@partify.store",
+      "two_tone_message_end": "con su VIN.",
+      
       "instructions_heading_is_make_found": "Hay dos formas principales de obtener un código de pintura.",
       "instructions_is_make_found_listitem_1_beginning": "Utilice nuestro servicio gratuito",
       "instructions_is_make_found_listitem_1_bold": "Servicio de descifrado de VIN",
@@ -972,5 +978,19 @@
       "message_3": "“La coincidencia de color fue increíblemente precisa. ¡¡¡99.9%!!! Creo que es una coincidencia de color del 100%. Compré el parachoques con certificación Capa, que es la única opción. El parachoques llegó desplegado y en perfecto estado, sin problemas con la pintura. ¡La pintura quedó increíble! No tuve ningún problema al colocarlo y quedó perfecto.”"
     },
       "fitment": "Mueble:",
-      "variant_instock_message": "Las opciones de pintura marcadas con 🚚 están prepintadas y se encuentran en nuestro estante, sin esperas ni complicaciones."
-}
+      "variant_instock_message": "Las opciones de pintura marcadas con 🚚 están prepintadas y se encuentran en nuestro estante, sin esperas ni complicaciones.",
+      "fitment_verification": {
+        "label": "Verificación de ajuste",
+        "yes": "Sí",
+        "no": "No",
+        "button_heading": "¿Tienes curiosidad por nuestra verificación de ajuste?",
+        "button_description": "Descubra cómo le aseguramos que obtendrá la pieza correcta.",
+        "modal_heading": "¿Tienes curiosidad por nuestra verificación de ajuste?",
+        "modal_subheading": "No te preocupes. Estamos aquí para ayudarte.",
+        "first_message": "Nuestro servicio de verificación de ajuste de VIN le brinda la seguridad de que está solicitando la pieza correcta para su vehículo.",
+        "point_1": "Analizaremos su VIN utilizando datos de fabricación OEM para confirmar el ajuste preciso para el año exacto, la marca, el modelo, el equipamiento y el paquete de opciones de su vehículo.",
+        "point_2": "Esta verificación adicional puede ayudarle a evitar retrasos y la frustración de recibir la pieza incorrecta. Es un paso adicional, pero le ahorrará tiempo, dinero y molestias.",
+        "point_3": "Al elegir la verificación de ajuste de VIN, Partify garantizará que la pieza que usted solicita se ajuste a su vehículo."
+      }
+    }
+

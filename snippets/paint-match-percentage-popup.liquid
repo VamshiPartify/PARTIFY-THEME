@@ -175,7 +175,7 @@
 
     const variantMatchPercentage = {};
 
-    function hideShopifyChat() {
+    {% comment %} function hideShopifyChat() {
         const shopifyChat = document.getElementById('shopify-chat');
         if (shopifyChat) {
           shopifyChat.style.display = 'none';
@@ -187,7 +187,7 @@
       if (shopifyChat) {
         shopifyChat.style.display = 'block';
       }
-    }
+    } {% endcomment %}
 
      {% for variant in product.variants %}
         {% assign matchpercentage = variant.metafields.custom.match_percentage %}

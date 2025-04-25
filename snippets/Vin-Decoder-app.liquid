@@ -186,8 +186,8 @@
                             vinMessage.style.display = 'block';
                             vinMessage.innerHTML = `
                             <strong style="color: #444;">{{ 'vin_decoder_product_page.first' | t }}</strong> 
-                            <span style="color: #000; font-weight: 800;">&nbsp;${paintCode}</span> 
-                            <span style="color: #444;">{{ 'vin_decoder_product_page.end' | t }}&nbsp;${vinSelected}</span> 
+                            <span style="color: #000; font-weight: 800;">${paintCode}</span> 
+                            <span style="color: #444;">{{ 'vin_decoder_product_page.end' | t }}<b>&nbsp;${vinSelected}</b></span> 
                             `;
                         
                             // Append the message to the VIN textbox container

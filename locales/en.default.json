@@ -713,6 +713,12 @@
     "button_description": "Explore the different ways you can get your paint code.",
     "heading": "Not sure what your paint code is?",
     "subheading": "That's okay. We're here to help.",
+    "two_tone_message_beg": "We use the primary paint code from your VIN. For",
+    "two_tone_two_tone": "two-tone",
+    "two_tone_mid": " vehicles, contact",
+    "two_tone_message_bold": "info@partify.store",
+    "two_tone_message_end": "with your VIN.",
+
 
     "instructions_heading_is_make_found": "There are two main ways to get a paint code.",
     "instructions_is_make_found_listitem_1_beginning": "Use our free ",
@@ -884,5 +890,19 @@
     "message_3": "“The color match was amazingly on point. 99.9%!!! I really think it’s a 100% color match. I bought the capa-certified bumper that’s the only way to go. The bumper came unfolded and in perfect condition no problems with the paint. The paint was awesome! I didn’t have any trouble putting it on and it lined up pretty good.”"
   },
     "fitment": "Fitment:",
-    "variant_instock_message": "Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle."
+    "variant_instock_message": "Paint options marked with 🚚 are pre-painted and sitting on our shelf — no wait, no hassle.",
+    
+  "fitment_verification": {
+    "label": "Fitment Verification",
+    "yes": "Yes",
+    "no": "No",
+    "button_heading": "Curious about our fitment verification?",
+    "button_description": "Discover how it ensures you're getting the right part.",
+    "modal_heading": "Curious about our fitment verification?",
+    "modal_subheading": "That's okay. We're here to help.",
+    "first_message": "Our VIN Fitment Verification service gives you confidence that you’re ordering the right part for your vehicle.",
+    "point_1": "We'll analyze your VIN using OEM build data to confirm precise fitment for your vehicle’s exact year, make, model, trim, and options package.",
+    "point_2": "This added layer of verification can help you avoid delays and avoid the frustration of receiving the wrong part. It’s an extra step—but one that can save you time, money, and hassle.",
+    "point_3": "By choosing VIN Fitment Verification, Partify will guarantee that the part you order will fit your vehicle."
+  }
 }
