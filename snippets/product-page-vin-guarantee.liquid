@@ -28,6 +28,22 @@
         overflow-y: auto;
         font-family: 'Lato', sans-serif;
       }
+      @media only screen and (max-width: 450px) {
+        .vin-verification-popup-modal {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            {% comment %} min-height: 456px; {% endcomment %}
+            background-color: white;
+            margin: 5% auto;
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+            border-radius: 8px;
+          }
+    }
+    @media only screen and (min-width: 451px) {
       .vin-verification-popup-modal {
         position: relative;
         width: 60%;
@@ -41,6 +57,7 @@
         z-index: 9999;
         border-radius: 8px;
       }
+    }
 
       .vin-verification-popup-wrapper {
         padding: 25px 25px 30px 30px;
