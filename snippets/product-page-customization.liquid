@@ -1152,6 +1152,7 @@
         // Customization portion
           document.addEventListener('DOMContentLoaded', () => {
             window.failedVinDecode = false;
+            window.selectedProductSku = '{{ product.variants.first.sku }}';
             const fitmentPage = document.getElementById('fitment-verification-page');
             const fitmentFailPage = document.getElementById('model-fitmentfail-button-container');
             const fitmentFailPageOOS = document.getElementById('model-fitmentfail-button-container-oos');
@@ -1518,6 +1519,7 @@
                       enableAddToCartButton();
                       updateProgressHeaderColors();
                   } else if(variantSelectedOption && fitmentSuccess && hasFitmentVerification) {
+                    form.action = `/cart/add?id=${variantSelectedOption}`;
                       disableAddToCartButton();
                       updateProgressHeaderColors();
                   } else {

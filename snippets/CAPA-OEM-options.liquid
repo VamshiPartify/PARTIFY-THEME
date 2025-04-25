@@ -357,6 +357,7 @@
                             "productTitle": "{{ aftermarket_product.title | escape  }}",
                             "productDescription": {{ aftermarket_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% comment %} "productSku": " {{ aftermarket_product.sku }}" {% endcomment %}
                             {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                               {% if variant.title contains "Match Paint by VIN" %}
                                 "class": "hidden-vin-option"
@@ -435,6 +436,7 @@
                             "productTitle": "{{ capa_product.title | escape  }}",
                             "productDescription": {{ capa_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% comment %} "productSku": " {{ capa_product.sku }}" {% endcomment %}
                             {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                               {% if variant.title contains "Match Paint by VIN" %}
                                 "class": "hidden-vin-option"
@@ -512,6 +514,7 @@
                             "productTitle": "{{ oem_product.title | escape  }}",
                             "productDescription": {{ oem_product.description | json }},
                             "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% comment %} "productSku": " {{ oem_product.sku }}" {% endcomment %}
                             {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
                               {% if variant.title contains "Match Paint by VIN" %}
                                 "class": "hidden-vin-option"
@@ -560,6 +563,7 @@
                   "productTitle": "{{ product.title | escape }}",
                   "productDescription": {{ product.description | json }},
                   "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                  {% comment %} "productSku": " {{ product.sku }}" {% endcomment %}
                   {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
                     {% if variant.title contains "Match Paint by VIN" %}
                       "class": "hidden-vin-option"
@@ -740,6 +744,7 @@
                       div.setAttribute("data-variant-title", variant.variantTitle || "");
                       div.setAttribute("data-product-title", variant.productTitle || "");
                       div.setAttribute("data-variant-sku", variant.variantSku || "");
+                      {% comment %} div.setAttribute("data-product-sku", variant.productSku || "");  {% endcomment %}
 
                       // Set text content
                       div.dataset.value = variant.id || "";
@@ -759,6 +764,7 @@
                       option.dataset.variantTitle = variant.variantTitle;
                       option.dataset.productTitle = variant.productTitle;
                       option.dataset.variantSku = variant.variantSku;
+                      {% comment %} option.dataset.productSku = variant.productSku || ""; // Add this line {% endcomment %}
                     }
                   } else {
                     option = document.createElement('option');
@@ -769,6 +775,7 @@
                     option.dataset.variantTitle = variant.variantTitle;
                     option.dataset.productTitle = variant.productTitle;
                     option.dataset.variantSku = variant.variantSku;
+                    {% comment %} option.dataset.productSku = variant.productSku || ""; // Add this line {% endcomment %}
                   }
 
                   if(failedVinDecode === true) {
@@ -847,6 +854,9 @@
         // 3. When product type is selected
         productTypeSelect.addEventListener('change', async function () {
           selectedType = productTypeSelect.value;
+          const selectedOption = productTypeSelect.selectedOptions[0];
+          window.selectedProductSku = selectedOption.getAttribute('quality-sku');
+
           setQualitySelectedType(selectedType);
         
           togglePaintedStockKey(selectedType, hasAvailableOptions);
