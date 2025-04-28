@@ -393,7 +393,7 @@
                         let newTotal;
                 
                         // Displays the updated price for adding on this feature
-                        if(yesRadioWasLastSelected === null || yesRadioWasLastSelected === false) {
+                        if(yesRadioWasLastSelected === null || yesRadioWasLastSelected === false || emptyRadioButtons) {
                             newTotal = (originalPriceValue + price).toFixed(2);
                         } else {
                             newTotal = (originalPriceValue).toFixed(2);
@@ -407,23 +407,23 @@
                         vinInput.value = '';
                         let newTotal;
                         // Displays the updated price for adding on this feature
-                        if(yesRadioWasLastSelected === true) {
-                            newTotal = (originalPriceValue - price).toFixed(2);
-                        } else {
+                        if(emptyRadioButtons) {
                             newTotal = (originalPriceValue).toFixed(2);
+                        } else {
+                            newTotal = (originalPriceValue - price).toFixed(2);
                         }
                         // Reset price to original
-                        priceDisplayElement.textContent = newTotal;
+                        priceDisplayElement.textContent = `$${newTotal}`;
                         yesRadioWasLastSelected = false;
                         currentAddToCartBtn.disabled = false;
                         window.checkedYes = false;
                     }
+                    emptyRadioButtons = false;
                 });                
             });
 
             if (productForm && fitmentYes) {
-            productForm.addEventListener('submit', function (event) {
-                event.preventDefault();
+            productForm.addEventListener('submit', async function (event) {
 
                 if(selectedProductSku) {
                     productSku = selectedProductSku;
@@ -432,8 +432,6 @@
                 }
                 
                 const weightInUnit = parseInt(productForm.getAttribute('data-weight-in-unit') || 0);
-                console.log('wool weightInUnit', weightInUnit);
-                        console.log('wool in the form');
 
                         // if "Yes" is checked, add fitment guarantee product first
                         if (fitmentYes.checked) {
@@ -456,7 +454,6 @@
                             }).then(response => {
                                 if (response.ok) {
                                     // Now submit the original product form
-                                    console.log('wool weightInUnit', weightInUnit);
                                     if (weightInUnit < 10) {
                                         productForm.submit();
                                     } else {
@@ -465,9 +462,7 @@
                                             bubbles: true,
                                             detail: { weightInUnit }
                                         }));
-                                        console.log('wool she is large...');
                                     }
-                                    
                                 } else {
                                     console.error('Failed to add fitment guarantee');
                                 }

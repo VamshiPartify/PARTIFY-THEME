@@ -88,6 +88,7 @@ function clearVinVerificationRadioButtons() {
     radios.forEach(radio => radio.checked = false);
     vinInputWrapper.classList.remove('show');
     vinInput.value = '';
+    emptyRadioButtons = true;
 }
 
 function disableAddToCartButton() {
@@ -200,16 +201,27 @@ function addOEMBadge() {
 
 
 
-    function hideShopifyChat() {
+function hideShopifyChat() {
     const shopifyChat = document.getElementById('shopify-chat');
     if (shopifyChat) {
         shopifyChat.style.display = 'none';
     }
-    }
+}
 
-    function showShopifyChat() {
+function showShopifyChat() {
     const shopifyChat = document.getElementById('shopify-chat');
     if (shopifyChat) {
         shopifyChat.style.display = 'block';
     }
-    }
+}
+
+
+
+/*******************************************************************************************************
+**                                                                                                    **
+**                                             VARIABLES                                              **
+**                                                                                                    **
+*******************************************************************************************************/
+
+
+let emptyRadioButtons = true;
