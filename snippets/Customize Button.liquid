@@ -639,7 +639,18 @@
 
   .color-preview-container-for-customizations {
     padding: 0 15px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    display: block; /* Always block, we'll animate with max-height instead of toggling display */
   }
+  
+  .color-preview-container-for-customizations.show {
+    max-height: 100px; /* Set high enough to accommodate actual height */
+    opacity: 1;
+  }
+  
 
 #model-fitmentfail-button-container {
   padding: 15px 15px 0 15px;

@@ -315,13 +315,8 @@
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
-                        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                          {% comment %} {% if variant.title contains "Match Paint by VIN" %}
-                            {% continue %}
-                          {% endif %} {% endcomment %}
-                          {% if variant.title contains "Custom Paint Code" %}
-                            {% continue %}
-                          {% endif %}
+                        {% if variant.title contains "Custom Paint Code" %}
+                          {% continue %}
                         {% endif %}
                         {% assign aftermarket_variant_price = variant.price %}
                         {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
@@ -394,13 +389,8 @@
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
-                        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                          {% comment %} {% if variant.title contains "Match Paint by VIN" %}
-                            {% continue %}
-                          {% endif %} {% endcomment %}
-                          {% if variant.title contains "Custom Paint Code" %}
-                            {% continue %}
-                          {% endif %}
+                        {% if variant.title contains "Custom Paint Code" %}
+                          {% continue %}
                         {% endif %}
                         {% assign capa_variant_price = variant.price %}
                         {% assign price_difference = capa_variant_price | minus: capa_base_price %}
@@ -473,13 +463,8 @@
                         {% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
                         {% endif %}
-                        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                          {% comment %} {% if variant.title contains "Match Paint by VIN" %}
-                            {% continue %}
-                          {% endif %} {% endcomment %}
-                          {% if variant.title contains "Custom Paint Code" %}
-                            {% continue %}
-                          {% endif %}
+                        {% if variant.title contains "Custom Paint Code" %}
+                          {% continue %}
                         {% endif %}
                         {% assign oem_variant_price = variant.price %}
                         {% assign price_difference = oem_variant_price | minus: oem_base_price %}
@@ -537,10 +522,8 @@
                 {% if variant.metafields.custom.hide_paint_code == true %}
                   {% continue %}
                 {% endif %}
-                {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-                  {% if variant.title contains "Custom Paint Code" %}
-                    {% continue %}
-                  {% endif %}
+                {% if variant.title contains "Custom Paint Code" %}
+                  {% continue %}
                 {% endif %}
                 {% assign current_variant_price = variant.price %}
                 {% assign price_difference = current_variant_price | minus: current_base_price %}
@@ -852,27 +835,37 @@
         }
 
         // 3. When product type is selected
-        productTypeSelect.addEventListener('change', async function () {
-          selectedType = productTypeSelect.value;
-          const selectedOption = productTypeSelect.selectedOptions[0];
-          window.selectedProductSku = selectedOption.getAttribute('quality-sku');
+        if(productTypeSelect) {
+          productTypeSelect.addEventListener('change', async function () {
+            selectedType = productTypeSelect.value;
+            const selectedOption = productTypeSelect.selectedOptions[0];
+            window.selectedProductSku = selectedOption.getAttribute('quality-sku');
 
-          setQualitySelectedType(selectedType);
-        
-          togglePaintedStockKey(selectedType, hasAvailableOptions);
-          handleDeliveryCountdown(selectedType);
-          handleVINUIChanges(selectedType);
-          updatePriceDisplay(selectedType);
+            const precisionMatchWrapper = document.querySelector('.product-page-precision-match-wrapper');
+            if(precisionMatchWrapper && precisionMatchWrapper.classList.contains('show')) {
+              precisionMatchWrapper.classList.remove('show');
+            }
 
-          clearVinVerificationRadioButtons();
-          if(combinedVariantSelect) disableVinVerificationBtns();
-        
-          if (selectedType !== "oem") {
-            await handleNonOEMSelection(selectedType);
-          } else {
-            await handleOEMSelection();
-          }
-        });
+            setQualitySelectedType(selectedType);
+          
+            togglePaintedStockKey(selectedType, hasAvailableOptions);
+            handleDeliveryCountdown(selectedType);
+            handleVINUIChanges(selectedType);
+            updatePriceDisplay(selectedType);
+
+            disableVinVerificationBtns()
+            clearVinVerificationRadioButtons();
+            disablePrecisionMatchBtns()
+            clearPrecisionMatchRadioButtons();
+            if(combinedVariantSelect) disableVinVerificationBtns();
+          
+            if (selectedType !== "oem") {
+              await handleNonOEMSelection(selectedType);
+            } else {
+              await handleOEMSelection();
+            }
+          });
+        }
         
 
         // 4. When a variant is selected, show the price
@@ -994,6 +987,8 @@
         document.getElementById('vin-textbox-for-oem').addEventListener('input', async function(event) {
           const vinInput = event.target.value.toUpperCase();
           const warning = document.getElementById('vin-warning-for-oem');
+          const precisionMatchWrapper = document.querySelector('.product-page-precision-match-wrapper');
+
 
           // Remove I, O, Q characters
           const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
@@ -1026,8 +1021,15 @@
             if(!combinedVariantSelect) enableAddToCartButton();
             updateProgressHeaderColors();
           } else {
+            if(precisionMatchWrapper && precisionMatchWrapper.classList.contains('show')) {
+              precisionMatchWrapper.classList.remove('show');
+            }
             disableCombinedVariantSelect();
             clearCombinedVariantSelect();
+            disablePrecisionMatchBtns();
+            clearPrecisionMatchRadioButtons();
+            disableVinVerificationBtns();
+            clearVinVerificationRadioButtons();
             disablehowToFindPaintCodeBtn();
             disableGetPaintCodeUsingVin();
             disableAddToCartButton();
