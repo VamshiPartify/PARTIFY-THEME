@@ -141,6 +141,7 @@
     const continueShoppingBtn = document.getElementById('continue-shopping-btn');
     const goToCartBtn = document.getElementById('go-to-cart-btn');
     const fitmentVariantId = '41104835379285';
+    const precisionMatchVariantId = '41114917404757';
     let scrollPosition = 0;
     let productSku = '';
 
@@ -154,101 +155,96 @@
     }
 
 
-      if (weightInUnit >= 10) {
-          event.preventDefault();
+    if (weightInUnit >= 10) {
+        event.preventDefault();
 
-          // Serialize form data
-          const formData = new FormData(productForm);
+        const vinValue = document.getElementById('vin-textbox-for-verification')?.value.toUpperCase() || '';
+        const precisionVin = document.getElementById('precision-match-textbox')?.value.toUpperCase() || '';
+        const precisionMatchChecked = document.getElementById('precision-match')?.checked;
+        const vinVerificationChecked = document.getElementById('fitment-yes')?.checked;
 
-          if(checkedYes) {
-            // First add the fitment product
-            fetch('/cart/add.js', {
+        const mainVariantId = document.querySelector('[name="id"]').value;
+        const mainQuantity = parseInt(document.querySelector('[name="quantity"]')?.value || 1);
+
+        const addToCartRequests = [];
+
+        if (precisionMatchChecked) {
+          addToCartRequests.push(() => {
+            return fetch('/cart/add.js', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: precisionMatchVariantId,
+                quantity: 1,
+                properties: {
+                  "VIN": precisionVin,
+                  "SKU": productSku
+                }
+              })
+            }).then(res => {
+              if (!res.ok) throw new Error('Failed to add precision match item');
+              return res.json();
+            });
+          });
+        }
+
+        if (vinVerificationChecked) {
+          addToCartRequests.push(() => {
+            return fetch('/cart/add.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 id: fitmentVariantId,
                 quantity: 1,
                 properties: {
-                  "VIN": document.getElementById('vin-textbox-for-verification').value.toUpperCase(),
-                  "SKU": productSku,
+                  "VIN": vinValue,
+                  "SKU": productSku
                 }
               })
-            })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Failed to add fitment item to cart');
-              }
-              return response.json();
-            })
-            .then(() => {
-              // Then add the main product
-              return fetch('/cart/add.js', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                  'Accept': 'application/json'
-                }
-              });
-            })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Failed to add main product to cart');
-              }
-              return response.json();
-            })
-            .then(data => {
-              // Show freight popup and effects
-              freightItemPopup.style.display = 'block';
-              document.body.classList.add('no-scroll');
-              document.body.style.top = `-${scrollPosition}px`;
-
-              confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { x: 0.5, y: 0.5 },
-                zIndex: 99999,
-                gravity: 0.8
-              });
-            })
-            .catch(error => {
-              console.error('Error adding items to cart:', error);
-              alert('There was an error adding items to your cart. Please try again.');
+            }).then(res => {
+              if (!res.ok) throw new Error('Failed to add VIN verification item');
+              return res.json();
             });
-          } else {
-            fetch('/cart/add.js', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-              .then(response => {
-                  if (!response.ok) {
-                      throw new Error('Failed to add item to cart');
-                  }
-                  return response.json();
-              })
-              .then(data => {
-                freightItemPopup.style.display = 'block';
-                document.body.classList.add('no-scroll');
-                document.body.style.top = `-${scrollPosition}px`;
+          });
+        }
 
-                confetti({
-                  particleCount: 100,
-                  spread: 70,
-                  origin: { x: 0.5, y: 0.5 },
-                  zIndex: 99999,
-                  gravity: 0.8
-                });
-              })
-              .catch(error => {
-                  console.error('Error adding item to cart:', error);
-                  alert('There was an error adding the item to your cart. Please try again.');
-              });
-          }
+        // Add main product
+        addToCartRequests.push(() => {
+          return fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: mainVariantId,
+              quantity: mainQuantity,
+              properties: {
+                "SKU": productSku
+              }
+            })
+          }).then(res => {
+            if (!res.ok) throw new Error('Failed to add main product');
+            return res.json();
+          });
+        });
+
+        // Execute all in order
+        addToCartRequests.reduce((promise, task) => promise.then(task), Promise.resolve())
+          .then(() => {
+            freightItemPopup.style.display = 'block';
+            document.body.classList.add('no-scroll');
+            document.body.style.top = `-${scrollPosition}px`;
+
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { x: 0.5, y: 0.5 },
+              zIndex: 99999,
+              gravity: 0.8
+            });
+          })
+          .catch(err => {
+            console.error('Error adding items to cart:', err);
+            alert('There was an error adding items to your cart. Please try again.');
+          });
       }
     });
 

@@ -417,7 +417,7 @@
                             clearVinVerificationRadioButtons();
                         }
                         currentAddToCartBtn.disabled = true;
-                        window.checkedYes = true;
+                        window.precisionMatchCheckedYes = true;
                     } else {
                         precisionMatchTextboxWrapper.classList.remove('show');
                         vinInput.value = '';
@@ -433,7 +433,7 @@
                         yesRadioWasLastSelected = false;
                         if(!vinVerificationCheckboxGroup) currentAddToCartBtn.disabled = false;
                         if(vinVerificationCheckboxGroup) enableVinVerificationBtns();
-                        window.checkedYes = false;
+                        window.precisionMatchCheckedYes = false;
                     }
                     emptyPrecisionMatchRadioButtons = false;
                     updateProgressHeaderColors();

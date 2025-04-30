@@ -401,7 +401,7 @@
                         priceDisplayElement.textContent = `$${newTotal}`;
                         yesRadioWasLastSelected = true;
                         currentAddToCartBtn.disabled = true;
-                        window.checkedYes = true;
+                        window.vinVerificationCheckedYes = true;
                     } else {
                         vinInputWrapper.classList.remove('show');
                         vinInput.value = '';
@@ -416,7 +416,7 @@
                         priceDisplayElement.textContent = `$${newTotal}`;
                         yesRadioWasLastSelected = false;
                         currentAddToCartBtn.disabled = false;
-                        window.checkedYes = false;
+                        window.vinVerificationCheckedYes = false;
                     }
                     emptyVinVerificationRadioButtons = false;
                     updateProgressHeaderColors();
