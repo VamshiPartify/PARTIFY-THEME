@@ -441,6 +441,9 @@
             });
 
             document.getElementById('precision-match-textbox').addEventListener('input', function(event) {
+                if(storedVin) {
+                    document.getElementById('precision-match-textbox').value = storedVin;
+                }
                 const originalValue = event.target.value;
                 let vinInput = originalValue.toUpperCase();
                 const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');

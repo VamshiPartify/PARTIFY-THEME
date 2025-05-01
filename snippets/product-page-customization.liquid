@@ -1749,6 +1749,7 @@
             //For unpainted items
             if(!vinTextBox && vinTextBoxOEM) {
               document.getElementById('vin-textbox-for-oem').addEventListener('input', function(event) {
+                  storedVin = event.target.value;
 
                   const vinInput = event.target.value.toUpperCase();
                   const warning = document.getElementById('vin-warning-for-oem');
@@ -1953,50 +1954,6 @@
   </script>
 
 
-  <!-- For yotpo stars skeleton -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const skeleton = document.getElementById('yotpo-skeleton');
-
-      const observer = new MutationObserver(() => {
-        const yotpoStars = document.querySelector('[class*="yotpo-sr-bottom-line-summary"]'); // Adjust if needed
-        if (yotpoStars && skeleton) {
-          skeleton.remove();
-          observer.disconnect();
-        }
-      });
-
-      observer.observe(document.body, { childList: true, subtree: true });
-    });
-  </script>
-
-  <!-- For product gallery skeleton -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const skeletonContainer = document.querySelector(".product-gallery--skeleton-thumbnails");
-      const galleryThumbnails = document.querySelectorAll("[data-gallery-thumbnail]");
-      const navigation = document.querySelector(".product-gallery--navigation");
-
-      if (!skeletonContainer || galleryThumbnails.length === 0) return;
-
-      const firstImage = galleryThumbnails[0].querySelector("img");
-
-      const cleanup = () => {
-        skeletonContainer.remove();
-        if (navigation?.classList.contains("loading")) {
-          navigation.classList.remove("loading");
-        }
-      };
-
-      if (firstImage && firstImage.complete) {
-        cleanup();
-      } else {
-        firstImage.addEventListener("load", cleanup);
-      }
-    });
-  </script>  
-
-
   <!-- Form submission for cart addons (precision paint match and fitment verification) -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -2005,6 +1962,10 @@
         const fitmentYes = document.getElementById('fitment-yes');
         const precisionMatchVariantId = '41114917404757';
         const fitmentVariantId = '41104835379285';
+        const continueShoppingBtn = document.getElementById('continue-shopping-btn');
+        const goToCartBtn = document.getElementById('go-to-cart-btn');
+        const freightItemPopup = document.getElementById('freight-item-popup');
+        let scrollPosition = 0;
         let productSku = '';
     
         productForm.addEventListener('submit', async function (event) {
@@ -2030,7 +1991,7 @@
                   quantity: 1,
                   properties: {
                     "VIN": vin1,
-                    "SKU": productSku,
+                    "Reference": productSku,
                   }
                 })
               });
@@ -2047,23 +2008,74 @@
                   quantity: 1,
                   properties: {
                     "VIN": vin2,
-                    "SKU": productSku,
+                    "Reference": productSku,
                   }
                 })
               });
               if (!res2.ok) throw new Error('Failed to add fitment verification');
             }
     
-            // All additions done — now submit the main product
+            // All additions done — now submit the main product on add to cart click
             if (weightInUnit < 10) {
               productForm.submit();
             } else {
-              productForm.dispatchEvent(new CustomEvent('fitment:done', {
-                bubbles: true,
-                detail: { weightInUnit }
-              }));
-            }
-    
+
+              // For items over 10 lbs, don't immediately submit the form.. rather just manually add the main product to the cart\
+              // direct customers to the cart if click 'go to cart' or to easysearch fitment link if clicked 'continue shopping'
+              const formData = new FormData(productForm);
+              fetch('/cart/add.js', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+              })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Failed to add item to cart');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                if(freightItemPopup) freightItemPopup.style.display = 'block';
+                document.body.classList.add('no-scroll');
+                document.body.style.top = `-${scrollPosition}px`;
+
+                confetti({
+                  particleCount: 100,
+                  spread: 70,
+                  origin: { x: 0.5, y: 0.5 },
+                  zIndex: 99999,
+                  gravity: 0.8
+                });
+              })
+              .catch(error => {
+                  console.error('Error adding item to cart:', error);
+                  alert('There was an error adding the item to your cart. Please try again.');
+              });
+
+              if(continueShoppingBtn) {
+                continueShoppingBtn.addEventListener('click', function() {
+                  freightItemPopup.style.display = 'none';
+                  const fitmentLink = document.querySelector('.easysearch-fitment-link');
+                    if (fitmentLink) {
+                        window.location.href = fitmentLink.href;
+                    }
+                    document.body.classList.remove('no-scroll');
+                    document.body.style.top = '';
+                });
+              }
+          
+              if(goToCartBtn) {
+                goToCartBtn.addEventListener('click', function() {
+                  freightItemPopup.style.display = 'none';
+                  window.location.href = '/cart';
+                  document.body.classList.remove('no-scroll');
+                  document.body.style.top = '';
+                  productForm.submit();
+                })
+              }
+            } 
           } catch (err) {
             console.error('Error adding to cart:', err);
           }

@@ -26544,11 +26544,11 @@ class StaticCart {
   }
 
   _bindEvents() {
-    this.$el.on('click.cart-page', '[data-cartitem-remove]', event => {
-      event.preventDefault();
-
-      this._editItemQuantity(event.currentTarget, true);
-    });
+    // this.$el.on('click.cart-page', '[data-cartitem-remove]', event => {
+    //   event.preventDefault();
+    //   console.log('wool event currentTarget: ', event.currentTarget);
+    //   this._editItemQuantity(event.currentTarget, true);
+    // });
     this.$window.on('resize.cart-page', just_debounce_default()(() => this._moveTitleTotal(), 20));
   }
   /**

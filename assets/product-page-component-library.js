@@ -256,3 +256,4 @@ function showShopifyChat() {
 
 let emptyVinVerificationRadioButtons = true;
 let emptyPrecisionMatchRadioButtons = true;
+let storedVin = '';

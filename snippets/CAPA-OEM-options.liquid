@@ -985,6 +985,8 @@
 *******************************************************************************************************/
 
         document.getElementById('vin-textbox-for-oem').addEventListener('input', async function(event) {
+          storedVin = event.target.value;
+          
           const vinInput = event.target.value.toUpperCase();
           const warning = document.getElementById('vin-warning-for-oem');
           const precisionMatchWrapper = document.querySelector('.product-page-precision-match-wrapper');
