@@ -258,6 +258,8 @@ function isPrecisionMatchSelected() {
     // Progressive header colors main function
 function updateProgressHeaderColors() {
     resetAllHeaderColors(false);
+    let precisionMatchHeaderColor;
+    let vinVerificationHeaderColor;
     
     if (!isFitmentVerified()) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
@@ -276,10 +278,14 @@ function updateProgressHeaderColors() {
     const paintOptionHeaderColor = isPaintOptionSelected();
     if (optionTitle) optionTitle.style.color = paintOptionHeaderColor;
 
-    const vinVerificationHeaderColor = isVinVerified();
+    if(vinVerifyCheckbboxYes) {
+        vinVerificationHeaderColor = isVinVerified();
+    }
     if (fitmentVerificationTitle) fitmentVerificationTitle.style.color = vinVerificationHeaderColor;
 
-    const precisionMatchHeaderColor = isPrecisionMatchSelected();
+    if(precisionMatchCheckboxYesLibrary) {
+        precisionMatchHeaderColor = isPrecisionMatchSelected();
+    }
     if (precisionMatchLabel) precisionMatchLabel.style.color = precisionMatchHeaderColor; 
 
 }
