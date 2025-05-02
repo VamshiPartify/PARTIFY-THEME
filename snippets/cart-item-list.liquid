@@ -75,6 +75,12 @@
           el.textContent = formatMoney(cart.total_price);
         });
       }
+      // Dispatch the cartcount:update event for other components to react
+      window.dispatchEvent(new CustomEvent('cartcount:update', {
+        detail: {
+          item_count: cart.item_count
+        }
+      }));
     }
 
     function formatMoney(cents, currency = 'USD') {

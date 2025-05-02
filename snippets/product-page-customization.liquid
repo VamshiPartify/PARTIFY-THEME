@@ -911,12 +911,12 @@
                   <div class="color-preview-container-for-customizations">
                       {% render 'color-preview-box' %}
                   </div>
-                  <div class="product-page-precision-match-wrapper">
+                  {% comment %} <div class="product-page-precision-match-wrapper">
                     <div class="divider-large-screen" style="transform: translateX(-10px);"></div>
                     {% render 'product-page-precision-match' %}
-                  </div>
-                  <div class="divider-large-screen"></div>
-                  {% render 'product-page-vin-guarantee' %}
+                  </div> {% endcomment %}
+                  {% comment %} <div class="divider-large-screen"></div>
+                  {% render 'product-page-vin-guarantee' %} {% endcomment %}
               </div>
               <div class="divider-small-screen"></div>
 
@@ -994,8 +994,8 @@
                   {% assign is_only_oem = true %}
                   {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
               {% endif %}
-              <div class="divider-large-screen"></div>
-              {% render 'product-page-vin-guarantee' %}
+              {% comment %} <div class="divider-large-screen"></div>
+              {% render 'product-page-vin-guarantee' %} {% endcomment %}
               <div class="divider-small-screen"></div>
             
 
