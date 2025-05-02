@@ -14,24 +14,21 @@
       "blocks": {
         "title": {
           "type": "title",
-          "settings": {
-          }
+          "settings": {}
         },
         "b0e438c8-4795-49ce-80cb-6a21e1798e46": {
-          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "type": "shopify://apps/yotpo-product-reviews/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
           "settings": {
             "product": "{{product}}"
           }
         },
         "price": {
           "type": "price",
-          "settings": {
-          }
+          "settings": {}
         },
         "e663a24f-1006-459a-8a37-8f77bfe52850": {
           "type": "shopify://apps/infinite-options/blocks/app-block/7e73b6f9-82b0-45f5-9b9b-04f446ba1a9b",
-          "settings": {
-          }
+          "settings": {}
         },
         "form": {
           "type": "form",
@@ -42,13 +39,11 @@
         },
         "description": {
           "type": "description",
-          "settings": {
-          }
+          "settings": {}
         },
         "share": {
           "type": "share",
-          "settings": {
-          }
+          "settings": {}
         }
       },
       "block_order": [
@@ -109,7 +104,7 @@
       "type": "apps",
       "blocks": {
         "61461c5e-e7e0-4e45-9cad-086df62fca09": {
-          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "type": "shopify://apps/yotpo-product-reviews/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
           "settings": {
             "product": "{{product}}"
           }
@@ -124,19 +119,6 @@
     },
     "91b3801f-49ae-463c-8817-1585d92d4264": {
       "type": "apps",
-      "blocks": {
-        "6d5e6498-d1ba-4f00-808a-18e5b47c0154": {
-          "type": "shopify://apps/boost-ai-search-discovery/blocks/recommendation/7fc998ae-a150-4367-bab8-505d8a4503f7",
-          "settings": {
-            "widgetId": "productpage-502271",
-            "additional_classes": "",
-            "custom_css": ""
-          }
-        }
-      },
-      "block_order": [
-        "6d5e6498-d1ba-4f00-808a-18e5b47c0154"
-      ],
       "settings": {
         "include_padding": true
       }

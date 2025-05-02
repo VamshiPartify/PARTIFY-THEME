@@ -14,19 +14,17 @@
       "blocks": {
         "title": {
           "type": "title",
-          "settings": {
-          }
+          "settings": {}
         },
         "b0e438c8-4795-49ce-80cb-6a21e1798e46": {
-          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "type": "shopify://apps/yotpo-product-reviews/blocks/star-rating/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
           "settings": {
             "product": "{{product}}"
           }
         },
         "price": {
           "type": "price",
-          "settings": {
-          }
+          "settings": {}
         },
         "5006f5e7-554d-4cc1-a089-51bc9c37611e": {
           "type": "custom-liquid",
@@ -42,8 +40,7 @@
         },
         "e663a24f-1006-459a-8a37-8f77bfe52850": {
           "type": "shopify://apps/infinite-options/blocks/app-block/7e73b6f9-82b0-45f5-9b9b-04f446ba1a9b",
-          "settings": {
-          }
+          "settings": {}
         },
         "form": {
           "type": "form",
@@ -54,8 +51,7 @@
         },
         "description": {
           "type": "description",
-          "settings": {
-          }
+          "settings": {}
         },
         "0165ca06-dd14-444d-91f3-3d5080c7f8b8": {
           "type": "collapsible-tab",
@@ -66,8 +62,7 @@
         },
         "share": {
           "type": "share",
-          "settings": {
-          }
+          "settings": {}
         }
       },
       "block_order": [
@@ -137,7 +132,7 @@
       "type": "apps",
       "blocks": {
         "61461c5e-e7e0-4e45-9cad-086df62fca09": {
-          "type": "shopify://apps/yotpo-product-reviews-ugc/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+          "type": "shopify://apps/yotpo-product-reviews/blocks/reviews/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
           "settings": {
             "product": "{{product}}"
           }

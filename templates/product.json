@@ -71,7 +71,6 @@
           "settings": {
             "show_offer": false,
             "show_countdown": true,
-            "show_location": true,
             "show_shipping_policy": false,
             "font_size": 16,
             "text_align": "left",
