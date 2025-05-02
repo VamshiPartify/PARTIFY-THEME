@@ -9,9 +9,13 @@ const productTypeSelect = document.getElementById('product-type-select');
 const combinedVariantSelect = document.getElementById('variant-selector');
 const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
 const vinVerifyCheckbboxYes = document.getElementById('fitment-yes');
-const vinVerifyCheckboxNo = document.getElementById('fitment-no');
 const addToCartButton = document.getElementById('add-to-cart');
 const addToCartForUnpainted = document.getElementById('add-to-cart-for-unpainted');
+const precisionMatchLabel = document.querySelector('.precision-match-guarantee');
+const precisionMatchCheckboxYesLibrary = document.getElementById('precision-match');
+const precisionMatchWrapperLibrary = document.querySelector('.product-page-precision-match-wrapper');
+
+
 
 let currentAddToCartBtn;
 if(addToCartButton) {
@@ -119,6 +123,11 @@ function isPaintOptionSelected() {
     const hasProductType = !!productTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+    const hasPrecisionMatch = !!precisionMatchLabel;
+    let precisionMatchWrapperIsShowing = false;
+    if(precisionMatchWrapperLibrary) {
+        precisionMatchWrapperIsShowing = precisionMatchWrapperLibrary.classList.contains('show')
+    }
 
 
     
@@ -127,13 +136,31 @@ function isPaintOptionSelected() {
 
 
     //If it is present, deem if it is true or not... if it is not present, then it is not applicable so set it to true
-    if(hasFitmentVerification) {
+    if(hasFitmentVerification && !hasPrecisionMatch) {
         if (hasProductType && hasCombinedVariant) {
             if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
             if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
         } else if (!hasProductType && hasCombinedVariant) {
             if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
             if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        }
+    } else if(hasPrecisionMatch) {
+        if(precisionMatchWrapperIsShowing) {
+            if (hasProductType && hasCombinedVariant) {
+                if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === true) return COLORS.red;
+                if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false) return COLORS.black;
+            } else if (!hasProductType && hasCombinedVariant) {
+                if(combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === true) return COLORS.red;
+                if(combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false) return COLORS.black;
+            }
+        } else {
+            if (hasProductType && hasCombinedVariant) {
+                if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+                if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+            } else if (!hasProductType && hasCombinedVariant) {
+                if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+                if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+            }
         }
     } else {
         if (hasProductType && hasCombinedVariant) {
@@ -150,31 +177,89 @@ function isPaintOptionSelected() {
 function isVinVerified() {
     const hasProductType = !!productTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
+    const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+    const hasPrecisionMatch = !!precisionMatchLabel;
+
 
 
     let addToCartBtnDisabled = true;
     if(currentAddToCartBtn) addToCartBtnDisabled = currentAddToCartBtn.disabled;
 
-    if (hasProductType && hasCombinedVariant) {
-        if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
-        if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
-    } else if (!hasProductType && hasCombinedVariant) {
-        if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
-        if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
-    } else if (hasProductType && !hasCombinedVariant) {
-        if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
-        if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
-    } else if (!hasProductType && !hasCombinedVariant) {
+    if(hasPrecisionMatch) {
+        if(vinVerifyCheckbboxYes.disabled === true) return COLORS.gray;
         if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
         if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+    } else {
+        if (hasProductType && hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        } else if (!hasProductType && hasCombinedVariant) {
+            if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        } else if (hasProductType && !hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        } else if (!hasProductType && !hasCombinedVariant) {
+            if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        }
+    }
+    return COLORS.gray;
+}
+
+function isPrecisionMatchSelected() {
+    const hasProductType = !!productTypeSelect;
+    const hasCombinedVariant = !!combinedVariantSelect;
+    const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+    const hasPrecisionMatch = !!precisionMatchLabel;
+
+    //precisionMatchCheckboxYesLibrary
+
+
+
+    let addToCartBtnDisabled = true;
+    if(currentAddToCartBtn) addToCartBtnDisabled = currentAddToCartBtn.disabled;
+
+    if(!hasFitmentVerification) {
+        if (hasProductType && hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        } else if (!hasProductType && hasCombinedVariant) {
+            if(combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        } else if (hasProductType && !hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+        } else if (!hasProductType && !hasCombinedVariant) {
+            if(addToCartBtnDisabled === true) return COLORS.red;
+            if(addToCartBtnDisabled === false) return COLORS.black;
+        }
+    } else {
+        if (hasProductType && hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        } else if (!hasProductType && hasCombinedVariant) {
+            if(combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if(combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        } else if (hasProductType && !hasCombinedVariant) {
+            if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if(productTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        } else if (!hasProductType && !hasCombinedVariant) {
+            if(vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if(vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+        }
     }
     return COLORS.gray;
 }
 
 
+
+
     // Progressive header colors main function
 function updateProgressHeaderColors() {
     resetAllHeaderColors(false);
+    let precisionMatchHeaderColor;
+    let vinVerificationHeaderColor;
     
     if (!isFitmentVerified()) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
@@ -193,7 +278,14 @@ function updateProgressHeaderColors() {
     const paintOptionHeaderColor = isPaintOptionSelected();
     if (optionTitle) optionTitle.style.color = paintOptionHeaderColor;
 
-    const vinVerificationHeaderColor = isVinVerified();
+    if(vinVerifyCheckbboxYes) {
+        vinVerificationHeaderColor = isVinVerified();
+    }
     if (fitmentVerificationTitle) fitmentVerificationTitle.style.color = vinVerificationHeaderColor;
+
+    if(precisionMatchCheckboxYesLibrary) {
+        precisionMatchHeaderColor = isPrecisionMatchSelected();
+    }
+    if (precisionMatchLabel) precisionMatchLabel.style.color = precisionMatchHeaderColor; 
 
 }

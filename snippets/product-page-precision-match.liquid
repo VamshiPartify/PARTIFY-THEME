@@ -1,12 +1,12 @@
 <style>
 
-    body.no-scroll-vin-verification {
+    body.no-scroll-precision-match {
         width: 100%;
         height: 100%;
         overflow: hidden !important;
       }
 
-    .vin-verification-popup-dark-overlay {
+    .precision-match-popup-dark-overlay {
         display: none;
         position: fixed;
         top: 0;
@@ -17,7 +17,7 @@
         z-index: 3000;
         animation: fade-in 0.5s;
     }
-    .vin-verification-popup-container {
+    .precision-match-popup-container {
         display: none;
         position: fixed;
         top: 0;
@@ -29,7 +29,7 @@
         font-family: 'Lato', sans-serif;
       }
       @media only screen and (max-width: 450px) {
-        .vin-verification-popup-modal {
+        .precision-match-popup-modal {
             position: relative;
             width: 90%;
             max-width: 800px;
@@ -44,7 +44,7 @@
           }
     }
     @media only screen and (min-width: 451px) {
-      .vin-verification-popup-modal {
+      .precision-match-popup-modal {
         position: relative;
         width: 60%;
         max-width: 800px;
@@ -59,30 +59,30 @@
       }
     }
 
-      .vin-verification-popup-wrapper {
+      .precision-match-popup-wrapper {
         padding: 25px 25px 30px 30px;
       }
-      .vin-verification-popup-wrapper img {
+      .precision-match-popup-wrapper img {
         max-width: 100%;
         height: auto;
         display: block;
         margin: 0 auto;
       }
-      .vin-verification-popup-wrapper h1 {
+      .precision-match-popup-wrapper h1 {
         font-size: 32px;
         margin-bottom: 5px;
         margin-top: 0;
         text-align: left;
         color: #373737;
       }
-      .vin-verification-popup-wrapper h2 {
-        font-size: 22px;
+      .precision-match-popup-wrapper h3 {
+        font-size: 20px;
         font-weight: 900;
         margin-bottom: 24px;
         text-align: left;
         color: #4b4b4b;
       }
-      .vin-verification-popup-wrapper h4, h5 {
+      .precision-match-popup-wrapper h4, h5 {
         font-size: 18px;
         font-weight: 700;
         margin: 8px 0;
@@ -91,7 +91,7 @@
         line-height: 24px;
       }
 
-      .vin-verification-popup-wrapper ul {
+      .precision-match-popup-wrapper ul {
         font-size: 16px;
         padding-left: 18px;
         color: #4b4b4b;
@@ -100,13 +100,13 @@
         line-height: 20px;
       }
 
-    .vin-verification-close-btn-wrapper {
+    .precision-match-close-btn-wrapper {
         display: flex;
         justify-content: end;
         width: 100%;
     }
 
-      .vin-verification-close-btn {
+      .precision-match-close-btn {
         font-size: 32px;
         height: 32px;
         background: none;
@@ -118,14 +118,14 @@
         align-items: start;
         justify-content: end;
       }
-    .vin-guarantee-container {
+    .precision-match-container {
         display: flex;
         flex-direction: column;
         justify-content: center; 
         width: 100%;
     }
 
-    .fitment-guarantee {
+    .precision-match-guarantee {
         font-size: 1.2rem;
         font-weight: 800;
         color: #333;
@@ -133,16 +133,30 @@
         display: flex;
         justify-content: start;
     }
-    .vin-verification-checkbox-group {
-        display: flex;
-        flex-direction: row;
-        gap: 20px; /* space between Yes and No */
-        align-items: center;
-        font-weight: 600;
-        margin-top: 5px;
+
+    @media only screen and (max-width: 640px) {
+        .precision-match-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: start;
+            font-weight: 600;
+            margin-top: 10px;
+        }
     }
 
-    .checkbox-option {
+    @media only screen and (min-width: 641px) {
+        .precision-match-checkbox-group {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+    }
+
+    .precision-match-checkbox-option {
         display: flex;
         align-items: center;
         gap: 5px;
@@ -155,17 +169,17 @@
         height: 16px;
     }
 
-    .checkbox-option:has(input:disabled) {
+    .precision-match-checkbox-option:has(input:disabled) {
         color: #ccc;
         opacity: 0.7;
         cursor: not-allowed;
     }
-    .checkbox-option input[type="radio"]:disabled {
+    .precision-match-checkbox-option input[type="radio"]:disabled {
         accent-color: #ccc;
         cursor: not-allowed;
     }
 
-    #vin-textbox-for-verification {
+    #precision-match-textbox {
         width: 100%;
         {% comment %} margin-top: 10px; {% endcomment %}
         padding: 10px;
@@ -174,21 +188,21 @@
         height: 45px;
     }
 
-    #vin-textbox-for-verification-wrapper {
+    #precision-match-textbox-wrapper {
         max-height: 0;
         overflow: hidden;
         opacity: 0;
-        transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+        transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
     }
     
-    #vin-textbox-for-verification-wrapper.show {
+    #precision-match-textbox-wrapper.show {
         max-height: 100px; /* adjust based on content height */
         opacity: 1;
         margin-top: 10px;
     }
 
     @media only screen and (max-width: 450px) {
-        #vin-verification-button {
+        #precision-match-button {
             width:100%;
             color: #3b3b3b;
             background-color: #f3f3f3;
@@ -204,16 +218,16 @@
             font-family: 'Lato', sans-serif;
             margin-top: 10px;
         }
-        #vin-verification-button p {
+        #precision-match-button p {
             margin: 0;
         }
-        #vin-verification-button:hover {
+        #precision-match-button:hover {
             background-color: #e5e5e5;
         }
-        #vin-verification-button:active {
+        #precision-match-button:active {
             background-color: #f3f3f3;
         }
-        #vin-verification-button:disabled {
+        #precision-match-button:disabled {
             color: #ccc;
             cursor: no-drop;
             background-color: #f0f0f0;
@@ -222,7 +236,7 @@
     }
 
     @media only screen and (min-width: 451px) {
-        #vin-verification-button {
+        #precision-match-button {
             width:100%;
             color: #3b3b3b;
             background-color: #f3f3f3;
@@ -238,23 +252,23 @@
             font-family: 'Lato', sans-serif;
             margin-top: 10px;
         }
-        #vin-verification-button p {
+        #precision-match-button p {
             margin: 0;
         }
-        #vin-verification-button:hover {
+        #precision-match-button:hover {
             background-color: #e5e5e5;
         }
-        #vin-verification-button:active {
+        #precision-match-button:active {
             background-color: #f3f3f3;
         }
-        #vin-verification-button:disabled {
+        #precision-match-button:disabled {
             color: #ccc;
             cursor: no-drop;
             background-color: #f0f0f0;
             opacity: 0.6;
         }
     }
-      .vin-verification-wrapper {
+      .precision-match-wrapper {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -267,68 +281,67 @@
     
 </style>
 
-<div class="vin-guarantee-container">
-    <label class="fitment-guarantee">{{ 'fitment_verification.label' | t }}</label>
+<div class="precision-match-container">
+    <label class="precision-match-guarantee">{{ 'precision_match.label' | t }}</label>
 
-    <div class="vin-verification-checkbox-group">
-        <label class="checkbox-option">
+    <div class="precision-match-checkbox-group">
+        <label class="precision-match-checkbox-option">
             <input 
                 type="radio" 
-                name="fitment_guarantee" 
-                value="yes" 
-                id="fitment-yes"
+                name="precision_match" 
+                value="precision" 
+                id="precision-match"
                 disabled
             >
-            {{ 'fitment_verification.yes' | t }}&nbsp;<span id="fitment-price-label"></span>
+            {{ 'precision_match.precision' | t }}&nbsp;<span id="precision-match-price-label"></span>
         </label>
     
-        <label class="checkbox-option">
+        <label class="precision-match-checkbox-option">
             <input
-                id="fitment-no"
+                id="standard-match"
                 type="radio" 
-                name="fitment_guarantee" 
-                value="no"
+                name="precision_match" 
+                value="standard"
                 disabled
             >
-            {{ 'fitment_verification.no' | t }}
+            {{ 'precision_match.standard' | t }}
         </label>
     </div>  
-    <div id="vin-textbox-for-verification-wrapper">
+    <div id="precision-match-textbox-wrapper">
         <input
             type="text"
-            id="vin-textbox-for-verification"
+            id="precision-match-textbox"
             placeholder="Enter your VIN"
             maxlength="17"
             value="{{ vinValue | default: "" }}"
         >
     </div>
-    <button id="vin-verification-button" type="button" class="btn" disabled>
-        <div class="vin-verification-wrapper">
-            <p id="vin-verification-button-text">
-                <b>{{ 'fitment_verification.button_heading' | t}}</b>
+    <button id="precision-match-button" type="button" class="btn" disabled>
+        <div class="precision-match-wrapper">
+            <p id="precision-match-button-text">
+                <b>{{ 'precision_match.button_heading' | t}}</b>
                 <br/>
-                {{ 'fitment_verification.button_description' | t}}       
+                {{ 'precision_match.button_description' | t}}       
             </p>
             <div class="button_svg_container">
                 <svg class="button_svg" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="14px" width="14px" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path></svg>
             </div>
         </div>
     </button>
-    <div class="vin-verification-popup-dark-overlay"></div>
-    <div class="vin-verification-popup-container">
-        <div class="vin-verification-popup-modal">
-            <div class="vin-verification-close-btn-wrapper">
-                <button class="vin-verification-close-btn" role="button" type="button">&times;</button>
+    <div class="precision-match-popup-dark-overlay"></div>
+    <div class="precision-match-popup-container">
+        <div class="precision-match-popup-modal">
+            <div class="precision-match-close-btn-wrapper">
+                <button class="precision-match-close-btn" role="button" type="button">&times;</button>
             </div>
-            <div class="vin-verification-popup-wrapper">
-                <h1>{{ 'fitment_verification.modal_heading' | t }}</h1>
-                {% comment %} <h2>{{ 'fitment_verification.modal_subheading' | t }}</h2> {% endcomment %}
+            <div class="precision-match-popup-wrapper">
+                <h1>{{ 'precision_match.modal_heading' | t }}</h1>
+                {% comment %} <h3>{{ 'precision_match.modal_subheading' | t }}</h3> {% endcomment %}
                 <div id="paint-code-instructions">
-                    <h4>{{ 'fitment_verification.first_message' | t }}</h4>
+                    {% comment %} <h4>{{ 'precision_match.first_message' | t }}</h4> {% endcomment %}
                     <ul>
-                        <li>{{ 'fitment_verification.point_1' | t }}</li>
-                        <li>{{ 'fitment_verification.point_2' | t }}</li>
-                        <li>{{ 'fitment_verification.point_3' | t }}</li>
+                        <li><span style="font-weight: 700;">{{ 'precision_match.point_1_label' | t }}</span>&nbsp;{{ 'precision_match.point_1' | t }}</li>
+                        <li><span style="font-weight: 700;">{{ 'precision_match.point_2_label' | t }}</span>&nbsp;{{ 'precision_match.point_2' | t }}</li>
                     </ul>
                 </div>
             </div>
@@ -338,16 +351,15 @@
 
 
 <script>
-    //41104835379285
         document.addEventListener('DOMContentLoaded', function () {
-            {% comment %} const form = document.querySelector('form[action^="/cart/add"]'); {% endcomment %}
-            const fitmentYes = document.getElementById('fitment-yes');
+            const precisionMatch = document.getElementById('precision-match');
             const addToCartButton = document.getElementById('add-to-cart');
             const addToCartForUnpainted = document.getElementById('add-to-cart-for-unpainted');
-            const vinInputWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
-            const vinInput = document.getElementById('vin-textbox-for-verification');
-            const vinVerificationService = 'vin-verification-service';
-            const fitmentVariantId = '41104835379285';
+            const precisionMatchTextboxWrapper = document.getElementById('precision-match-textbox-wrapper');
+            const vinInput = document.getElementById('precision-match-textbox');
+            const precisionPaintMatchService = 'precision-paint-match-service';
+            const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
+            const precisionMatchVariantId = '41114917404757';
             {% comment %} const productForm = document.getElementById('product-form'); {% endcomment %}
             {% comment %} let productSku = ''; {% endcomment %}
 
@@ -364,13 +376,13 @@
             
 
             // Used to fetch the price and then add it to the price-display to show updated pricing
-            fetch(`/products/${vinVerificationService}.js`)
+            fetch(`/products/${precisionPaintMatchService}.js`)
                 .then(res => res.json())
                 .then(product => {
-                    const fitmentVariant = product.variants.find(variant => variant.id === Number(fitmentVariantId));
-                    if (fitmentVariant) {
-                        price = (fitmentVariant.price / 100); // convert cents to dollars
-                        document.getElementById('fitment-price-label').textContent = `+$${price.toFixed(2)}`;
+                    const precisionMatchVariant = product.variants.find(variant => variant.id === Number(precisionMatchVariantId));
+                    if (precisionMatchVariant) {
+                        price = (precisionMatchVariant.price / 100); // convert cents to dollars
+                        document.getElementById('precision-match-price-label').textContent = `+$${price.toFixed(2)}`;
                     } else {
                         console.warn('Fitment variant not found in product data');
                     }
@@ -381,33 +393,37 @@
 
 
             // Show/hide VIN input based on radio selection
-            const radios = document.querySelectorAll('input[name="fitment_guarantee"]');
+            const radios = document.querySelectorAll('input[name="precision_match"]');
             radios.forEach(radio => {
                 radio.addEventListener('change', function () {
                     const priceDisplayElement = document.getElementById('price-display');
                     const originalPriceText = priceDisplayElement.textContent;
                     const originalPriceValue = parseFloat(originalPriceText.replace(/[^0-9.]/g, ''));
 
-                    if (fitmentYes.checked) {
-                        vinInputWrapper.classList.add('show');
+                    if (precisionMatch.checked) {
+                        precisionMatchTextboxWrapper.classList.add('show');
                         let newTotal;
                 
                         // Displays the updated price for adding on this feature
-                        if(yesRadioWasLastSelected === null || yesRadioWasLastSelected === false || emptyVinVerificationRadioButtons) {
+                        if(yesRadioWasLastSelected === null || yesRadioWasLastSelected === false || emptyPrecisionMatchRadioButtons) {
                             newTotal = (originalPriceValue + price).toFixed(2);
                         } else {
                             newTotal = (originalPriceValue).toFixed(2);
                         }
                         priceDisplayElement.textContent = `$${newTotal}`;
                         yesRadioWasLastSelected = true;
+                        if(vinVerificationCheckboxGroup) {
+                            disableVinVerificationBtns();
+                            clearVinVerificationRadioButtons();
+                        }
                         currentAddToCartBtn.disabled = true;
-                        window.vinVerificationCheckedYes = true;
+                        window.precisionMatchCheckedYes = true;
                     } else {
-                        vinInputWrapper.classList.remove('show');
+                        precisionMatchTextboxWrapper.classList.remove('show');
                         vinInput.value = '';
                         let newTotal;
                         // Displays the updated price for adding on this feature
-                        if(emptyVinVerificationRadioButtons) {
+                        if(emptyPrecisionMatchRadioButtons) {
                             newTotal = (originalPriceValue).toFixed(2);
                         } else {
                             newTotal = (originalPriceValue - price).toFixed(2);
@@ -415,15 +431,19 @@
                         // Reset price to original
                         priceDisplayElement.textContent = `$${newTotal}`;
                         yesRadioWasLastSelected = false;
-                        currentAddToCartBtn.disabled = false;
-                        window.vinVerificationCheckedYes = false;
+                        if(!vinVerificationCheckboxGroup) currentAddToCartBtn.disabled = false;
+                        if(vinVerificationCheckboxGroup) enableVinVerificationBtns();
+                        window.precisionMatchCheckedYes = false;
                     }
-                    emptyVinVerificationRadioButtons = false;
+                    emptyPrecisionMatchRadioButtons = false;
                     updateProgressHeaderColors();
                 });                
             });
 
-            document.getElementById('vin-textbox-for-verification').addEventListener('input', function(event) {
+            document.getElementById('precision-match-textbox').addEventListener('input', function(event) {
+                if(storedVin) {
+                    document.getElementById('precision-match-textbox').value = storedVin;
+                }
                 const originalValue = event.target.value;
                 let vinInput = originalValue.toUpperCase();
                 const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
@@ -441,9 +461,14 @@
             
                 // Check for VIN length
                 if (vinInput.length === 17) {
-                    currentAddToCartBtn.disabled = false;
+                    if(!vinVerificationCheckboxGroup) currentAddToCartBtn.disabled = false;
+                    if(vinVerificationCheckboxGroup) enableVinVerificationBtns();
                     updateProgressHeaderColors();
                 } else {
+                    if(vinVerificationCheckboxGroup) {
+                        clearVinVerificationRadioButtons();
+                        disableVinVerificationBtns();
+                    }
                     currentAddToCartBtn.disabled = true;
                     updateProgressHeaderColors();
                 }
@@ -453,7 +478,7 @@
             let vinVerificationScrollPosition = 0;
 
             //Open Modal
-            document.querySelector("#vin-verification-button").onclick = async function() {
+            document.querySelector("#precision-match-button").onclick = async function() {
                 vinVerificationScrollPosition = window.scrollY || document.documentElement.scrollTop;
 
                 hideShopifyChat();
@@ -461,7 +486,7 @@
 
                 try {
                     // Lock scroll and show the modal
-                    document.body.classList.add('no-scroll-vin-verification');
+                    document.body.classList.add('no-scroll-precision-match');
                     showModal();
                 } catch (error) {
                     console.error('Error fetching page content how-to-find-paint-code:', error);
@@ -469,23 +494,23 @@
             }
 
             function showOverlay() {
-                document.querySelector(".vin-verification-popup-dark-overlay").style.display = "block";
+                document.querySelector(".precision-match-popup-dark-overlay").style.display = "block";
             }
             function showModal () {
-                document.querySelector(".vin-verification-popup-container").style.display = "block";
+                document.querySelector(".precision-match-popup-container").style.display = "block";
             }
             function hideOverlay() {
-                document.querySelector(".vin-verification-popup-dark-overlay").style.display = "none";
+                document.querySelector(".precision-match-popup-dark-overlay").style.display = "none";
             }
             function hideModal() {
-                document.body.classList.remove('no-scroll-vin-verification');
+                document.body.classList.remove('no-scroll-precision-match');
                 window.scrollTo(0, vinVerificationScrollPosition);
 
                 showShopifyChat();
                 hideOverlay();
 
-                const container = document.querySelector('.vin-verification-popup-container');
-                const modal = document.querySelector('.vin-verification-popup-modal');
+                const container = document.querySelector('.precision-match-popup-container');
+                const modal = document.querySelector('.precision-match-popup-modal');
                 const onAnimationEnd = function() {
                   modal.style.animation = '';
                   container.style.display = 'none';
@@ -497,21 +522,21 @@
             }
 
             // Close Modal (exit button)
-            document.querySelector(".vin-verification-close-btn").onclick = async function() {
+            document.querySelector(".precision-match-close-btn").onclick = async function() {
                 hideModal();
             };
 
 
             // Close Modal (click outside)
             window.onclick = function(event) {
-                if (event.target === document.querySelector('.vin-verification-popup-container')) {
+                if (event.target === document.querySelector('.precision-match-popup-container')) {
                     hideModal();
                 }
               };
             // Close Modal (ESC key)
             document.addEventListener("keydown", (event) => {
                 event.stopPropagation();
-                const modal = document.querySelector('.vin-verification-popup-container');
+                const modal = document.querySelector('.precision-match-popup-container');
                 const isModalOpen = modal && modal.style.display === 'block';
                 if (event.key === "Escape" && isModalOpen) {
                     hideModal();

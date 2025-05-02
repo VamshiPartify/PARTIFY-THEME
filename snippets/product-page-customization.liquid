@@ -421,8 +421,31 @@
     }
 
     .color-preview-container-for-customizations {
-        width: 100%;
+      width: 100%;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+      display: block; /* Always block, we'll animate with max-height instead of toggling display */
     }
+    
+    .color-preview-container-for-customizations.show {
+      max-height: 100px; /* Set high enough to accommodate actual height */
+      opacity: 1;
+    }
+
+    .product-page-precision-match-wrapper {
+      width: 100%;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+    .product-page-precision-match-wrapper.show {
+      max-height: 1000px; /* or something large enough to contain the content */
+      opacity: 1;
+    }
+    
 
   #model-fitmentfail-button-container {
     padding: 15px 15px 0 15px;
@@ -888,8 +911,12 @@
                   <div class="color-preview-container-for-customizations">
                       {% render 'color-preview-box' %}
                   </div>
-                  <div class="divider-large-screen"></div>
-                  {% render 'product-page-vin-guarantee' %}
+                  {% comment %} <div class="product-page-precision-match-wrapper">
+                    <div class="divider-large-screen" style="transform: translateX(-10px);"></div>
+                    {% render 'product-page-precision-match' %}
+                  </div> {% endcomment %}
+                  {% comment %} <div class="divider-large-screen"></div>
+                  {% render 'product-page-vin-guarantee' %} {% endcomment %}
               </div>
               <div class="divider-small-screen"></div>
 
@@ -967,8 +994,8 @@
                   {% assign is_only_oem = true %}
                   {% render 'CAPA-OEM-options', is_only_oem: is_only_oem %}
               {% endif %}
-              <div class="divider-large-screen"></div>
-              {% render 'product-page-vin-guarantee' %}
+              {% comment %} <div class="divider-large-screen"></div>
+              {% render 'product-page-vin-guarantee' %} {% endcomment %}
               <div class="divider-small-screen"></div>
             
 
@@ -1174,7 +1201,6 @@
             const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === "Enabled";
             const productTypeSelect = document.getElementById('product-type-select');
 
-
             const easyFitmentFail = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-fail');
             const easyFitmentSuccess = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-icon-success');
             const fitmentLink = document.querySelector('.easysearch-fitment-link'); // Get the dynamic link
@@ -1191,6 +1217,9 @@
             const vinVerifyCheckboxNo = document.getElementById('fitment-no');
             const vinVerificationButton = document.getElementById('vin-verification-button');
             const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+            const precisionMatchContainer = document.querySelector('.precision-match-container');
+            const hasPrecisionMatch = !!precisionMatchContainer;
+
             let variantSelectedOption = null;
             let productSelect;
 
@@ -1283,6 +1312,8 @@
                 }
                 clearCombinedVariantSelect();
                 disableCombinedVariantSelect();
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
                 disableVinVerificationBtns();
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
@@ -1304,6 +1335,8 @@
                 }
                 clearCombinedVariantSelect();
                 disableCombinedVariantSelect();
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
                 disableVinVerificationBtns()
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
@@ -1357,6 +1390,8 @@
                   clearCombinedVariantSelect();
                   disableCombinedVariantSelect();
                 }
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
                 disableVinVerificationBtns();
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
@@ -1379,7 +1414,10 @@
             function checkFitmentStatusWrapper(failEl, successEl, hiddenEl) {
               console.log('🔁 EasySearch mutation detected – checking fitment status...');
               if(hiddenEl) {
-                if(oemVinContainer && oemVinContainer.style.display === "block") oemVinContainer.style.display = "none";
+                const isOnlyOem = '{{ is_only_oem }}';
+                if(isOnlyOem === 'false') {
+                  if(oemVinContainer && oemVinContainer.style.display === "block") oemVinContainer.style.display = "none";
+                }
                 if(paintedStockKey && paintedStockKey.style.display === "block") paintedStockKey.style.display = "none";
               }
 
@@ -1438,6 +1476,7 @@
                 const selectedOptionText = combinedVariantSelect.options[combinedVariantSelect.selectedIndex].text;
                 const selectedOptionCheckingForVin = selectedOptionText.includes("Match Paint by VIN") || selectedOptionText.includes("Pintura de combinación por VIN");
                 const oemVinContainer = document.querySelector('.oem-vin-container');
+
         
                 if (parseInt(variantSize) === 1 && variantTitle === "Default Title") {
                     combinedVariantSelect.style.display = "none";
@@ -1481,13 +1520,25 @@
                 }
             }
 
-            //If product has paint options and fitment verification
-            if(combinedVariantSelect && hasFitmentVerification === true) {
+            //If product has paint options and fitment verification or precision match
+            if(combinedVariantSelect && (hasFitmentVerification === true || hasPrecisionMatch === true)) {
               combinedVariantSelect.addEventListener('change', function() {
-                {% comment %} updateProgressHeaderColors(); {% endcomment %}
                 const selectedOption = this.options[this.selectedIndex];
                 const successEl = document.querySelector('.easysearch-fitment-icon-success');
+                const precisionMatchWrapper = document.querySelector('.product-page-precision-match-wrapper');
+                const selectedOptionText = selectedOption.textContent;
                 variantSelectedOption = selectedOption.value;
+                if(
+                  !selectedOptionText.includes("Match Paint by VIN") && 
+                  !selectedOptionText.includes("Pintura de combinación por VIN") &&
+                  !selectedOptionText.includes("Unpainted") &&
+                  !selectedOptionText.includes("Sin pintar")
+                ) {
+                  if(precisionMatchWrapper) precisionMatchWrapper.classList.add('show');
+                } else {
+                  if(precisionMatchWrapper) precisionMatchWrapper.classList.remove('show');
+                  clearPrecisionMatchRadioButtons();
+                }
 
 
 
@@ -1498,7 +1549,17 @@
 
 
                 if (variantId && fitmentSuccess) {
-                    enableVinVerificationBtns();
+                  if(!hasPrecisionMatch) enableVinVerificationBtns();
+                  if(hasPrecisionMatch) {
+                    if(precisionMatchWrapper && precisionMatchWrapper.classList.contains('show')) {
+                      clearPrecisionMatchRadioButtons();
+                      enablePrecisionMatchBtns();
+                      clearVinVerificationRadioButtons();
+                      disableVinVerificationBtns();
+                    } else {
+                      enableVinVerificationBtns();
+                    }
+                  }
                     updateProgressHeaderColors();
                 }
 
@@ -1553,7 +1614,8 @@
                         addToCartButtonForUnpaintedItems.disabled = false;
                       }
                       if(productSelect !== "oem" && hasFitmentVerification) {
-                        enableVinVerificationBtns();
+                        if(!hasPrecisionMatch) enableVinVerificationBtns();
+                        if(hasPrecisionMatch) enablePrecisionMatchBtns();
                         addToCartButtonForUnpaintedItems.disabled = true;
                       }
                       if(previousQualitySelectUnpainted !== '' && productSelect === "oem" && previousQualitySelectUnpainted !== productSelect) {
@@ -1582,7 +1644,8 @@
                     }
 
                     if(!oemProduct) {
-                      enableVinVerificationBtns();
+                      if(!hasPrecisionMatch) enableVinVerificationBtns();
+                      if(hasPrecisionMatch) enablePrecisionMatchBtns();
                       addToCartButtonForUnpaintedItems.style.display = 'block';
                       addToCartButtonForUnpaintedItems.disabled = true;
                     }
@@ -1604,8 +1667,16 @@
                   const selectedOption = event.target.options[event.target.selectedIndex];
                   handleFitmentSuccessChange(selectedOption.value);
                   updateProgressHeaderColors();
-                  ///Wool we are here!!!
                 })
+              }
+            }
+
+            if(!hasFitmentVerification && !hasPrecisionMatch) {
+              // Check variant on change
+              if(combinedVariantSelect) {
+                combinedVariantSelect.addEventListener('change', function () {
+                  if(paintedItem) checkBothConditions();                
+                });
               }
             }
         });
@@ -1621,6 +1692,8 @@
             const paintOrVin = document.querySelector('.paint-or-vin');
             const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
             const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+            const precisionMatchContainer = document.querySelector('.precision-match-container');
+            const hasPrecisionMatch = !!precisionMatchContainer;
 
     
             // Function to check if the selected variant is the VIN variant
@@ -1671,7 +1744,8 @@
                       vinSuccess = true;    
                   } else if(vinInput.length === 17 && fitmentSuccess && hasFitmentVerification) {
                       disableAddToCartButton();
-                      enableVinVerificationBtns()
+                      if(!hasPrecisionMatch) enableVinVerificationBtns();
+                      if(hasPrecisionMatch) enablePrecisionMatchBtns();
                       updateProgressHeaderColors();
                   } else {
                       disableAddToCartButton();
@@ -1684,6 +1758,7 @@
             //For unpainted items
             if(!vinTextBox && vinTextBoxOEM) {
               document.getElementById('vin-textbox-for-oem').addEventListener('input', function(event) {
+                  storedVin = event.target.value;
 
                   const vinInput = event.target.value.toUpperCase();
                   const warning = document.getElementById('vin-warning-for-oem');
@@ -1710,7 +1785,8 @@
                     updateProgressHeaderColors();
                   } else if(vinInput.length === 17 && fitmentSuccess && hasFitmentVerification) {
                     disableAddToCartButton();
-                    enableVinVerificationBtns()
+                    if(!hasPrecisionMatch) enableVinVerificationBtns();
+                    if(hasPrecisionMatch) enablePrecisionMatchBtns();
                     vinSuccess = false;
                     updateProgressHeaderColors();
                   } else {
@@ -1887,45 +1963,132 @@
   </script>
 
 
-  <!-- For yotpo stars skeleton -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const skeleton = document.getElementById('yotpo-skeleton');
+  <!-- Form submission for cart addons (precision paint match and fitment verification) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const productForm = document.getElementById('product-form');
+        const precisionMatch = document.getElementById('precision-match');
+        const fitmentYes = document.getElementById('fitment-yes');
+        const precisionMatchVariantId = '41114917404757';
+        const fitmentVariantId = '41104835379285';
+        const continueShoppingBtn = document.getElementById('continue-shopping-btn');
+        const goToCartBtn = document.getElementById('go-to-cart-btn');
+        const freightItemPopup = document.getElementById('freight-item-popup');
+        let scrollPosition = 0;
+        let productSku = '';
+    
+        productForm.addEventListener('submit', async function (event) {
+          event.preventDefault(); // Stop default submission
+    
+          if (selectedProductSku) {
+            productSku = selectedProductSku;
+          } else {
+            productSku = '{{ product.variants.first.sku }}';
+          }
+    
+          const weightInUnit = parseInt(productForm.getAttribute('data-weight-in-unit') || 0);
+    
+          try {
+            // Sequentially add each fitment item
+            if (precisionMatch && precisionMatch.checked) {
+              const vin1 = document.getElementById('precision-match-textbox').value.toUpperCase();
+              const res1 = await fetch('/cart/add.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: precisionMatchVariantId,
+                  quantity: 1,
+                  properties: {
+                    "VIN": vin1,
+                    "Reference": productSku,
+                  }
+                })
+              });
+              if (!res1.ok) throw new Error('Failed to add precision match');
+            }
+    
+            if (fitmentYes && fitmentYes.checked) {
+              const vin2 = document.getElementById('vin-textbox-for-verification').value.toUpperCase();
+              const res2 = await fetch('/cart/add.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: fitmentVariantId,
+                  quantity: 1,
+                  properties: {
+                    "VIN": vin2,
+                    "Reference": productSku,
+                  }
+                })
+              });
+              if (!res2.ok) throw new Error('Failed to add fitment verification');
+            }
+    
+            // All additions done — now submit the main product on add to cart click
+            if (weightInUnit < 10) {
+              productForm.submit();
+            } else {
 
-      const observer = new MutationObserver(() => {
-        const yotpoStars = document.querySelector('[class*="yotpo-sr-bottom-line-summary"]'); // Adjust if needed
-        if (yotpoStars && skeleton) {
-          skeleton.remove();
-          observer.disconnect();
-        }
+              // For items over 10 lbs, don't immediately submit the form.. rather just manually add the main product to the cart\
+              // direct customers to the cart if click 'go to cart' or to easysearch fitment link if clicked 'continue shopping'
+              const formData = new FormData(productForm);
+              fetch('/cart/add.js', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+              })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Failed to add item to cart');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                if(freightItemPopup) freightItemPopup.style.display = 'block';
+                document.body.classList.add('no-scroll');
+                document.body.style.top = `-${scrollPosition}px`;
+
+                confetti({
+                  particleCount: 100,
+                  spread: 70,
+                  origin: { x: 0.5, y: 0.5 },
+                  zIndex: 99999,
+                  gravity: 0.8
+                });
+              })
+              .catch(error => {
+                  console.error('Error adding item to cart:', error);
+                  alert('There was an error adding the item to your cart. Please try again.');
+              });
+
+              if(continueShoppingBtn) {
+                continueShoppingBtn.addEventListener('click', function() {
+                  freightItemPopup.style.display = 'none';
+                  const fitmentLink = document.querySelector('.easysearch-fitment-link');
+                    if (fitmentLink) {
+                        window.location.href = fitmentLink.href;
+                    }
+                    document.body.classList.remove('no-scroll');
+                    document.body.style.top = '';
+                });
+              }
+          
+              if(goToCartBtn) {
+                goToCartBtn.addEventListener('click', function() {
+                  freightItemPopup.style.display = 'none';
+                  window.location.href = '/cart';
+                  document.body.classList.remove('no-scroll');
+                  document.body.style.top = '';
+                  productForm.submit();
+                })
+              }
+            } 
+          } catch (err) {
+            console.error('Error adding to cart:', err);
+          }
+        });
       });
-
-      observer.observe(document.body, { childList: true, subtree: true });
-    });
-  </script>
-
-  <!-- For product gallery skeleton -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const skeletonContainer = document.querySelector(".product-gallery--skeleton-thumbnails");
-      const galleryThumbnails = document.querySelectorAll("[data-gallery-thumbnail]");
-      const navigation = document.querySelector(".product-gallery--navigation");
-
-      if (!skeletonContainer || galleryThumbnails.length === 0) return;
-
-      const firstImage = galleryThumbnails[0].querySelector("img");
-
-      const cleanup = () => {
-        skeletonContainer.remove();
-        if (navigation?.classList.contains("loading")) {
-          navigation.classList.remove("loading");
-        }
-      };
-
-      if (firstImage && firstImage.complete) {
-        cleanup();
-      } else {
-        firstImage.addEventListener("load", cleanup);
-      }
-    });
-  </script>  
+    </script>
+  

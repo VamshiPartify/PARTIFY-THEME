@@ -1,23 +1,29 @@
-const productTypeSelectLibrary = document.getElementById('product-type-select');
-const qualityDescriptionBtnLibrary = document.getElementById('quality-description-vindecoder');
-const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
-const combinedVariantSelectLibrary = document.getElementById('variant-selector');
-const vinVerificationCheckboxGroupLibrary = document.querySelector('.vin-verification-checkbox-group');
-const vinVerifyCheckbboxYesLibrary = document.getElementById('fitment-yes');
-const vinVerifyCheckboxNoLibrary = document.getElementById('fitment-no');
-const vinVerificationButtonLibrary = document.getElementById('vin-verification-button');
 const addToCartButtonLibrary = document.getElementById('add-to-cart');
 const addToCartForUnpaintedLibrary = document.getElementById('add-to-cart-for-unpainted');
-const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
+const combinedVariantSelectLibrary = document.getElementById('variant-selector');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
-const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
+const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
+const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
+const precisionMatchContainer = document.querySelector('.precision-match-container');
+const precisionMatchCheckboxYes = document.getElementById('precision-match');
+const precisionMatchCheckboxNo = document.getElementById('standard-match');
+const precisionMatchButton = document.getElementById('precision-match-button');
+const precisionMatchInputBox = document.getElementById('precision-match-textbox');
+const precisionMatchVinWrapper = document.getElementById('precision-match-textbox-wrapper');
 const priceContainerLargeScreen = document.querySelector('.price-container-large-screen');
 const priceContainerSmallScreen = document.querySelector('.price-container');
 const priceDisplay = document.getElementById('price-display');
 const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
-const vinInputWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
-const vinInput = document.getElementById('vin-textbox-for-verification');
+const productTypeSelectLibrary = document.getElementById('product-type-select');
+const qualityDescriptionBtnLibrary = document.getElementById('quality-description-vindecoder');
+const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
+const vinVerificationWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
+const vinVerificationInput = document.getElementById('vin-textbox-for-verification');
 const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
+const vinVerificationCheckboxGroupLibrary = document.querySelector('.vin-verification-checkbox-group');
+const vinVerifyCheckbboxYesLibrary = document.getElementById('fitment-yes');
+const vinVerifyCheckboxNoLibrary = document.getElementById('fitment-no');
+const vinVerificationButtonLibrary = document.getElementById('vin-verification-button');
 
 
 
@@ -77,6 +83,22 @@ function disableSelectVinVariantBtn() {
     if (selectVinVariantButtonLibrary) selectVinVariantButtonLibrary.disabled = true;
 }
 
+function disablePrecisionMatchBtns() {
+    if (precisionMatchContainer) precisionMatchCheckboxYes.disabled = true;
+    if (precisionMatchContainer) precisionMatchCheckboxNo.disabled = true;
+    if (precisionMatchButton) precisionMatchButton.disabled = true;
+}
+
+function clearPrecisionMatchRadioButtons() {
+    if(precisionMatchContainer) {
+        const radios = document.querySelectorAll(`input[name="precision_match"]`);
+        radios.forEach(radio => radio.checked = false);
+        precisionMatchVinWrapper.classList.remove('show');
+        precisionMatchInputBox.value = '';
+        emptyPrecisionMatchRadioButtons = true;
+    }
+}
+
 function disableVinVerificationBtns() {
     if (vinVerifyCheckbboxYesLibrary) vinVerifyCheckbboxYesLibrary.disabled = true;
     if (vinVerifyCheckboxNoLibrary) vinVerifyCheckboxNoLibrary.disabled = true;
@@ -84,11 +106,13 @@ function disableVinVerificationBtns() {
 }
 
 function clearVinVerificationRadioButtons() {
-    const radios = document.querySelectorAll(`input[name="fitment_guarantee"]`);
-    radios.forEach(radio => radio.checked = false);
-    vinInputWrapper.classList.remove('show');
-    vinInput.value = '';
-    emptyRadioButtons = true;
+    if(vinVerificationCheckboxGroupLibrary) {
+        const radios = document.querySelectorAll(`input[name="fitment_guarantee"]`);
+        radios.forEach(radio => radio.checked = false);
+        vinVerificationWrapper.classList.remove('show');
+        vinVerificationInput.value = '';
+        emptyVinVerificationRadioButtons = true;
+    }
 }
 
 function disableAddToCartButton() {
@@ -125,6 +149,12 @@ function enableGetPaintCodeUsingVin() {
 
 function enableSelectVinVariantBtn() {
     if (selectVinVariantButtonLibrary) selectVinVariantButtonLibrary.disabled = false;
+}
+
+function enablePrecisionMatchBtns() {
+    if (precisionMatchContainer) precisionMatchCheckboxYes.disabled = false;
+    if (precisionMatchContainer) precisionMatchCheckboxNo.disabled = false;
+    if (precisionMatchButton) precisionMatchButton.disabled = false;
 }
 
 function enableVinVerificationBtns() {
@@ -224,4 +254,6 @@ function showShopifyChat() {
 *******************************************************************************************************/
 
 
-let emptyRadioButtons = true;
+let emptyVinVerificationRadioButtons = true;
+let emptyPrecisionMatchRadioButtons = true;
+let storedVin = '';

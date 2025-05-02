@@ -100,7 +100,7 @@
 
 
             if (selectedColor) {
-                colorPreviewContainer.style.display = 'block';
+                colorPreviewContainer.classList.add('show');
                 colorBox.style.backgroundColor = selectedColor;
                 colorPreviewTitle.style.visibility = "visible";
                 colorBox.style.display = 'block';
@@ -108,7 +108,7 @@
                 colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
                 currentColor = selectedColor;
             } else if (paintColor) {
-                colorPreviewContainer.style.display = 'block';
+                colorPreviewContainer.classList.add('show');
                 colorBox.style.backgroundColor = paintColor;
                 colorPreviewTitle.style.visibility = "visible";
                 colorBox.style.display = 'block';
@@ -116,7 +116,7 @@
                 colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
             } else {
                 // Hide both the color preview and the skeleton if no metafield
-                colorPreviewContainer.style.display = 'none';
+                colorPreviewContainer.classList.remove('show');
                 colorPreviewTitle.style.visibility = "hidden";
                 colorBox.style.display = 'none';
                 colorSkeleton.style.display = 'block';

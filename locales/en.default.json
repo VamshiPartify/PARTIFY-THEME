@@ -771,7 +771,7 @@
     "fits_the": "Fits The:"
   },
   "model_fitment": "Model Fitment",
-  "verify_fitment": "Verify Fitment",
+  "verify_fitment": "Year, Make, & Model",
   "paint_options": {
     "select_paint_options": "Select Paint Options",
     "title": "Paint Option",
@@ -900,9 +900,24 @@
     "button_description": "Discover how it ensures you're getting the right part.",
     "modal_heading": "Curious about our fitment verification?",
     "modal_subheading": "That's okay. We're here to help.",
-    "first_message": "Our VIN Fitment Verification service gives you confidence that you’re ordering the right part for your vehicle.",
+    "first_message": "Our VIN fitment verification service gives you confidence that you’re ordering the right part for your vehicle.",
     "point_1": "We'll analyze your VIN using OEM build data to confirm precise fitment for your vehicle’s exact year, make, model, trim, and options package.",
     "point_2": "This added layer of verification can help you avoid delays and avoid the frustration of receiving the wrong part. It’s an extra step—but one that can save you time, money, and hassle.",
-    "point_3": "By choosing VIN Fitment Verification, Partify will guarantee that the part you order will fit your vehicle."
+    "point_3": "By choosing VIN fitment verification, Partify will guarantee that the part you order will fit your vehicle."
+  },
+  "precision_match": {
+    "label": "Precision Paint Match",
+    "standard": "Standard Paint Match",
+    "precision": "Precision Paint Match",
+    "button_heading": "Want an even better paint match?",
+    "button_description": "See how we can get a better match.",
+    "modal_heading": "What's the difference between standard and precision paint match?",
+    "modal_subheading": "Our Precision Paint Match service ensures your part is painted as close to your original color as possible.",
+    "first_message": "You'll have two options:",
+    "point_1_label": "Standard Match:",
+    "point_1": "We will use a standard paint line and spray your part without any adjustments. This delivers an 80–90% match.",
+    "point_2_label": "Precision Match:",
+    "point_2": "We will use a premium paint line and spray your part with adjustments determined by your VIN. Using OEM build data, we tailor the paint mix to match your vehicle’s exact color—resulting in up to a 99% match.",
+    "final_message": "This added level of accuracy is ideal for customers who want a seamless color blend, especially when replacing parts on visible areas of the vehicle."
   }
 }

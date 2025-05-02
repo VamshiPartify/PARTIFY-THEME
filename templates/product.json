@@ -131,7 +131,7 @@
         "custom_liquid_EKKgEh": {
           "type": "custom-liquid",
           "settings": {
-            "custom_liquid": "<div id=\"buttons\">\n      {% render 'product-page-customization' %}\n    </div>"
+            "custom_liquid": "<div id=\"buttons\">\n    {% if product.type != 'Additional Service' %}{% render 'product-page-customization' %}{% endif %}\n    </div>"
           }
         },
         "custom_liquid_7ik3my": {
