@@ -11,16 +11,6 @@
   "sections": {
     "15a95124-fa2c-4f51-ac0c-105f5675693d": {
       "type": "apps",
-      "blocks": {
-        "6b8957db-d616-4558-8e79-4f553e94d559": {
-          "type": "shopify://apps/boost-ai-search-discovery/blocks/product-filter/7fc998ae-a150-4367-bab8-505d8a4503f7",
-          "settings": {
-          }
-        }
-      },
-      "block_order": [
-        "6b8957db-d616-4558-8e79-4f553e94d559"
-      ],
       "settings": {
         "include_padding": true
       }
