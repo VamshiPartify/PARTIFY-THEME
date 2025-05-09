@@ -250,10 +250,64 @@
       </div> <!-- end of flex row -->
 
     </div>
+    <div class="footer-policies-wrapper">
+  <div class="footer-policies container">
+    <ul>
+      <li><a href="/policies/terms-of-service">Terms of Service</a></li>
+      <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+      <li><a href="/policies/refund-policy">Refund Policy</a></li>
+    </ul>
+  </div>
+</div>
+
   </section>
 </footer>
 
 <style>
+  .footer-policies-wrapper {
+  background-color: #F5F3ED; /* Set background color */
+  padding: 0 1rem 2rem; /* Remove top padding, add bottom padding */
+}
+
+.footer-policies {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-policies ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  text-align: center;
+}
+
+.footer-policies li a {
+  text-decoration: none;
+  color: var(--color-foreground, #333);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.footer-policies li a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for mobile devices */
+@media (max-width: 600px) {
+  .footer-policies ul {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-policies li a {
+    font-size: 16px;
+  }
+}
+
  .site-footer__row-flex {
   display: flex;
   justify-content: space-between; /* Space between columns */

@@ -58,16 +58,16 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     </script>
     
 
+
     <script>
       window.Shopify = window.Shopify || {theme: {id: {{ theme.id }}, role: '{{ theme.role }}' } };
       window._template = {
-      directory: "{{ template.directory }}",
-      name: "{{ template.name }}",
-      suffix: "{{ template.suffix }}"
+          directory: "{{ template.directory }}",
+          name: "{{ template.name }}",
+          suffix: "{{ template.suffix }}"
       };
     </script>
-    <script src="https://cdn.intelligems.io/02ea28a367f5.js"></script>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
+    <script type="module" blocking="render" fetchpriority="high" src="https://cdn.intelligems.io/esm/02ea28a367f5/bundle.js" async></script>    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
     <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}" defer></script>
 
     <style>
@@ -869,6 +869,8 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
   }
   </style>
 {% endif %}
+
+<script type="text/javascript" src="{{ 'global-library.js' | asset_url }}" defer></script>
 
 
 

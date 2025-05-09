@@ -1092,5 +1092,16 @@
         "default": "subaru"
       }
     ]
+  },
+  {
+    "name": "VIN Verification Exclusions",
+    "settings": [
+      {
+        "type": "text",
+        "id": "vin_verification_exclusions",
+        "label": "VIN Verification Exclusions",
+        "default": "bmw"
+      }
+    ]
   }
 ]

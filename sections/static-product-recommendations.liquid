@@ -1,7 +1,7 @@
 <style>
 /* Product Recommendations Section */
 .product-recommendations--container {
-  padding: 20px;
+  padding: 0;
 }
 
 /* Title of the Recommendations */
@@ -12,17 +12,9 @@
   text-align: center;
 }
 
-/* Product Grid Container */
-/* Product Grid Container */
-.product-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  list-style: none;
-  padding: 0;
-  margin: 0 auto;
-  justify-content: center; /* Center items horizontally */
-  max-width: 1200px; /* Adjust this to fit your layout */
+.horizontal-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 /* Individual Product Item */
@@ -34,10 +26,11 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align:center;
   margin-bottom: 5px !important;
+  min-width: 175px;
 }
 
 .product-grid-item:hover {
-  transform: translateY(-5px);
+  {% comment %} transform: translateY(-5px); {% endcomment %}
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -56,7 +49,7 @@
   text-decoration: none !important;
   color: inherit;
   margin: 8px 0 8px 0 !important;
-  
+  width: 100%;
 }
 
 /* Price Styling */
@@ -87,6 +80,8 @@
   font-size: 18px !important;
   font-weight: 600;
   text-align: left !important;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Product Fitment */
@@ -97,16 +92,36 @@
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 1440px) {
   .product-row {
-    grid-template-columns: 2fr 1fr;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(225px, auto); /* Each item gets at least 175px */
+    gap: 15px;
+    list-style: none;
+    padding: 0 15px; /* Gives space on both ends */
+    margin: 0;
+    overflow-x: auto;
+  }
+}
+
+/* Horizontal scrolling grid */
+@media (min-width: 1441px) {
+  .product-row {
+    display: grid;
+    grid-auto-flow: column; /* Forces grid items to line up horizontally */
+    grid-auto-columns: minmax(225px, 1fr); /* Each item gets at least 175px */
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .product-row {
+  {% comment %} .product-row {
     grid-template-columns: 2fr;
-  }
+  } {% endcomment %}
   .product-recommendations--title {
     font-size: 20px;
   }
@@ -141,9 +156,12 @@
     data-html
     data-product-recommendations
 >
-    <ul id="dynamic-recommendations" class="product-section--content product-row">
+    <div class="horizontal-scroll-wrapper">
+      <ul id="dynamic-recommendations" class="product-section--content product-row">
         <!-- JavaScript dynamically injects recommendations here -->
-    </ul>
+      </ul>
+    </div>
+  
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -188,6 +206,7 @@
               }
 
               var recommendationsContainer = document.getElementById("dynamic-recommendations");
+              const horizontalScrollWrapper = document.querySelector('.horizontal-scroll-wrapper');
               if (recommendationsContainer && productList.length > 0) {
                 var heading = document.querySelector(".product-recommendations--title");
 
@@ -198,7 +217,8 @@
                   heading.classList.add("product-section--title", "product-recommendations--title");
                   heading.textContent = morePartsText + " " + searchTerm.replace(/-/g, " ");
                   var productfits = fitsTheText + " " + searchTerm.replace(/-/g, " ");
-                  recommendationsContainer.insertAdjacentElement("beforebegin", heading);
+                  {% comment %} recommendationsContainer.insertAdjacentElement("beforebegin", heading); {% endcomment %}
+                  horizontalScrollWrapper.insertAdjacentElement("beforebegin", heading);
                 } else {
                   heading.textContent = morePartsText + " " + searchTerm.replace(/-/g, " ");
                   var productfits = fitsTheText + " " + searchTerm.replace(/-/g, " ");
@@ -217,13 +237,15 @@
                   var shortSearchTerm = searchTerm.substring(0, 4); //Extracts year
 
                   var productTitle = searchTerm ? `${shortSearchTerm} ${translation}` : product.title;
+
+                  const wrappedTitle = productTitle.replace(/\//g, '/&#8203;');
   
                   var productHTML = `
                     <li class="product-grid-item">
                       <a href="{{ shop.url }}/products/${ product.handle }">
-                        <img src="${product.images[0].src}" alt="${productTitle}" loading="lazy">
+                        <img src="${product.images[0].src}" alt="${wrappedTitle}" loading="lazy">
                         <p class="recommended-price">${Shopify.formatMoney(product.variants[0].price)}</p>
-                        <p class="rec-product-title">${productTitle}</p>
+                        <p class="rec-product-title">${wrappedTitle}</p>
                         <p class="rec-fits">${productfits}</p>
                       </a>
                       
@@ -349,10 +371,15 @@ async function loadShopifyRecommendations() {
       return;
     }
 
-    products = products.filter(({ node: product }) => {
-      const productSku = product.variants.edges[0]?.node?.sku || "";
-      return !productSku.startsWith(skuPrefix);
-    });
+    products = products
+      .filter(({ node: product }) => {
+        const productSku = product.variants.edges[0]?.node?.sku || "";
+        return !productSku.startsWith(skuPrefix);
+      })
+      .filter(({ node: product }) => {
+        const title = product.title?.toLowerCase() || "";
+        return !title.includes("swatch");
+      });
 
     products = products.slice(0, productLimit);
 
@@ -375,6 +402,17 @@ async function loadShopifyRecommendations() {
         }
 
         var productTitle = translation;
+        const wrappedTitle = productTitle.replace(/\//g, '/&#8203;');
+        const horizontalScrollWrapper = document.querySelector('.horizontal-scroll-wrapper');
+        var heading = document.querySelector(".product-recommendations--title");
+    
+        if (!heading) {
+          heading = document.createElement("h2");
+          const morePartsText = '{{ 'product_recommendations.might_also_like' | t }}';
+          heading.classList.add("product-section--title", "product-recommendations--title");
+          heading.textContent = morePartsText;
+          horizontalScrollWrapper.insertAdjacentElement("beforebegin", heading);
+        }
 
 
       const fitment = product.metafield?.value;
@@ -390,7 +428,7 @@ async function loadShopifyRecommendations() {
             </p>
           <div class="yotpo bottomLine" data-yotpo-product-id="${product.id.replace('gid://shopify/Product/', '')}">
           </div>
-            <p class="rec-product-title">${productTitle}</p>
+            <p class="rec-product-title">${wrappedTitle}</p>
             <p class="rec-fits">{{ 'fitment' | t }}&nbsp;${fitment}</p>
           </a>
         
@@ -424,6 +462,17 @@ function fetchShopifyDefaultRecommendations() {
     .then(data => {
       if (!data || !data.products) return;
       var recommendationsContainer = document.getElementById("dynamic-recommendations");
+      const wrappedTitle = productTitle.replace(/\//g, '/&#8203;');
+      const horizontalScrollWrapper = document.querySelector('.horizontal-scroll-wrapper');
+      var heading = document.querySelector(".product-recommendations--title");
+  
+      if (!heading) {
+        heading = document.createElement("h2");
+        const morePartsText = '{{ 'product_recommendations.might_also_like' | t }}';
+        heading.classList.add("product-section--title", "product-recommendations--title");
+        heading.textContent = morePartsText;
+        horizontalScrollWrapper.insertAdjacentElement("beforebegin", heading);
+      }
       data.products.forEach(product => {
 
         var productHTML = `

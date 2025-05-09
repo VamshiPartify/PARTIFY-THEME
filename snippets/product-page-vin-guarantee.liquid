@@ -182,9 +182,49 @@
     }
     
     #vin-textbox-for-verification-wrapper.show {
-        max-height: 100px; /* adjust based on content height */
+        {% comment %} max-height: 100px; /* adjust based on content height */ {% endcomment %}
         opacity: 1;
         margin-top: 10px;
+        max-height: fit-content;
+    }
+
+    .vin-verification-remaining-attempts {
+        color: #e61b24;
+        font-size: 14px;
+        padding: 2px 0;
+    }
+
+    .vin-verification-fetching-vin-data,
+    .vin-verification-submission-failed-message {
+        background-color: #ffbc2c17;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 5px;
+        text-align: left;
+        color: #4b4b4b;
+        line-height: 1.2;
+        padding: 5px;
+        border-left: 4px solid #ffae00;
+        border-top: 1px solid #ffae00;
+        border-bottom: 1px solid #ffae00;
+        border-right: 1px solid #ffae00;
+        border-radius: 5px;
+    }
+
+    .vin-verification-submission-success-message {
+        background-color: #f4f9f4;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 5px;
+        text-align: left;
+        color: #4b4b4b;
+        line-height: 1.2;
+        padding: 5px;
+        border-left: 4px solid #007600;
+        border-top: 1px solid #007600;
+        border-bottom: 1px solid #007600;
+        border-right: 1px solid #007600;
+        border-radius: 5px;
     }
 
     @media only screen and (max-width: 450px) {
@@ -301,6 +341,18 @@
             maxlength="17"
             value="{{ vinValue | default: "" }}"
         >
+        <div class="vin-verification-remaining-attempts" style="display: none;">
+            {{ 'fitment_verification.remaining_attempts' | t }}
+        </div>
+        <div class="vin-verification-fetching-vin-data" style="display: none;">
+            {{ 'fitment_verification.fetching_vin_data' | t }}
+        </div>
+        <div class="vin-verification-submission-failed-message" style="display: none;">
+            {{ 'garage.no_results' | t }}
+        </div>
+        <div class="vin-verification-submission-success-message" style="display: none;">
+            {{ 'fitment_verification.success' | t }}
+        </div>
     </div>
     <button id="vin-verification-button" type="button" class="btn" disabled>
         <div class="vin-verification-wrapper">
@@ -400,8 +452,13 @@
                         }
                         priceDisplayElement.textContent = `$${newTotal}`;
                         yesRadioWasLastSelected = true;
-                        currentAddToCartBtn.disabled = true;
+                        if(successfulVinVerificationVin === false) {
+                            currentAddToCartBtn.disabled = true;
+                        } else {
+                            currentAddToCartBtn.disabled = false;
+                        }
                         window.vinVerificationCheckedYes = true;
+                        if(finalVinVerificationSubmissionVin.length) vinInput.value = finalVinVerificationSubmissionVin;
                     } else {
                         vinInputWrapper.classList.remove('show');
                         vinInput.value = '';
@@ -417,6 +474,7 @@
                         yesRadioWasLastSelected = false;
                         currentAddToCartBtn.disabled = false;
                         window.vinVerificationCheckedYes = false;
+                        if(finalVinVerificationSubmissionVin.length) vinInput.value = finalVinVerificationSubmissionVin;
                     }
                     emptyVinVerificationRadioButtons = false;
                     updateProgressHeaderColors();
@@ -426,8 +484,12 @@
             document.getElementById('vin-textbox-for-verification').addEventListener('input', function(event) {
                 const originalValue = event.target.value;
                 let vinInput = originalValue.toUpperCase();
+                const isRetryed = handleVinChange(event, 2);
+                if(isRetryed) {
+                    return;
+                }
                 const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
-            
+                
                 // Set sanitized value to input box
                 event.target.value = filteredValue;
                 vinInput = filteredValue;
@@ -441,8 +503,9 @@
             
                 // Check for VIN length
                 if (vinInput.length === 17) {
-                    currentAddToCartBtn.disabled = false;
-                    updateProgressHeaderColors();
+                    attemptedVinsVinVerification.push(vinInput);
+              
+                    handleVinValidation(vinInput, 2);
                 } else {
                     currentAddToCartBtn.disabled = true;
                     updateProgressHeaderColors();
@@ -468,6 +531,25 @@
                 }
             }
 
+            async function handleVinValidation(vinInput, location) {
+                const noResults = '{{ 'garage.no_results' | t }}';
+                const useYMM = '{{ 'fitment_verification.failed_3_times_message' | t }}';
+                const searchBtn = '{{ 'garage.search_btn' | t }}';
+                const tailoredSuccessMessage = '{{ 'fitment_verification.tailored_success_message' | t }}'
+                const remainingAttempts = '{{ 'fitment_verification.remaining_attempts' | t }}'
+
+                const validVin = await fetchVehicalDataByVin(vinInput, location, noResults, useYMM, searchBtn, tailoredSuccessMessage, remainingAttempts);
+              
+                if (validVin) {
+                  currentAddToCartBtn.disabled = false;
+                } else {
+                  currentAddToCartBtn.disabled = true;
+                }
+                updateProgressHeaderColors();
+
+            }
+              
+
             function showOverlay() {
                 document.querySelector(".vin-verification-popup-dark-overlay").style.display = "block";
             }
@@ -486,14 +568,16 @@
 
                 const container = document.querySelector('.vin-verification-popup-container');
                 const modal = document.querySelector('.vin-verification-popup-modal');
-                const onAnimationEnd = function() {
+              
+                {% comment %} const onAnimationEnd = function() { {% endcomment %}
+                    {% comment %} console.log('wool Animation ended'); {% endcomment %}
                   modal.style.animation = '';
                   container.style.display = 'none';
-                  modal.removeEventListener('animationend', onAnimationEnd);
-                };
+                  {% comment %} modal.removeEventListener('animationend', onAnimationEnd); {% endcomment %}
+                {% comment %} }; {% endcomment %}
               
-                modal.style.animation = "drop-out 0.3s forwards";
-                modal.addEventListener('animationend', onAnimationEnd);
+                {% comment %} modal.style.animation = "drop-out 0.3s forwards"; {% endcomment %}
+                {% comment %} modal.addEventListener('animationend', onAnimationEnd); {% endcomment %}
             }
 
             // Close Modal (exit button)

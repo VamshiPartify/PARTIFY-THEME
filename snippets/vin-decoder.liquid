@@ -9,7 +9,6 @@
         border: none;
         padding: 10px;
         font-size: 18px;
-        {% comment %} font-weight: bold; {% endcomment %}
         cursor: pointer;
         transition: background-color 0.3s, transform 0.2s;
         width: 100%;
@@ -55,11 +54,11 @@
 </style>
 
 
-<div class="vin-decoder-product-page-container">
+{% comment %} <div class="vin-decoder-product-page-container">
     <div class='htfpc-swatch-modal'>
         {% render 'how-to-find-paint-code' %}
     </div>
-</div>
+</div> {% endcomment %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

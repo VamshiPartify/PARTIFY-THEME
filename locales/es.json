@@ -813,24 +813,33 @@
       "two_tone_message_end": "con su VIN.",
       
       "instructions_heading_is_make_found": "Hay dos formas principales de obtener un código de pintura.",
-      "instructions_is_make_found_listitem_1_beginning": "Utilice nuestro servicio gratuito",
-      "instructions_is_make_found_listitem_1_bold": "Servicio de descifrado de VIN",
-      "instructions_is_make_found_listitem_1_end": "Para ayudarte a encontrar el código de tu pintura. Simplemente ingresa tu VIN y te lo proporcionaremos.",
+      "instructions_is_make_found_listitem_1_beginning": "Seleccione la opción",
+      "instructions_is_make_found_listitem_1_vin_option": "Obtener el código de pintura mediante VIN",
+      "instructions_is_make_found_listitem_1_mid": "para utilizar nuestro servicio gratuito",
+      "instructions_is_make_found_listitem_1_bold": "Servicio de descifrado de VIN.",
+      "instructions_is_make_found_listitem_1_end": "Simplemente ingrese su VIN y nos encargaremos de encontrar el código de pintura para usted.",
       "instructions_is_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
-      "instructions_is_make_found_listitem_2_link": "Estas instrucciones aquí.",
+      "instructions_is_make_found_listitem_2_link": "estas instrucciones aquí.",
+    
       "instructions_heading_is_excluded_make_found": "Hay dos formas principales de obtener un código de pintura.",
       "instructions_is_excluded_make_found_listitem_1": "Simplemente ingrese su VIN y le responderemos con su código lo antes posible.",
       "instructions_is_excluded_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
-      "instructions_is_excluded_make_found_listitem_2_link": "Estas instrucciones aquí.",
+      "instructions_is_excluded_make_found_listitem_2_link": "estas instrucciones aquí.",
+    
       "instructions_heading_is_bumperdotcom_make_found": "Hay dos formas principales de obtener un código de pintura.",
-      "instructions_is_bumperdotcom_make_found_listitem_1_beginning": "Utilice nuestro servicio gratuito",
-      "instructions_is_bumperdotcom_make_found_listitem_1_bold": "servicio de descifrado de VIN",
-      "instructions_is_bumperdotcom_make_found_listitem_1_end": "para ayudarte a encontrar el código de tu pintura. Simplemente ingresa tu VIN y te lo proporcionaremos.",
+      "instructions_is_bumperdotcom_make_found_listitem_1_beginning": "Seleccione la opción",
+      "instructions_is_bumperdotcom_make_found_listitem_1_vin_option": "Obtener el código de pintura mediante VIN",
+      "instructions_is_bumperdotcom_make_found_listitem_1_mid": "para utilizar nuestro servicio gratuito",
+      "instructions_is_bumperdotcom_make_found_listitem_1_bold": "Servicio de descifrado de VIN.",
+      "instructions_is_bumperdotcom_make_found_listitem_1_end": "Simplemente ingrese su VIN y nos encargaremos de encontrar el código de pintura para usted.",
       "instructions_is_bumperdotcom_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
-      "instructions_is_bumperdotcom_make_found_listitem_2_link": "Estas instrucciones aquí.",
+      "instructions_is_bumperdotcom_make_found_listitem_2_link": "estas instrucciones aquí.",
+    
       "instructions_heading_everything_else": "Hay dos formas principales de obtener un código de pintura.",
-      "instructions_everything_else_listitem_1": "Puede enviar su VIN a continuación y se adjuntará al pedido. Lo usaremos para determinar el código de pintura.",
-      "instructions_everything_else_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
+      "instructions_everything_else_listitem_1": "Seleccione la opción",
+      "instructions_everything_else_listitem_vin_option": "Obtener el código de pintura mediante VIN",
+      "instructions_everything_else_listitem_1_end": " para ingresar su VIN, el cual se adjuntará al pedido y lo usaremos para determinar el código de pintura.",
+      "instructions_everything_else_listitem_2_beginning": "puede encontrar el código de pintura de su vehículo usando",
       "instructions_everything_else_listitem_2_link": "estas instrucciones aquí.",
       "accordion_title_1": "Obtener el código de pintura con VIN",
       "accordion_title_2": "Cómo encontrar el código de pintura"
@@ -856,7 +865,8 @@
     },
     "product_recommendations": {
       "heading": "Más piezas para el",
-      "fits_the": "Se adapta a la:"
+      "fits_the": "Se adapta a la:",
+      "might_also_like": "También te puede gustar"
     },
     "model_fitment": "Montaje del modelo",
     "verify_fitment": "Año, marca y modelo",
@@ -887,7 +897,7 @@
       "failed_vin": "No se encontraron resultados. Pruebe con otro VIN.",
       "placeholder": "Ingrese el número de bastidor",
       "disclaimer": "Aviso legal: Introducir su VIN es una forma simplificada de indicar el año, la marca y el modelo. No utilizamos el VIN para verificar la compatibilidad. Utilice la información de compatibilidad del producto para solicitar las piezas correctas.",
-      "no_results": "No se encontraron resultados para este VIN.",
+      "no_results": "No pudimos encontrar una coincidencia para este VIN.",
       "use_YMM_dropdown": "Utilice los menús desplegables de año, marca y modelo para encontrar su vehículo.",
       "enter_valid_characters": "Introduzca caracteres válidos. No se permiten caracteres especiales como I, O, Q ni ningún otro en los VIN.",
       "exactly_17_characters": "El VIN debe tener exactamente 17 caracteres."
@@ -954,8 +964,8 @@
       "update_color": "Sí, actualizar color"
     },
     "vin_decoder_product_page": {
-      "first": "El código de pintura",
-      "end": "se ha seleccionado automáticamente utilizando el VIN:",
+      "first": "Usando el VIN:",
+      "end": "hemos determinado que el código de pintura de su vehículo es",
       "auto_attach_msg_strong": "El VIN",
       "will_be_attached": "se adjuntará a esta orden y",
       "bold": "coincide con el código de pintura correcto",
@@ -990,7 +1000,17 @@
         "first_message": "Nuestro servicio de verificación de ajuste de VIN le brinda la seguridad de que está solicitando la pieza correcta para su vehículo.",
         "point_1": "Analizaremos su VIN utilizando datos de fabricación OEM para confirmar el ajuste preciso para el año exacto, la marca, el modelo, el equipamiento y el paquete de opciones de su vehículo.",
         "point_2": "Esta verificación adicional puede ayudarle a evitar retrasos y la frustración de recibir la pieza incorrecta. Es un paso adicional, pero le ahorrará tiempo, dinero y molestias.",
-        "point_3": "Al elegir la verificación de ajuste de VIN, Partify garantizará que la pieza que usted solicita se ajuste a su vehículo."
+        "point_3": "Al elegir la verificación de ajuste de VIN, Partify garantizará que la pieza que usted solicita se ajuste a su vehículo.",
+        "failed_3_times_message": "No pudimos validar su VIN. Puede comprar su pieza sin verificación de compatibilidad.",
+        "success": "VIN es válido",
+        "tailored_success_message": "VIN emparejado a un ",
+        "remaining_attempts": "Intentos restantes: ",
+        "fetching_vin_data": "Por favor espere mientras verificamos su VIN..."
+      },
+      "paint_options_radio_labels": {
+        "unpainted": "Sin pintar +$0.00",
+        "selection": "Seleccionar código de pintura",
+        "VIN": "Obtener el código de pintura mediante VIN"
       }
     }
 

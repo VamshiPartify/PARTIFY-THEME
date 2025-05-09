@@ -721,9 +721,11 @@
 
 
     "instructions_heading_is_make_found": "There are two main ways to get a paint code.",
-    "instructions_is_make_found_listitem_1_beginning": "Use our free ",
-    "instructions_is_make_found_listitem_1_bold": "VIN deciphering service",
-    "instructions_is_make_found_listitem_1_end": " to help you find your paint code. Simply enter your VIN, and we’ll provide the code.",
+    "instructions_is_make_found_listitem_1_beginning": "Select the option ",
+    "instructions_is_make_found_listitem_1_vin_option": "Get Paint Code Using VIN",
+    "instructions_is_make_found_listitem_1_mid": "to use our free ",
+    "instructions_is_make_found_listitem_1_bold": "VIN deciphering service.",
+    "instructions_is_make_found_listitem_1_end": " Simply enter your VIN and we will take care of finding your paint code for you.",
     "instructions_is_make_found_listitem_2_beginning": "You can find your paint code on your vehicle using ",
     "instructions_is_make_found_listitem_2_link": "these instructions here.",
 
@@ -733,14 +735,18 @@
     "instructions_is_excluded_make_found_listitem_2_link": "these instructions here.",
 
     "instructions_heading_is_bumperdotcom_make_found": "There are two main ways to get a paint code.",
-    "instructions_is_bumperdotcom_make_found_listitem_1_beginning": "Use our free ",
-    "instructions_is_bumperdotcom_make_found_listitem_1_bold": "VIN deciphering service",
-    "instructions_is_bumperdotcom_make_found_listitem_1_end": " to help you find your paint code. Simply enter your VIN, and we’ll provide the code.",
+    "instructions_is_bumperdotcom_make_found_listitem_1_beginning": "Select the option ",
+    "instructions_is_bumperdotcom_make_found_listitem_1_vin_option": "Get Paint Code Using VIN",
+    "instructions_is_bumperdotcom_make_found_listitem_1_mid": "to use our free ",
+    "instructions_is_bumperdotcom_make_found_listitem_1_bold": "VIN deciphering service.",
+    "instructions_is_bumperdotcom_make_found_listitem_1_end": "Simply enter your VIN and we will take care of finding your paint code for you.",
     "instructions_is_bumperdotcom_make_found_listitem_2_beginning": "You can find your paint code on your vehicle using ",
     "instructions_is_bumperdotcom_make_found_listitem_2_link": "these instructions here.",
 
     "instructions_heading_everything_else": "There are two main ways to get a paint code.",
-    "instructions_everything_else_listitem_1": "You can submit your VIN below and it will be attached to the order. We will use it to determine the paint code on our end.",
+    "instructions_everything_else_listitem_1": "Select the option ",
+    "instructions_everything_else_listitem_vin_option": "Get Paint Code Using VIN",
+    "instructions_everything_else_listitem_1_end": " to enter your VIN. The VIN will be attached to the order and we will use it on our end to determine the paint code.",
     "instructions_everything_else_listitem_2_beginning": "You can find your paint code on your vehicle using ",
     "instructions_everything_else_listitem_2_link": "these instructions here.",
 
@@ -768,7 +774,8 @@
   },
   "product_recommendations": {
     "heading": "More Parts For The",
-    "fits_the": "Fits The:"
+    "fits_the": "Fits The:",
+    "might_also_like": "You might also like"
   },
   "model_fitment": "Model Fitment",
   "verify_fitment": "Year, Make, & Model",
@@ -799,7 +806,7 @@
     "failed_vin": "No results found. Please try a different VIN",
     "placeholder": "Enter VIN",
     "disclaimer": "Disclaimer: Entering your VIN is a simplified way of submitting your year, make, and model. We do not use the VIN to verify fitment. Please use product fitment details for ordering the correct parts.",
-    "no_results": "No results found for this VIN.",
+    "no_results": "We couldn’t find a match for this VIN.",
     "use_YMM_dropdown": "Please use the year, make, model dropdowns to find your vehicle",
     "enter_valid_characters": "Please enter valid characters. I, O, & Q and other special characters are not allowed in VINs.",
     "exactly_17_characters": "VIN must be exactly 17 characters.",
@@ -866,8 +873,8 @@
     "update_color": "Yes, Update Color"
   },
   "vin_decoder_product_page": {
-    "first": "The paint code",
-    "end": "has been auto-selected using the VIN:",
+    "first": "Using the VIN:",
+    "end": "we have determined that the paint code for your vehicle is",
     "auto_attach_msg_strong": "The VIN",
     "will_be_attached": "will be attached to this order and",
     "bold": "matched with the correct paint code",
@@ -903,7 +910,12 @@
     "first_message": "Our VIN fitment verification service gives you confidence that you’re ordering the right part for your vehicle.",
     "point_1": "We'll analyze your VIN using OEM build data to confirm precise fitment for your vehicle’s exact year, make, model, trim, and options package.",
     "point_2": "This added layer of verification can help you avoid delays and avoid the frustration of receiving the wrong part. It’s an extra step—but one that can save you time, money, and hassle.",
-    "point_3": "By choosing VIN fitment verification, Partify will guarantee that the part you order will fit your vehicle."
+    "point_3": "By choosing VIN fitment verification, Partify will guarantee that the part you order will fit your vehicle.",
+    "failed_3_times_message": "We weren’t able to validate your VIN. You can still purchase your part without fitment verification.",
+    "success": "VIN is valid",
+    "tailored_success_message": "VIN matched to a ",
+    "remaining_attempts": "Attempts remaining: ",
+    "fetching_vin_data": "Please wait while we verify your vin..."
   },
   "precision_match": {
     "label": "Precision Paint Match",
@@ -919,5 +931,10 @@
     "point_2_label": "Precision Match:",
     "point_2": "We will use a premium paint line and spray your part with adjustments determined by your VIN. Using OEM build data, we tailor the paint mix to match your vehicle’s exact color—resulting in up to a 99% match.",
     "final_message": "This added level of accuracy is ideal for customers who want a seamless color blend, especially when replacing parts on visible areas of the vehicle."
+  },
+  "paint_options_radio_labels": {
+    "unpainted": "Unpainted +$0.00",
+    "selection": "Select Paint Code",
+    "VIN": "Get Paint Code Using VIN"
   }
 }
