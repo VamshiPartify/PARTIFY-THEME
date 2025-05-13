@@ -787,11 +787,11 @@
   "quality_options": {
     "title": "Quality",
     "disabled_first_option": "Select Quality",
-    "aftermarket_in_stock": "Aftermarket - ",
+    "aftermarket_in_stock": "Aftermarket",
     "aftermarket_oos": "Aftermarket (Out of Stock)",
-    "capa_in_stock": "CAPA - ",
+    "capa_in_stock": "CAPA",
     "capa_oos": "CAPA (Out of Stock)",
-    "oem_in_stock": "OEM - ",
+    "oem_in_stock": "OEM",
     "oem_oos": "OEM (Out of Stock)"
   },
   "garage_changer": "CHANGE",
@@ -933,8 +933,8 @@
     "final_message": "This added level of accuracy is ideal for customers who want a seamless color blend, especially when replacing parts on visible areas of the vehicle."
   },
   "paint_options_radio_labels": {
-    "unpainted": "Unpainted +$0.00",
-    "selection": "Select Paint Code",
-    "VIN": "Get Paint Code Using VIN"
+    "unpainted": "Unpainted",
+    "selection": "Select Code",
+    "VIN": "Use VIN"
   }
 }

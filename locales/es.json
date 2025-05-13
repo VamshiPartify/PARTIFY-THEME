@@ -878,11 +878,11 @@
     "quality_options": {
       "title": "Calidad",
       "disabled_first_option": "Seleccione Calidad",
-      "aftermarket_in_stock": "Mercado de accesorios -",
+      "aftermarket_in_stock": "Mercado de accesorios",
       "aftermarket_oos": "Mercado de accesorios (Agotado)",
-      "capa_in_stock": "CAPA - ",
+      "capa_in_stock": "CAPA",
       "capa_oos": "CAPA (Agotado)",
-      "oem_in_stock": "Fabricante de equipos originales (OEM) -",
+      "oem_in_stock": "OEM",
       "oem_oos": "OEM (Agotado)"
     },
     "garage_changer": "CAMBIAR",
@@ -1008,9 +1008,9 @@
         "fetching_vin_data": "Por favor espere mientras verificamos su VIN..."
       },
       "paint_options_radio_labels": {
-        "unpainted": "Sin pintar +$0.00",
-        "selection": "Seleccionar código de pintura",
-        "VIN": "Obtener el código de pintura mediante VIN"
+        "unpainted": "Sin pintar",
+        "selection": "Seleccionar código",
+        "VIN": "Usar número de bastidor"
       }
     }
 

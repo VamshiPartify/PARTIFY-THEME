@@ -1,3 +1,10 @@
+/*******************************************************************************************************
+**                                                                                                    **
+**                                             VARIABLES                                              **
+**                                                                                                    **
+*******************************************************************************************************/
+
+
 const addToCartButtonLibrary = document.getElementById('add-to-cart');
 const addToCartForUnpaintedLibrary = document.getElementById('add-to-cart-for-unpainted');
 const checkboxGetPaintCodeWithVINAndLabel = document.querySelector('input#checkbox-get-paint-code-with-vin')?.closest('label');
@@ -12,7 +19,8 @@ const paintCodeWrapperLibrary = document.querySelector(".paint-code-wrapper");
 const paintOptionCheckboxByPaintCode = document.getElementById('checkbox-select-paint-option');
 const paintOptionCheckboxByUnpainted = document.getElementById('checkbox-select-unpainted');
 const paintOptionCheckboxByVIN = document.getElementById('checkbox-get-paint-code-with-vin');
-const paintOptionsCheckboxGroupLibrary = document.querySelector('.paint-options-checkbox-group');
+const paintOptionsButtonsLibrary = document.querySelector('.paint-options-buttons');
+const paintOptionsIndividualButtonsLibrary = document.querySelectorAll('.paint-option-button');
 const precisionMatchContainerLibrary = document.querySelector('.precision-match-container');
 const precisionMatchCheckboxYes = document.getElementById('precision-match');
 const precisionMatchCheckboxNo = document.getElementById('standard-match');
@@ -23,7 +31,8 @@ const priceContainerLargeScreen = document.querySelector('.price-container-large
 const priceContainerSmallScreen = document.querySelector('.price-container');
 const priceDisplay = document.getElementById('price-display');
 const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
-const productTypeSelectLibrary = document.getElementById('product-type-select');
+const qualityTypeButtonsLibrary = document.querySelector('.quality-type-buttons');
+const qualityOptionsLibrary = document.querySelectorAll('.quality-option');
 const qualityDescriptionBtnLibrary = document.getElementById('quality-description-vindecoder');
 const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
 const vinVerificationWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
@@ -36,19 +45,26 @@ const vinVerifyCheckbboxYesLibrary = document.getElementById('fitment-yes');
 const vinVerifyCheckboxNoLibrary = document.getElementById('fitment-no');
 const vinVerificationButtonLibrary = document.getElementById('vin-verification-button');
 
-
-
-
-
-
-
+let emptyVinVerificationRadioButtons = true;
+let emptyPrecisionMatchRadioButtons = true;
+let boolMatchByVIN = false;
+let selectedOptionHasAvailableStock = false;
+let failedVinDecode = false;
+let vinDecoderJustUsed = false;
+let storedVin = '';
+let storedDecodedVin = '';
+let autoSelectedColor = '';
+let selectedProductSku = '';
+let amountOfVINPostMessages = 0;
+let amountOfOOSPaintVariants = 0;
 let currentAddToCartBtnLibrary;
-if(addToCartButtonLibrary) {
+if (addToCartButtonLibrary) {
     currentAddToCartBtnLibrary = addToCartButtonLibrary;
 }
-if(addToCartForUnpaintedLibrary) {
+if (addToCartForUnpaintedLibrary) {
     currentAddToCartBtnLibrary = addToCartForUnpaintedLibrary;
 }
+
 
 
 
@@ -60,11 +76,15 @@ if(addToCartForUnpaintedLibrary) {
 
 
 // DISABLING AND CLEARING
-function disableProductTypeSelect() {
-    if (productTypeSelectLibrary) productTypeSelectLibrary.disabled = true;
+function disableQualityTypeButtons() {
+    if (qualityTypeButtonsLibrary) qualityTypeButtonsLibrary.classList.add("disabled");
 }
-function clearProductTypeSelect() {
-    if (productTypeSelectLibrary) productTypeSelectLibrary.selectedIndex = 0;
+function clearQualityTypeButtons() {
+    if (qualityOptionsLibrary) {
+        qualityOptionsLibrary.forEach(button => {
+            button.classList.remove("selected");
+        })
+    };
 }
 
 function disableQualityDescriptionBtn() {
@@ -83,37 +103,38 @@ function clearCombinedVariantSelect() {
 }
 
 function disablePaintOptionRadioBtns() {
-    if (paintOptionCheckboxByUnpainted) paintOptionCheckboxByUnpainted.disabled = true;
-    if (paintOptionCheckboxByPaintCode) {
-        paintOptionCheckboxByPaintCode.disabled = true;
-        if (paintCodeWrapperLibrary && paintCodeWrapperLibrary.classList.contains('show')) {
-            paintCodeWrapperLibrary.classList.remove('show');
-        }
-        if(paintCodeAppContainerLibrary && paintCodeAppContainerLibrary.classList.contains('show')) {
-            paintCodeAppContainerLibrary.classList.remove('show');
-        }
+    if (!paintOptionsButtonsLibrary.classList.contains("disabled")) {
+        paintOptionsButtonsLibrary.classList.add("disabled");
     }
-    if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = true;
+    if (paintCodeWrapperLibrary && paintCodeWrapperLibrary.classList.contains('show')) {
+        paintCodeWrapperLibrary.classList.remove('show');
+    }
+    if (paintCodeAppContainerLibrary && paintCodeAppContainerLibrary.classList.contains('show')) {
+        paintCodeAppContainerLibrary.classList.remove('show');
+    }
 }
 
 function clearPaintOptionRadioBtns() {
-    if(paintOptionsCheckboxGroupLibrary) {
-        const radios = document.querySelectorAll(`input[name="select_paint_option"]`);
-        radios.forEach(radio => radio.checked = false);
-    }
+    if (paintOptionsIndividualButtonsLibrary) {
+        paintOptionsIndividualButtonsLibrary.forEach(button => {
+            button.classList.remove("selected");
+        })
+    };
 }
 
 function hideGetPaintCodeUsingVINCheckbox() {
-    if(checkboxGetPaintCodeWithVINAndLabel) checkboxGetPaintCodeWithVINAndLabel.style.display = "none";
+    if (checkboxGetPaintCodeWithVINAndLabel) checkboxGetPaintCodeWithVINAndLabel.style.display = "none";
 }
 
 function hidePaintedStockKeyDisclaimer() {
-    if(paintedStockKeyLibrary) paintedStockKeyLibrary.style.display = "none";
+    if (paintedStockKeyLibrary) paintedStockKeyLibrary.style.display = "none";
 }
 
 function disablehowToFindPaintCodeBtn() {
-    disablePaintOptionRadioBtns();
-    if (howToFindPaintCodeBtnLibrary) howToFindPaintCodeBtnLibrary.disabled = true;
+    if (paintOptionsButtonsLibrary) {
+        disablePaintOptionRadioBtns();
+        if (howToFindPaintCodeBtnLibrary) howToFindPaintCodeBtnLibrary.disabled = true;
+    }
 }
 
 function disableGetPaintCodeUsingVin() {
@@ -131,7 +152,7 @@ function disablePrecisionMatchBtns() {
 }
 
 function clearPrecisionMatchRadioButtons() {
-    if(precisionMatchContainerLibrary) {
+    if (precisionMatchContainerLibrary) {
         const radios = document.querySelectorAll(`input[name="precision_match"]`);
         radios.forEach(radio => radio.checked = false);
         precisionMatchVinWrapper.classList.remove('show');
@@ -147,7 +168,7 @@ function disableVinVerificationBtns() {
 }
 
 function clearVinVerificationRadioButtons() {
-    if(vinVerificationCheckboxGroupLibrary) {
+    if (vinVerificationCheckboxGroupLibrary) {
         const radios = document.querySelectorAll(`input[name="fitment_guarantee"]`);
         radios.forEach(radio => radio.checked = false);
         vinVerificationWrapper.classList.remove('show');
@@ -164,8 +185,8 @@ function disableAddToCartButton() {
 
 
 // ENABLING
-function enableProductTypeSelect() {
-    if (productTypeSelectLibrary) productTypeSelectLibrary.disabled = false;
+function enableQualityTypeButtons() {
+    if (qualityTypeButtonsLibrary) qualityTypeButtonsLibrary.classList.remove("disabled");
 }
 
 function enableQualityDescriptionBtn() {
@@ -181,17 +202,15 @@ function enableCombinedVariantSelect() {
 }
 
 function enablePaintOptionRadioBtns() {
-    if (paintOptionCheckboxByUnpainted) paintOptionCheckboxByUnpainted.disabled = false;
-    if (paintOptionCheckboxByPaintCode) paintOptionCheckboxByPaintCode.disabled = false;
-    if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = false;
+    if (paintOptionsButtonsLibrary) paintOptionsButtonsLibrary.classList.remove("disabled");
 }
 
 function showGetPaintCodeUsingVINCheckbox() {
-    if(checkboxGetPaintCodeWithVINAndLabel) checkboxGetPaintCodeWithVINAndLabel.style.display = "block";
+    if (checkboxGetPaintCodeWithVINAndLabel) checkboxGetPaintCodeWithVINAndLabel.style.display = "block";
 }
 
 function showPaintedStockKeyDisclaimer() {
-    if(paintedStockKeyLibrary) paintedStockKeyLibrary.style.display = "block";
+    if (paintedStockKeyLibrary) paintedStockKeyLibrary.style.display = "block";
 }
 
 function enablehowToFindPaintCodeBtn() {
@@ -225,6 +244,7 @@ function enableAddToCartButton() {
 
 
 
+
 /*******************************************************************************************************
 **                                                                                                    **
 **                                             CAPA-OEM-options                                       **
@@ -235,10 +255,10 @@ function enableAddToCartButton() {
 function addOEMBadge() {
     const capaImg = document.getElementById('capa-certified-badge');
     if (capaImg) capaImg.remove();
-  
+
     const existingOEMBadge = document.getElementById('oem-badge');
     if (existingOEMBadge) return;
-  
+
     const oemImg = document.createElement('img');
     oemImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png';
     oemImg.alt = 'OEM Certified';
@@ -246,38 +266,36 @@ function addOEMBadge() {
     oemImg.style.position = 'relative';
     oemImg.style.height = "34px";
     oemImg.style.margin = "0 0 0 10px";
-  
+
     if (window.innerWidth > 720) {
-      priceContainerLargeScreen.appendChild(oemImg);
+        priceContainerLargeScreen.appendChild(oemImg);
     } else {
-      priceContainerSmallScreen.appendChild(oemImg);
+        priceContainerSmallScreen.appendChild(oemImg);
     }
-  }
+}
 
-
-  function togglePaintedStockKey(selectedType, hasAvailableOptions) {
+function togglePaintedStockKey(selectedType, hasAvailableOptions) {
     if (!paintedStockKeyLibrary) return false;
-  
+
     if (hasAvailableOptions[selectedType]) {
         selectedOptionHasAvailableStock = true;
     } else {
         selectedOptionHasAvailableStock = false;
     };
-  }
+}
 
-  function updatePriceDisplay(selectedType) {
-    const selectedText = productTypeSelect.options[productTypeSelect.selectedIndex].textContent;
-    const priceMatch = selectedText.match(/\$[\d,]+\.\d{2}/);
+function updatePriceDisplay(selectedType) {
+    const selectedButton = document.querySelector(`.quality-option[data-value="${selectedType}"]`);
+    if (!selectedButton) return;
+
+    // Option 1: If the button text includes the price
+    const buttonText = selectedButton.textContent;
+    const priceMatch = buttonText.match(/\$[\d,]+\.\d{2}/);
     if (!priceMatch) return;
-  
+
     priceDisplay.textContent = priceMatch[0];
     priceDisplaySmallScreen.textContent = priceMatch[0];
-  }
-
-
-
-
-
+}
 
 
 
@@ -287,7 +305,6 @@ function addOEMBadge() {
 **                                             UTILITIES                                              **
 **                                                                                                    **
 *******************************************************************************************************/
-
 
 
 function hideShopifyChat() {
@@ -309,90 +326,64 @@ function resortToGetPaintCodeByVin(eventVin, eventMatchByVIN) {
     const combinedVariantSelect = document.getElementById('variant-selector');
     const vin = eventVin;
     let hiddenDiv;
+    storedDecodedVin = vin;
 
-
-
-    if(amountOfVINPostMessages > 0 && eventMatchByVIN === false) {
+    if (amountOfVINPostMessages > 0 && eventMatchByVIN === false) {
         return;
     }
 
-    storedDecodedVin = vin;
-
-
-
     // If boolMatchByVIN is true, then it has already been set in the case that a paint code has been returned for the vin decoder but a matching
     // option has not been found for it
-    if(boolMatchByVIN === false) {
+    if (boolMatchByVIN === false) {
         boolMatchByVIN = eventMatchByVIN;
     }
-    // window.usedVinDecoder = true;
 
-    if(document.querySelector('.hidden-vin-option')) {
+    if (document.querySelector('.hidden-vin-option')) {
         hiddenDiv = document.querySelector('.hidden-vin-option');
-    } else if(document.querySelector('.hidden-vin-option-single-quality')) {
+    } else if (document.querySelector('.hidden-vin-option-single-quality')) {
         hiddenDiv = document.querySelector('.hidden-vin-option-single-quality');
     }
+
     // Only display the option to select Match Paint by VIN in certain circumstances
     if (boolMatchByVIN) {
         if (hiddenDiv) {
-    
             if (!combinedVariantSelect) {
                 console.error("Error: Select element not found.");
                 return;
             }
-    
-            // Read attributes directly instead of using .dataset
+
             let value;
-            if(hiddenDiv.getAttribute("data-value")) {
+            if (hiddenDiv.getAttribute("data-value")) {
                 value = hiddenDiv.getAttribute("data-value");
-            } else if(hiddenDiv.getAttribute("value")) {
+            } else if (hiddenDiv.getAttribute("value")) {
                 value = hiddenDiv.getAttribute("value");
             }
+
             const text = hiddenDiv.textContent;
             const price = hiddenDiv.getAttribute("data-price") || "";
+            const priceDifference = hiddenDiv.getAttribute("data-price-difference") || "";
             const color = hiddenDiv.getAttribute("data-color") || "";
             const variantTitle = hiddenDiv.getAttribute("data-variant-title") || "";
             const productTitle = hiddenDiv.getAttribute("data-product-title") || "";
             const variantSKU = hiddenDiv.getAttribute("data-variant-sku") || "";
-    
-            // Create the option
             const option = document.createElement("option");
+
             option.value = value;
             option.textContent = text;
             option.setAttribute("data-price", price);
+            option.setAttribute("data-price-difference", priceDifference);
             option.setAttribute("data-color", color);
             option.setAttribute("data-variant-title", variantTitle);
             option.setAttribute("data-product-title", productTitle);
             option.setAttribute("data-variant-sku", variantSKU);
-    
+
             option.classList.add("hidden-vin-option");
-    
+
             // Append and remove
             combinedVariantSelect.appendChild(option);
-            console.log('combinedVariantSelect: ', combinedVariantSelect);
             hiddenDiv.remove();
         }
     }
-    
     amountOfVINPostMessages++;
 }
-
-
-
-/*******************************************************************************************************
-**                                                                                                    **
-**                                             VARIABLES                                              **
-**                                                                                                    **
-*******************************************************************************************************/
-
-
-let emptyVinVerificationRadioButtons = true;
-let emptyPrecisionMatchRadioButtons = true;
-let storedVin = '';
-let failedVinDecode = false;
-let storedDecodedVin = '';
-let amountOfVINPostMessages = 0;
-let boolMatchByVIN = false;
-let selectedOptionHasAvailableStock = false;
-
 

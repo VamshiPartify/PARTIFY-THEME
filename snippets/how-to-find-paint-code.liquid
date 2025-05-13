@@ -1,602 +1,620 @@
 <style>
-    body.no-scroll-paint-swatch {
-      width: 100%;
-      height: 100%;
-      overflow: hidden !important;
-    }
-
-    .htfypc-wrapper {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: start;
-    }
-
-    .vin-decoder-product-page-container {
-      padding-top: 10px;
-      width: 100%;
-    }
-    .get-paint-code-using-vin {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        padding: 10px;
-        font-size: 18px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
+      body.no-scroll-paint-swatch {
         width: 100%;
-        border-radius: 6px;
-        margin-bottom: 10px;
-    }
+        height: 100%;
+        overflow: hidden !important;
+      }
 
-    .get-paint-code-using-vin:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
-    }
+      .htfypc-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: start;
+      }
 
-    .get-paint-code-using-vin:active {
-        background-color: #004494;
-        transform: translateY(0);
-    }
-
-    .get-paint-code-using-vin:disabled {
-        background-color: #f0f0f0;
-        color: #ccc;
-        cursor: no-drop;
-        opacity: 0.6;
-    }
-
-    .vin-decoder-or {
-        text-align: center;
-        color: #6b6b6b;
-    }
-
-    .close-wrapper-vin-decoder {
+      .vin-decoder-product-page-container {
+        padding-top: 10px;
         width: 100%;
+      }
+      .get-paint-code-using-vin {
+          background-color: #007BFF;
+          color: white;
+          border: none;
+          padding: 10px;
+          font-size: 18px;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+          width: 100%;
+          border-radius: 6px;
+          margin-bottom: 10px;
+      }
+
+      .get-paint-code-using-vin:hover {
+          background-color: #0056b3;
+          transform: translateY(-2px);
+      }
+
+      .get-paint-code-using-vin:active {
+          background-color: #004494;
+          transform: translateY(0);
+      }
+
+      .get-paint-code-using-vin:disabled {
+          background-color: #f0f0f0;
+          color: #ccc;
+          cursor: no-drop;
+          opacity: 0.6;
+      }
+
+      .vin-decoder-or {
+          text-align: center;
+          color: #6b6b6b;
+      }
+
+      .close-wrapper-vin-decoder {
+          width: 100%;
+          display: flex;
+          justify-content: end;
+      }
+
+      .close-vin-decoder {
+          background-color: unset;
+          border: none;
+          color: #e61b24;
+          cursor: pointer;
+      }
+
+      .button_svg_container {
         display: flex;
         justify-content: end;
-    }
+      }
 
-    .close-vin-decoder {
-        background-color: unset;
-        border: none;
-        color: #e61b24;
-        cursor: pointer;
-    }
+      .button_svg {
+        display: flex;
+        justify-content: center;
+      }
 
-    .button_svg_container {
-      display: flex;
-      justify-content: end;
-    }
+      /* Accordion Style */
+  .accordion-section {
+    margin: 10px 0 0 0;
+  }
 
-    .button_svg {
-      display: flex;
-      justify-content: center;
-    }
-
-    /* Accordion Style */
-.accordion-section {
-  margin: 10px 0 0 0;
-}
-
-.accordion-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 4px 12px;
-  background-color: #0a1e9c;
-  color: #ffffff;
-  border: none;
-  font-size: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.accordion-button:hover {
-  background-color: #062e7a;
-  transform: translateY(-2px);
-}
-
-.accordion-button p {
-  margin: 0;
-}
-
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.4s ease-out, opacity 0.3s ease;
-  {% comment %} background-color: #f4f6fc; {% endcomment %}
-  padding: 0 15px;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
-/* Show content when active */
-.accordion-content.open {
-  max-height: fit-content !important;
-  opacity: 1;
-  padding: 2px;
-}
-
-.circle_plus {
-  font-size: 14px;
-}
-
-.circle_none {
-  font-size: 14px;
-}
-
-.vin-decoder-accordion-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.how-to-find-paintcode-accordion-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-
-  .product-unfolded-popup-dark-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
+  .accordion-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 3000;
-    animation: fade-in 0.5s;
+    padding: 4px 12px;
+    background-color: #0a1e9c;
+    color: #ffffff;
+    border: none;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
-  @keyframes fade-in {
-    from { background-color: rgba(0, 0, 0, 0); }
-    to { background-color: rgba(0, 0, 0, 0.7); }
+
+  .accordion-button:hover {
+    background-color: #062e7a;
+    transform: translateY(-2px);
   }
 
-    /* Phone */
-    @media only screen and (max-width: 450px) {
-      .unfolded-popup-container {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 5000;
-        overflow-y: auto;
-        font-family: 'Lato', sans-serif;
-      }
-      .unfolded-popup-modal {
-        position: relative;
-        width: 90%;
-        max-width: 400px;
-        {% comment %} min-height: 451px; {% endcomment %}
-        background-color: white;
-        margin: 10% auto;
-        padding: 30px 20px 20px 20px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 9999;
-        border-radius: 8px;
-      }
-      .unfolded-popup-modal img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-      }
-      .unfolded-popup-modal h1 {
-        font-size: 30px;
-        margin-bottom: 5px;
-        text-align: left;
-        color: #373737;
-      }
-      .unfolded-popup-modal h2 {
-        font-size: 22px;
-        font-weight: 900;
-        text-align: left;
-        color: #4b4b4b;
-      }
-      .unfolded-popup-modal h4, h5 {
-        font-size: 18px;
-        font-weight: 700;
-        margin: 8px 0;
-        text-align: left;
-        color: #4b4b4b;
-        line-height: 24px;
-      }
-
-      .unfolded-popup-modal ol {
-        font-size: 16px;
-        padding-left: 18px;
-        color: #4b4b4b;
-        font-weight: 400;
-        margin-top: 0;
-        line-height: 20px;
-      }
-      .popup-modal-content {
-        font-size: 16px;
-        line-height: 20px;
-        color: #4b4b4b;
-        font-weight: 400;
-      }
-      #modal-exit {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 24px;
-        color: #888;
-        cursor: pointer;
-        background-color: #fff;
-        border: none;
-      }
-      #how-to-find-your-paint-code-vindecoder {
-        width:100%;
-        color: #3b3b3b;
-        background-color: #f3f3f3;
-        border: none;
-        font-size: 16px;
-        padding: 10px 12px;
-        {% comment %} margin: 20px 0; {% endcomment %}
-        display: block;
-        text-align: left;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
-        border-radius: 6px;
-        font-family: 'Lato', sans-serif;
-      }
-      #how-to-find-your-paint-code-vindecoder p {
-        margin: 0;
-      }
-      #how-to-find-your-paint-code-vindecoder:hover {
-        background-color: #e5e5e5;
-      }
-      #how-to-find-your-paint-code-vindecoder:active {
-        background-color: #f3f3f3;
-      }
-      #how-to-find-your-paint-code-vindecoder:disabled {
-        color: #ccc;
-        cursor: no-drop;
-        background-color: #f0f0f0;
-        opacity: 0.6;
-      }
-    }
-    /* Desktop */
-    @media only screen and (min-width: 451px) {
-      .unfolded-popup-container {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 5000;
-        overflow-y: auto;
-        font-family: 'Lato', sans-serif;
-      }
-      .unfolded-popup-modal {
-        position: relative;
-        width: 60%;
-        max-width: 800px;
-        {% comment %} min-height: 456px; {% endcomment %}
-        background-color: white;
-        margin: 5% auto;
-        padding: 40px 30px 30px 30px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 9999;
-        border-radius: 8px;
-      }
-      .unfolded-popup-modal img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-      }
-      .unfolded-popup-modal h1 {
-        font-size: 32px;
-        margin-bottom: 5px;
-        text-align: left;
-        color: #373737;
-      }
-      .unfolded-popup-modal h2 {
-        font-size: 22px;
-        font-weight: 900;
-        margin-bottom: 24px;
-        text-align: left;
-        color: #4b4b4b;
-      }
-      .unfolded-popup-modal h4, h5 {
-        font-size: 18px;
-        font-weight: 700;
-        margin: 8px 0;
-        text-align: left;
-        color: #4b4b4b;
-        line-height: 24px;
-      }
-
-      .unfolded-popup-modal ol {
-        font-size: 16px;
-        padding-left: 18px;
-        color: #4b4b4b;
-        font-weight: 400;
-        margin-top: 0;
-        line-height: 20px;
-      }
-
-      .popup-modal-content {
-        font-size: 16px;
-        line-height: 20px;
-        color: #4b4b4b;
-        font-weight: 400;
-      }
-      #modal-exit {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        font-size: 28px;
-        color: #888;
-        cursor: pointer;
-        background-color: #fff;
-        border: none;
-      }
-      #how-to-find-your-paint-code-vindecoder {
-        width:100%;
-        color: #3b3b3b;
-        background-color: #f3f3f3;
-        border: none;
-        font-size: 18px;
-        padding: 10px 12px;
-        {% comment %} margin: 20px 0; {% endcomment %}
-        display: block;
-        text-align: left;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
-        border-radius: 6px;
-        font-family: 'Lato', sans-serif;
-      }
-      #how-to-find-your-paint-code-vindecoder p {
-        margin: 0;
-      }
-      #how-to-find-your-paint-code-vindecoder:hover {
-        background-color: #e5e5e5;
-      }
-      #how-to-find-your-paint-code-vindecoder:active {
-        background-color: #f3f3f3;
-      }
-      #how-to-find-your-paint-code-vindecoder:disabled {
-        color: #ccc;
-        cursor: no-drop;
-        background-color: #f0f0f0;
-        opacity: 0.6;
-      }
-    }
-    @keyframes drop-in {
-      0% { opacity: 0; transform: translateY(-50px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes drop-out {
-      0% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-50px); }
+  .accordion-button p {
+    margin: 0;
   }
-  </style>
 
-  {% assign makes = settings.makes_list | split: ", " %}
-  {% assign excluded_makes = settings.excluded_makes_list | split: ", " %}
-  {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ", " %}
-  {% assign is_make_found = false %}
-  {% assign is_excluded_make_found = false %}
-  {% assign is_bumperdotcom_make_found = false %}
-  {% assign downcase_handle = product.handle | downcase %}
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease-out, opacity 0.3s ease;
+    {% comment %} background-color: #f4f6fc; {% endcomment %}
+    padding: 0 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
 
-  {% assign current_locale = shop.locale %}
+  /* Show content when active */
+  .accordion-content.open {
+    max-height: fit-content !important;
+    opacity: 1;
+    padding: 2px;
+  }
 
-  {% for make in makes %}
-    {% assign downcase_make = make | downcase %}
-    {% if downcase_handle contains downcase_make %}
-      {% assign is_make_found = true %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
+  .circle_plus {
+    font-size: 14px;
+  }
+
+  .circle_none {
+    font-size: 14px;
+  }
+
+  .vin-decoder-accordion-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .how-to-find-paintcode-accordion-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
 
-  {% for excluded_make in excluded_makes %}
-    {% assign downcase_excluded_make = excluded_make | downcase %}
-    {% if downcase_handle contains downcase_excluded_make %}
-      {% assign is_excluded_make_found = true %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
+    .product-unfolded-popup-dark-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 3000;
+      animation: fade-in 0.5s;
+    }
+    @keyframes fade-in {
+      from { background-color: rgba(0, 0, 0, 0); }
+      to { background-color: rgba(0, 0, 0, 0.7); }
+    }
 
+      /* Phone */
+      @media only screen and (max-width: 450px) {
+        .unfolded-popup-container {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 5000;
+          overflow-y: auto;
+          font-family: 'Lato', sans-serif;
+        }
+        .unfolded-popup-modal {
+          position: relative;
+          width: 90%;
+          max-width: 400px;
+          {% comment %} min-height: 451px; {% endcomment %}
+          background-color: white;
+          margin: 10% auto;
+          padding: 30px 20px 20px 20px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+          animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          z-index: 9999;
+          border-radius: 8px;
+        }
+        .unfolded-popup-modal img {
+          max-width: 100%;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+        }
+        .unfolded-popup-modal h1 {
+          font-size: 30px;
+          margin-bottom: 5px;
+          text-align: left;
+          color: #373737;
+        }
+        .unfolded-popup-modal h2 {
+          font-size: 22px;
+          font-weight: 900;
+          text-align: left;
+          color: #4b4b4b;
+        }
+        .unfolded-popup-modal h4, h5 {
+          font-size: 18px;
+          font-weight: 700;
+          margin: 8px 0;
+          text-align: left;
+          color: #4b4b4b;
+          line-height: 24px;
+        }
 
-  {% for bumperdotcom_make in bumperdotcom_makes %}
-    {% assign downcase_bumperdotcom_make = bumperdotcom_make | downcase %}
-    {% if downcase_handle contains downcase_bumperdotcom_make %}
-      {% assign is_bumperdotcom_make_found = true %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
+        .unfolded-popup-modal ol {
+          font-size: 16px;
+          padding-left: 18px;
+          color: #4b4b4b;
+          font-weight: 400;
+          margin-top: 0;
+          line-height: 20px;
+        }
+        .popup-modal-content {
+          font-size: 16px;
+          line-height: 20px;
+          color: #4b4b4b;
+          font-weight: 400;
+        }
+        #modal-exit {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          font-size: 24px;
+          color: #888;
+          cursor: pointer;
+          background-color: #fff;
+          border: none;
+        }
+        #how-to-find-your-paint-code-vindecoder {
+          width:100%;
+          color: #3b3b3b;
+          background-color: #f3f3f3;
+          border: none;
+          font-size: 16px;
+          padding: 10px 12px;
+          {% comment %} margin: 20px 0; {% endcomment %}
+          display: block;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+          border-radius: 8px;
+          font-family: 'Lato', sans-serif;
+        }
+        #how-to-find-your-paint-code-vindecoder p {
+          margin: 0;
+        }
+        #how-to-find-your-paint-code-vindecoder:hover {
+          background-color: #e5e5e5;
+        }
+        #how-to-find-your-paint-code-vindecoder:active {
+          background-color: #f3f3f3;
+        }
+        #how-to-find-your-paint-code-vindecoder:disabled {
+          color: #ccc;
+          cursor: no-drop;
+          background-color: #f0f0f0;
+          opacity: 0.6;
+        }
+      }
+      /* Desktop */
+      @media only screen and (min-width: 451px) {
+        .unfolded-popup-container {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 5000;
+          overflow-y: auto;
+          font-family: 'Lato', sans-serif;
+        }
+        .unfolded-popup-modal {
+          position: relative;
+          width: 60%;
+          max-width: 800px;
+          {% comment %} min-height: 456px; {% endcomment %}
+          background-color: white;
+          margin: 5% auto;
+          padding: 40px 30px 30px 30px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+          animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          z-index: 9999;
+          border-radius: 8px;
+        }
+        .unfolded-popup-modal img {
+          max-width: 100%;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+        }
+        .unfolded-popup-modal h1 {
+          font-size: 32px;
+          margin-bottom: 5px;
+          text-align: left;
+          color: #373737;
+        }
+        .unfolded-popup-modal h2 {
+          font-size: 22px;
+          font-weight: 900;
+          margin-bottom: 24px;
+          text-align: left;
+          color: #4b4b4b;
+        }
+        .unfolded-popup-modal h4, h5 {
+          font-size: 18px;
+          font-weight: 700;
+          margin: 8px 0;
+          text-align: left;
+          color: #4b4b4b;
+          line-height: 24px;
+        }
 
+        .unfolded-popup-modal ol {
+          font-size: 16px;
+          padding-left: 18px;
+          color: #4b4b4b;
+          font-weight: 400;
+          margin-top: 0;
+          line-height: 20px;
+        }
 
-  <div class="vin-decoder-product-page-container">
-    <div class='htfpc-swatch-modal'>
-      <button id="how-to-find-your-paint-code-vindecoder" type="button" class="btn" disabled>
-        <div class="htfypc-wrapper">
-          <p id="button-text">
-            <b>{{ 'paintcode_popup.button_heading' | t }}</b>
-            <br />
-            {{ 'paintcode_popup.button_description' | t }}
-          </p>
-          <div class="button_svg_container">
-            <svg class="button_svg" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="14px" width="14px" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path></svg>
-          </div>
+        .popup-modal-content {
+          font-size: 16px;
+          line-height: 20px;
+          color: #4b4b4b;
+          font-weight: 400;
+        }
+        #modal-exit {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          font-size: 28px;
+          color: #888;
+          cursor: pointer;
+          background-color: #fff;
+          border: none;
+        }
+        #how-to-find-your-paint-code-vindecoder {
+          width:100%;
+          color: #3b3b3b;
+          background-color: #f3f3f3;
+          border: none;
+          font-size: 18px;
+          padding: 10px 12px;
+          {% comment %} margin: 20px 0; {% endcomment %}
+          display: block;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+          border-radius: 8px;
+          font-family: 'Lato', sans-serif;
+        }
+        #how-to-find-your-paint-code-vindecoder p {
+          margin: 0;
+        }
+        #how-to-find-your-paint-code-vindecoder:hover {
+          background-color: #e5e5e5;
+        }
+        #how-to-find-your-paint-code-vindecoder:active {
+          background-color: #f3f3f3;
+        }
+        #how-to-find-your-paint-code-vindecoder:disabled {
+          color: #ccc;
+          cursor: no-drop;
+          background-color: #f0f0f0;
+          opacity: 0.6;
+        }
+      }
+      @keyframes drop-in {
+        0% { opacity: 0; transform: translateY(-50px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes drop-out {
+        0% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-50px); }
+    }
+</style>
+
+{% assign makes = settings.makes_list | split: ', ' %}
+{% assign excluded_makes = settings.excluded_makes_list | split: ', ' %}
+{% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ', ' %}
+{% assign is_make_found = false %}
+{% assign is_excluded_make_found = false %}
+{% assign is_bumperdotcom_make_found = false %}
+{% assign downcase_handle = product.handle | downcase %}
+
+{% assign current_locale = shop.locale %}
+
+{% for make in makes %}
+  {% assign downcase_make = make | downcase %}
+  {% if downcase_handle contains downcase_make %}
+    {% assign is_make_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for excluded_make in excluded_makes %}
+  {% assign downcase_excluded_make = excluded_make | downcase %}
+  {% if downcase_handle contains downcase_excluded_make %}
+    {% assign is_excluded_make_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for bumperdotcom_make in bumperdotcom_makes %}
+  {% assign downcase_bumperdotcom_make = bumperdotcom_make | downcase %}
+  {% if downcase_handle contains downcase_bumperdotcom_make %}
+    {% assign is_bumperdotcom_make_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="vin-decoder-product-page-container">
+  <div class="htfpc-swatch-modal">
+    <button id="how-to-find-your-paint-code-vindecoder" type="button" class="btn" disabled>
+      <div class="htfypc-wrapper">
+        <p id="button-text">
+          <b>{{ 'paintcode_popup.button_heading' | t }}</b>
+          <br>
+          {{ 'paintcode_popup.button_description' | t }}
+        </p>
+        <div class="button_svg_container">
+          <svg
+            class="button_svg"
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 512 512"
+            height="14px"
+            width="14px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path>
+          </svg>
         </div>
-      </button>
-      <div class="product-unfolded-popup-dark-overlay"></div>
-      <div class="unfolded-popup-container">
-        <div class="unfolded-popup-modal">
-          <button id="modal-exit" type="button">
-            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><path d="M331.3 308.7L278.6 256l52.7-52.7c6.2-6.2 6.2-16.4 0-22.6-6.2-6.2-16.4-6.2-22.6 0L256 233.4l-52.7-52.7c-6.2-6.2-15.6-7.1-22.6 0-7.1 7.1-6 16.6 0 22.6l52.7 52.7-52.7 52.7c-6.7 6.7-6.4 16.3 0 22.6 6.4 6.4 16.4 6.2 22.6 0l52.7-52.7 52.7 52.7c6.2 6.2 16.4 6.2 22.6 0 6.3-6.2 6.3-16.4 0-22.6z"></path><path d="M256 76c48.1 0 93.3 18.7 127.3 52.7S436 207.9 436 256s-18.7 93.3-52.7 127.3S304.1 436 256 436c-48.1 0-93.3-18.7-127.3-52.7S76 304.1 76 256s18.7-93.3 52.7-127.3S207.9 76 256 76m0-28C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48z"></path></svg>
-          </button>
-          <h1>{{ 'paintcode_popup.heading' | t }}</h1>
-          <h2>{{ 'paintcode_popup.subheading' | t }}</h2>
-          
-          {% if is_make_found %}
-            <div id="paint-code-instructions">
-              <h4>{{ 'paintcode_popup.instructions_heading_is_make_found' | t }}</h4>
-              <ol>
-                <li>
-                  {{ 'paintcode_popup.instructions_is_make_found_listitem_1_beginning' | t }}
-                  <span style="font-style: italic; background-color: #f0f4ff; color: #1a3d8f; font-weight: 500; border-radius: 4px;">
-                    {{ 'paintcode_popup.instructions_is_make_found_listitem_1_vin_option' | t }}
-                  </span>
-                  {{ 'paintcode_popup.instructions_is_make_found_listitem_1_mid' | t }}
-                  <b>{{ 'paintcode_popup.instructions_is_make_found_listitem_1_bold' | t }}</b>
-                  {{ 'paintcode_popup.instructions_is_make_found_listitem_1_end' | t }}
-                </li>
-                <li>
-                  {{ 'paintcode_popup.instructions_is_make_found_listitem_2_beginning' | t }}
-                  <a href="#" id="instructions-link">
-                    <b>{{ 'paintcode_popup.instructions_is_make_found_listitem_2_link' | t }}</b>
-                  </a>
-                </li>
-              </ol>
-            </div>
-          
-          {% elsif is_excluded_make_found %}
-            <div id="paint-code-instructions">
-              <h4>{{ 'paintcode_popup.instructions_heading_is_excluded_make_found' | t }}</h4>
-              <ol>
-                <li>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_1' | t }}</li>
-                <li>
-                  {{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_beginning' | t }}
-                  <a href="#" id="instructions-link">
-                    <b>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_link' | t }}</b>
-                  </a>
-                </li>
-              </ol>
-            </div>
-          
-          {% elsif is_bumperdotcom_make_found %}
-            <div id="paint-code-instructions">
-              <h4>{{ 'paintcode_popup.instructions_heading_is_bumperdotcom_make_found' | t }}</h4>
-              <ol>
-                <li>
-                  {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_beginning' | t }}
-                  <span style="font-style: italic; background-color: #f0f4ff; color: #1a3d8f; font-weight: 500; border-radius: 4px;">
-                    {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_vin_option' | t }}
-                  </span>
-                  {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_mid' | t }}
-                  <b>{{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_bold' | t }}</b>
-                  &nbsp;
-                  {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_end' | t }}
-                </li>
-                <li>
-                  {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_2_beginning' | t }}
-                  <a href="#" id="instructions-link">
-                    <b>{{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_2_link' | t }}</b>
-                  </a>
-                </li>
-              </ol>
-            </div>
-          
-          {% else %}
-            {%- if product.variants[1].sku contains ".VIN" -%}
-              <div id="paint-code-instructions">
-                <h4>{{ 'paintcode_popup.instructions_heading_everything_else' | t }}</h4>
-                <ol>
-                  <li>
-                    {{ 'paintcode_popup.instructions_everything_else_listitem_1' | t }}
-                    <span style="font-style: italic; background-color: #f0f4ff; color: #1a3d8f; font-weight: 500; border-radius: 4px;">
-                      {{ 'paintcode_popup.instructions_everything_else_listitem_vin_option' | t }}
-                    </span>
-                    &nbsp;
-                    {{ 'paintcode_popup.instructions_everything_else_listitem_1_end' | t }}
-                  </li>
-                  <li>
-                    {{ 'paintcode_popup.instructions_everything_else_listitem_2_beginning' | t }}
-                    <a href="#" id="instructions-link">
-                      <b>{{ 'paintcode_popup.instructions_everything_else_listitem_2_link' | t }}</b>
-                    </a>
-                  </li>
-                </ol>
-              </div>
-            {% endif %}
-          {% endif %}
-          {% comment %} {%- if product.variants[1].sku contains ".VIN" -%}
-          <div class="accordion-section" id="vin-decoder-accordion">
-            <div class="vin-decoder-accordion-container">
-              <button type="button" class="accordion-button">
-                <p>{{ 'paintcode_popup.accordion_title_1' | t }}</p>
-                <!-- Plus -->
-                <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
-                <!-- minus -->
-                <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
-              </button>
-            </div>
-            <div class="accordion-content">
-              {% comment %} <div class="two-tone-message">{{ 'paintcode_popup.two_tone_message_beg' | t }}&nbsp;<b>{{ 'paintcode_popup.two_tone_two_tone' | t }}</b>{{ 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span>&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}</div> {% endcomment %}
+      </div>
+    </button>
+    <div class="product-unfolded-popup-dark-overlay"></div>
+    <div class="unfolded-popup-container">
+      <div class="unfolded-popup-modal">
+        <button id="modal-exit" type="button">
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 512 512"
+            height="30px"
+            width="30px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M331.3 308.7L278.6 256l52.7-52.7c6.2-6.2 6.2-16.4 0-22.6-6.2-6.2-16.4-6.2-22.6 0L256 233.4l-52.7-52.7c-6.2-6.2-15.6-7.1-22.6 0-7.1 7.1-6 16.6 0 22.6l52.7 52.7-52.7 52.7c-6.7 6.7-6.4 16.3 0 22.6 6.4 6.4 16.4 6.2 22.6 0l52.7-52.7 52.7 52.7c6.2 6.2 16.4 6.2 22.6 0 6.3-6.2 6.3-16.4 0-22.6z"></path><path d="M256 76c48.1 0 93.3 18.7 127.3 52.7S436 207.9 436 256s-18.7 93.3-52.7 127.3S304.1 436 256 436c-48.1 0-93.3-18.7-127.3-52.7S76 304.1 76 256s18.7-93.3 52.7-127.3S207.9 76 256 76m0-28C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48z"></path>
+          </svg>
+        </button>
+        <h1>{{ 'paintcode_popup.heading' | t }}</h1>
+        <h2>{{ 'paintcode_popup.subheading' | t }}</h2>
 
-              {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
-            </div>
+        {% if is_make_found %}
+          <div id="paint-code-instructions">
+            <h4>{{ 'paintcode_popup.instructions_heading_is_make_found' | t }}</h4>
+            <ol>
+              <li>
+                {{ 'paintcode_popup.instructions_is_make_found_listitem_1_beginning' | t }}
+                <span style="font-style: italic; background-color: #f0f4ff; color: #1a3d8f; font-weight: 500; border-radius: 4px;">
+                  {{ 'paintcode_popup.instructions_is_make_found_listitem_1_vin_option' | t }}
+                </span>
+                {{ 'paintcode_popup.instructions_is_make_found_listitem_1_mid' | t }}
+                <b>{{ 'paintcode_popup.instructions_is_make_found_listitem_1_bold' | t }}</b>
+                {{ 'paintcode_popup.instructions_is_make_found_listitem_1_end' | t }}
+              </li>
+              <li>
+                {{ 'paintcode_popup.instructions_is_make_found_listitem_2_beginning' | t }}
+                <a href="#" id="instructions-link">
+                  <b>{{ 'paintcode_popup.instructions_is_make_found_listitem_2_link' | t }}</b>
+                </a>
+              </li>
+            </ol>
           </div>
-        {%- endif -%} {% endcomment %}
-          <div class="accordion-section" id="paint-code-accordion">
-            <div class="how-to-find-paintcode-accordion-container">
-              <button type="button" class="accordion-button">
-                <p>{{ 'paintcode_popup.accordion_title_2' | t }}</p>
-                <!-- Plus -->
-                <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
-                <!-- minus -->
-                <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
-              </button>
+
+        {% elsif is_excluded_make_found %}
+          <div id="paint-code-instructions">
+            <h4>{{ 'paintcode_popup.instructions_heading_is_excluded_make_found' | t }}</h4>
+            <ol>
+              <li>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_1' | t }}</li>
+              <li>
+                {{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_beginning' | t }}
+                <a href="#" id="instructions-link">
+                  <b>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_link' | t }}</b>
+                </a>
+              </li>
+            </ol>
+          </div>
+
+        {% elsif is_bumperdotcom_make_found %}
+          <div id="paint-code-instructions">
+            <h4>{{ 'paintcode_popup.instructions_heading_is_bumperdotcom_make_found' | t }}</h4>
+            <ol>
+              <li>
+                {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_beginning' | t }}
+                <span style="font-style: italic; background-color: #f0f4ff; color: #1a3d8f; font-weight: 500; border-radius: 4px;">
+                  {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_vin_option' | t }}
+                </span>
+                {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_mid' | t }}
+                <b>{{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_bold' | t }}</b>
+                &nbsp;
+                {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_1_end' | t }}
+              </li>
+              <li>
+                {{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_2_beginning' | t }}
+                <a href="#" id="instructions-link">
+                  <b>{{ 'paintcode_popup.instructions_is_bumperdotcom_make_found_listitem_2_link' | t }}</b>
+                </a>
+              </li>
+            </ol>
+          </div>
+
+        {% else %}
+          {%- if product.variants[1].sku contains '.VIN' -%}
+            <div id="paint-code-instructions">
+              <h4>{{ 'paintcode_popup.instructions_heading_everything_else' | t }}</h4>
+              <ol>
+                <li>
+                  {{ 'paintcode_popup.instructions_everything_else_listitem_1' | t }}
+                  <span style="font-style: italic; background-color: #f0f4ff; color: #1a3d8f; font-weight: 500; border-radius: 4px;">
+                    {{ 'paintcode_popup.instructions_everything_else_listitem_vin_option' | t }}
+                  </span>
+                  &nbsp;
+                  {{ 'paintcode_popup.instructions_everything_else_listitem_1_end' | t }}
+                </li>
+                <li>
+                  {{ 'paintcode_popup.instructions_everything_else_listitem_2_beginning' | t }}
+                  <a href="#" id="instructions-link">
+                    <b>{{ 'paintcode_popup.instructions_everything_else_listitem_2_link' | t }}</b>
+                  </a>
+                </li>
+              </ol>
             </div>
-            <div class="accordion-content">
-              <div class="popup-modal-content">
-                <!-- Placeholder for dynamically inserted content -->
+          {% endif %}
+        {% endif %}
+        {% comment %}
+          {%- if product.variants[1].sku contains ".VIN" -%}
+            <div class="accordion-section" id="vin-decoder-accordion">
+              <div class="vin-decoder-accordion-container">
+                <button type="button" class="accordion-button">
+                  <p>{{ 'paintcode_popup.accordion_title_1' | t }}</p>
+                  <!-- Plus -->
+                  <svg class="circle_plus" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g></svg>
+                  <!-- minus -->
+                  <svg class="circle_none" style="display: none;" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g></svg>
+                </button>
               </div>
+              <div class="accordion-content">
+                {% comment %} <div class="two-tone-message">{{ 'paintcode_popup.two_tone_message_beg' | t }}&nbsp;<b>{{ 'paintcode_popup.two_tone_two_tone' | t }}</b>{{ 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span>&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}</div> {% endcomment %}
+
+                {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
+              </div>
+            </div>
+          {%- endif -%}
+        {% endcomment %}
+        <div class="accordion-section" id="paint-code-accordion">
+          <div class="how-to-find-paintcode-accordion-container">
+            <button type="button" class="accordion-button">
+              <p>{{ 'paintcode_popup.accordion_title_2' | t }}</p>
+              <!-- Plus -->
+              <svg
+                class="circle_plus"
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 24 24"
+                height="30px"
+                width="30px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="Circle_Plus"><g><path d="M15,12.5H12.5V15a.5.5,0,0,1-1,0V12.5H9a.5.5,0,0,1,0-1h2.5V9a.5.5,0,0,1,1,0v2.5H15A.5.5,0,0,1,15,12.5Z"></path><path d="M12,21.932A9.934,9.934,0,1,1,21.932,12,9.944,9.944,0,0,1,12,21.932ZM12,3.065A8.934,8.934,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.065Z"></path></g></g>
+              </svg>
+              <!-- minus -->
+              <svg
+                class="circle_none"
+                style="display: none;"
+                stroke="currentColor"
+                fill="currentColor"
+                stroke-width="0"
+                viewBox="0 0 24 24"
+                height="30px"
+                width="30px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="Circle_Minus"><g><path d="M15,11.5h0a.5.5,0,0,1,0,1H9a.5.5,0,0,1,0-1Z"></path><path d="M12,21.934A9.933,9.933,0,1,1,21.932,12,9.945,9.945,0,0,1,12,21.934ZM12,3.068A8.933,8.933,0,1,0,20.932,12,8.944,8.944,0,0,0,12,3.068Z"></path></g></g>
+              </svg>
+            </button>
+          </div>
+          <div class="accordion-content">
+            <div class="popup-modal-content">
+              <!-- Placeholder for dynamically inserted content -->
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-
-
-  <script>
-    let noPaintSwatchImage = false;
-
-    {% comment %} document.addEventListener('DOMContentLoaded', function () {
-      const vindecoderAppContainer = document.querySelector(".vindecoder-paintcode-app-container");
-      const closeVinDecoderBtn = document.querySelector('.close-vin-decoder');
-      const appBtn = document.querySelector(".get-paint-code-using-vin");
-
-
-      if(appBtn) {
-          appBtn.addEventListener("click", () => {
-              vindecoderAppContainer.style.display = "block";
-              closeVinDecoderBtn.style.display = "block";
-              appBtn.style.display = "none";
-          });
-      }
-
-      if(closeVinDecoderBtn) {
-          closeVinDecoderBtn.addEventListener("click", () => {
-              vindecoderAppContainer.style.display = "none";
-              closeVinDecoderBtn.style.display = "none";
-              appBtn.style.display = "block";
-          })
-      }
-    }) {% endcomment %}
-
+<script>
+  let noPaintSwatchImage = false;
+    
   //Autoscrolls to paintcode section
   if(document.getElementById('instructions-link')) {
     document.getElementById('instructions-link').addEventListener('click', function(event) {
@@ -799,4 +817,4 @@ document.addEventListener("keydown", (event) => {
           `;
       }
     }
-  </script>
+</script>

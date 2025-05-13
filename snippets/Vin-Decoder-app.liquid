@@ -1,77 +1,72 @@
 <style>
-    {% comment %} #paintcode-app-container {
-        position: relative;
-        width: 100%;
-        {% comment %} margin-top: 30px; {% endcomment %}
-    } {% endcomment %}
-
-    .vin-decoder-message {
-        padding: 10px;
-        border: 1px solid #007600;
-        border-radius: 5px;
-        background-color: #f4f9f4;
-        margin-top: 10px;
-        margin-bottom: 0;
-        font-size: 14px;
-        line-height: 1.5;
-    }
+  .vin-decoder-message {
+    padding: 10px;
+    border: 1px solid #007600;
+    border-radius: 5px;
+    background-color: #f4f9f4;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
 </style>
 
 <div>
-    {% assign makes_list = settings.makes_list | split: ", " %}
-    {% comment %} {% assign excluded_makes = settings.excluded_makes_list | split: ", " %} {% endcomment %}
-    {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ", " %}
-    {% assign troublesome_makes = settings.troublesome_chromedata_makes_list | split: ", " %}
-    {% assign is_makes_found = false %}
-    {% assign is_excluded_make_found = false %}
-    {% assign is_bumperdotcom_make_found = false %}
-    {% assign is_troublesome_make = false %}
-    {% assign downcase_handle = product.handle | downcase %}
+  {% assign makes_list = settings.makes_list | split: ', ' %}
+  {% comment %} {% assign excluded_makes = settings.excluded_makes_list | split: ", " %} {% endcomment %}
+  {% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ', ' %}
+  {% assign troublesome_makes = settings.troublesome_chromedata_makes_list | split: ', ' %}
+  {% assign is_makes_found = false %}
+  {% assign is_excluded_make_found = false %}
+  {% assign is_bumperdotcom_make_found = false %}
+  {% assign is_troublesome_make = false %}
+  {% assign downcase_handle = product.handle | downcase %}
 
-
-    {% for make in makes_list %}
-        {% if downcase_handle contains make %}
-            {% assign is_makes_found = true %}
-            {% break %}
-        {% endif %}
-    {% endfor %}
-    {% comment %} {% for excluded_make in excluded_makes %}
+  {% for make in makes_list %}
+    {% if downcase_handle contains make %}
+      {% assign is_makes_found = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+  {% comment %}
+    {% for excluded_make in excluded_makes %}
         {% if downcase_handle contains excluded_make %}
             {% assign is_excluded_make_found = true %}
             {% break %}
         {% endif %}
-    {% endfor %} {% endcomment %}
-    {% for bumperdotcom_make in bumperdotcom_makes %}
-        {% if downcase_handle contains bumperdotcom_make %}
-            {% assign is_bumperdotcom_make_found = true %}
-            {% break %}
-        {% endif %}
-      {% endfor %}
-    {% for troublesome_make in troublesome_makes %}
-        {% if downcase_handle contains troublesome_make %}
-            {% assign is_troublesome_make = true %}
-            {% break %}
-        {% endif %}
     {% endfor %}
+  {% endcomment %}
+  {% for bumperdotcom_make in bumperdotcom_makes %}
+    {% if downcase_handle contains bumperdotcom_make %}
+      {% assign is_bumperdotcom_make_found = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+  {% for troublesome_make in troublesome_makes %}
+    {% if downcase_handle contains troublesome_make %}
+      {% assign is_troublesome_make = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
 
-    <!-- is_makes_found means chromedata, bumper is bumper.com, and troublesome is chromedata... so if none of this, then set it to excluded-->
-    {% unless is_makes_found == true or is_bumperdotcom_make_found == true or is_troublesome_make == true %}
-        {% assign is_excluded_make_found = true %}
-    {% endunless %}
-  
-    <div id="product-details-for-app" data-product-title="{{ product.title }}" data-product-id="{{ product.id }}">
-    </div>
+  <!--
+    is_makes_found means chromedata, bumper is bumper.com, and troublesome is chromedata... so if none of this, then set it to excluded
+  -->
+  {% unless is_makes_found == true or is_bumperdotcom_make_found == true or is_troublesome_make == true %}
+    {% assign is_excluded_make_found = true %}
+  {% endunless %}
 
-    {% comment %} <div id="paintcode-app-container"> {% endcomment %}
-        <iframe
-            id="paintcode-iframe"
-            src="https://vin-to-paintcode-app-445858330997.us-east5.run.app"
-            style="width: 100%; height: 100%; min-height: 225px; border: none;"
-            scrolling="no"
-            allowfullscreen
-            sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals">
-        </iframe>
-    {% comment %} </div> {% endcomment %}
+  <div id="product-details-for-app" data-product-title="{{ product.title }}" data-product-id="{{ product.id }}"></div>
+
+  <iframe
+    id="paintcode-iframe"
+    src="https://vin-to-paintcode-app-445858330997.us-east5.run.app"
+    style="width: 100%; height: 100%; min-height: 225px; border: none;"
+    scrolling="no"
+    allowfullscreen
+    sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals"
+  >
+  </iframe>
 </div>
 
 <script>
@@ -81,27 +76,12 @@
         const productDetailsElement = document.getElementById('product-details-for-app');
         const paintCodeWrapper = document.querySelector(".paint-code-wrapper");
         const paintCodeAppContainer = document.getElementById('paintcode-app-container');
-        const paintOptionsCheckboxGroup = document.querySelector('.paint-options-checkbox-group');
+        const paintOptionsButtons = document.querySelector('.paint-options-buttons');
+        const themeName = "{{ theme.name | escape }}" || 'Unknown Theme';
+        const troublesomeMakesColors = {};
+
         let isExcludedValue = '{{ is_excluded_make_found }}';
         let isBumperdotcom = '{{ is_bumperdotcom_make_found }}';
-        const themeName = "{{ theme.name | escape }}" || 'Unknown Theme';
-        {% comment %} window.failedVinDecode = false; {% endcomment %}
-
-        const getIpAddress = async () => {
-            try {
-              const response = await fetch('https://api.ipify.org?format=json');
-              const data = await response.json();
-              console.log('ip addy: ', data.ip);
-              return data.ip; // Returns the client's public IP
-            } catch (error) {
-              console.error("Error fetching IP address:", error);
-              return null;
-            }
-          };
-
-
-          {% comment %} Getting the product variants with color names for subarus and other complicated ChromeData searches {% endcomment %}
-          const troublesomeMakesColors = {};
 
         {% if is_troublesome_make == true %}
           {% assign product_variants = product.variants %}
@@ -149,10 +129,10 @@
             }
         });
         
-        // Listen for messages from the iframe
         window.addEventListener('message', function(event) {
             if (event.origin === 'https://vin-to-paintcode-app-445858330997.us-east5.run.app') {
                 if (event.data.type === 'resizeIframe') {
+
                     // Adjust the iframe's height based on the received data
                     iframe.style.height = event.data.height + 50 + 'px';
                 }
@@ -161,20 +141,23 @@
                 if (event.data.type === "updatePaintCode") {
                   const paintCode = event.data.paintCode;
                   const vinSelected = event.data.vin;
-                  storedDecodedVin = vinSelected;
                   const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
+                  const variantSelector = document.getElementById('variant-selector');
 
                   let matchingOption = false;
-                  let autoSelectedColor;
 
-                  const variantSelector = document.getElementById('variant-selector');
+                  // Product page component library variable
+                  storedDecodedVin = vinSelected;
+
                     if (variantSelector) {
-                        if(!failedVinDecode) hideGetPaintCodeUsingVINCheckbox(); //wool here
+                        if(!failedVinDecode) hideGetPaintCodeUsingVINCheckbox();
                         
                         const options = Array.from(variantSelector.options);
                         options.find(option => {
                             if(option.label.split(" ")[0] === paintCode) {
                                 matchingOption = true;
+
+                                // Product page component library variable
                                 autoSelectedColor = option.value;
                                 return;
                             }
@@ -183,9 +166,6 @@
                         if (matchingOption) {
                             variantSelector.value = autoSelectedColor;
                             document.body.classList.remove('no-scroll-paint-swatch');
-                            {% comment %} hideOverlay();
-                            hideModal();
-                            showShopifyChat(); {% endcomment %}
 
                             // Create a new message to indicate the selected VIN
                             const vinMessage = document.createElement('div');
@@ -205,11 +185,6 @@
                             variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
                         } else {
                             boolMatchByVIN = true;
-                            const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
-
-                            {% comment %} resortToGetPaintCodeByVin(event.data.vin, event.data.matchByVIN);
-                            formulateMessage(event.data.vin); {% endcomment %}
-
                             console.warn(`No matching option found for paint code: ${paintCode}`);
                         }
                     } else {
@@ -217,7 +192,7 @@
                     }
                     paintCodeWrapper.classList.add('show');
                     paintCodeAppContainer.classList.remove('show');
-                    paintOptionsCheckboxGroup.classList.add('hide');
+                    {% comment %} paintOptionsButtons.classList.add('hide'); {% endcomment %}
                 }
 
                 if (event.data.type === "getPaintByVIN") {
@@ -228,10 +203,25 @@
 
                     paintCodeWrapper.classList.add('show');
                     paintCodeAppContainer.classList.remove('show');
-                    paintOptionsCheckboxGroup.classList.add('hide');
+                    {% comment %} paintOptionsButtons.classList.add('hide'); {% endcomment %}
                 }
+
+                // Variable used in product-page-paint-options to change the price displayed on 
+                // Use VIN button
+                vinDecoderJustUsed = true;
             }
         });
+
+        async function getIpAddress() {
+            try {
+              const response = await fetch('https://api.ipify.org?format=json');
+              const data = await response.json();
+              return data.ip; // Returns the client's public IP
+            } catch (error) {
+              console.error("Error fetching IP address:", error);
+              return null;
+            }
+        };
 
         function formulateMessage(vin) {
             if (combinedVariantSelectLibrary) {
@@ -253,16 +243,12 @@
         
                 if (vinInputLibrary) {
                     vinInputLibrary.value = vin;
-                  }
+                }
         
                 options.find(option => {
-                      if(option.label.startsWith("Match Paint by VIN") || option.label.startsWith("Pintura de combinación por VIN")) {
-        
-                        // const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
-        
+                    if(option.label.startsWith("Match Paint by VIN") || option.label.startsWith("Pintura de combinación por VIN")) {        
                         if (vinTextboxContainer) {
                             vinTextboxContainer.style.display = "block";
-        
                       
                             // Remove any existing message to avoid duplication
                             const existingMessage = vinTextboxContainer.querySelector('.vin-selected-message');
@@ -283,7 +269,7 @@
                             `;
         
                             failedVinDecode = true;
-                            if(checkboxGetPaintCodeWithVINAndLabel.style.display === "none") showGetPaintCodeUsingVINCheckbox();
+                            {% comment %} if(checkboxGetPaintCodeWithVINAndLabel.style.display === "none") showGetPaintCodeUsingVINCheckbox(); {% endcomment %}
 
                       
                             // Append the message to the VIN textbox container
@@ -294,7 +280,7 @@
                         combinedVariantSelectLibrary.dispatchEvent(new Event('change', { bubbles: true }));
         
                         return;
-                      }
+                    }
                 });   
             } else {
                 console.warn('Variant selector dropdown not found.');
