@@ -1,29 +1,34 @@
 {% comment %} {% include 'shogun-content-handler' %} {% endcomment %}
 <!doctype html>
 <html class="no-js no-touch" lang="{{ request.locale.iso_code }}">
-{% comment %} <script>
-window['_fs_host'] = 'fullstory.com';
-window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
-window['_fs_org'] = 'o-21W8N1-na1';
-window['_fs_namespace'] = 'FS';
-!function(m,n,e,t,l,o,g,y){var s,f,a=function(h){
-return!(h in m)||(m.console&&m.console.log&&m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'),!1)}(e)
-;function p(b){var h,d=[];function j(){h&&(d.forEach((function(b){var d;try{d=b[h[0]]&&b[h[0]](h[1])}catch(h){return void(b[3]&&b[3](h))}
-d&&d.then?d.then(b[2],b[3]):b[2]&&b[2](d)})),d.length=0)}function r(b){return function(d){h||(h=[b,d],j())}}return b(r(0),r(1)),{
-then:function(b,h){return p((function(r,i){d.push([b,h,r,i]),j()}))}}}a&&(g=m[e]=function(){var b=function(b,d,j,r){function i(i,c){
-h(b,d,j,i,c,r)}r=r||2;var c,u=/Async$/;return u.test(b)?(b=b.replace(u,""),"function"==typeof Promise?new Promise(i):p(i)):h(b,d,j,c,c,r)}
-;function h(h,d,j,r,i,c){return b._api?b._api(h,d,j,r,i,c):(b.q&&b.q.push([h,d,j,r,i,c]),null)}return b.q=[],b}(),y=function(b){function h(h){
-"function"==typeof h[4]&&h[4](new Error(b))}var d=g.q;if(d){for(var j=0;j<d.length;j++)h(d[j]);d.length=0,d.push=h}},function(){
-(o=n.createElement(t)).async=!0,o.crossOrigin="anonymous",o.src="https://"+l,o.onerror=function(){y("Error loading "+l)}
-;var b=n.getElementsByTagName(t)[0];b&&b.parentNode?b.parentNode.insertBefore(o,b):n.head.appendChild(o)}(),function(){function b(){}
-function h(b,h,d){g(b,h,d,1)}function d(b,d,j){h("setProperties",{type:b,properties:d},j)}function j(b,h){d("user",b,h)}function r(b,h,d){j({
-uid:b},d),h&&j(h,d)}g.identify=r,g.setUserVars=j,g.identifyAccount=b,g.clearUserCookie=b,g.setVars=d,g.event=function(b,d,j){h("trackEvent",{
-name:b,properties:d},j)},g.anonymize=function(){r(!1)},g.shutdown=function(){h("shutdown")},g.restart=function(){h("restart")},
-g.log=function(b,d){h("log",{level:b,msg:d})},g.consent=function(b){h("setIdentity",{consent:!arguments.length||b})}}(),s="fetch",
-f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){return g._w[s].apply(this,arguments)}),g._v="2.0.0")
-}(window,document,window._fs_namespace,"script",window._fs_script);
-</script> {% endcomment %}
+  {% comment %}
+    <script>
+    window['_fs_host'] = 'fullstory.com';
+    window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
+    window['_fs_org'] = 'o-21W8N1-na1';
+    window['_fs_namespace'] = 'FS';
+    !function(m,n,e,t,l,o,g,y){var s,f,a=function(h){
+    return!(h in m)||(m.console&&m.console.log&&m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'),!1)}(e)
+    ;function p(b){var h,d=[];function j(){h&&(d.forEach((function(b){var d;try{d=b[h[0]]&&b[h[0]](h[1])}catch(h){return void(b[3]&&b[3](h))}
+    d&&d.then?d.then(b[2],b[3]):b[2]&&b[2](d)})),d.length=0)}function r(b){return function(d){h||(h=[b,d],j())}}return b(r(0),r(1)),{
+    then:function(b,h){return p((function(r,i){d.push([b,h,r,i]),j()}))}}}a&&(g=m[e]=function(){var b=function(b,d,j,r){function i(i,c){
+    h(b,d,j,i,c,r)}r=r||2;var c,u=/Async$/;return u.test(b)?(b=b.replace(u,""),"function"==typeof Promise?new Promise(i):p(i)):h(b,d,j,c,c,r)}
+    ;function h(h,d,j,r,i,c){return b._api?b._api(h,d,j,r,i,c):(b.q&&b.q.push([h,d,j,r,i,c]),null)}return b.q=[],b}(),y=function(b){function h(h){
+    "function"==typeof h[4]&&h[4](new Error(b))}var d=g.q;if(d){for(var j=0;j<d.length;j++)h(d[j]);d.length=0,d.push=h}},function(){
+    (o=n.createElement(t)).async=!0,o.crossOrigin="anonymous",o.src="https://"+l,o.onerror=function(){y("Error loading "+l)}
+    ;var b=n.getElementsByTagName(t)[0];b&&b.parentNode?b.parentNode.insertBefore(o,b):n.head.appendChild(o)}(),function(){function b(){}
+    function h(b,h,d){g(b,h,d,1)}function d(b,d,j){h("setProperties",{type:b,properties:d},j)}function j(b,h){d("user",b,h)}function r(b,h,d){j({
+    uid:b},d),h&&j(h,d)}g.identify=r,g.setUserVars=j,g.identifyAccount=b,g.clearUserCookie=b,g.setVars=d,g.event=function(b,d,j){h("trackEvent",{
+    name:b,properties:d},j)},g.anonymize=function(){r(!1)},g.shutdown=function(){h("shutdown")},g.restart=function(){h("restart")},
+    g.log=function(b,d){h("log",{level:b,msg:d})},g.consent=function(b){h("setIdentity",{consent:!arguments.length||b})}}(),s="fetch",
+    f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){return g._w[s].apply(this,arguments)}),g._v="2.0.0")
+    }(window,document,window._fs_namespace,"script",window._fs_script);
+    </script>
+  {% endcomment %}
   <head>
+    <script>
+      window.enablePrepaintedMessaging = true;
+    </script>
     <meta name="format-detection" content="telephone=no">
 
     <!-- <script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=59f380be"></script> -->
@@ -33,31 +38,29 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
 
     {% comment %} {% render 'visually_io_sdk' %} {% endcomment %}
     <script>
-      (function() {
-        const localeCookie = document.cookie.replace(/(?:(?:^|.*;\s*)selectedLocale\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      (function () {
+        const localeCookie = document.cookie.replace(/(?:(?:^|.*;\s*)selectedLocale\s*\=\s*([^;]*).*$)|^.*$/, '$1');
         const supportedLocales = ['es']; // Add all supported languages here
-    
+
         if (localeCookie && supportedLocales.includes(localeCookie)) {
           const currentPath = window.location.pathname;
-          const pathParts = currentPath.split('/').filter(part => part);
+          const pathParts = currentPath.split('/').filter((part) => part);
           const currentLocale = pathParts[0];
-    
+
           if (supportedLocales.includes(currentLocale)) {
             pathParts.shift(); // Remove old locale
           }
 
           const newPath = '/' + pathParts.join('/');
-    
+
           if (!currentPath.startsWith(`/${localeCookie}/`) && !(localeCookie === 'en' && currentLocale !== 'en')) {
             window.location.replace(localeCookie === 'en' ? newPath : `/${localeCookie}${newPath}`);
           }
         }
       })();
 
-      window.shopLocale = "{{ shop.locale }}";
+      window.shopLocale = '{{ shop.locale }}';
     </script>
-    
-
 
     <script>
       window.Shopify = window.Shopify || {theme: {id: {{ theme.id }}, role: '{{ theme.role }}' } };
@@ -67,22 +70,29 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
           suffix: "{{ template.suffix }}"
       };
     </script>
-    <script type="module" blocking="render" fetchpriority="high" src="https://cdn.intelligems.io/esm/02ea28a367f5/bundle.js" async></script>    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
+    <script
+      type="module"
+      blocking="render"
+      fetchpriority="high"
+      src="https://cdn.intelligems.io/esm/02ea28a367f5/bundle.js"
+      async
+    ></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
     <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}" defer></script>
 
     <style>
-      #ReturnItemProposition-module_additionalCosts{
-      display: none;
+      #ReturnItemProposition-module_additionalCosts {
+        display: none;
       }
     </style>
 
     {% comment %}{% render 'pagefly-head' %}{% endcomment %}
     <!-- Infinite Options by ShopPad -->
     <script>
-      window.Shoppad = window.Shoppad || {},
-      window.Shoppad.apps = window.Shoppad.apps || {},
-      window.Shoppad.apps.infiniteoptions = window.Shoppad.apps.infiniteoptions || {},
-      window.Shoppad.apps.infiniteoptions.submitPriceModCartAnyways = true;
+      (window.Shoppad = window.Shoppad || {}),
+        (window.Shoppad.apps = window.Shoppad.apps || {}),
+        (window.Shoppad.apps.infiniteoptions = window.Shoppad.apps.infiniteoptions || {}),
+        (window.Shoppad.apps.infiniteoptions.submitPriceModCartAnyways = true);
     </script>
     <!-- BEGIN GCR Badge Code -->
     <script
@@ -92,24 +102,25 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     ></script>
 
     <script>
-      window.renderBadge = function() {
-        var ratingBadgeContainer = document.createElement("div");
-          document.body.appendChild(ratingBadgeContainer);
-          window.gapi.load('ratingbadge', function() {
-            window.gapi.ratingbadge.render(
-              ratingBadgeContainer, {
-                // REQUIRED
-                "merchant_id": 141592694,
-                // OPTIONAL
-                "position": "BOTTOM_LEFT"
-              });
-         });
-      }
+      window.renderBadge = function () {
+        var ratingBadgeContainer = document.createElement('div');
+        document.body.appendChild(ratingBadgeContainer);
+        window.gapi.load('ratingbadge', function () {
+          window.gapi.ratingbadge.render(ratingBadgeContainer, {
+            // REQUIRED
+            merchant_id: 141592694,
+            // OPTIONAL
+            position: 'BOTTOM_LEFT',
+          });
+        });
+      };
     </script>
 
-    {% comment %}<script
-      src="//d1liekpayvooaz.cloudfront.net/apps/customizery/customizery.js?shop={{shop.permanent_domain}}"
-    ></script> {% endcomment %}
+    {% comment %}
+      <script
+        src="//d1liekpayvooaz.cloudfront.net/apps/customizery/customizery.js?shop={{shop.permanent_domain}}"
+      ></script>
+    {% endcomment %}
     <script>
       window.Store = window.Store || {};
       window.Store.id = {{ shop.id }};
@@ -184,20 +195,21 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     {{ 'theme.css' | asset_url | stylesheet_tag }}
 
     {{ 'easysearch-custom-selects-styles.min.css' | asset_url | stylesheet_tag }}
-    {% comment %} <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "{{ 'easysearch-custom-selects-styles.min.css' | asset_url }}";
-        link.type = "text/css";
-        link.media = "print";
-        link.onload = function() { this.media = "all"; };
-        document.head.appendChild(link);
-      });
-    </script> {% endcomment %}
-    
+    {% comment %}
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          var link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = "{{ 'easysearch-custom-selects-styles.min.css' | asset_url }}";
+          link.type = "text/css";
+          link.media = "print";
+          link.onload = function() { this.media = "all"; };
+          document.head.appendChild(link);
+        });
+      </script>
+    {% endcomment %}
+
     <script defer src="{{ 'easysearch-custom-selects.min.js' | asset_url }}"></script>
-   
 
     {% comment %}Inject theme-object begin{% endcomment %}
     <script>
@@ -205,21 +217,21 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
       window.Theme.version = '9.1.1';
       window.Theme.name = 'Empire';
       window.Theme.routes = {
-        "root_url": "{{ routes.root_url }}",
-        "account_url": "{{ routes.account_url }}",
-        "account_login_url": "{{ routes.account_login_url }}",
-        "account_logout_url": "{{ routes.account_logout_url }}",
-        "account_register_url": "{{ routes.account_register_url }}",
-        "account_addresses_url": "{{ routes.account_addresses_url }}",
-        "collections_url": "{{ routes.collections_url }}",
-        "all_products_collection_url": "{{ routes.all_products_collection_url }}",
-        "search_url": "{{ routes.search_url }}",
-        "predictive_search_url": "{{ routes.predictive_search_url }}",
-        "cart_url": "{{ routes.cart_url }}",
-        "cart_add_url": "{{ routes.cart_add_url }}",
-        "cart_change_url": "{{ routes.cart_change_url }}",
-        "cart_clear_url": "{{ routes.cart_clear_url }}",
-        "product_recommendations_url": "{{ routes.product_recommendations_url }}",
+        root_url: '{{ routes.root_url }}',
+        account_url: '{{ routes.account_url }}',
+        account_login_url: '{{ routes.account_login_url }}',
+        account_logout_url: '{{ routes.account_logout_url }}',
+        account_register_url: '{{ routes.account_register_url }}',
+        account_addresses_url: '{{ routes.account_addresses_url }}',
+        collections_url: '{{ routes.collections_url }}',
+        all_products_collection_url: '{{ routes.all_products_collection_url }}',
+        search_url: '{{ routes.search_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_clear_url: '{{ routes.cart_clear_url }}',
+        product_recommendations_url: '{{ routes.product_recommendations_url }}',
       };
     </script>
     {% comment %}Inject theme-object end{% endcomment %}
@@ -236,67 +248,104 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     {% comment %}{% render 'shogun-head' %} {% endcomment %}
     <!-- Hotjar Tracking Code for https://partifyusa.com/ -->
     <script>
-      (function(h,o,t,j,a,r){
-          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-          h._hjSettings={hjid:5008847,hjsv:6};
-          a=o.getElementsByTagName('head')[0];
-          r=o.createElement('script');r.async=1;
-          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-          a.appendChild(r);
-      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
+          function () {
+            (h.hj.q = h.hj.q || []).push(arguments);
+          };
+        h._hjSettings = { hjid: 5008847, hjsv: 6 };
+        a = o.getElementsByTagName('head')[0];
+        r = o.createElement('script');
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
     </script>
     <!-- Affirm -->
     <script>
-       _affirm_config = {
-         public_api_key:  "YOUR_PUBLIC_KEY",
-         script:          "https://cdn1-sandbox.affirm.com/js/v2/affirm.js"
-       };
-       (function(l,g,m,e,a,f,b){var d,c=l[m]||{},h=document.createElement(f),n=document.getElementsByTagName(f)[0],k=function(a,b,c){return function(){a[b]._.push([c,arguments])}};c[e]=k(c,e,"set");d=c[e];c[a]={};c[a]._=[];d._=[];c[a][b]=k(c,a,b);a=0;for(b="set add save post open empty reset on off trigger ready setProduct".split(" ");a<b.length;a++)d[b[a]]=k(c,e,b[a]);a=0;for(b=["get","token","url","items"];a<b.length;a++)d[b[a]]=function(){};h.async=!0;h.src=g[f];n.parentNode.insertBefore(h,n);delete g[f];d(g);l[m]=c})(window,_affirm_config,"affirm","checkout","ui","script","ready");
+      _affirm_config = {
+        public_api_key: 'YOUR_PUBLIC_KEY',
+        script: 'https://cdn1-sandbox.affirm.com/js/v2/affirm.js',
+      };
+      (function (l, g, m, e, a, f, b) {
+        var d,
+          c = l[m] || {},
+          h = document.createElement(f),
+          n = document.getElementsByTagName(f)[0],
+          k = function (a, b, c) {
+            return function () {
+              a[b]._.push([c, arguments]);
+            };
+          };
+        c[e] = k(c, e, 'set');
+        d = c[e];
+        c[a] = {};
+        c[a]._ = [];
+        d._ = [];
+        c[a][b] = k(c, a, b);
+        a = 0;
+        for (b = 'set add save post open empty reset on off trigger ready setProduct'.split(' '); a < b.length; a++)
+          d[b[a]] = k(c, e, b[a]);
+        a = 0;
+        for (b = ['get', 'token', 'url', 'items']; a < b.length; a++) d[b[a]] = function () {};
+        h.async = !0;
+        h.src = g[f];
+        n.parentNode.insertBefore(h, n);
+        delete g[f];
+        d(g);
+        l[m] = c;
+      })(window, _affirm_config, 'affirm', 'checkout', 'ui', 'script', 'ready');
       // Use your live public API Key and https://cdn1.affirm.com/js/v2/affirm.js script to point to Affirm production environment.
     </script>
     <!-- End Affirm -->
     <script>
-  (function () {
-    // Check if the page is a collection page based on URL structure
-    if (window.location.pathname.includes('/collections/')) {
-      var _learnq = window._learnq || [];
-      var collectionURL = window.location.href;
+      (function () {
+        // Check if the page is a collection page based on URL structure
+        if (window.location.pathname.includes('/collections/')) {
+          var _learnq = window._learnq || [];
+          var collectionURL = window.location.href;
 
-      // Retrieve the Klaviyo cookie for anonymous tracking
-      var kla_id = getKlaviyoCookie('__kla_id');
-      
-      // If you have an email, add it to the identify call (replace 'user@example.com' with actual email if you have it)
-      var email = "user@example.com"; // Or dynamically retrieve if available
+          // Retrieve the Klaviyo cookie for anonymous tracking
+          var kla_id = getKlaviyoCookie('__kla_id');
 
-      if (email) {
-        // If email is available, associate it with the user and send data
-        _learnq.push(['identify', {
-          '$email': email,
-          'Visited Collection': collectionURL
-        }]);
-      } else if (kla_id) {
-        // If no email, send data with the __kla_id cookie
-        _learnq.push(['identify', {
-          '$anonymous_id': kla_id,  // Use anonymous identifier
-          'Visited Collection': collectionURL
-        }]);
-      }
-    }
+          // If you have an email, add it to the identify call (replace 'user@example.com' with actual email if you have it)
+          var email = 'user@example.com'; // Or dynamically retrieve if available
 
-    // Helper function to get Klaviyo cookie
-    function getKlaviyoCookie(name) {
-      var cookieArr = document.cookie.split(';');
-      for (var i = 0; i < cookieArr.length; i++) {
-        var cookie = cookieArr[i].trim();
-        if (cookie.indexOf(name + '=') === 0) {
-          return cookie.substring(name.length + 1);
+          if (email) {
+            // If email is available, associate it with the user and send data
+            _learnq.push([
+              'identify',
+              {
+                $email: email,
+                'Visited Collection': collectionURL,
+              },
+            ]);
+          } else if (kla_id) {
+            // If no email, send data with the __kla_id cookie
+            _learnq.push([
+              'identify',
+              {
+                $anonymous_id: kla_id, // Use anonymous identifier
+                'Visited Collection': collectionURL,
+              },
+            ]);
+          }
         }
-      }
-      return null; // Return null if cookie not found
-    }
-  })();
-</script>
 
+        // Helper function to get Klaviyo cookie
+        function getKlaviyoCookie(name) {
+          var cookieArr = document.cookie.split(';');
+          for (var i = 0; i < cookieArr.length; i++) {
+            var cookie = cookieArr[i].trim();
+            if (cookie.indexOf(name + '=') === 0) {
+              return cookie.substring(name.length + 1);
+            }
+          }
+          return null; // Return null if cookie not found
+        }
+      })();
+    </script>
   </head>
 
   <body
@@ -307,9 +356,10 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     {% endif %}
   >
     <script>
-      document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'js');
-      if(window.Shopify&&window.Shopify.designMode)document.documentElement.className+=' in-theme-editor';
-      if(('ontouchstart' in window)||window.DocumentTouch&&document instanceof DocumentTouch)document.documentElement.className=document.documentElement.className.replace(/\bno-touch\b/,'has-touch');
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/, 'js');
+      if (window.Shopify && window.Shopify.designMode) document.documentElement.className += ' in-theme-editor';
+      if ('ontouchstart' in window || (window.DocumentTouch && document instanceof DocumentTouch))
+        document.documentElement.className = document.documentElement.className.replace(/\bno-touch\b/, 'has-touch');
     </script>
 
     {% comment %}Inject icon-star-symbol begin{% endcomment %}
@@ -718,36 +768,32 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
 
     {% unless settings.reduce_animations %}
       <script>
-        (
-          function () {
-            var classes = {
-              block: 'pxu-lia-block',
-              element: 'pxu-lia-element',
-            };
+        (function () {
+          var classes = {
+            block: 'pxu-lia-block',
+            element: 'pxu-lia-element',
+          };
 
-            document
-              .querySelectorAll('[type="application/pxs-animation-mapping+json"]')
-              .forEach(function (mappingEl) {
-                const section = mappingEl.parentNode;
-                try {
-                  const mapping = JSON.parse(mappingEl.innerHTML);
-                  mapping.elements.forEach(function (elementSelector) {
-                    section
-                      .querySelectorAll(elementSelector)
-                      .forEach(function (element) { element.classList.add(classes.element); });
-                  });
+          document.querySelectorAll('[type="application/pxs-animation-mapping+json"]').forEach(function (mappingEl) {
+            const section = mappingEl.parentNode;
+            try {
+              const mapping = JSON.parse(mappingEl.innerHTML);
+              mapping.elements.forEach(function (elementSelector) {
+                section.querySelectorAll(elementSelector).forEach(function (element) {
+                  element.classList.add(classes.element);
+                });
+              });
 
-                  mapping.blocks.forEach(function (blockSelector) {
-                    section
-                      .querySelectorAll(blockSelector)
-                      .forEach(function (block) { block.classList.add(classes.block); });
-                  });
-                } catch (error) {
-                  console.warn('Unable to parse animation mapping', mappingEl, error);
-                }
-            });
-          }
-        )()
+              mapping.blocks.forEach(function (blockSelector) {
+                section.querySelectorAll(blockSelector).forEach(function (block) {
+                  block.classList.add(classes.block);
+                });
+              });
+            } catch (error) {
+              console.warn('Unable to parse animation mapping', mappingEl, error);
+            }
+          });
+        })();
       </script>
     {% endunless %}
 
@@ -769,7 +815,8 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     <script>
       (function () {
         function handleFirstTab(e) {
-          if (e.keyCode === 9) { // the "I am a keyboard user" key
+          if (e.keyCode === 9) {
+            // the "I am a keyboard user" key
             document.body.classList.add('user-is-tabbing');
             window.removeEventListener('keydown', handleFirstTab);
           }
@@ -779,7 +826,12 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
     </script>
 
     {% unless settings.reduce_animations %}
-      <link rel="preload" href="{{ 'ripple.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link
+        rel="preload"
+        href="{{ 'ripple.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
     {% endunless %}
 
     <script
@@ -787,120 +839,118 @@ f="XMLHttpRequest",g._w={},g._w[f]=m[f],g._w[s]=m[s],m[s]&&(m[s]=function(){retu
       type="module"
       defer
     ></script>
-<script>
-  // Klaviyo Collection Tracking
-  document.addEventListener("DOMContentLoaded", function() {
-    try {
-      if (window.location.pathname.includes('/collections/')) {
-        // Extract collection details
-        let collectionName = document.title.split('|')[0].trim();
-        let collectionUrl = window.location.href;
+    <script>
+      // Klaviyo Collection Tracking
+      document.addEventListener('DOMContentLoaded', function () {
+        try {
+          if (window.location.pathname.includes('/collections/')) {
+            // Extract collection details
+            let collectionName = document.title.split('|')[0].trim();
+            let collectionUrl = window.location.href;
 
-        // Clean up the collection name if it contains 'Painted Replacement'
-        if (collectionName.includes('Painted Replacement')) {
-          collectionName = collectionName.split('Painted Replacement')[0].trim();
-        }
+            // Clean up the collection name if it contains 'Painted Replacement'
+            if (collectionName.includes('Painted Replacement')) {
+              collectionName = collectionName.split('Painted Replacement')[0].trim();
+            }
 
-        // Remove everything after '?' in the URL
-        collectionUrl = collectionUrl.split('?')[0];
+            // Remove everything after '?' in the URL
+            collectionUrl = collectionUrl.split('?')[0];
 
-        // Update Klaviyo profile with last viewed collection details
-        if (typeof _learnq !== "undefined") {
-          _learnq.push(['identify', {
-            $last_viewed_collection_name: collectionName,
-            $last_viewed_collection_url: collectionUrl
-          }]);
-        }
-      }
-    } catch (error) {
-      console.error("Klaviyo Collection Tracking Error:", error);
-    }
-  });
-</script>
-
-  <!-- For yotpo stars skeleton -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const skeleton = document.getElementById('yotpo-skeleton');
-
-      const observer = new MutationObserver(() => {
-        const yotpoStars = document.querySelector('[class*="yotpo-sr-bottom-line-summary"]'); // Adjust if needed
-        if (yotpoStars && skeleton) {
-          skeleton.remove();
-          observer.disconnect();
+            // Update Klaviyo profile with last viewed collection details
+            if (typeof _learnq !== 'undefined') {
+              _learnq.push([
+                'identify',
+                {
+                  $last_viewed_collection_name: collectionName,
+                  $last_viewed_collection_url: collectionUrl,
+                },
+              ]);
+            }
+          }
+        } catch (error) {
+          console.error('Klaviyo Collection Tracking Error:', error);
         }
       });
+    </script>
 
-      observer.observe(document.body, { childList: true, subtree: true });
-    });
-  </script>
+    <!-- For yotpo stars skeleton -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const skeleton = document.getElementById('yotpo-skeleton');
 
-  <!-- For product gallery skeleton -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const skeletonContainer = document.querySelector(".product-gallery--skeleton-thumbnails");
-      const galleryThumbnails = document.querySelectorAll("[data-gallery-thumbnail]");
-      const navigation = document.querySelector(".product-gallery--navigation");
+        const observer = new MutationObserver(() => {
+          const yotpoStars = document.querySelector('[class*="yotpo-sr-bottom-line-summary"]'); // Adjust if needed
+          if (yotpoStars && skeleton) {
+            skeleton.remove();
+            observer.disconnect();
+          }
+        });
 
-      if (!skeletonContainer || galleryThumbnails.length === 0) return;
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
+    </script>
 
-      const firstImage = galleryThumbnails[0].querySelector("img");
+    <!-- For product gallery skeleton -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const skeletonContainer = document.querySelector('.product-gallery--skeleton-thumbnails');
+        const galleryThumbnails = document.querySelectorAll('[data-gallery-thumbnail]');
+        const navigation = document.querySelector('.product-gallery--navigation');
 
-      const cleanup = () => {
-        skeletonContainer.remove();
-        if (navigation?.classList.contains("loading")) {
-          navigation.classList.remove("loading");
+        if (!skeletonContainer || galleryThumbnails.length === 0) return;
+
+        const firstImage = galleryThumbnails[0].querySelector('img');
+
+        const cleanup = () => {
+          skeletonContainer.remove();
+          if (navigation?.classList.contains('loading')) {
+            navigation.classList.remove('loading');
+          }
+        };
+
+        if (firstImage && firstImage.complete) {
+          cleanup();
+        } else {
+          firstImage.addEventListener('load', cleanup);
         }
-      };
+      });
+    </script>
 
-      if (firstImage && firstImage.complete) {
-        cleanup();
-      } else {
-        firstImage.addEventListener("load", cleanup);
-      }
-    });
-  </script>  
+    {% if shop.locale == 'es' %}
+      <style>
+        div#shopify-chat {
+          display: none !important;
+        }
+      </style>
+    {% endif %}
 
+    <script type="text/javascript" src="{{ 'global-library.js' | asset_url }}" defer></script>
 
-{% if  shop.locale == "es" %}
-  <style>
-  div#shopify-chat {
-      display: none !important;
-  }
-  </style>
-{% endif %}
-
-<script type="text/javascript" src="{{ 'global-library.js' | asset_url }}" defer></script>
-
-
-
-{% comment %}
-This forces localization to the US market with USD currency when running in dev mode
-{% endcomment %}
-{% comment %} {% if request.host contains 'localhost' or request.host contains '.myshopify.com' %}
-  <script>
-    fetch('/localization.json', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'xmlhttprequest'
-      },
-      body: JSON.stringify({
-        country: 'US',
-        currency: 'USD',
-        locale: 'en'
-      })
-    }).then(() => {
-      // Optional: reload only if country wasn't already US
-      {% comment %} if (!document.cookie.includes('country=US')) {
-        location.reload();
-      } {% endcomment %}
-    });
-  </script>
-{% endif %} {% endcomment %}
-
-
-
-
+    {% comment %}
+      This forces localization to the US market with USD currency when running in dev mode
+    {% endcomment %}
+    {% comment %}
+      {% if request.host contains 'localhost' or request.host contains '.myshopify.com' %}
+        <script>
+          fetch('/localization.json', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'xmlhttprequest'
+            },
+            body: JSON.stringify({
+              country: 'US',
+              currency: 'USD',
+              locale: 'en'
+            })
+          }).then(() => {
+            // Optional: reload only if country wasn't already US
+            {% comment %} if (!document.cookie.includes('country=US')) {
+              location.reload();
+            } {% endcomment %}
+          });
+        </script>
+      {% endif %}
+    {% endcomment %}
   </body>
 </html>

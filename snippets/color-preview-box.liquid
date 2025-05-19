@@ -1,73 +1,83 @@
 <!-- Color Preview Box -->
 <label class="color-preview-title">{{ 'color_preview_label' | t }}</label>
 <div id="color-preview-wrapper" style="width: 100%; height: 40px; display: none;">
-    <!-- Skeleton loader placeholder -->
-    <div id="color-preview-skeleton" style="width: 100%; height: 100%; background-color: #fafafa; border-radius: 9999px; border: 2px solid #ddd; animation: skeleton-loading 1.5s infinite ease-in-out;">
-    </div>
-    
-    <!-- Actual color preview box -->
-    <div id="color-preview-box" 
-         style="width: 100%; height: 100%; display: none; border-radius: 9999px; border: 2px solid #ddd; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer;"
-         title="">
-    </div>
-  </div>
-  
-  <style>
+  <!-- Skeleton loader placeholder -->
+  <div
+    id="color-preview-skeleton"
+    style="width: 100%; height: 100%; background-color: #fafafa; border-radius: 9999px; border: 2px solid #ddd; animation: skeleton-loading 1.5s infinite ease-in-out;"
+  ></div>
 
-    .color-preview-title {
-        margin-top: 10px;
-        color: #858585;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-     /* Skeleton loader animation */
-     #color-preview-skeleton {
-        position: relative;
-        background-color: #fdfdfd;
-        color: #adadad;
-        height: 100%;
-    }
-    
-    #color-preview-skeleton::after {
-        content: "Color Preview";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-    }
-  
-     /* Subtle Diagonal Stripe Pattern Overlay */
-     #color-preview-box::before {
-         content: "";
-         position: absolute;
-         top: 0;
-         left: 0;
-         width: 200%;
-         height: 200%;
-         background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);
-         background-size: 12px 12px; /* Adjusted for a slightly larger pattern */
-         pointer-events: none;
-         opacity: 0.15; /* Slightly less opacity for a more subtle effect */
-     }
-  
-     /* Shine Effect */
-     #color-preview-box::after {
-         content: "";
-         position: absolute;
-         top: 0;
-         left: 0;
-         width: 100%;
-         height: 100%;
-         background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 60%);
-         opacity: 0.4; /* Adjusted for a softer shine */
-         pointer-events: none;
-         transform: translateY(-100%) rotate(15deg);
-         transition: transform 0.5s ease-in-out;
-     }
-  </style>
-  
+  <!-- Actual color preview box -->
+  <div
+    id="color-preview-box"
+    style="width: 100%; height: 100%; display: none; border-radius: 9999px; border: 2px solid #ddd; transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer;"
+    title=""
+  ></div>
+</div>
+
+<style>
+  .color-preview-title {
+    margin-top: 10px;
+    color: #858585;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  /* Skeleton loader animation */
+  #color-preview-skeleton {
+    position: relative;
+    background-color: #fdfdfd;
+    color: #adadad;
+    height: 100%;
+  }
+
+  #color-preview-skeleton::after {
+    content: 'Color Preview';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  /* Subtle Diagonal Stripe Pattern Overlay */
+  #color-preview-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background-image: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.1) 75%,
+      transparent 75%,
+      transparent
+    );
+    background-size: 12px 12px; /* Adjusted for a slightly larger pattern */
+    pointer-events: none;
+    opacity: 0.15; /* Slightly less opacity for a more subtle effect */
+  }
+
+  /* Shine Effect */
+  #color-preview-box::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 60%);
+    opacity: 0.4; /* Adjusted for a softer shine */
+    pointer-events: none;
+    transform: translateY(-100%) rotate(15deg);
+    transition: transform 0.5s ease-in-out;
+  }
+</style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -91,8 +101,8 @@
         {% endfor %}
     
         function updateColorBox(variantId) {
-            const selectedColor = window.selectedProductColor;
-            const selectedTitle = window.selectedProductTitle;
+            const selectedColor = selectedProductColor;
+            const selectedTitle = selectedProductTitle;
 
             const paintColor = variantColors[variantId];
             const variantName = variantNames[variantId];
@@ -147,5 +157,4 @@
             updateColorBox(initialVariantId);
         }
     });
-    
 </script>
