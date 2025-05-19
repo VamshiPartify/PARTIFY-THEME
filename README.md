@@ -30,3 +30,12 @@
 9. git merge main
 10. press esc
 11. type :wq and then enter
+
+**If I want to revert back to a previous commit without deleting local work**
+# Step 1: Revert the bad commit on main
+1. git checkout main
+2. git pull origin main          # make sure you're up to date
+3. git log --oneline            # het the hash of the most recent commits
+4. git revert <bad-commit-hash> # creates a new "undo" commit
+5. git push origin main
+
