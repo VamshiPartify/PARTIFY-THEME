@@ -1,4 +1,4 @@
-**If I made changes and want to make sure I am up to date with current Shopify theme code through merging branches:**
+# If I made changes and want to make sure I am up to date with current Shopify theme code through merging branches:
 1. git add .
 2. git commit -m "random message"
 3. git push -u origin <any branch>
@@ -11,14 +11,14 @@
 10. merge with live.
     - Main theme code will now reflect latest changes while maintaining most up-to-date shopify theme code
 
-**If i made changes but want to make sure I am up to date with current Shopify theme without merging branches**
+# If i made changes but want to make sure I am up to date with current Shopify theme without merging branches
 1. git stash
 2. shopify theme pull
 3. git add .
 4. git stash pop
 5. Fix conflicts if any
 
-**If i pushed a branch and want to merge it into the latest shopify theme code**
+# If i pushed a branch and want to merge it into the latest shopify theme code
 1. Push my latest changes to a branch "feature/<new branch>"
 2. git checkout feature/latest-updates
 3. shopify theme pull
@@ -31,8 +31,7 @@
 10. press esc
 11. type :wq and then enter
 
-**If I want to revert back to a previous commit without deleting local work**
-# Step 1: Revert the bad commit on main
+# If I want to revert back to a previous commit without deleting local work
 1. git checkout main
 2. git pull origin main          # make sure you're up to date
 3. git log --oneline            # het the hash of the most recent commits
