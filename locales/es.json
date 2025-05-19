@@ -872,17 +872,17 @@
     "verify_fitment": "Año, marca y modelo",
     "paint_options": {
       "select_paint_options": "Seleccionar opciones de pintura",
-      "title": "Opción de pintura",
+      "title": "Opciones de pintura",
       "disabled_first_option": "Seleccionar código de pintura"
     },
     "quality_options": {
-      "title": "Calidad",
+      "title": "Opciones de calidad",
       "disabled_first_option": "Seleccione Calidad",
-      "aftermarket_in_stock": "Mercado de accesorios -",
+      "aftermarket_in_stock": "Mercado de accesorios",
       "aftermarket_oos": "Mercado de accesorios (Agotado)",
-      "capa_in_stock": "CAPA - ",
+      "capa_in_stock": "CAPA",
       "capa_oos": "CAPA (Agotado)",
-      "oem_in_stock": "Fabricante de equipos originales (OEM) -",
+      "oem_in_stock": "OEM",
       "oem_oos": "OEM (Agotado)"
     },
     "garage_changer": "CAMBIAR",
@@ -1007,10 +1007,31 @@
         "remaining_attempts": "Intentos restantes: ",
         "fetching_vin_data": "Por favor espere mientras verificamos su VIN..."
       },
+      "precision_match": {
+        "label": "Combinación de pintura de precisión",
+        "standard": "Igualación de pintura estándar",
+        "precision": "Combinación de pintura de precisión",
+        "button_heading": "¿Quieres una combinación de pintura aún mejor?",
+        "button_description": "Veamos cómo podemos lograr una mejor combinación.",
+        "modal_heading": "¿Cuál es la diferencia entre la pintura estándar y la de precisión?",
+        "modal_subheading": "Nuestro servicio de igualación de pintura de precisión garantiza que su pieza esté pintada lo más cerca posible de su color original.",
+        "first_message": "Tendrás dos opciones:",
+        "point_1_label": "Partido estándar:",
+        "point_1": "Utilizaremos una línea de pintura estándar y pintaremos su pieza sin realizar ajustes. Esto garantiza una igualación del 80-90%.",
+        "point_2_label": "Coincidencia de precisión:",
+        "point_2": "Utilizaremos una línea de pintura premium y pintaremos su pieza con los ajustes que determine su VIN. Con datos de fabricación del fabricante original, adaptamos la mezcla de pintura para que coincida exactamente con el color de su vehículo, con una coincidencia de hasta el 99 %.",
+        "final_message": "Este nivel adicional de precisión es ideal para los clientes que desean una combinación de colores perfecta, especialmente al reemplazar piezas en áreas visibles del vehículo."
+      },
       "paint_options_radio_labels": {
-        "unpainted": "Sin pintar +$0.00",
-        "selection": "Seleccionar código de pintura",
-        "VIN": "Obtener el código de pintura mediante VIN"
+        "unpainted": "Sin pintar",
+        "selection": "Seleccionar código",
+        "VIN": "Usar número de bastidor",
+        "select_for_price": "Seleccionar por precio"
+      },
+      "quality_level_painted_stock": {
+        "aftermarket": "Mercado de accesorios",
+        "postfix": "disponemos de opciones de stock prepintado, sin esperas ni complicaciones.",
+        "and": "y"
       }
     }
 

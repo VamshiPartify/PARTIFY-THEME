@@ -105,7 +105,10 @@
 {%- endcapture -%}
 
 {%- assign show_swatches = false -%}
-{% assign initial_image = product.metafields.custom.site_primary_image.value | default: product.featured_media.preview_image.src %}
+
+{% assign initial_image = product.metafields.custom.site_primary_image.value
+  | default: product.featured_media.preview_image.src
+%}
 {%- if settings.swatches_enable and recently_viewed != true -%}
   {% comment %} Check if product should show swatches {% endcomment %}
   {%- for option in product.options_with_values -%}
@@ -401,18 +404,20 @@
         {% endif %}
 
         <h2 class="productitem--title">
-                 <a href="{{ product_link }}" data-product-page-link>
-    {%- assign first_four = collection.title | slice: 0, 4 -%}
-    {%- assign is_number = first_four | plus: 0 -%}
-    
-    {%- if product.metafields.custom.title_collection_appending != blank and is_number > 0 -%}
-        {{ collection.title }} {{ product.metafields.custom.title_collection_appending }}
-      {%- elsif is_number > 0 -%}
-    {{ collection.title | slice: 0, 4 }} {{ product_title }}   
-    {%- else -%}
-        {{ product_title }}
-    {%- endif -%}
-</a>
+          <a href="{{ product_link }}" data-product-page-link>
+            {%- assign first_four = collection.title | slice: 0, 4 -%}
+            {%- assign is_number = first_four | plus: 0 -%}
+
+            {%- if product.metafields.custom.title_collection_appending != blank and is_number > 0 -%}
+              {{ collection.title }}
+              {{ product.metafields.custom.title_collection_appending }}
+            {%- elsif is_number > 0 -%}
+              {{ collection.title | slice: 0, 4 }}
+              {{ product_title }}
+            {%- else -%}
+              {{ product_title }}
+            {%- endif -%}
+          </a>
         </h2>
 
         {% unless emphasize_price %}
