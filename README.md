@@ -33,8 +33,8 @@
 
 # If I want to revert back to a previous commit without deleting local work
 1. git checkout main
-2. git pull origin main          # make sure you're up to date
-3. git log --oneline            # het the hash of the most recent commits
-4. git revert <bad-commit-hash> # creates a new "undo" commit
+2. git pull origin main          
+3. git log --oneline            
+4. git revert <bad-commit-hash>
 5. git push origin main
 
