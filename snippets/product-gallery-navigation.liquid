@@ -33,8 +33,11 @@
   {% endcase %}
 {% endif %}
 
-{% assign primary_image = product.metafields.custom.site_primary_image | default: product.media.first %}
-{% assign lifestyle_reference = product.metafields.custom.lifestyle_image %}
+{% assign fallback_image_url = images['Partify_Photo_Coming_Soon.png'] %}
+{% assign media_image = product.media.first %}
+{% assign default_image = media_image | default: fallback_image_url %}
+{% assign primary_image = product.metafields.custom.site_primary_image | default: default_image -%}
+{%- assign lifestyle_reference = product.metafields.custom.lifestyle_image %}
 {% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
 {% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
 {% assign how_to_find_paint_code_reference = product.metafields.custom.how_to_find_your_paint_code_image.value.image %}
@@ -77,10 +80,6 @@
 {% assign reordered_media = reordered_media | split: ',' %}
 
 {% assign gallery_size = reordered_media.size %}
-
-<script>
-  console.log('wool reordered_media.size: ', '{{ gallery_size }}');
-</script>
 
 <!-- gallery skeleton -->
 <div class="product-gallery--skeleton-thumbnails">
