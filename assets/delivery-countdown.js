@@ -1,6 +1,6 @@
-function deliveryCountdown (store_id, item_sku) {
+function deliveryCountdown(store_id, item_sku) {
 	if ((store_id != '') && (typeof store_id != 'undefined'))
-		asm_store_id = store_id.replace ('.myshopify.com', '');
+		asm_store_id = store_id.replace('.myshopify.com', '');
 
 	if ((item_sku != '') && (typeof item_sku != 'undefined'))
 		asm_item_sku = item_sku;
@@ -10,81 +10,81 @@ function deliveryCountdown (store_id, item_sku) {
 
 		var jsel = document.createElement('SCRIPT');
 		jsel.type = 'text/javascript';
-		jsel.src = 'https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si='+ asm_store_id +'&is='+ asm_item_sku;
-		document.getElementById('asm-ajax').appendChild (jsel);
+		jsel.src = 'https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si=' + asm_store_id + '&is=' + asm_item_sku;
+		document.getElementById('asm-ajax').appendChild(jsel);
 	} else {
-		asm_timeout = setTimeout ('deliveryCountdown()', 100);
+		asm_timeout = setTimeout('deliveryCountdown()', 100);
 	}
 }
 
-function activate_enter (evt) {
-    evt = (evt) ? evt : event;
-    var charCode = (evt.charCode) ? evt.charCode :
-          ((evt.which) ? evt.which : evt.keyCode);
-    if (charCode == 13) {
+function activate_enter(evt) {
+	evt = (evt) ? evt : event;
+	var charCode = (evt.charCode) ? evt.charCode :
+		((evt.which) ? evt.which : evt.keyCode);
+	if (charCode == 13) {
 		deliveryRecalc(1);
-//		ValidateShippingCalc();
-        return false;
-    } else {
-        return true;
-    }
+		//		ValidateShippingCalc();
+		return false;
+	} else {
+		return true;
+	}
 }
 
 function deliveryRecalc(relocation) {
-    let applyButton = document.getElementById('dc-alt-zip-apply-partify');
+	let applyButton = document.getElementById('dc-alt-zip-apply-partify');
 
-    if (document.getElementById('dc-alt-country-partify'))
-        asm_country_code = document.getElementById('dc-alt-country-partify').value;
+	if (document.getElementById('dc-alt-country-partify'))
+		asm_country_code = document.getElementById('dc-alt-country-partify').value;
 
-    if (document.getElementById('dc-alt-zip-partify')) {
-        asm_zip_code = document.getElementById('dc-alt-zip-partify').value;
+	if (document.getElementById('dc-alt-zip-partify')) {
+		asm_zip_code = document.getElementById('dc-alt-zip-partify').value;
 
-        clearInterval(x_interval);
+		clearInterval(x_interval);
 
-        if (applyButton) {
-            applyButton.classList.add('vin-to-collection-btn--loading'); // Add spinner class
-            applyButton.innerHTML = ''; // Clear text to only show spinner
+		if (applyButton) {
+			applyButton.classList.add('vin-to-collection-btn--loading'); // Add spinner class
+			applyButton.innerHTML = ''; // Clear text to only show spinner
 
 			applyButton.style.display = 'flex';
-            applyButton.style.justifyContent = 'center';
-            applyButton.style.alignItems = 'center';
+			applyButton.style.justifyContent = 'center';
+			applyButton.style.alignItems = 'center';
 
-            applyButton.disabled = true; // Disable button
-        }
+			applyButton.disabled = true; // Disable button
+		}
 
-        asmDataBackup = structuredClone(window.asmData);
+		asmDataBackup = structuredClone(window.asmData);
 
-        Object.keys(window.asmData).forEach(key => delete window.asmData[key]);
+		Object.keys(window.asmData).forEach(key => delete window.asmData[key]);
 
-        queryAllETAs(qualitySelectedType, relocation);
+		queryAllETAs(qualitySelectedType, relocation);
 
-        clearTimeout(applyButtonTimeout);
+		clearTimeout(applyButtonTimeout);
 
-        applyButtonTimeout = setTimeout(function() {
-            const zipHolder = document.getElementById('dc-alt-zip-holder-partify');
-            if (zipHolder && zipHolder.style.display === 'block') {
-                zipHolder.style.display = 'none';
-                document.body.classList.remove('delivery-popup-no-scroll');
-            }
+		applyButtonTimeout = setTimeout(function () {
+			const zipHolder = document.getElementById('dc-alt-zip-holder-partify');
+			if (zipHolder && zipHolder.style.display === 'block') {
+				zipHolder.style.display = 'none';
+				document.body.classList.remove('delivery-popup-no-scroll');
+			}
 
-            // Restore the button text and state after 5 seconds
-            if (applyButton) {
-                applyButton.classList.remove('vin-to-collection-btn--loading'); // Remove spinner class
-                applyButton.innerHTML = apply; // Restore button text
+			// Restore the button text and state after 5 seconds
+			if (applyButton) {
+				applyButton.classList.remove('vin-to-collection-btn--loading'); // Remove spinner class
+				applyButton.innerHTML = apply; // Restore button text
 
 				applyButton.style.display = '';
 				applyButton.style.justifyContent = '';
 				applyButton.style.alignItems = '';
-				
-                applyButton.disabled = false; // Enable button
-            }
-        }, 5000);
-    }
+
+				applyButton.disabled = false; // Enable button
+			}
+		}, 5000);
+	}
 }
 
 
-function qualityVariantRecalc (quality, variant, sku) {
-	if(asm_item_sku === '') {
+function qualityVariantRecalc(quality, variant, sku) {
+	if (asm_item_sku === '') {
 		asm_item_sku = sku;
 	}
 
@@ -106,8 +106,8 @@ function qualityVariantRecalc (quality, variant, sku) {
 
 
 	if ((variant !== '') && (typeof variant !== 'undefined')) {
-		if(variant === "Unpainted") {
-			variantSku = qualitySku; 
+		if (variant === "Unpainted") {
+			variantSku = qualitySku;
 		} else {
 			variantSku = qualitySku + "." + variant;
 		}
@@ -120,88 +120,88 @@ function qualityVariantRecalc (quality, variant, sku) {
 // Override setCountdownTime to capture the data
 // This function intercepts the ASM script to set the countdown time
 window.setCountdownTime = function (time) {
-    const lastScript = document.currentScript; // Get the current script executing
-    if (lastScript) {
-        let variantSku = lastScript.getAttribute('data-sku');
-		if(variantSku.includes("Default")) {
+	const lastScript = document.currentScript; // Get the current script executing
+	if (lastScript) {
+		let variantSku = lastScript.getAttribute('data-sku');
+		if (variantSku.includes("Default")) {
 			variantSku = variantSku.split('.')[0];
 		}
-        if (variantSku) {
-            if (!window.asmData[variantSku]) window.asmData[variantSku] = {};
-            window.asmData[variantSku].countdownTime = time;
-        }
-    }
+		if (variantSku) {
+			if (!window.asmData[variantSku]) window.asmData[variantSku] = {};
+			window.asmData[variantSku].countdownTime = time;
+		}
+	}
 };
 
 // Override setGeoValues to capture the data
 // This function intercepts the ASM script to set the geo values
 window.setGeoValues = function (city, state, zip, country) {
-    const lastScript = document.currentScript; // Get the current script executing
+	const lastScript = document.currentScript; // Get the current script executing
 	baseZipForRevert = zip;
 
 	if (lastScript) {
-        let variantSku = lastScript.getAttribute('data-sku');
-		if(variantSku.includes("Default")) {
+		let variantSku = lastScript.getAttribute('data-sku');
+		if (variantSku.includes("Default")) {
 			variantSku = variantSku.split('.')[0];
 		}
 		if (variantSku) {
 
-            if (!window.asmData[variantSku]) window.asmData[variantSku] = {};
+			if (!window.asmData[variantSku]) window.asmData[variantSku] = {};
 			window.asmData[variantSku].geo = { city, state, zip, country };
-        }
-    }
+		}
+	}
 };
 
 // Override setZipValue to capture the data
 // This function intercepts the ASM script to set the zip value
 window.setZipValue = function (zip) {
-    const lastScript = document.currentScript; // Get the current script executing
-    if (lastScript) {
-        let variantSku = lastScript.getAttribute('data-sku');
-		if(variantSku.includes("Default")) {
+	const lastScript = document.currentScript; // Get the current script executing
+	if (lastScript) {
+		let variantSku = lastScript.getAttribute('data-sku');
+		if (variantSku.includes("Default")) {
 			variantSku = variantSku.split('.')[0];
 		}
-        if (variantSku) {
-            if (!window.asmData[variantSku]) window.asmData[variantSku] = {};
-            window.asmData[variantSku].geo = { zip };
-        }
-    }
+		if (variantSku) {
+			if (!window.asmData[variantSku]) window.asmData[variantSku] = {};
+			window.asmData[variantSku].geo = { zip };
+		}
+	}
 };
 
 function loadASMDataAsync(variantSku) {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = `https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si=${asm_store_id}&is=${variantSku}`;
-        script.setAttribute('data-sku', variantSku);
-        script.style.display = 'none';
+	return new Promise((resolve, reject) => {
+		const script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = `https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si=${asm_store_id}&is=${variantSku}`;
+		script.setAttribute('data-sku', variantSku);
+		script.style.display = 'none';
 
-        script.onload = () => resolve(variantSku); // Resolve when script loads
-        script.onerror = () => reject(`Failed to load ${variantSku}`); // Reject on error
+		script.onload = () => resolve(variantSku); // Resolve when script loads
+		script.onerror = () => reject(`Failed to load ${variantSku}`); // Reject on error
 
-        document.body.appendChild(script);
-    });
+		document.body.appendChild(script);
+	});
 }
 
 function loadASMDataAsyncRelocation(variantSku) {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si='+ asm_store_id +'&is='+ variantSku +'&zc='+ asm_zip_code +'&cc='+ asm_country_code +'&variant='+ asm_variant;
-        script.setAttribute('data-sku', variantSku);
-        script.style.display = 'none';
+	return new Promise((resolve, reject) => {
+		const script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = 'https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si=' + asm_store_id + '&is=' + variantSku + '&zc=' + asm_zip_code + '&cc=' + asm_country_code + '&variant=' + asm_variant;
+		script.setAttribute('data-sku', variantSku);
+		script.style.display = 'none';
 
-        script.onload = () => resolve(variantSku); // Resolve when script loads
-        script.onerror = () => reject(`Failed to load ${variantSku}`); // Reject on error
+		script.onload = () => resolve(variantSku); // Resolve when script loads
+		script.onerror = () => reject(`Failed to load ${variantSku}`); // Reject on error
 
-        document.body.appendChild(script);
-    });
+		document.body.appendChild(script);
+	});
 }
 
 
 function preloadASMData(possibleVariantSkus, duplicateETAArr, baseModelSku, relocation) {
-    
-	if(relocation === 1 || relocation === 2) {
+
+	if (relocation === 1 || relocation === 2) {
 		Promise.all(possibleVariantSkus.map(loadASMDataAsyncRelocation))
 			.then(() => {
 				const roleModelSku = baseModelSku || possibleVariantSkus[1];
@@ -230,25 +230,25 @@ function preloadASMData(possibleVariantSkus, duplicateETAArr, baseModelSku, relo
 
 
 function loadASMData(variantSku) {
-    const asmContainer = document.getElementById('asm-ajax');
-    
-    if (window.asmCache[variantSku]) {
-        asmContainer.innerHTML = ""; // Clear previous script
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.textContent = window.asmCache[variantSku]; // Use preloaded data
-        asmContainer.appendChild(script);
-    } else {
-        asmContainer.innerHTML = ""; // Clear previous script
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = `https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si=${asm_store_id}&is=${variantSku}`;
-        asmContainer.appendChild(script);
-    }
+	const asmContainer = document.getElementById('asm-ajax');
+
+	if (window.asmCache[variantSku]) {
+		asmContainer.innerHTML = ""; // Clear previous script
+		const script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.textContent = window.asmCache[variantSku]; // Use preloaded data
+		asmContainer.appendChild(script);
+	} else {
+		asmContainer.innerHTML = ""; // Clear previous script
+		const script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = `https://www.advancedshippingmanager.com/clients/delivery_countdown/delivery_countdown.php?si=${asm_store_id}&is=${variantSku}`;
+		asmContainer.appendChild(script);
+	}
 }
 
 
-function getCountdownTime (target_date) {
+function getCountdownTime(target_date) {
 	clearInterval(x_interval);
 
 	if (target_date) {
@@ -256,15 +256,15 @@ function getCountdownTime (target_date) {
 		var countDownTime = countDownDate.getTime();
 
 		var defined_weekday = new Array();
-		
+
 		defined_weekday[0] = shopLocale === 'en' ? 'Sunday' : 'Domingo';
 		defined_weekday[1] = shopLocale === 'en' ? 'Monday' : 'Lunes';
-		defined_weekday[2] = shopLocale === 'en' ? 'Tuesday': 'Martes';
+		defined_weekday[2] = shopLocale === 'en' ? 'Tuesday' : 'Martes';
 		defined_weekday[3] = shopLocale === 'en' ? 'Wednesday' : 'Miércoles';
 		defined_weekday[4] = shopLocale === 'en' ? 'Thursday' : 'Jueves';
 		defined_weekday[5] = shopLocale === 'en' ? 'Friday' : 'Viernes';
 		defined_weekday[6] = shopLocale === 'en' ? 'Saturday' : 'Sábado';
-		
+
 		var defined_months = new Array();
 		defined_months[0] = shopLocale === 'en' ? 'January' : 'Enero';
 		defined_months[1] = shopLocale === 'en' ? 'February' : 'Febrero';
@@ -304,15 +304,15 @@ function getCountdownTime (target_date) {
 
 		if (document.getElementById('dc-day-partify'))
 			document.getElementById('dc-day-partify').innerHTML = countDownDate.getDate();
-	
-		x_interval = setInterval(function() {
+
+		x_interval = setInterval(function () {
 			var now = new Date().getTime();
-	    
+
 			var distance = countDownTime - now;
-	    
+
 			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-	    
+
 			if (document.getElementById('dc-hours-partify')) {
 				document.getElementById('dc-hours-partify').innerHTML = hours;
 			}
@@ -320,10 +320,10 @@ function getCountdownTime (target_date) {
 			if (document.getElementById('dc-minutes-partify')) {
 				document.getElementById('dc-minutes-partify').innerHTML = minutes;
 			}
-	    
+
 			if (distance < 0) {
 				clearInterval(x_interval);
-				if(qualitySelectedType) {
+				if (qualitySelectedType) {
 					deliveryRecalc(2);
 				} else {
 					if (document.getElementById('delivery-countdown-placeholder')) {
@@ -341,9 +341,9 @@ function getCountdownTime (target_date) {
 	}
 }
 
-function getGeoValues (city, state, zip, country) {
+function getGeoValues(city, state, zip, country) {
 	if (document.getElementById('dc-city-partify')) {
-		if(city === "N/A") {
+		if (city === "N/A") {
 			document.getElementById('dc-city-partify').innerHTML = '';
 		} else {
 			document.getElementById('dc-city-partify').innerHTML = ' ' + city;
@@ -351,7 +351,7 @@ function getGeoValues (city, state, zip, country) {
 	}
 
 	if (document.getElementById('dc-state-partify')) {
-		if(state === "N/A") {
+		if (state === "N/A") {
 			document.getElementById('dc-state-partify').innerHTML = '';
 		} else {
 			document.getElementById('dc-state-partify').innerHTML = ' ' + state;
@@ -370,7 +370,7 @@ function getGeoValues (city, state, zip, country) {
 	if (document.getElementById('dc-alt-country-partify'))
 		document.getElementById('dc-alt-country-partify').value = country;
 
-	
+
 	if (document.getElementById('delivery-countdown-placeholder')) {
 		document.getElementById('delivery-countdown-placeholder').style.display = 'none';
 	}
@@ -392,7 +392,7 @@ window.getZipValue = function (zip) {
 		document.getElementById('dc-alt-zip-partify').value = zip;
 }
 
-function toggleZipInput () {
+function toggleZipInput() {
 	if (document.getElementById('dc-alt-zip-holder-partify')) {
 		if (document.getElementById('dc-alt-zip-holder-partify').style.display != 'block') {
 			document.getElementById('dc-alt-zip-holder-partify').style.display = 'block';
@@ -404,7 +404,7 @@ function toggleZipInput () {
 	}
 }
 
-function toggleCalc () {
+function toggleCalc() {
 	if (document.getElementById('dc-details-info-partify')) {
 		if (document.getElementById('dc-details-info-partify').style.display != 'block')
 			document.getElementById('dc-details-info-partify').style.display = 'block';
@@ -445,14 +445,14 @@ function getCountdownAndGeoValues() {
 		// If there is no sku data from asm yet, then that means it is still being fetched from the ASM api call
 		// Consequently, need to poll with intervals in order to set the sku data in asmData global variable 
 		// so that way it becomes available for the delivery countdown function ASAP
-		if(!selectedSku) {
+		if (!selectedSku) {
 			const checkAsmData = setInterval(() => {
-			selectedSku = window.asmData[dataVariantSku];
+				selectedSku = window.asmData[dataVariantSku];
 				if (selectedSku) {
 					clearInterval(checkAsmData); // Stop polling once data is available
 					const geoValues = selectedSku.geo || {};
 					const countdownTime = selectedSku.countdownTime;
-					if(countdownTime) {
+					if (countdownTime) {
 						getCountdownTime(countdownTime);
 						document.getElementById('dc-bottom-partify').style.display = 'block';
 						document.getElementById('dc-top-partify').style.display = 'block';
@@ -473,7 +473,7 @@ function getCountdownAndGeoValues() {
 		} else {
 			const geoValues = selectedSku.geo || {};
 			const countdownTime = selectedSku.countdownTime;
-			if(countdownTime) {
+			if (countdownTime) {
 				getCountdownTime(countdownTime);
 				document.getElementById('dc-bottom-partify').style.display = 'block';
 				document.getElementById('dc-top-partify').style.display = 'block';
@@ -497,17 +497,17 @@ let retryCount = 0;
 // Relocation == 0 means queryAllETAs normally, when a quality is selected
 // Relocation == 1 means customer changed the delivery address and the ETAs must be recalculated
 // Relocation == 2 means rollover minutes.  The customer was on the product page and the countdown timer ran below 0... recalculated based off of new ETA
-async function queryAllETAs (selectedType, relocation) {
+async function queryAllETAs(selectedType, relocation) {
 	let productVariant;
-	if(productVariants[selectedType]) {
+	if (productVariants[selectedType]) {
 		productVariant = productVariants[selectedType];
 	} else {
 		console.log('No product variants found for selected type');
 	}
 
-	
+
 	let variantSkusArr = [];
-	let duplicateETAArr= [];
+	let duplicateETAArr = [];
 	let unpaintedInventory = 0;
 	let firstPaintedItem = true;
 	let baseModelSku = '';
@@ -515,14 +515,14 @@ async function queryAllETAs (selectedType, relocation) {
 	productVariant.forEach((variant) => {
 		let variantTitle = selectedType !== 'single' ? variant.variantTitle : variant.title;
 
-		if(variantTitle === "Match Paint by VIN" || variantTitle === "Pintura de combinación por VIN") return;
-		if(variantTitle.includes("Custom Paint Code")) return;
+		if (variantTitle === "Match Paint by VIN" || variantTitle === "Pintura de combinación por VIN") return;
+		if (variantTitle.includes("Custom Paint Code")) return;
 
 
 		let currentInventory;
-		if(selectedType === 'single') {
+		if (selectedType === 'single') {
 			let currentQuantity = Number(variant.inventory_quantity);
-			if(currentQuantity) {
+			if (currentQuantity) {
 				currentInventory = currentQuantity;
 			} else {
 				currentInventory = 0;
@@ -536,17 +536,17 @@ async function queryAllETAs (selectedType, relocation) {
 		let variantSku = '';
 
 		// Must get the inventory of the unpainted items to compare with
-		if(variantTitle === "Unpainted") {
+		if (variantTitle === "Unpainted") {
 			unpaintedInventory = currentInventory;
 			calculateETA = true;
 		} else {
 			let inventoryDifference = unpaintedInventory - currentInventory;
 			// If the inventory difference is 0, then we don't need to recalculate the ETA UNLESS it is the first painted item
 			// in which case we will need to determine the ETA for that so it can be used across other variantSkus
-			if(unpaintedInventory === inventoryDifference) {
+			if (unpaintedInventory === inventoryDifference) {
 				// For the first painted item only, determine the variantSku here so that way the function is only called once
 				// and then set the baseModelSku to it to use as the reference
-				if(firstPaintedItem) {
+				if (firstPaintedItem) {
 					firstPaintedItem = false;
 					calculateETA = true;
 					variantSku = qualityVariantRecalc(selectedType, variantTitle, productSku);
@@ -560,13 +560,13 @@ async function queryAllETAs (selectedType, relocation) {
 		}
 
 		// Set the variantSku here only if it the baseModelSku has not been set
-		if(!variantSku) {
+		if (!variantSku) {
 			variantSku = qualityVariantRecalc(selectedType, variantTitle, productSku);
 		}
 
 
-		if(!window.asmData[variantSku]) {
-			if(calculateETA) {
+		if (!window.asmData[variantSku]) {
+			if (calculateETA) {
 				variantSkusArr.push(variantSku);
 			} else {
 				duplicateETAArr.push(variantSku);
@@ -577,21 +577,21 @@ async function queryAllETAs (selectedType, relocation) {
 	})
 
 
-	if(variantSkusArr.length > 0) {
+	if (variantSkusArr.length > 0) {
 		preloadASMData(variantSkusArr, duplicateETAArr, baseModelSku, relocation);
 		let selectedSku;
 		let attempts;
 		let maxAttempts;
-		if(dataVariantSku) {
+		if (dataVariantSku) {
 			selectedSku = window.asmData[dataVariantSku];
 			attempts = 0;
 			maxAttempts = 120; // Run for max 60 seconds
 		}
 
 		// Countdown has gone below 0, need to recalculate
-		if(relocation === 2) {
+		if (relocation === 2) {
 			if (dataVariantTitle && dataVariantTitle !== "Match Paint by VIN" && dataVariantTitle !== "Pintura de combinación por VIN") {
-				if(!selectedSku) {
+				if (!selectedSku) {
 					const checkAsmData = setInterval(() => {
 						selectedSku = window.asmData[dataVariantSku];
 						if (selectedSku) {
@@ -613,12 +613,12 @@ async function queryAllETAs (selectedType, relocation) {
 		}
 
 		// User changed the zip code, need to recalculate
-		if(relocation === 1) {
+		if (relocation === 1) {
 			if (dataVariantTitle && dataVariantTitle !== "Match Paint by VIN" && dataVariantTitle !== "Pintura de combinación por VIN") {
 
 				const currentCountdownTime = await relocationCalculation(selectedSku, attempts, maxAttempts);
 
-				if(!currentCountdownTime) {
+				if (!currentCountdownTime) {
 					Object.keys(window.asmData).forEach(key => delete window.asmData[key]);
 					window.asmData = structuredClone(asmDataBackup); // Restore backup
 				}
@@ -629,17 +629,17 @@ async function queryAllETAs (selectedType, relocation) {
 }
 
 async function relocationCalculation(selectedSku, attempts, maxAttempts) {
-    return new Promise((resolve) => {
-        let currentCountdownTime;
-        if (!selectedSku) {
-            const checkAsmData = setInterval(() => {
-                selectedSku = window.asmData[dataVariantSku];
+	return new Promise((resolve) => {
+		let currentCountdownTime;
+		if (!selectedSku) {
+			const checkAsmData = setInterval(() => {
+				selectedSku = window.asmData[dataVariantSku];
 
-                if (selectedSku) {
-                    clearInterval(checkAsmData); // Stop polling once data is available
-                    const geoValues = selectedSku.geo || {};
-                    currentCountdownTime = selectedSku.countdownTime;
-					if(currentCountdownTime) {
+				if (selectedSku) {
+					clearInterval(checkAsmData); // Stop polling once data is available
+					const geoValues = selectedSku.geo || {};
+					currentCountdownTime = selectedSku.countdownTime;
+					if (currentCountdownTime) {
 						getCountdownTime(currentCountdownTime);
 						document.getElementById('dc-bottom-partify').style.display = 'block';
 						document.getElementById('dc-top-partify').style.display = 'block';
@@ -650,30 +650,30 @@ async function relocationCalculation(selectedSku, attempts, maxAttempts) {
 						document.getElementById('dc-top-partify').style.display = 'none';
 						document.getElementById('dc-incorrect-zip-message').style.display = "flex";
 					}
-                    getGeoValues(geoValues.city, geoValues.state, geoValues.zip, geoValues.country);
+					getGeoValues(geoValues.city, geoValues.state, geoValues.zip, geoValues.country);
 
-                    if (document.getElementById('dc-alt-zip-apply-partify')) {
-                        document.getElementById('dc-alt-zip-apply-partify').innerHTML = apply;
-                    }
+					if (document.getElementById('dc-alt-zip-apply-partify')) {
+						document.getElementById('dc-alt-zip-apply-partify').innerHTML = apply;
+					}
 
 					// Only toggle the zip popup here if it currently is open.  If it is not, that means the 5 second timeout has triggered already
 					if (document.getElementById('dc-alt-zip-holder-partify').style.display === 'block') {
-                    	toggleZipInput();
+						toggleZipInput();
 					}
 
-                    resolve(currentCountdownTime); // Return the countdown time
-                } else if (attempts >= maxAttempts) {
-                    clearInterval(checkAsmData); // Stop polling after max attempts
-                    console.log("Max attempts reached, resolving with undefined");
-                    resolve(undefined); // Ensure function completes
-                }
+					resolve(currentCountdownTime); // Return the countdown time
+				} else if (attempts >= maxAttempts) {
+					clearInterval(checkAsmData); // Stop polling after max attempts
+					console.log("Max attempts reached, resolving with undefined");
+					resolve(undefined); // Ensure function completes
+				}
 
-                attempts++;
-            }, 500); // Check every 0.5 seconds
-        } else {
-            const geoValues = selectedSku.geo || {};
-            currentCountdownTime = selectedSku.countdownTime;
-			if(currentCountdownTime) {
+				attempts++;
+			}, 500); // Check every 0.5 seconds
+		} else {
+			const geoValues = selectedSku.geo || {};
+			currentCountdownTime = selectedSku.countdownTime;
+			if (currentCountdownTime) {
 				getCountdownTime(currentCountdownTime);
 				document.getElementById('dc-bottom-partify').style.display = 'block';
 				document.getElementById('dc-top-partify').style.display = 'block';
@@ -684,20 +684,20 @@ async function relocationCalculation(selectedSku, attempts, maxAttempts) {
 				document.getElementById('dc-top-partify').style.display = 'none';
 				document.getElementById('dc-incorrect-zip-message').style.display = "flex";
 			}
-            getGeoValues(geoValues.city, geoValues.state, geoValues.zip, geoValues.country);
+			getGeoValues(geoValues.city, geoValues.state, geoValues.zip, geoValues.country);
 
-            if (document.getElementById('dc-alt-zip-apply-partify')) {
-                document.getElementById('dc-alt-zip-apply-partify').innerHTML = apply;
-            }
+			if (document.getElementById('dc-alt-zip-apply-partify')) {
+				document.getElementById('dc-alt-zip-apply-partify').innerHTML = apply;
+			}
 
 
 			// Only toggle the zip popup here if it currently is open.  If it is not, that means the 5 second timeout has triggered already
 			if (document.getElementById('dc-alt-zip-holder-partify').style.display === 'block') {
 				toggleZipInput();
 			}
-            resolve(currentCountdownTime); // Return immediately if data is available
-        }
-    });
+			resolve(currentCountdownTime); // Return immediately if data is available
+		}
+	});
 }
 
 const shopLocale = window.shopLocale || 'en'; // Default to 'en' if not set

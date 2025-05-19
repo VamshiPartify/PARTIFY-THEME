@@ -402,8 +402,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             {% comment %} const form = document.querySelector('form[action^="/cart/add"]'); {% endcomment %}
             const fitmentYes = document.getElementById('fitment-yes');
-            const addToCartButton = document.getElementById('add-to-cart');
-            const addToCartForUnpainted = document.getElementById('add-to-cart-for-unpainted');
+            const addToCartButton = document.querySelector('.add-to-cart');
+            const addToCartForUnpainted = document.querySelector('.add-to-cart-for-unpainted');
             const vinInputWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
             const vinInput = document.getElementById('vin-textbox-for-verification');
             const vinVerificationService = 'vin-verification-service';

@@ -5,15 +5,16 @@
 *******************************************************************************************************/
 
 
-const addToCartButtonLibrary = document.getElementById('add-to-cart');
-const addToCartForUnpaintedLibrary = document.getElementById('add-to-cart-for-unpainted');
+const addToCartButtonLibrary = document.querySelector('.add-to-cart');
+const addToCartForUnpaintedLibrary = document.querySelector('.add-to-cart-for-unpainted');
 const checkboxGetPaintCodeWithVINAndLabel = document.querySelector('input#checkbox-get-paint-code-with-vin')?.closest('label');
 const combinedVariantSelectLibrary = document.getElementById('variant-selector');
 const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
 const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
 const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
-const paintedStockKeyLibrary = document.querySelector('.painted-stock-key');
+const paintedStockKeyPaintLevelLibrary = document.querySelector('.painted-stock-key-paint-level');
+const paintedStockKeyQualityLevelLibrary = document.querySelector('.painted-stock-key-quality-level');
 const paintCodeAppContainerLibrary = document.getElementById('paintcode-app-container');
 const paintCodeWrapperLibrary = document.querySelector(".paint-code-wrapper");
 const paintOptionCheckboxByPaintCode = document.getElementById('checkbox-select-paint-option');
@@ -35,15 +36,16 @@ const qualityTypeButtonsLibrary = document.querySelector('.quality-type-buttons'
 const qualityOptionsLibrary = document.querySelectorAll('.quality-option');
 const qualityDescriptionBtnLibrary = document.getElementById('quality-description-vindecoder');
 const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
-const vinVerificationWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
-const vinVerificationInput = document.getElementById('vin-textbox-for-verification');
 const vinInputLibrary = document.querySelector('#vin-textbox');
+const vinMessageParagraphLibrary = document.querySelector('.vin-decoder-message');
 const vinTextBoxOEMLibrary = document.getElementById('vin-textbox-for-oem');
 const vinTextboxContainer = document.getElementById("vin-textbox-container");
 const vinVerificationCheckboxGroupLibrary = document.querySelector('.vin-verification-checkbox-group');
 const vinVerifyCheckbboxYesLibrary = document.getElementById('fitment-yes');
 const vinVerifyCheckboxNoLibrary = document.getElementById('fitment-no');
 const vinVerificationButtonLibrary = document.getElementById('vin-verification-button');
+const vinVerificationWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
+const vinVerificationInput = document.getElementById('vin-textbox-for-verification');
 
 let emptyVinVerificationRadioButtons = true;
 let emptyPrecisionMatchRadioButtons = true;
@@ -51,10 +53,20 @@ let boolMatchByVIN = false;
 let selectedOptionHasAvailableStock = false;
 let failedVinDecode = false;
 let vinDecoderJustUsed = false;
+let decodedVINHasAvailableStock = false;
+let addedBadgeInPaintOptions = false;
+let selectedVariantUnavailable = false;
+let autoSelectedBanned = false;
+let aftermarketAvailability = '';
+let capaAvailability = '';
+let oemAvailability = '';
 let storedVin = '';
 let storedDecodedVin = '';
 let autoSelectedColor = '';
+let autoSelectedOption = '';
 let selectedProductSku = '';
+let selectedProductColor = '';
+let selectedProductTitle = '';
 let amountOfVINPostMessages = 0;
 let amountOfOOSPaintVariants = 0;
 let currentAddToCartBtnLibrary;
@@ -76,6 +88,14 @@ if (addToCartForUnpaintedLibrary) {
 
 
 // DISABLING AND CLEARING
+function hideFitmentFailButton() {
+
+    // Must defined the element here as it is dynamically created 
+    const fitmentFailButtonLibrary = document.getElementById('fitment-fail-button');
+
+    if (fitmentFailButtonLibrary) fitmentFailButtonLibrary.style.display = "none";
+}
+
 function disableQualityTypeButtons() {
     if (qualityTypeButtonsLibrary) qualityTypeButtonsLibrary.classList.add("disabled");
 }
@@ -126,8 +146,26 @@ function hideGetPaintCodeUsingVINCheckbox() {
     if (checkboxGetPaintCodeWithVINAndLabel) checkboxGetPaintCodeWithVINAndLabel.style.display = "none";
 }
 
-function hidePaintedStockKeyDisclaimer() {
-    if (paintedStockKeyLibrary) paintedStockKeyLibrary.style.display = "none";
+function hidePaintedStockKeyPaintDisclaimer() {
+    if (paintedStockKeyPaintLevelLibrary) paintedStockKeyPaintLevelLibrary.style.display = "none";
+}
+
+function hidePaintedStockKeyQualityDisclaimer() {
+    if (paintedStockKeyQualityLevelLibrary) paintedStockKeyQualityLevelLibrary.style.display = "none";
+}
+
+function disablePaintedStockKeyQualityDisclaimer() {
+    if (paintedStockKeyQualityLevelLibrary) paintedStockKeyQualityLevelLibrary.classList.add("disabled");
+}
+
+function hideVinMessageParagraph() {
+    if (
+        vinMessageParagraphLibrary &&
+        (vinMessageParagraphLibrary.innerHTML.includes("will be attached to this order and") ||
+            vinMessageParagraphLibrary.innerHTML.includes("se adjuntará a esta orden"))
+    ) {
+        vinMessageParagraphLibrary.style.display = 'none';
+    }
 }
 
 function disablehowToFindPaintCodeBtn() {
@@ -177,6 +215,10 @@ function clearVinVerificationRadioButtons() {
     }
 }
 
+function hideAddToCartButton() {
+    if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.style.display = 'none';
+}
+
 function disableAddToCartButton() {
     if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.disabled = true;
 }
@@ -185,6 +227,14 @@ function disableAddToCartButton() {
 
 
 // ENABLING
+function showFitmentFailButton() {
+
+    // Must defined the element here as it is dynamically created 
+    const fitmentFailButtonLibrary = document.getElementById('fitment-fail-button');
+
+    if (fitmentFailButtonLibrary) fitmentFailButtonLibrary.style.display = "block";
+}
+
 function enableQualityTypeButtons() {
     if (qualityTypeButtonsLibrary) qualityTypeButtonsLibrary.classList.remove("disabled");
 }
@@ -209,8 +259,29 @@ function showGetPaintCodeUsingVINCheckbox() {
     if (checkboxGetPaintCodeWithVINAndLabel) checkboxGetPaintCodeWithVINAndLabel.style.display = "block";
 }
 
-function showPaintedStockKeyDisclaimer() {
-    if (paintedStockKeyLibrary) paintedStockKeyLibrary.style.display = "block";
+function showPaintedStockKeyPaintDisclaimer() {
+    if (paintedStockKeyPaintLevelLibrary) paintedStockKeyPaintLevelLibrary.style.display = "block";
+}
+
+function showPaintedStockKeyQualityDisclaimer(message) {
+    if (paintedStockKeyQualityLevelLibrary) {
+        paintedStockKeyQualityLevelLibrary.style.display = "block";
+        paintedStockKeyQualityLevelLibrary.innerHTML = message;
+    }
+}
+
+function enablePaintedStockKeyQualityDisclaimer() {
+    if (paintedStockKeyQualityLevelLibrary) paintedStockKeyQualityLevelLibrary.classList.remove("disabled");
+}
+
+function showVinMessageParagraph() {
+    if (
+        vinMessageParagraphLibrary &&
+        (vinMessageParagraphLibrary.innerHTML.includes("will be attached to this order and") ||
+            vinMessageParagraphLibrary.innerHTML.includes("se adjuntará a esta orden"))
+    ) {
+        vinMessageParagraphLibrary.style.display = 'block';
+    }
 }
 
 function enablehowToFindPaintCodeBtn() {
@@ -238,44 +309,91 @@ function enableVinVerificationBtns() {
     if (vinVerificationButtonLibrary) vinVerificationButtonLibrary.disabled = false;
 }
 
+function showAddToCartButton() {
+    if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.style.display = 'block';
+}
+
 function enableAddToCartButton() {
     if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.disabled = false;
 }
 
 
-
-
 /*******************************************************************************************************
 **                                                                                                    **
-**                                             CAPA-OEM-options                                       **
+**                                       Quality Options                                              **
 **                                                                                                    **
 *******************************************************************************************************/
 
 
-function addOEMBadge() {
-    const capaImg = document.getElementById('capa-certified-badge');
-    if (capaImg) capaImg.remove();
+function handleQualityLevelPrePaintMsg(STOCK_POSTFIX, aftermarketWord, andWord) {
 
-    const existingOEMBadge = document.getElementById('oem-badge');
-    if (existingOEMBadge) return;
+    // Displays the pre-painted in stock message at quality level
+    if (window.enablePrepaintedMessaging) {
+        if (aftermarketAvailability || capaAvailability || oemAvailability) {
+            const options = [];
 
-    const oemImg = document.createElement('img');
-    oemImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png';
-    oemImg.alt = 'OEM Certified';
-    oemImg.id = 'oem-badge';
-    oemImg.style.position = 'relative';
-    oemImg.style.height = "34px";
-    oemImg.style.margin = "0 0 0 10px";
+            if (aftermarketAvailability) options.push(`<strong>${aftermarketWord}</strong>`);
+            if (capaAvailability) options.push('<strong>CAPA</strong>');
+            if (oemAvailability) options.push('<strong>OEM</strong>');
 
-    if (window.innerWidth > 720) {
-        priceContainerLargeScreen.appendChild(oemImg);
-    } else {
-        priceContainerSmallScreen.appendChild(oemImg);
+            // Join the list properly with commas and "and"
+            let optionsString = '';
+            if (options.length === 1) {
+                optionsString = options[0];
+            } else if (options.length === 2) {
+                optionsString = `${options[0]} ${andWord} ${options[1]}`;
+            } else if (options.length === 3) {
+                optionsString = `${options[0]}, ${options[1]}, ${andWord} ${options[2]}`;
+            }
+
+            const finalMessage = `${optionsString} ${STOCK_POSTFIX}`;
+            showPaintedStockKeyQualityDisclaimer(finalMessage);
+        }
     }
 }
 
+function addInStockBadgeInQualityOptions() {
+    qualityOptionsLibrary.forEach(button => {
+        const quality = button.getAttribute('data-value');
+        const isInStock = handleCheckQualityAvailability(quality);
+
+        if (isInStock) {
+            // Create the new element
+            const badge = createInStockBadge();
+
+            // Insert before the .quality-option-labels element
+            const labels = button.querySelector('.quality-option-labels');
+            if (labels) {
+                button.insertBefore(badge, labels);
+            }
+        }
+    });
+}
+
+function addInStockBadgeInPaintOptions() {
+    addedBadgeInPaintOptions = true;
+    paintOptionsIndividualButtonsLibrary.forEach(button => {
+        // Create the new element
+        const badge = createInStockBadge();
+        badge.classList.add("ready-paint");
+
+        // Insert before the .quality-option-labels element
+        const labels = button.querySelector('.paint-option-labels-wrapper');
+        if (labels) {
+            button.insertBefore(badge, labels);
+        }
+    });
+}
+
+
+/*******************************************************************************************************
+**                                                                                                    **
+**                                         Paint Options                                              **
+**                                                                                                    **
+*******************************************************************************************************/
+
 function togglePaintedStockKey(selectedType, hasAvailableOptions) {
-    if (!paintedStockKeyLibrary) return false;
+    if (!paintedStockKeyPaintLevelLibrary) return false;
 
     if (hasAvailableOptions[selectedType]) {
         selectedOptionHasAvailableStock = true;
@@ -284,42 +402,11 @@ function togglePaintedStockKey(selectedType, hasAvailableOptions) {
     };
 }
 
-function updatePriceDisplay(selectedType) {
-    const selectedButton = document.querySelector(`.quality-option[data-value="${selectedType}"]`);
-    if (!selectedButton) return;
-
-    // Option 1: If the button text includes the price
-    const buttonText = selectedButton.textContent;
-    const priceMatch = buttonText.match(/\$[\d,]+\.\d{2}/);
-    if (!priceMatch) return;
-
-    priceDisplay.textContent = priceMatch[0];
-    priceDisplaySmallScreen.textContent = priceMatch[0];
-}
-
-
-
-
 /*******************************************************************************************************
 **                                                                                                    **
-**                                             UTILITIES                                              **
+**                                         Vin Decoder App                                            **
 **                                                                                                    **
 *******************************************************************************************************/
-
-
-function hideShopifyChat() {
-    const shopifyChat = document.getElementById('shopify-chat');
-    if (shopifyChat) {
-        shopifyChat.style.display = 'none';
-    }
-}
-
-function showShopifyChat() {
-    const shopifyChat = document.getElementById('shopify-chat');
-    if (shopifyChat) {
-        shopifyChat.style.display = 'block';
-    }
-}
 
 function resortToGetPaintCodeByVin(eventVin, eventMatchByVIN) {
     //Have to get the most up-to-date combined variants
@@ -387,3 +474,100 @@ function resortToGetPaintCodeByVin(eventVin, eventMatchByVIN) {
     amountOfVINPostMessages++;
 }
 
+/*******************************************************************************************************
+**                                                                                                    **
+**                                             UTILITIES                                              **
+**                                                                                                    **
+*******************************************************************************************************/
+
+function createInStockBadge() {
+    const badge = document.createElement('div');
+    badge.classList.add('available-options');
+    badge.textContent = '✓';
+    return badge;
+}
+
+function hideInStockBadgeOnPaintOption() {
+    if (document.querySelectorAll(".available-options")) {
+        const readyBadges = document.querySelectorAll(".available-options.ready-paint");
+        readyBadges.forEach(badge => {
+            badge.style.display = "none";
+        });
+    }
+}
+
+function showInStockBadgeOnPaintOption() {
+    if (document.querySelectorAll(".available-options")) {
+
+        // Check for false prevents from calling the function more than once
+        if (addedBadgeInPaintOptions === false) {
+            // addInStockBadgeInPaintOptions();
+        }
+        const readyBadges = document.querySelectorAll(".available-options.ready-paint");
+        readyBadges.forEach(badge => {
+            badge.style.display = "block";
+        });
+    }
+}
+
+function handleCheckQualityAvailability(quality) {
+    let isInStock = false;
+
+    if (quality === 'aftermarket' && aftermarketAvailability) {
+        isInStock = true;
+    } else if (quality === 'capa' && capaAvailability) {
+        isInStock = true;
+    } else if (quality === 'oem' && oemAvailability) {
+        isInStock = true;
+    }
+    return isInStock;
+}
+
+function addOEMBadge() {
+    const capaImg = document.getElementById('capa-certified-badge');
+    if (capaImg) capaImg.remove();
+
+    const existingOEMBadge = document.getElementById('oem-badge');
+    if (existingOEMBadge) return;
+
+    const oemImg = document.createElement('img');
+    oemImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/OEM_Badge.png';
+    oemImg.alt = 'OEM Certified';
+    oemImg.id = 'oem-badge';
+    oemImg.style.position = 'relative';
+    oemImg.style.height = "34px";
+    oemImg.style.margin = "0 0 0 10px";
+
+    if (window.innerWidth > 720) {
+        priceContainerLargeScreen.appendChild(oemImg);
+    } else {
+        priceContainerSmallScreen.appendChild(oemImg);
+    }
+}
+
+function updatePriceDisplay(selectedType) {
+    const selectedButton = document.querySelector(`.quality-option[data-value="${selectedType}"]`);
+    if (!selectedButton) return;
+
+    // Option 1: If the button text includes the price
+    const buttonText = selectedButton.textContent;
+    const priceMatch = buttonText.match(/\$[\d,]+\.\d{2}/);
+    if (!priceMatch) return;
+
+    priceDisplay.textContent = priceMatch[0];
+    priceDisplaySmallScreen.textContent = priceMatch[0];
+}
+
+function hideShopifyChat() {
+    const shopifyChat = document.getElementById('shopify-chat');
+    if (shopifyChat) {
+        shopifyChat.style.display = 'none';
+    }
+}
+
+function showShopifyChat() {
+    const shopifyChat = document.getElementById('shopify-chat');
+    if (shopifyChat) {
+        shopifyChat.style.display = 'block';
+    }
+}

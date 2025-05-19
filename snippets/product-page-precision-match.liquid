@@ -1,360 +1,374 @@
 <style>
-
-    body.no-scroll-precision-match {
-        width: 100%;
-        height: 100%;
-        overflow: hidden !important;
-      }
-
-    .precision-match-popup-dark-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        z-index: 3000;
-        animation: fade-in 0.5s;
-    }
-    .precision-match-popup-container {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 5000;
-        overflow-y: auto;
-        font-family: 'Lato', sans-serif;
-      }
-      @media only screen and (max-width: 450px) {
-        .precision-match-popup-modal {
-            position: relative;
-            width: 90%;
-            max-width: 800px;
-            {% comment %} min-height: 456px; {% endcomment %}
-            background-color: white;
-            margin: 5% auto;
-            padding: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 9999;
-            border-radius: 8px;
-          }
-    }
-    @media only screen and (min-width: 451px) {
-      .precision-match-popup-modal {
-        position: relative;
-        width: 60%;
-        max-width: 800px;
-        {% comment %} min-height: 456px; {% endcomment %}
-        background-color: white;
-        margin: 5% auto;
-        padding: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 9999;
-        border-radius: 8px;
-      }
+  body.no-scroll-precision-match {
+      width: 100%;
+      height: 100%;
+      overflow: hidden !important;
     }
 
-      .precision-match-popup-wrapper {
-        padding: 25px 25px 30px 30px;
-      }
-      .precision-match-popup-wrapper img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-      }
-      .precision-match-popup-wrapper h1 {
-        font-size: 32px;
-        margin-bottom: 5px;
-        margin-top: 0;
-        text-align: left;
-        color: #373737;
-      }
-      .precision-match-popup-wrapper h3 {
-        font-size: 20px;
-        font-weight: 900;
-        margin-bottom: 24px;
-        text-align: left;
-        color: #4b4b4b;
-      }
-      .precision-match-popup-wrapper h4, h5 {
-        font-size: 18px;
-        font-weight: 700;
-        margin: 8px 0;
-        text-align: left;
-        color: #4b4b4b;
-        line-height: 24px;
-      }
-
-      .precision-match-popup-wrapper ul {
-        font-size: 16px;
-        padding-left: 18px;
-        color: #4b4b4b;
-        font-weight: 400;
-        margin-top: 0;
-        line-height: 20px;
-      }
-
-    .precision-match-close-btn-wrapper {
-        display: flex;
-        justify-content: end;
-        width: 100%;
+  .precision-match-popup-dark-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 3000;
+      animation: fade-in 0.5s;
+  }
+  .precision-match-popup-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5000;
+      overflow-y: auto;
+      font-family: 'Lato', sans-serif;
     }
-
-      .precision-match-close-btn {
-        font-size: 32px;
-        height: 32px;
-        background: none;
-        border: none;
-        color: #000;
-        cursor: pointer;
-        z-index: 1001;
-        display: flex;
-        align-items: start;
-        justify-content: end;
-      }
-    .precision-match-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center; 
-        width: 100%;
-    }
-
-    .precision-match-guarantee {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: #333;
-        margin-bottom: 3px;
-        display: flex;
-        justify-content: start;
-    }
-
-    @media only screen and (max-width: 640px) {
-        .precision-match-checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: start;
-            font-weight: 600;
-            margin-top: 10px;
-        }
-    }
-
-    @media only screen and (min-width: 641px) {
-        .precision-match-checkbox-group {
-            display: flex;
-            flex-direction: row;
-            gap: 20px;
-            align-items: center;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-    }
-
-    .precision-match-checkbox-option {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 1rem;
-        color: #444;
-    }
-
-    input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-    }
-
-    .precision-match-checkbox-option:has(input:disabled) {
-        color: #ccc;
-        opacity: 0.7;
-        cursor: not-allowed;
-    }
-    .precision-match-checkbox-option input[type="radio"]:disabled {
-        accent-color: #ccc;
-        cursor: not-allowed;
-    }
-
-    #precision-match-textbox {
-        width: 100%;
-        {% comment %} margin-top: 10px; {% endcomment %}
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        height: 45px;
-    }
-
-    #precision-match-textbox-wrapper {
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
-    }
-    
-    #precision-match-textbox-wrapper.show {
-        max-height: 100px; /* adjust based on content height */
-        opacity: 1;
-        margin-top: 10px;
-    }
-
     @media only screen and (max-width: 450px) {
-        #precision-match-button {
-            width:100%;
-            color: #3b3b3b;
-            background-color: #f3f3f3;
-            border: none;
-            font-size: 16px;
-            padding: 10px 12px;
-            {% comment %} margin: 20px 0; {% endcomment %}
-            display: block;
-            text-align: left;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            border-radius: 6px;
-            font-family: 'Lato', sans-serif;
-            margin-top: 10px;
+      .precision-match-popup-modal {
+          position: relative;
+          width: 90%;
+          max-width: 800px;
+          {% comment %} min-height: 456px; {% endcomment %}
+          background-color: white;
+          margin: 5% auto;
+          padding: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+          animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          z-index: 9999;
+          border-radius: 8px;
         }
-        #precision-match-button p {
-            margin: 0;
-        }
-        #precision-match-button:hover {
-            background-color: #e5e5e5;
-        }
-        #precision-match-button:active {
-            background-color: #f3f3f3;
-        }
-        #precision-match-button:disabled {
-            color: #ccc;
-            cursor: no-drop;
-            background-color: #f0f0f0;
-            opacity: 0.6;
-        }
+  }
+  @media only screen and (min-width: 451px) {
+    .precision-match-popup-modal {
+      position: relative;
+      width: 60%;
+      max-width: 800px;
+      {% comment %} min-height: 456px; {% endcomment %}
+      background-color: white;
+      margin: 5% auto;
+      padding: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      border-radius: 8px;
+    }
+  }
+
+    .precision-match-popup-wrapper {
+      padding: 25px 25px 30px 30px;
+    }
+    .precision-match-popup-wrapper img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .precision-match-popup-wrapper h1 {
+      font-size: 32px;
+      margin-bottom: 5px;
+      margin-top: 0;
+      text-align: left;
+      color: #373737;
+    }
+    .precision-match-popup-wrapper h3 {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 24px;
+      text-align: left;
+      color: #4b4b4b;
+    }
+    .precision-match-popup-wrapper h4, h5 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 8px 0;
+      text-align: left;
+      color: #4b4b4b;
+      line-height: 24px;
     }
 
-    @media only screen and (min-width: 451px) {
-        #precision-match-button {
-            width:100%;
-            color: #3b3b3b;
-            background-color: #f3f3f3;
-            border: none;
-            font-size: 18px;
-            padding: 10px 12px;
-            {% comment %} margin: 20px 0; {% endcomment %}
-            display: block;
-            text-align: left;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            border-radius: 6px;
-            font-family: 'Lato', sans-serif;
-            margin-top: 10px;
-        }
-        #precision-match-button p {
-            margin: 0;
-        }
-        #precision-match-button:hover {
-            background-color: #e5e5e5;
-        }
-        #precision-match-button:active {
-            background-color: #f3f3f3;
-        }
-        #precision-match-button:disabled {
-            color: #ccc;
-            cursor: no-drop;
-            background-color: #f0f0f0;
-            opacity: 0.6;
-        }
+    .precision-match-popup-wrapper ul {
+      font-size: 16px;
+      padding-left: 18px;
+      color: #4b4b4b;
+      font-weight: 400;
+      margin-top: 0;
+      line-height: 20px;
     }
-      .precision-match-wrapper {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: start;
+
+  .precision-match-close-btn-wrapper {
+      display: flex;
+      justify-content: end;
+      width: 100%;
+  }
+
+    .precision-match-close-btn {
+      font-size: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      color: #000;
+      cursor: pointer;
+      z-index: 1001;
+      display: flex;
+      align-items: start;
+      justify-content: end;
+    }
+  .precision-match-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+  }
+
+  .precision-match-guarantee {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #333;
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: start;
+  }
+
+  @media only screen and (max-width: 640px) {
+      .precision-match-checkbox-group {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          align-items: start;
+          font-weight: 600;
+          margin-top: 10px;
       }
-      .button_svg_container {
-        display: flex;
-        justify-content: end;
+  }
+
+  @media only screen and (min-width: 641px) {
+      .precision-match-checkbox-group {
+          display: flex;
+          flex-direction: row;
+          gap: 20px;
+          align-items: center;
+          font-weight: 600;
+          margin-top: 5px;
       }
-    
+  }
+
+  .precision-match-checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 1rem;
+      color: #444;
+  }
+
+  input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+  }
+
+  .precision-match-checkbox-option:has(input:disabled) {
+      color: #ccc;
+      opacity: 0.7;
+      cursor: not-allowed;
+  }
+  .precision-match-checkbox-option input[type="radio"]:disabled {
+      accent-color: #ccc;
+      cursor: not-allowed;
+  }
+
+  #precision-match-textbox {
+      width: 100%;
+      {% comment %} margin-top: 10px; {% endcomment %}
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      height: 45px;
+  }
+
+  #precision-match-textbox-wrapper {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+  }
+
+  #precision-match-textbox-wrapper.show {
+      max-height: 100px; /* adjust based on content height */
+      opacity: 1;
+      margin-top: 10px;
+  }
+
+  @media only screen and (max-width: 450px) {
+      #precision-match-button {
+          width:100%;
+          color: #3b3b3b;
+          background-color: #f3f3f3;
+          border: none;
+          font-size: 16px;
+          padding: 10px 12px;
+          {% comment %} margin: 20px 0; {% endcomment %}
+          display: block;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+          border-radius: 6px;
+          font-family: 'Lato', sans-serif;
+          margin-top: 10px;
+      }
+      #precision-match-button p {
+          margin: 0;
+      }
+      #precision-match-button:hover {
+          background-color: #e5e5e5;
+      }
+      #precision-match-button:active {
+          background-color: #f3f3f3;
+      }
+      #precision-match-button:disabled {
+          color: #ccc;
+          cursor: no-drop;
+          background-color: #f0f0f0;
+          opacity: 0.6;
+      }
+  }
+
+  @media only screen and (min-width: 451px) {
+      #precision-match-button {
+          width:100%;
+          color: #3b3b3b;
+          background-color: #f3f3f3;
+          border: none;
+          font-size: 18px;
+          padding: 10px 12px;
+          {% comment %} margin: 20px 0; {% endcomment %}
+          display: block;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+          border-radius: 6px;
+          font-family: 'Lato', sans-serif;
+          margin-top: 10px;
+      }
+      #precision-match-button p {
+          margin: 0;
+      }
+      #precision-match-button:hover {
+          background-color: #e5e5e5;
+      }
+      #precision-match-button:active {
+          background-color: #f3f3f3;
+      }
+      #precision-match-button:disabled {
+          color: #ccc;
+          cursor: no-drop;
+          background-color: #f0f0f0;
+          opacity: 0.6;
+      }
+  }
+    .precision-match-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+    }
+    .button_svg_container {
+      display: flex;
+      justify-content: end;
+    }
 </style>
 
 <div class="precision-match-container">
-    <label class="precision-match-guarantee">{{ 'precision_match.label' | t }}</label>
+  <label class="precision-match-guarantee">{{ 'precision_match.label' | t }}</label>
 
-    <div class="precision-match-checkbox-group">
-        <label class="precision-match-checkbox-option">
-            <input 
-                type="radio" 
-                name="precision_match" 
-                value="precision" 
-                id="precision-match"
-                disabled
-            >
-            {{ 'precision_match.precision' | t }}&nbsp;<span id="precision-match-price-label"></span>
-        </label>
-    
-        <label class="precision-match-checkbox-option">
-            <input
-                id="standard-match"
-                type="radio" 
-                name="precision_match" 
-                value="standard"
-                disabled
-            >
-            {{ 'precision_match.standard' | t }}
-        </label>
-    </div>  
-    <div id="precision-match-textbox-wrapper">
-        <input
-            type="text"
-            id="precision-match-textbox"
-            placeholder="Enter your VIN"
-            maxlength="17"
-            value="{{ vinValue | default: "" }}"
+  <div class="precision-match-checkbox-group">
+    <label class="precision-match-checkbox-option">
+      <input
+        type="radio"
+        name="precision_match"
+        value="precision"
+        id="precision-match"
+        disabled
+      >
+      {{ 'precision_match.precision' | t }}&nbsp;<span id="precision-match-price-label"></span>
+    </label>
+
+    <label class="precision-match-checkbox-option">
+      <input
+        id="standard-match"
+        type="radio"
+        name="precision_match"
+        value="standard"
+        disabled
+      >
+      {{ 'precision_match.standard' | t }}
+    </label>
+  </div>
+  <div id="precision-match-textbox-wrapper">
+    <input
+      type="text"
+      id="precision-match-textbox"
+      placeholder="Enter your VIN"
+      maxlength="17"
+      value="{{ vinValue | default: "" }}"
+    >
+  </div>
+  <button id="precision-match-button" type="button" class="btn" disabled>
+    <div class="precision-match-wrapper">
+      <p id="precision-match-button-text">
+        <b>{{ 'precision_match.button_heading' | t }}</b>
+        <br>
+        {{ 'precision_match.button_description' | t }}
+      </p>
+      <div class="button_svg_container">
+        <svg
+          class="button_svg"
+          stroke="currentColor"
+          fill="currentColor"
+          stroke-width="0"
+          viewBox="0 0 512 512"
+          height="14px"
+          width="14px"
+          xmlns="http://www.w3.org/2000/svg"
         >
+          <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path>
+        </svg>
+      </div>
     </div>
-    <button id="precision-match-button" type="button" class="btn" disabled>
-        <div class="precision-match-wrapper">
-            <p id="precision-match-button-text">
-                <b>{{ 'precision_match.button_heading' | t}}</b>
-                <br/>
-                {{ 'precision_match.button_description' | t}}       
-            </p>
-            <div class="button_svg_container">
-                <svg class="button_svg" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="14px" width="14px" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"></path></svg>
-            </div>
+  </button>
+  <div class="precision-match-popup-dark-overlay"></div>
+  <div class="precision-match-popup-container">
+    <div class="precision-match-popup-modal">
+      <div class="precision-match-close-btn-wrapper">
+        <button class="precision-match-close-btn" role="button" type="button">&times;</button>
+      </div>
+      <div class="precision-match-popup-wrapper">
+        <h1>{{ 'precision_match.modal_heading' | t }}</h1>
+        {% comment %} <h3>{{ 'precision_match.modal_subheading' | t }}</h3> {% endcomment %}
+        <div id="paint-code-instructions">
+          {% comment %} <h4>{{ 'precision_match.first_message' | t }}</h4> {% endcomment %}
+          <ul>
+            <li>
+              <span style="font-weight: 700;">{{ 'precision_match.point_1_label' | t }}</span>&nbsp;
+              {{- 'precision_match.point_1' | t }}
+            </li>
+            <li>
+              <span style="font-weight: 700;">{{ 'precision_match.point_2_label' | t }}</span>&nbsp;
+              {{- 'precision_match.point_2' | t }}
+            </li>
+          </ul>
         </div>
-    </button>
-    <div class="precision-match-popup-dark-overlay"></div>
-    <div class="precision-match-popup-container">
-        <div class="precision-match-popup-modal">
-            <div class="precision-match-close-btn-wrapper">
-                <button class="precision-match-close-btn" role="button" type="button">&times;</button>
-            </div>
-            <div class="precision-match-popup-wrapper">
-                <h1>{{ 'precision_match.modal_heading' | t }}</h1>
-                {% comment %} <h3>{{ 'precision_match.modal_subheading' | t }}</h3> {% endcomment %}
-                <div id="paint-code-instructions">
-                    {% comment %} <h4>{{ 'precision_match.first_message' | t }}</h4> {% endcomment %}
-                    <ul>
-                        <li><span style="font-weight: 700;">{{ 'precision_match.point_1_label' | t }}</span>&nbsp;{{ 'precision_match.point_1' | t }}</li>
-                        <li><span style="font-weight: 700;">{{ 'precision_match.point_2_label' | t }}</span>&nbsp;{{ 'precision_match.point_2' | t }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>  
+      </div>
+    </div>
+  </div>
 </div>
-
 
 <script>
         document.addEventListener('DOMContentLoaded', function () {
             const precisionMatch = document.getElementById('precision-match');
-            const addToCartButton = document.getElementById('add-to-cart');
-            const addToCartForUnpainted = document.getElementById('add-to-cart-for-unpainted');
+            const addToCartButton = document.querySelector('.add-to-cart');
+            const addToCartForUnpainted = document.querySelector('.add-to-cart-for-unpainted');
             const precisionMatchTextboxWrapper = document.getElementById('precision-match-textbox-wrapper');
             const vinInput = document.getElementById('precision-match-textbox');
             const precisionPaintMatchService = 'precision-paint-match-service';

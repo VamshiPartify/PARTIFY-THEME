@@ -15,7 +15,10 @@
     This is the hover zoom setting, which is either 'disabled', 'separate', or 'replace'
 {% endcomment %}
 
-{% assign primary_image = product.metafields.custom.site_primary_image | default: product.media.first %}
+{% assign fallback_image_url = images['Partify_Photo_Coming_Soon.png'] %}
+{% assign media_image = product.media.first %}
+{% assign default_image = media_image | default: fallback_image_url %}
+{% assign primary_image = product.metafields.custom.site_primary_image | default: default_image %}
 {% assign lifestyle_reference = product.metafields.custom.lifestyle_image %}
 {% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
 {% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
@@ -25,7 +28,6 @@
 
 {% assign reordered_media = '' %}
 {% assign reordered_media = reordered_media | append: primary_image | append: ',' %}
-
 
 {%- comment -%}
   Collect media images excluding the primary image to avoid duplication.
@@ -60,20 +62,16 @@
 
 {% assign reordered_media = reordered_media | split: ',' %}
 
-
-
 <!-- Must be less than 2 because there will always be something in the first index of the reorder_media array -->
 {% if reordered_media.size < 2 %}
-
   <div
     class="
       product-gallery--viewer
-      {% if product.media.size > 0 %}
+      {% comment %} {% if product.media.size > 0 %} {% endcomment %}
         product-gallery--has-media
-      {% endif %}
+      {% comment %} {% endif %} {% endcomment %}
     "
     data-gallery-viewer
-    
   >
     <!-- If primary image exists and it is the only one, ensure it is first -->
     {% if primary_image != blank %}
@@ -94,12 +92,14 @@
       >
         <div class="product-gallery--image-background">
           {{
-            primary_image | image_url: width: 700, format: 'webp' | image_tag: 
-            class: 'product-gallery--loaded-image',
-            loading: 'eager',
-            fetchpriority: 'high',
-            width: 700,
-            height: 700
+            primary_image
+            | image_url: width: 700, format: 'webp'
+            | image_tag:
+              class: 'product-gallery--loaded-image',
+              loading: 'eager',
+              fetchpriority: 'high',
+              width: 700,
+              height: 700
           }}
         </div>
       </figure>
@@ -135,11 +135,9 @@
           {% when 'image' %}
             <div class="product-gallery--image-background">
               {{
-                media | image_url: width: 700 | image_tag: 
-                class: 'product-gallery--loaded-image',
-                loading: 'lazy',
-                width: 700,
-                height: 700
+                media
+                | image_url: width: 700
+                | image_tag: class: 'product-gallery--loaded-image', loading: 'lazy', width: 700, height: 700
               }}
             </div>
           {% when 'external_video' %}
@@ -159,8 +157,6 @@
   </div>
 {% endif %}
 
-
-
 <!-- This case is if there are metaobject references in the metafields other than the primary image -->
 {% if reordered_media.size >= 2 %}
   <!-- Convert to array -->
@@ -169,16 +165,17 @@
   <div
     class="
       product-gallery--viewer
-      {% if product.media.size > 0 %}
+      {% comment %} {% if product.media.size > 0 %} {% endcomment %}
         product-gallery--has-media
-      {% endif %}
+      {% comment %} {% endif %} {% endcomment %}
     "
     data-gallery-viewer
-    
   >
-
     <!-- For the first image, either render the primary_image if it exists, or the product.media.first image -->
     {% if primary_image != blank %}
+      <script>
+        console.log('wool primary image: ', '{{ primary_image }}');
+      </script>
       <figure
         class="
           product-gallery--media
@@ -196,50 +193,47 @@
       >
         <div class="product-gallery--image-background">
           {{
-            primary_image | image_url: width: 700, format: 'webp' | image_tag: 
-            class: 'product-gallery--loaded-image',
-            loading: 'eager',
-            fetchpriority: 'high',
-            width: 700,
-            height: 700
+            primary_image
+            | image_url: width: 700, format: 'webp'
+            | image_tag:
+              class: 'product-gallery--loaded-image',
+              loading: 'eager',
+              fetchpriority: 'high',
+              width: 700,
+              height: 700
           }}
         </div>
       </figure>
       {% assign reordered_counter = reordered_counter | plus: 1 %}
     {% endif %}
 
-
-
     {% if lifestyle_reference != blank and product.variants.size > 1 %}
-        <figure
-          class="
-            product-gallery--media
-            product-gallery--image
-          "
-          tabindex="-1"
-          aria-hidden="false"
-          data-gallery-figure
-          data-gallery-index={{ reordered_counter }}
-          data-gallery-selected="false"
-          data-media-type="image"
-          data-zoom="{{ lifestyle_reference | image_url: '2400x' }}"
-          data-image-height="2400"
-          data-image-width="2400"
-        >
-          <div class="product-gallery--image-background">
-            {{
-              lifestyle_reference | image_url: width: 700 | image_tag: 
-              class: 'product-gallery--loaded-image',
-              loading: 'lazy',
-              width: 700,
-              height: 700
-            }}
-          </div>
-        </figure>
-        {% assign reordered_counter = reordered_counter | plus: 1 %}
-        {% comment %} Increment the current position {% endcomment %}
+      <figure
+        class="
+          product-gallery--media
+          product-gallery--image
+        "
+        tabindex="-1"
+        aria-hidden="false"
+        data-gallery-figure
+        data-gallery-index="{{ reordered_counter }}"
+        data-gallery-selected="false"
+        data-media-type="image"
+        data-zoom="{{ lifestyle_reference | image_url: '2400x' }}"
+        data-image-height="2400"
+        data-image-width="2400"
+      >
+        <div class="product-gallery--image-background">
+          {{
+            lifestyle_reference
+            | image_url: width: 700
+            | image_tag: class: 'product-gallery--loaded-image', loading: 'lazy', width: 700, height: 700
+          }}
+        </div>
+      </figure>
+      {% assign reordered_counter = reordered_counter | plus: 1 %}
+      {% comment %} Increment the current position {% endcomment %}
     {% endif %}
-
 
     {% if quality_reference != blank %}
       <figure
@@ -250,7 +244,7 @@
         tabindex="-1"
         aria-hidden="false"
         data-gallery-figure
-        data-gallery-index={{ reordered_counter }}
+        data-gallery-index="{{ reordered_counter }}"
         data-gallery-selected="false"
         data-media-type="image"
         data-zoom="{{ quality_reference | image_url: '2400x' }}"
@@ -259,18 +253,15 @@
       >
         <div class="product-gallery--image-background">
           {{
-            quality_reference | image_url: width: 700 | image_tag: 
-            class: 'product-gallery--loaded-image',
-            loading: 'lazy',
-            width: 700,
-            height: 700
+            quality_reference
+            | image_url: width: 700
+            | image_tag: class: 'product-gallery--loaded-image', loading: 'lazy', width: 700, height: 700
           }}
         </div>
       </figure>
       {% assign reordered_counter = reordered_counter | plus: 1 %}
       {% comment %} Increment the current position {% endcomment %}
     {% endif %}
-
 
     {% if paint_infographic_reference != blank and product.variants.size > 1 %}
       <figure
@@ -281,7 +272,7 @@
         tabindex="-1"
         aria-hidden="false"
         data-gallery-figure
-        data-gallery-index={{ reordered_counter }}
+        data-gallery-index="{{ reordered_counter }}"
         data-gallery-selected="false"
         data-media-type="image"
         data-zoom="{{ paint_infographic_reference | image_url: '2400x' }}"
@@ -290,18 +281,15 @@
       >
         <div class="product-gallery--image-background">
           {{
-            paint_infographic_reference | image_url: width: 700 | image_tag: 
-            class: 'product-gallery--loaded-image',
-            loading: 'lazy',
-            width: 700,
-            height: 700
+            paint_infographic_reference
+            | image_url: width: 700
+            | image_tag: class: 'product-gallery--loaded-image', loading: 'lazy', width: 700, height: 700
           }}
         </div>
       </figure>
       {% assign reordered_counter = reordered_counter | plus: 1 %}
       {% comment %} Increment the current position {% endcomment %}
     {% endif %}
-
 
     {% if how_to_find_paint_code_reference != blank and product.variants.size > 1 %}
       <figure
@@ -312,7 +300,7 @@
         tabindex="-1"
         aria-hidden="false"
         data-gallery-figure
-        data-gallery-index={{ reordered_counter }}
+        data-gallery-index="{{ reordered_counter }}"
         data-gallery-selected="false"
         data-media-type="image"
         data-zoom="{{ how_to_find_paint_code_reference | image_url: '2400x' }}"
@@ -321,11 +309,9 @@
       >
         <div class="product-gallery--image-background">
           {{
-            how_to_find_paint_code_reference | image_url: width: 700 | image_tag: 
-            class: 'product-gallery--loaded-image',
-            loading: 'lazy',
-            width: 700,
-            height: 700
+            how_to_find_paint_code_reference
+            | image_url: width: 700
+            | image_tag: class: 'product-gallery--loaded-image', loading: 'lazy', width: 700, height: 700
           }}
         </div>
       </figure>
@@ -348,7 +334,7 @@
           tabindex="-1"
           aria-hidden="false"
           data-gallery-figure
-          data-gallery-index={{ reordered_counter }}
+          data-gallery-index="{{ reordered_counter }}"
           data-gallery-selected="false"
           data-media-type="image"
           data-zoom="{{ file_url_current_image | image_url: '2400x' }}"
@@ -357,11 +343,9 @@
         >
           <div class="product-gallery--image-background">
             {{
-              file_url_current_image | image_url: width: 700 | image_tag: 
-              class: 'product-gallery--loaded-image',
-              loading: 'lazy',
-              width: 700,
-              height: 700
+              file_url_current_image
+              | image_url: width: 700
+              | image_tag: class: 'product-gallery--loaded-image', loading: 'lazy', width: 700, height: 700
             }}
           </div>
         </figure>
@@ -369,12 +353,9 @@
       {% endfor %}
       {% comment %} Increment the current position {% endcomment %}
     {% endif %}
-
-
   </div>
 {% endif %}
 
 {% if gallery_hover_zoom == 'separate' %}
   <div class="product-gallery--zoomed-image" data-zoomed-image></div>
 {% endif %}
-

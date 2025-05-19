@@ -42,7 +42,7 @@
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
-    margin: 0.5rem 0;
+    margin: 10px 0;
     flex-direction: column;
   }
 
@@ -64,7 +64,24 @@
     }
   }
 
+  .available-options {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: #fff;
+    font-weight: 600;
+    background: #0d1ca2;
+    padding: 2px 5px;
+    border-radius: 999px;
+    font-size: 11px;
+    z-index: 1;
+  }
+
+  .available-options.ready-paint {
+  }
+
   .quality-option {
+    position: relative;
     flex: 1 1 0;
     flex-direction: column;
     min-width: 90px;
@@ -88,8 +105,13 @@
 
   .quality-option.selected {
     background-color: #f9f9ff;
-    box-shadow: 0 0 0 2px #334fb4;
+    box-shadow: 0 0 0 3px #334fb4;
     border: 1px solid #f9f9ff;
+  }
+
+  .quality-option-labels {
+    display: flex;
+    flex-direction: column;
   }
 
   .oem-vin-container {
@@ -209,6 +231,7 @@
 <div class="product-type-dropdown">
   {% if is_only_oem == false and is_no_quality_options == false %}
     <label class="option-title-quality">{{ 'quality_options.title' | t }}</label>
+    <div class="painted-stock-key-quality-level" style="display: none;"></div>
     <div class="quality-type-buttons disabled">
       {% assign available_product_types = '' %}
 
@@ -238,8 +261,10 @@
               data-value="aftermarket"
               data-quality-sku="{{ aftermarket_sku }}"
             >
-              <span class="quality-label">{{ 'quality_options.aftermarket_in_stock' | t }}</span>
-              <span class="quality-price">{{ aftermarket_price }}</span>
+              <div class="quality-option-labels">
+                <span class="quality-label">{{ 'quality_options.aftermarket_in_stock' | t }}</span>
+                <span class="quality-price">{{ aftermarket_price }}</span>
+              </div>
             </button>
           {% else %}
             <button
@@ -271,8 +296,10 @@
               data-value="capa"
               data-quality-sku="{{ capa_sku }}"
             >
-              <span class="quality-label">{{ 'quality_options.capa_in_stock' | t }}</span>
-              <span class="quality-price">{{ capa_price }}</span>
+              <div class="quality-option-labels">
+                <span class="quality-label">{{ 'quality_options.capa_in_stock' | t }}</span>
+                <span class="quality-price">{{ capa_price }}</span>
+              </div>
             </button>
           {% else %}
             <button
@@ -304,8 +331,10 @@
               data-value="oem"
               data-quality-sku="{{ oem_sku }}"
             >
-              <span class="quality-label">{{ 'quality_options.oem_in_stock' | t }}</span>
-              <span class="quality-price">{{ oem_price }}</span>
+              <div class="quality-option-labels">
+                <span class="quality-label">{{ 'quality_options.oem_in_stock' | t }}</span>
+                <span class="quality-price">{{ oem_price }}</span>
+              </div>
             </button>
           {% else %}
             <button
@@ -360,3 +389,13 @@
     </div>
   {% endif %}
 </div>
+
+{% comment %}
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const vinTextBoxForOEM = document.getElementById('vin-textbox-for-oem');
+
+
+    });
+  </script>
+{% endcomment %}

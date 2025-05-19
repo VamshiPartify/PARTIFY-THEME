@@ -198,59 +198,6 @@
     margin: 0;
   }
 
-  #add-to-cart {
-    background-color: #0c1a94;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 10px;
-    padding: 10px;
-    transition: background-color 0.3s, transform 0.2s;
-    width: 100%;
-    border-radius: 12px;
-  }
-
-  #add-to-cart-for-unpainted {
-    background-color: #0c1a94;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 10px 0;
-    padding: 10px;
-    transition: background-color 0.3s, transform 0.2s;
-    width: 100%;
-    border-radius: 12px;
-  }
-
-  #add-to-cart:disabled {
-    background-color: #f0f0f08c;
-    color: #ccccccde;
-    cursor: not-allowed;
-    pointer-events: none;
-    border: 1px solid #f0f0f0;
-  }
-
-  #add-to-cart-for-unpainted:disabled {
-    background-color: #f0f0f0;
-    color: #ccc;
-    cursor: not-allowed;
-    pointer-events: none;
-    border: 1px solid;
-  }
-
-  #add-to-cart:hover {
-    background-color: #063175;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-  }
-
-  #add-to-cart:active {
-    background-color: #051d59;
-    transform: translateY(0);
-  }
-
   #product-form {
     display: flex;
     justify-content: center;
@@ -294,6 +241,7 @@
     min-height: 45px;
     cursor: pointer;
     color: #000;
+    {% comment %} margin-bottom: 10px; {% endcomment %}
   }
 
   .unpainted-fitment-container {
@@ -302,11 +250,6 @@
     flex-direction: column;
     justify-content: start;
     align-items: start;
-  }
-
-  .unpainted-add-to-cart-btn-container {
-    width: 100%;
-    display: flex;
   }
 
   .vin-options-container {
@@ -452,34 +395,6 @@
     margin-bottom: 10px;
   }
 
-  .conditional-small-screen {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    top: 0;
-    z-index: 50;
-    width: 100vw;
-    height: fit-content;
-  }
-
-  @media (min-width: 720px) {
-    .conditional-small-screen {
-      position: relative;
-      display: flex;
-      align-items: center;
-      flex-direction: row;
-      bottom: 0;
-      z-index: 50;
-      background-color: #fff;
-      width: 100%;
-      height: fit-content;
-      border-top: none;
-      border-bottom: none;
-    }
-  }
-
   #add-to-cart-page {
     padding: 0;
     display: flex;
@@ -562,20 +477,6 @@
       width: 100vw;
       height: 100%;
       border-left: none;
-    }
-  }
-
-  .add-to-cart-button-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: end;
-  }
-
-  @media (max-width: 720px) {
-    .add-to-cart-button-wrapper {
-      min-width: 160px;
-      display: flex;
-      justify-content: end;
     }
   }
 
@@ -806,9 +707,7 @@
       </select>
       <div class="divider-small-screen"></div>
       <!-- Add to Cart Button -->
-      <button type="submit" class="btn full-width bold-text" id="add-to-cart" style="margin: 10px 0;" disabled>
-        {{ 'add_to_cart_text' | t }}
-      </button>
+      {% render 'product-page-cart-btn', unpainted: false %}
     </form>
 
     <!-- Form for either customizations or add to cart on product page -->
@@ -937,14 +836,7 @@
       <div class="divider-small-screen"></div>
 
       <!-- Fixed Add to cart and price container to bottom of mobile -->
-      <div class="conditional-small-screen">
-        <!-- Add to Cart Button for correct fitment and selected paint option -->
-        <div class="add-to-cart-button-wrapper">
-          <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>
-            {{ 'add_to_cart_text' | t }}
-          </button>
-        </div>
-      </div>
+      {% render 'product-page-cart-btn', unpainted: false %}
     </form>
 
     <!-- Color mismatch popup -->
@@ -1029,13 +921,7 @@
           {% endunless %}
         {% endcomment %}
         <div class="divider-small-screen"></div>
-
-        <div class="unpainted-add-to-cart-btn-container">
-          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-          <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>
-            {{ 'add_to_cart_text' | t }}
-          </button>
-        </div>
+        {% render 'product-page-cart-btn', unpainted: true %}
       </div>
     </form>
   {% endif %}
@@ -1140,20 +1026,11 @@
 
     <!-- Fixed Add to cart and price container to bottom of mobile -->
     {% if product.variants.size > 1 %}
-      <div class="conditional-small-screen">
-        <div class="add-to-cart-button-wrapper">
-          <button type="submit" class="btn full-width bold-text" id="add-to-cart" disabled>
-            {{ 'add_to_cart_text' | t }}
-          </button>
-        </div>
-      </div>
+      {% comment %} <div class="conditional-small-screen"> {% endcomment %}
+      {% render 'product-page-cart-btn', unpainted: false %}
+      {% comment %} </div> {% endcomment %}
     {% else %}
-      <div class="unpainted-add-to-cart-btn-container">
-        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-        <button type="submit" class="btn full-width bold-text" id="add-to-cart-for-unpainted" disabled>
-          {{ 'add_to_cart_text' | t }}
-        </button>
-      </div>
+      {% render 'product-page-cart-btn', unpainted: true %}
     {% endif %}
   </form>
 {% endif %}
@@ -1186,18 +1063,17 @@
           // Renders the Add to Cart button on product page for non customizable products (e.g. swatch)
           document.addEventListener('DOMContentLoaded', function () {
             const combinedVariantSelect = document.getElementById('variant-selector');
-            const addToCartButton = document.getElementById('add-to-cart');
 
           
           // let vinSuccess = false;
             if(combinedVariantSelect) {
               combinedVariantSelect.addEventListener('change', function () {
                 if (combinedVariantSelect.value) {
-                addToCartButton.style.display = 'block';
-                addToCartButton.disabled = false;
+                showAddToCartButton();
+                enableAddToCartButton()
                 updateProgressHeaderColors();
                 } else {
-                addToCartButton.style.display = 'none';
+                hideAddToCartButton();
                 disableAddToCartButton();
                 updateProgressHeaderColors();
                 }
@@ -1217,11 +1093,10 @@
             const addToCartPage = document.getElementById('add-to-cart-page');
             const fitmentFailButton = document.createElement('button');
             const combinedVariantSelect = document.getElementById('variant-selector');
-            const addToCartButton = document.getElementById('add-to-cart');
-            const addToCartButtonForUnpaintedItems = document.getElementById("add-to-cart-for-unpainted");
+            const addToCartButton = document.querySelector('.add-to-cart');
+            const addToCartButtonForUnpaintedItems = document.querySelector(".add-to-cart-for-unpainted");
             const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
             const vinTextBox = document.getElementById('vin-textbox');
-            const paintedStockKey = document.querySelector('.painted-stock-key');
             const howToFindPaintCodeBtn = document.getElementById('how-to-find-your-paint-code-vindecoder');
             const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
             const asmSettings = document.getElementById("asm-settings");
@@ -1327,11 +1202,38 @@
             //Enables and disables product page features
             function checkProductFitmentStatus(failEl, successEl, hiddenEl) {
               // Failed Fitment Verification
-              if (failEl) {
+              if(hiddenEl) {
+                resetAllHeaderColors(true);
+                hideFitmentFailButton();
+
+                if(qualityTypeButtons) {
+                  clearQualityTypeButtons();
+                  disableQualityTypeButtons();
+                  disableQualityDescriptionBtn();
+                }
+                {% comment %} if(failedVinDecode) showGetPaintCodeUsingVINCheckbox(); {% endcomment %}
+                clearPaintOptionRadioBtns();
+                clearCombinedVariantSelect();
+                disableCombinedVariantSelect();
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
+                disableVinVerificationBtns()
+                clearVinVerificationRadioButtons();
+                disableAddToCartButton();
+
+                //The following two are for the vin decoder button and how to find paint code button
+                disablehowToFindPaintCodeBtn();
+                disableGetPaintCodeUsingVin();
+                disableSelectVinVariantBtn();
+                disableVINTextboxForOEM();
+                fitmentSuccess = false;
+
+              // Successful fitment verification
+              } else if (failEl) {
                 resetAllHeaderColors(true);
 
                 // Fitment failed, hide Continue button and show "Parts That Fit" button
-                fitmentFailButton.style.display = 'block';
+                showFitmentFailButton();
                 if (!document.getElementById('fitment-fail-button')) {
                   if(fitmentFailPage) fitmentFailPage.appendChild(fitmentFailButton);
                   if(fitmentFailPageOOS) fitmentFailPageOOS.appendChild(fitmentFailButton);
@@ -1357,37 +1259,11 @@
                 fitmentSuccess = false;
 
               // Currently filling out fitment verification
-              } else if(hiddenEl) {
-                resetAllHeaderColors(true);
-
-                if(qualityTypeButtons) {
-                  clearQualityTypeButtons();
-                  disableQualityTypeButtons();
-                  disableQualityDescriptionBtn();
-                }
-                {% comment %} if(failedVinDecode) showGetPaintCodeUsingVINCheckbox(); {% endcomment %}
-                clearPaintOptionRadioBtns();
-                clearCombinedVariantSelect();
-                disableCombinedVariantSelect();
-                disablePrecisionMatchBtns();
-                clearPrecisionMatchRadioButtons();
-                disableVinVerificationBtns()
-                clearVinVerificationRadioButtons();
-                disableAddToCartButton();
-
-                //The following two are for the vin decoder button and how to find paint code button
-                disablehowToFindPaintCodeBtn();
-                disableGetPaintCodeUsingVin();
-                disableSelectVinVariantBtn();
-                disableVINTextboxForOEM();
-                fitmentSuccess = false;
-
-              // Successful fitment verification
               } else if (successEl) {
                 // STEP 1: 
                 // - Ensure the fitmentFail button is hidden
                 // - Enable the quality select dropdown if it exists
-                fitmentFailButton.style.display = 'none';
+                hideFitmentFailButton();
                 const event = new Event('eventFitmentSuccess');
                 successEl.dispatchEvent(event);
                 if(qualityTypeButtons) {
@@ -1419,7 +1295,7 @@
 
               // Anything else (never should enter this)
               } else {
-                fitmentFailButton.style.display = 'none';
+                hideFitmentFailButton();
                 if(qualityTypeButtons) {
                   clearQualityTypeButtons();
                   disableQualityTypeButtons();
@@ -1455,7 +1331,9 @@
                 if(isOnlyOem === 'false') {
                   if(oemVinContainer && oemVinContainer.classList.contains("show")) oemVinContainer.classList.remove("show");
                 }
-                if(paintedStockKey && paintedStockKey.style.display === "block") paintedStockKey.style.display = "none";
+                if(window.enablePrepaintedMessaging) {
+                  hidePaintedStockKeyPaintDisclaimer();
+                }
               }
 
               //Enable the Paint option section if the product is only OEM and if the 
@@ -1484,45 +1362,49 @@
         
                 if (parseInt(variantSize) === 1 && variantTitle === "Default Title" && fitmentSuccess) {
                     form.action = `/cart/add?id=${variantId}`;
-                    currentAddToCartBtn.style.display = 'block';
+                    showAddToCartButton();
                     enableAddToCartButton();
                     updateProgressHeaderColors();
                 } else {
+                    if(selectedVariantUnavailable === true) {
+                      disableAddToCartButton();
+                      return;
+                    }
                     if (variantSelected && !selectedOptionCheckingForVin && fitmentSuccess && !hasFitmentVerification) {
                         form.action = `/cart/add?id=${combinedVariantSelect.value}`;
-                        currentAddToCartBtn.style.display = 'block';
+                        showAddToCartButton();
                         enableAddToCartButton();
                         updateProgressHeaderColors();
                     } else if(selectedOptionCheckingForVin && fitmentSuccess && vinSuccess && !hasFitmentVerification) {
                     form.action = `/cart/add?id=${combinedVariantSelect.value}`;
-                      currentAddToCartBtn.style.display = 'block';
+                        showAddToCartButton();
                         enableAddToCartButton();
                         updateProgressHeaderColors();
                     } else if(selectedOptionCheckingForVin && fitmentSuccess && !hasFitmentVerification) {
                         const vinMessageParagraph = document.querySelector('.vin-decoder-message');
                         if (vinMessageParagraph) {
                           form.action = `/cart/add?id=${combinedVariantSelect.value}`;
-                          currentAddToCartBtn.style.display = 'block';
+                          showAddToCartButton();
                           enableAddToCartButton();
                           updateProgressHeaderColors();
                         }
                     } else if(selectedOptionCheckingForVin && fitmentSuccess && oemVinContainer.classList.contains("show") && !hasfitmentVerification) {
                       form.action = `/cart/add?id=${combinedVariantSelect.value}`;
-                        currentAddToCartBtn.style.display = 'block';
+                          showAddToCartButton();
                           enableAddToCartButton();
                           updateProgressHeaderColors();
                     } else {
                       form.action = '/cart/add';
-                      currentAddToCartBtn.style.display = 'block';
+                      showAddToCartButton();
                     }
                 }
             }
         
             function handleFitmentSuccessChange(productSelect) {
-                if(addToCartButton) {
+                if(paintedItem) {
                   if (variantSelectedOption && fitmentSuccess && !hasFitmentVerification) {
                       form.action = `/cart/add?id=${variantSelectedOption}`;
-                      addToCartButton.style.display = 'block';
+                      showAddToCartButton();;
                       enableAddToCartButton();
                       updateProgressHeaderColors();
                   } else if(variantSelectedOption && fitmentSuccess && hasFitmentVerification) {
@@ -1534,7 +1416,7 @@
                       disableAddToCartButton();
                       updateProgressHeaderColors();
                   }
-                } else if (addToCartButtonForUnpaintedItems) {
+                } else if (!paintedItem) {
                   let variantSelectedOption;
                   let noQualityOptions = false;
 
@@ -1552,20 +1434,20 @@
                   }
 
                   if (productSelect && fitmentSuccess) {
-                    addToCartButtonForUnpaintedItems.style.display = 'block';
+                      showAddToCartButton();
 
                       // For unpainted items that have different quality selections, ensure that the add to cart button is clickable as soon
                       // as a quality is selected that is not oem
                       if(productSelect !== "oem" && !hasFitmentVerification) {
-                        addToCartButtonForUnpaintedItems.disabled = false;
+                        enableAddToCartButton();
                       }
                       if(productSelect !== "oem" && hasFitmentVerification) {
                         if(!hasPrecisionMatch) enableVinVerificationBtns();
                         if(hasPrecisionMatch) enablePrecisionMatchBtns();
-                        addToCartButtonForUnpaintedItems.disabled = true;
+                        disableAddToCartButton();
                       }
                       if(previousQualitySelectUnpainted !== '' && productSelect === "oem" && previousQualitySelectUnpainted !== productSelect) {
-                        addToCartButtonForUnpaintedItems.disabled = true;
+                        disableAddToCartButton();
                       }
                   } else if(noQualityOptions && fitmentSuccess && !hasFitmentVerification) { 
                     let oemProduct = false;
@@ -1578,8 +1460,8 @@
                     // For unpainted items that do not have quality options, ensure the add to cart button is clickable as soon as fitment is verified
                     // NOTE: This is only for non-OEM products
                     if(!oemProduct) {
-                      addToCartButtonForUnpaintedItems.style.display = 'block';
-                      addToCartButtonForUnpaintedItems.disabled = false;
+                      showAddToCartButton();
+                      enableAddToCartButton();
                     }
                   } else if(noQualityOptions && fitmentSuccess && hasFitmentVerification) { 
                     let oemProduct = false;
@@ -1592,12 +1474,12 @@
                     if(!oemProduct) {
                       if(!hasPrecisionMatch) enableVinVerificationBtns();
                       if(hasPrecisionMatch) enablePrecisionMatchBtns();
-                      addToCartButtonForUnpaintedItems.style.display = 'block';
-                      addToCartButtonForUnpaintedItems.disabled = true;
+                      showAddToCartButton();
+                      disableAddToCartButton();
                     }
                   } else {
                       form.action = '/cart/add';
-                      addToCartButtonForUnpaintedItems.disabled = true;
+                      disableAddToCartButton();
                   }
 
                   previousQualitySelectUnpainted = productSelect;
@@ -1614,16 +1496,14 @@
                 if(vinTextBoxContainer) {
                   if (selectedOption.includes('Match Paint by VIN') || selectedOption.includes('Pintura de combinación por VIN')) {
                     //This check is if the vin decoder results in 'match paint by vin', then customer toggles off of it then back onto it
-                      if (vinMessageParagraph && (vinMessageParagraph.innerHTML.includes("will be attached to this order and") || vinMessageParagraph.innerHTML.includes("se adjuntará a esta orden"))) {
-                        vinMessageParagraph.style.display = 'block';
-                      }
+                      showVinMessageParagraph();
                       if(paintOrVin) paintOrVin.style.visibility = "hidden";
                       if(useVinButton) useVinButton.style.display = 'none';
                       if(vinTextBox) vinTextBox.style.display = 'block';
                       if(vinTextBoxContainer) vinTextBoxContainer.style.display = 'block';
                       updateProgressHeaderColors();
                   } else { 
-                    if(vinMessageParagraph && failedVinDecode) vinMessageParagraph.style.display = 'none';
+                    if(vinMessageParagraph && failedVinDecode) hideVinMessageParagraph();
                     if(paintOrVin) paintOrVin.style.visibility = "visible";
                     if(useVinButton) useVinButton.style.display = 'block';
                     if(failedVinDecode && !failedVinDecode) vinSuccess = false;
@@ -1712,10 +1592,10 @@
 
             //Add an event listener for the product type select only for unpainted... this is to call the handleFitmentSuccessChange
             if (!paintedItem) {
-              const qualityTypeButtons = document.querySelectorAll('.quality-option');
+              const qualityOption = document.querySelectorAll('.quality-option');
             
-              if (qualityTypeButtons.length > 0) {
-                qualityTypeButtons.forEach(button => {
+              if (qualityOption.length > 0) {
+                qualityOption.forEach(button => {
                   button.addEventListener('click', (event) => {
                     const selectedValue = event.currentTarget.dataset.value;
             
@@ -1723,7 +1603,7 @@
                     updateProgressHeaderColors();
             
                     // Optional: visually highlight the selected button
-                    qualityTypeButtons.forEach(btn => btn.classList.remove('active'));
+                    qualityOption.forEach(btn => btn.classList.remove('active'));
                     event.currentTarget.classList.add('active');
                   });
                 });
@@ -1740,7 +1620,19 @@
                 const precisionMatchWrapper = document.querySelector('.product-page-precision-match-wrapper');
                 const selectedVariantTitle = selectedOption?.getAttribute('title');
                 const selectedSku = selectedOption?.getAttribute('sku');
+                const unavailableSelection = selectedOption?.dataset.unavailable;
+                const oosPaintVariants = document.querySelector('.oos-paint-variants');
                 variantSelectedOption = selectedOption?.value;
+
+
+                // Firstly, Check to see if the option is even available
+                if(unavailableSelection === "true") {
+                  if(oosPaintVariants && !oosPaintVariants.classList.contains('show')) oosPaintVariants.classList.add("show");
+                  selectedVariantUnavailable = true;
+                } else {
+                  if(oosPaintVariants && oosPaintVariants.classList.contains('show')) oosPaintVariants.classList.remove("show");
+                  selectedVariantUnavailable = false;
+                }
             
                 // 1. Handle products WITHOUT fitment verification or precision match
                 if (!hasFitmentVerification && !hasPrecisionMatch && paintedItem) {
@@ -1837,7 +1729,6 @@
 
                   const vinInput = event.target.value.toUpperCase();
                   const warning = document.getElementById('vin-warning-for-oem');
-                  const addToCartButtonForUnpaintedItems = document.getElementById("add-to-cart-for-unpainted");
 
       
                   // Remove I, O, Q characters
@@ -1855,7 +1746,7 @@
 
                   // Ensure VIN input is 17 characters before enabling Add to Cart
                   if (vinInput.length === 17 && fitmentSuccess && !hasFitmentVerification) {
-                    addToCartButtonForUnpaintedItems.disabled = false;
+                    enableAddToCartButton();
                     vinSuccess = true;    
                     updateProgressHeaderColors();
                   } else if(vinInput.length === 17 && fitmentSuccess && hasFitmentVerification) {
@@ -1865,7 +1756,7 @@
                     vinSuccess = false;
                     updateProgressHeaderColors();
                   } else {
-                    addToCartButtonForUnpaintedItems.disabled = true;
+                    disableAddToCartButton();
                     vinSuccess = false;
                     updateProgressHeaderColors();
                   }
