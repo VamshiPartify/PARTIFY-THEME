@@ -380,7 +380,7 @@
                             "price": "{{ variant.price | money }}",
                             "priceDifference": "{{ price_difference }}",
                             "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
-                            "variantAvailable": "{{ variant.available }}",
+                            "variantAvailable": "{{ variant.metafields.custom.hide_paint_code }}",
                             "variantTitle": "{{ variant.title }}",
                             "variantSku": "{{ variant.sku }}",
                             "variantInventory": "{{ variant.inventory_quantity }}",
