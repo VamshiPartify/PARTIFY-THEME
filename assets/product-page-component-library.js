@@ -13,6 +13,7 @@ const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
 const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
 const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
+const oosPaintVariantsLibrary = document.querySelector('.oos-paint-variants');
 const paintedStockKeyPaintLevelLibrary = document.querySelector('.painted-stock-key-paint-level');
 const paintedStockKeyQualityLevelLibrary = document.querySelector('.painted-stock-key-quality-level');
 const paintCodeAppContainerLibrary = document.getElementById('paintcode-app-container');
@@ -20,8 +21,7 @@ const paintCodeWrapperLibrary = document.querySelector(".paint-code-wrapper");
 const paintOptionCheckboxByPaintCode = document.getElementById('checkbox-select-paint-option');
 const paintOptionCheckboxByUnpainted = document.getElementById('checkbox-select-unpainted');
 const paintOptionCheckboxByVIN = document.getElementById('checkbox-get-paint-code-with-vin');
-const paintOptionsButtonsLibrary = document.querySelector('.paint-options-buttons');
-const paintOptionsIndividualButtonsLibrary = document.querySelectorAll('.paint-option-button');
+const paintOptionsCheckboxGroupLibrary = document.querySelector('.paint-options-checkbox-group');
 const precisionMatchContainerLibrary = document.querySelector('.precision-match-container');
 const precisionMatchCheckboxYes = document.getElementById('precision-match');
 const precisionMatchCheckboxNo = document.getElementById('standard-match');
@@ -32,12 +32,10 @@ const priceContainerLargeScreen = document.querySelector('.price-container-large
 const priceContainerSmallScreen = document.querySelector('.price-container');
 const priceDisplay = document.getElementById('price-display');
 const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
-const qualityTypeButtonsLibrary = document.querySelector('.quality-type-buttons');
-const qualityOptionsLibrary = document.querySelectorAll('.quality-option');
+const qualityTypeSelectLibrary = document.getElementById('quality-type-select');
 const qualityDescriptionBtnLibrary = document.getElementById('quality-description-vindecoder');
 const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
 const vinInputLibrary = document.querySelector('#vin-textbox');
-const vinMessageParagraphLibrary = document.querySelector('.vin-decoder-message');
 const vinTextBoxOEMLibrary = document.getElementById('vin-textbox-for-oem');
 const vinTextboxContainer = document.getElementById("vin-textbox-container");
 const vinVerificationCheckboxGroupLibrary = document.querySelector('.vin-verification-checkbox-group');
@@ -96,15 +94,8 @@ function hideFitmentFailButton() {
     if (fitmentFailButtonLibrary) fitmentFailButtonLibrary.style.display = "none";
 }
 
-function disableQualityTypeButtons() {
-    if (qualityTypeButtonsLibrary) qualityTypeButtonsLibrary.classList.add("disabled");
-}
-function clearQualityTypeButtons() {
-    if (qualityOptionsLibrary) {
-        qualityOptionsLibrary.forEach(button => {
-            button.classList.remove("selected");
-        })
-    };
+function clearProductTypeSelect() {
+    if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.selectedIndex = 0;
 }
 
 function disableQualityDescriptionBtn() {
@@ -123,23 +114,24 @@ function clearCombinedVariantSelect() {
 }
 
 function disablePaintOptionRadioBtns() {
-    if (!paintOptionsButtonsLibrary.classList.contains("disabled")) {
-        paintOptionsButtonsLibrary.classList.add("disabled");
+    if (paintOptionCheckboxByUnpainted) paintOptionCheckboxByUnpainted.disabled = true;
+    if (paintOptionCheckboxByPaintCode) {
+        paintOptionCheckboxByPaintCode.disabled = true;
+        if (paintCodeWrapperLibrary && paintCodeWrapperLibrary.classList.contains('show')) {
+            paintCodeWrapperLibrary.classList.remove('show');
+        }
+        if (paintCodeAppContainerLibrary && paintCodeAppContainerLibrary.classList.contains('show')) {
+            paintCodeAppContainerLibrary.classList.remove('show');
+        }
     }
-    if (paintCodeWrapperLibrary && paintCodeWrapperLibrary.classList.contains('show')) {
-        paintCodeWrapperLibrary.classList.remove('show');
-    }
-    if (paintCodeAppContainerLibrary && paintCodeAppContainerLibrary.classList.contains('show')) {
-        paintCodeAppContainerLibrary.classList.remove('show');
-    }
+    if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = true;
 }
 
 function clearPaintOptionRadioBtns() {
-    if (paintOptionsIndividualButtonsLibrary) {
-        paintOptionsIndividualButtonsLibrary.forEach(button => {
-            button.classList.remove("selected");
-        })
-    };
+    if (paintOptionsCheckboxGroupLibrary) {
+        const radios = document.querySelectorAll(`input[name="select_paint_option"]`);
+        radios.forEach(radio => radio.checked = false);
+    }
 }
 
 function hideGetPaintCodeUsingVINCheckbox() {
@@ -159,6 +151,8 @@ function disablePaintedStockKeyQualityDisclaimer() {
 }
 
 function hideVinMessageParagraph() {
+    const vinMessageParagraphLibrary = document.querySelector('.vin-decoder-message');
+
     if (
         vinMessageParagraphLibrary &&
         (vinMessageParagraphLibrary.innerHTML.includes("will be attached to this order and") ||
@@ -169,10 +163,8 @@ function hideVinMessageParagraph() {
 }
 
 function disablehowToFindPaintCodeBtn() {
-    if (paintOptionsButtonsLibrary) {
-        disablePaintOptionRadioBtns();
-        if (howToFindPaintCodeBtnLibrary) howToFindPaintCodeBtnLibrary.disabled = true;
-    }
+    disablePaintOptionRadioBtns();
+    if (howToFindPaintCodeBtnLibrary) howToFindPaintCodeBtnLibrary.disabled = true;
 }
 
 function disableGetPaintCodeUsingVin() {
@@ -215,6 +207,10 @@ function clearVinVerificationRadioButtons() {
     }
 }
 
+function hideOOSPaintVariantsMsg() {
+    if (oosPaintVariantsLibrary && oosPaintVariantsLibrary.classList.contains('show')) oosPaintVariantsLibrary.classList.remove("show");
+}
+
 function hideAddToCartButton() {
     if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.style.display = 'none';
 }
@@ -235,8 +231,8 @@ function showFitmentFailButton() {
     if (fitmentFailButtonLibrary) fitmentFailButtonLibrary.style.display = "block";
 }
 
-function enableQualityTypeButtons() {
-    if (qualityTypeButtonsLibrary) qualityTypeButtonsLibrary.classList.remove("disabled");
+function enableProductTypeSelect() {
+    if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.disabled = false;
 }
 
 function enableQualityDescriptionBtn() {
@@ -252,7 +248,9 @@ function enableCombinedVariantSelect() {
 }
 
 function enablePaintOptionRadioBtns() {
-    if (paintOptionsButtonsLibrary) paintOptionsButtonsLibrary.classList.remove("disabled");
+    if (paintOptionCheckboxByUnpainted) paintOptionCheckboxByUnpainted.disabled = false;
+    if (paintOptionCheckboxByPaintCode) paintOptionCheckboxByPaintCode.disabled = false;
+    if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = false;
 }
 
 function showGetPaintCodeUsingVINCheckbox() {
@@ -275,6 +273,8 @@ function enablePaintedStockKeyQualityDisclaimer() {
 }
 
 function showVinMessageParagraph() {
+    const vinMessageParagraphLibrary = document.querySelector('.vin-decoder-message');
+
     if (
         vinMessageParagraphLibrary &&
         (vinMessageParagraphLibrary.innerHTML.includes("will be attached to this order and") ||
@@ -307,6 +307,10 @@ function enableVinVerificationBtns() {
     if (vinVerifyCheckbboxYesLibrary) vinVerifyCheckbboxYesLibrary.disabled = false;
     if (vinVerifyCheckboxNoLibrary) vinVerifyCheckboxNoLibrary.disabled = false;
     if (vinVerificationButtonLibrary) vinVerificationButtonLibrary.disabled = false;
+}
+
+function showOOSPaintVariantsMsg() {
+    if (oosPaintVariantsLibrary && !oosPaintVariantsLibrary.classList.contains('show')) oosPaintVariantsLibrary.classList.add("show");
 }
 
 function showAddToCartButton() {
@@ -546,17 +550,29 @@ function addOEMBadge() {
 }
 
 function updatePriceDisplay(selectedType) {
-    const selectedButton = document.querySelector(`.quality-option[data-value="${selectedType}"]`);
-    if (!selectedButton) return;
-
-    // Option 1: If the button text includes the price
-    const buttonText = selectedButton.textContent;
-    const priceMatch = buttonText.match(/\$[\d,]+\.\d{2}/);
+    const selectedText = qualityTypeSelectLibrary.options[qualityTypeSelectLibrary.selectedIndex].textContent;
+    const priceMatch = selectedText.match(/\$[\d,]+\.\d{2}/);
     if (!priceMatch) return;
 
     priceDisplay.textContent = priceMatch[0];
     priceDisplaySmallScreen.textContent = priceMatch[0];
 }
+
+
+
+
+
+
+
+
+
+/*******************************************************************************************************
+**                                                                                                    **
+**                                             UTILITIES                                              **
+**                                                                                                    **
+*******************************************************************************************************/
+
+
 
 function hideShopifyChat() {
     const shopifyChat = document.getElementById('shopify-chat');

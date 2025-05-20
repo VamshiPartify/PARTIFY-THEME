@@ -76,7 +76,7 @@
         const productDetailsElement = document.getElementById('product-details-for-app');
         const paintCodeWrapper = document.querySelector(".paint-code-wrapper");
         const paintCodeAppContainer = document.getElementById('paintcode-app-container');
-        const paintOptionsButtons = document.querySelector('.paint-options-buttons');
+        const paintOptionsCheckboxGroup = document.querySelector('.paint-options-checkbox-group');
         const themeName = "{{ theme.name | escape }}" || 'Unknown Theme';
         const troublesomeMakesColors = {};
 
@@ -151,7 +151,7 @@
                   storedDecodedVin = vinSelected;
 
                     if (variantSelector) {
-                        if(!failedVinDecode) hideGetPaintCodeUsingVINCheckbox();
+                        {% comment %} if(!failedVinDecode) hideGetPaintCodeUsingVINCheckbox(); {% endcomment %}
                         
                         const options = Array.from(variantSelector.options);
                         options.find(option => {
@@ -208,7 +208,7 @@
                     }
                     paintCodeWrapper.classList.add('show');
                     paintCodeAppContainer.classList.remove('show');
-                    {% comment %} paintOptionsButtons.classList.add('hide'); {% endcomment %}
+                    {% comment %} paintOptionsCheckboxGroup.classList.add('hide'); {% endcomment %}
                 }
 
                 if (event.data.type === "getPaintByVIN") {
@@ -220,7 +220,7 @@
 
                     paintCodeWrapper.classList.add('show');
                     paintCodeAppContainer.classList.remove('show');
-                    {% comment %} paintOptionsButtons.classList.add('hide'); {% endcomment %}
+                    {% comment %} paintOptionsCheckboxGroup.classList.add('hide'); {% endcomment %}
                 }
             }
         });

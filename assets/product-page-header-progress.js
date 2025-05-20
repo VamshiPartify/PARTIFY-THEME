@@ -5,7 +5,7 @@ const vinHeader = document.querySelector('.option-title-vin');
 const optionTitle = document.querySelector('.option-title');
 const fitmentVerificationTitle = document.querySelector('.fitment-guarantee');
 const oemVinContainer = document.querySelector('.oem-vin-container');
-const qualityTypeButtons = document.querySelector('.quality-type-buttons');
+const qualityTypeSelect = document.getElementById('quality-type-select');
 const combinedVariantSelect = document.getElementById('variant-selector');
 const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
 const vinVerifyCheckbboxYes = document.getElementById('fitment-yes');
@@ -63,7 +63,7 @@ function isFitmentVerified() {
     return !!successEl && !failEl;
 }
 function getQualityHeaderColor() {
-    const hasProductType = !!qualityTypeButtons;
+    const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
     const needsVin = oemVinContainer && oemVinContainer.classList.contains("show");
@@ -72,22 +72,22 @@ function getQualityHeaderColor() {
     //If it does not needsVin, then the OEM option was not selected
     if (!needsVin) {
         if (hasProductType && hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
         }
         if (hasProductType && !hasCombinedVariant && hasFitmentVerification) {
-            if (!qualityTypeButtons.classList.contains("disabled") && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
         }
         if (hasProductType && !hasCombinedVariant && !hasFitmentVerification) {
-            if (!qualityTypeButtons.classList.contains("disabled") && currentAddToCartBtn.disabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && currentAddToCartBtn.disabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
         }
     }
     //If it needsVin, then the OEM option was selected
     if (needsVin) {
         if (hasProductType) {
-            if (!qualityTypeButtons.classList.contains("disabled")) return COLORS.black;
+            if (qualityTypeSelect.disabled === false) return COLORS.black;
         }
     }
     return COLORS.gray; // gray
@@ -121,7 +121,7 @@ function isValidVin() {
     }
 }
 function isPaintOptionSelected() {
-    const hasProductType = !!qualityTypeButtons;
+    const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
     const hasPrecisionMatch = !!precisionMatchLabel;
@@ -139,8 +139,8 @@ function isPaintOptionSelected() {
     //If it is present, deem if it is true or not... if it is not present, then it is not applicable so set it to true
     if (hasFitmentVerification && !hasPrecisionMatch) {
         if (hasProductType && hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
         } else if (!hasProductType && hasCombinedVariant) {
             if (combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
             if (combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
@@ -148,16 +148,16 @@ function isPaintOptionSelected() {
     } else if (hasPrecisionMatch) {
         if (precisionMatchWrapperIsShowing) {
             if (hasProductType && hasCombinedVariant) {
-                if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === true) return COLORS.red;
-                if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false) return COLORS.black;
+                if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === true) return COLORS.red;
+                if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false) return COLORS.black;
             } else if (!hasProductType && hasCombinedVariant) {
                 if (combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === true) return COLORS.red;
                 if (combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false) return COLORS.black;
             }
         } else {
             if (hasProductType && hasCombinedVariant) {
-                if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
-                if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+                if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+                if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
             } else if (!hasProductType && hasCombinedVariant) {
                 if (combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
                 if (combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
@@ -165,8 +165,8 @@ function isPaintOptionSelected() {
         }
     } else {
         if (hasProductType && hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
         } else if (!hasProductType && hasCombinedVariant) {
             if (combinedVariantSelect.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
             if (combinedVariantSelect.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
@@ -176,7 +176,7 @@ function isPaintOptionSelected() {
 }
 
 function isVinVerified() {
-    const hasProductType = !!qualityTypeButtons;
+    const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
     const hasPrecisionMatch = !!precisionMatchLabel;
@@ -192,14 +192,14 @@ function isVinVerified() {
         if (vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
     } else {
         if (hasProductType && hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
         } else if (!hasProductType && hasCombinedVariant) {
             if (combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
             if (combinedVariantSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
         } else if (hasProductType && !hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
         } else if (!hasProductType && !hasCombinedVariant) {
             if (vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
             if (vinVerifyCheckbboxYes.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
@@ -209,7 +209,7 @@ function isVinVerified() {
 }
 
 function isPrecisionMatchSelected() {
-    const hasProductType = !!qualityTypeButtons;
+    const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
     const hasPrecisionMatch = !!precisionMatchLabel;
@@ -223,28 +223,28 @@ function isPrecisionMatchSelected() {
 
     if (!hasFitmentVerification) {
         if (hasProductType && hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
         } else if (!hasProductType && hasCombinedVariant) {
             if (combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
             if (combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
         } else if (hasProductType && !hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && addToCartBtnDisabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && addToCartBtnDisabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && addToCartBtnDisabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && addToCartBtnDisabled === false) return COLORS.black;
         } else if (!hasProductType && !hasCombinedVariant) {
             if (addToCartBtnDisabled === true) return COLORS.red;
             if (addToCartBtnDisabled === false) return COLORS.black;
         }
     } else {
         if (hasProductType && hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
         } else if (!hasProductType && hasCombinedVariant) {
             if (combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
             if (combinedVariantSelect.disabled === false && precisionMatchCheckboxYesLibrary.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
         } else if (hasProductType && !hasCombinedVariant) {
-            if (!qualityTypeButtons.classList.contains("disabled") && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
-            if (!qualityTypeButtons.classList.contains("disabled") && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
         } else if (!hasProductType && !hasCombinedVariant) {
             if (vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
             if (vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
