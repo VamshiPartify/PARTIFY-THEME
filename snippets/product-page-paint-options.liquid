@@ -826,8 +826,14 @@
               enableSelectVinVariantBtn();
 
                 variants.forEach(function(variant) {
-                  const isVariantAvailable = variant.variantAvailable === "true" || variant.variantAvailable === true;
+            let isVariantAvailable = true;
 
+            // set it to true in the following because it is actually checking to see if the variant is hidden
+            if (variant.variantAvailable === "true" || variant.variantAvailable === true) {
+                isVariantAvailable = false;
+            } else {
+                isVariantAvailable = true;
+            }
                   window.selectedVariantId = variant.id;
                   let option;
 
