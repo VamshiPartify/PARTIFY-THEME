@@ -232,6 +232,7 @@
 <div class="product-type-dropdown">
   {% if is_only_oem == false and is_no_quality_options == false %}
     <label class="option-title-quality" for="quality-type-select">{{ 'quality_options.title' | t }}</label>
+    <div class="painted-stock-key-quality-level" style="display: none;"></div>
     <select id="quality-type-select" disabled>
       <option value="" disabled selected>{{ 'quality_options.disabled_first_option' | t }}</option>
       {% assign available_product_types = '' %}
