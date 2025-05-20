@@ -726,7 +726,7 @@
 
     <!-- Fitment Verification -->
     <div id="model-fitmentfail-button-container">
-      <label class="verify-fitment-title">{{ 'verify_fitment' | t }}</label>
+      <label class="verify-fitment-title" for="quality-type-select">{{ 'verify_fitment' | t }}</label>
       <div class="model-fitment-easysearch-container">
         <div class="easysearch-embed-widget-fitment"></div>
       </div>
@@ -856,10 +856,10 @@
   {% else %}
     <!-- Form for Unpainted Items -->
     <!--
-      ******************************************************************************************************
-      **                                                                                                  **
-      **                                      UNPAINTED AND IN STOCK                                      **
-      **                                                                                                  **
+      ***************************************************************************************************
+      **                                                                                                    **
+      **                                      UNPAINTED AND IN STOCK                                        **
+      **                                                                                                    **
       ******************************************************************************************************
     -->
     <form
@@ -875,7 +875,7 @@
             {% render 'delivery-countdown' %}
           </div>
           <div id="model-fitmentfail-button-container">
-            <label class="verify-fitment-title">{{ 'verify_fitment' | t }}</label>
+            <label class="verify-fitment-title" for="quality-type-select">{{ 'verify_fitment' | t }}</label>
             <div class="model-fitment-easysearch-container">
               <div class="easysearch-embed-widget-fitment"></div>
             </div>
@@ -957,7 +957,7 @@
     <div id="product-unavailable-alert">This product is currently out of stock.</div>
   {% endif %}
   <div id="model-fitmentfail-button-container-oos">
-    <label class="verify-fitment-title">{{ 'verify_fitment' | t }}</label>
+    <label class="verify-fitment-title" for="quality-type-select">{{ 'verify_fitment' | t }}</label>
     <div class="model-fitment-easysearch-container">
       <div class="easysearch-embed-widget-fitment"></div>
     </div>
@@ -1101,7 +1101,7 @@
             const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
             const asmSettings = document.getElementById("asm-settings");
             const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === "Enabled";
-            const qualityTypeButtons = document.querySelector('.quality-type-buttons');
+            const qualityTypeSelect = document.getElementById('quality-type-select');
             const easyFitmentFail = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-fail');
             const easyFitmentSuccess = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-icon-success');
             const fitmentLink = document.querySelector('.easysearch-fitment-link');
@@ -1125,8 +1125,7 @@
             const variantSize = '{{ product.variants.size }}';
             const variantTitle = '{{ product.variants.first.title }}';
             const variantId = '{{ product.variants[0].id }}';
-            const paintOptionsButtons = document.querySelector(".paint-options-buttons");
-            
+            const paintOptionsCheckBoxGroup = document.querySelector(".paint-options-checkbox-group");
 
             let fitmentObject = JSON.parse(localStorage.getItem("easysearch-preselect-fitment"));
             let variantSelectedOption = null;
@@ -1158,7 +1157,7 @@
             *******************************************************************************************************/
 
             // The following is only for product pages with no quality selection
-            if(isDeliveryCountdownEnabled && !qualityTypeButtons && combinedVariantSelect) {
+            if(isDeliveryCountdownEnabled && !qualityTypeSelect && combinedVariantSelect) {
               let singularProductVariants = {{ product.variants | json }};
               let singularVariantsObj = { 'single': singularProductVariants };
               let singularProductSku = {{ product.variants.first.sku | json }};
@@ -1173,7 +1172,7 @@
 
             
             // The following is only for product pages (unpainted) with no quality selection and no paint option selection
-            if(isDeliveryCountdownEnabled && !qualityTypeButtons && !combinedVariantSelect) {
+            if(isDeliveryCountdownEnabled && !qualityTypeSelect && !combinedVariantSelect) {
               let singularProductVariants = {{ product.variants | json }};
               let singularVariantsObj = { 'single': singularProductVariants };
               let singularProductSku = {{ product.variants.first.sku | json }};
@@ -1206,9 +1205,9 @@
                 resetAllHeaderColors(true);
                 hideFitmentFailButton();
 
-                if(qualityTypeButtons) {
-                  clearQualityTypeButtons();
-                  disableQualityTypeButtons();
+                if(qualityTypeSelect) {
+                  {% comment %} clearQualityTypeButtons(); {% endcomment %}
+                  {% comment %} disableQualityTypeButtons(); {% endcomment %}
                   disableQualityDescriptionBtn();
                 }
                 {% comment %} if(failedVinDecode) showGetPaintCodeUsingVINCheckbox(); {% endcomment %}
@@ -1238,9 +1237,9 @@
                   if(fitmentFailPage) fitmentFailPage.appendChild(fitmentFailButton);
                   if(fitmentFailPageOOS) fitmentFailPageOOS.appendChild(fitmentFailButton);
                 }
-                if(qualityTypeButtons) {
-                  disableQualityTypeButtons();
-                  clearQualityTypeButtons();
+                if(qualityTypeSelect) {
+                  {% comment %} disableQualityTypeButtons(); {% endcomment %}
+                  {% comment %} clearQualityTypeButtons(); {% endcomment %}
                   disableQualityDescriptionBtn();
                 }
                 clearCombinedVariantSelect();
@@ -1266,9 +1265,10 @@
                 hideFitmentFailButton();
                 const event = new Event('eventFitmentSuccess');
                 successEl.dispatchEvent(event);
-                if(qualityTypeButtons) {
-                  productSelect = qualityTypeButtons.dataset.value;
-                  enableQualityTypeButtons();
+                if(qualityTypeSelect) {
+                  productSelect = qualityTypeSelect.value;
+                  enableProductTypeSelect();
+                  {% comment %} enableQualityTypeButtons(); {% endcomment %}
                   enableQualityDescriptionBtn();
                 }
                 
@@ -1278,7 +1278,7 @@
                 // - Check if the combinedVariantSelect is present
 
                 // This means if there is not a quality selection present AND the product is not an OEM
-                if(!qualityTypeButtons && !oemVinContainer) {
+                if(!qualityTypeSelect && !oemVinContainer) {
                   enableCombinedVariantSelect();
 
                   //The following two are for the vin decoder button and how to find paint code button
@@ -1296,9 +1296,9 @@
               // Anything else (never should enter this)
               } else {
                 hideFitmentFailButton();
-                if(qualityTypeButtons) {
-                  clearQualityTypeButtons();
-                  disableQualityTypeButtons();
+                if(qualityTypeSelect) {
+                  {% comment %} clearQualityTypeButtons(); {% endcomment %}
+                  {% comment %} disableQualityTypeButtons(); {% endcomment %}
                   disableQualityDescriptionBtn();
                 }
                 if(combinedVariantSelect) {
@@ -1429,7 +1429,7 @@
                   }
 
                   // If there isn't a product type select, then there are no quality options
-                  if(!qualityTypeButtons) {
+                  if(!qualityTypeSelect) {
                     noQualityOptions = true;
                   }
 
@@ -1531,7 +1531,7 @@
                   const fitmentHolder = document.querySelector('.easysearch-fitment-holder');
                   if (fitmentHolder && fitmentHolder.classList.contains('easysearch-hidden')) {
                     hiddenEl = true;
-                    if(paintOptionsButtons && paintOptionsButtons.classList.contains("hide")) paintOptionsButtons.classList.remove("hide");
+                    if(paintOptionsCheckBoxGroup && paintOptionsCheckBoxGroup.classList.contains("hide")) paintOptionsCheckBoxGroup.classList.remove("hide");
                   } else {
                     hiddenEl = false;
                   }
@@ -1579,7 +1579,7 @@
             };
         
 
-            if(qualityTypeButtons) {
+            if(qualityTypeSelect) {
               if(addToCartButtonForUnpaintedItems !== null) {
                 addToCartButtonForUnpaintedItems.addEventListener("click", function () {
                     form.action = `/cart/add?id=${window.selectedVariantId}`;
@@ -1591,22 +1591,13 @@
 
 
             //Add an event listener for the product type select only for unpainted... this is to call the handleFitmentSuccessChange
-            if (!paintedItem) {
-              const qualityOption = document.querySelectorAll('.quality-option');
-            
-              if (qualityOption.length > 0) {
-                qualityOption.forEach(button => {
-                  button.addEventListener('click', (event) => {
-                    const selectedValue = event.currentTarget.dataset.value;
-            
-                    handleFitmentSuccessChange(selectedValue);
-                    updateProgressHeaderColors();
-            
-                    // Optional: visually highlight the selected button
-                    qualityOption.forEach(btn => btn.classList.remove('active'));
-                    event.currentTarget.classList.add('active');
-                  });
-                });
+            if(!paintedItem) {
+              if(qualityTypeSelect) {
+                qualityTypeSelect.addEventListener("change", function (event) {
+                  const selectedOption = event.target.options[event.target.selectedIndex];
+                  handleFitmentSuccessChange(selectedOption.value);
+                  updateProgressHeaderColors();
+                })
               }
             }
             
@@ -1621,16 +1612,15 @@
                 const selectedVariantTitle = selectedOption?.getAttribute('title');
                 const selectedSku = selectedOption?.getAttribute('sku');
                 const unavailableSelection = selectedOption?.dataset.unavailable;
-                const oosPaintVariants = document.querySelector('.oos-paint-variants');
                 variantSelectedOption = selectedOption?.value;
 
 
                 // Firstly, Check to see if the option is even available
                 if(unavailableSelection === "true") {
-                  if(oosPaintVariants && !oosPaintVariants.classList.contains('show')) oosPaintVariants.classList.add("show");
+                  showOOSPaintVariantsMsg();
                   selectedVariantUnavailable = true;
                 } else {
-                  if(oosPaintVariants && oosPaintVariants.classList.contains('show')) oosPaintVariants.classList.remove("show");
+                  hideOOSPaintVariantsMsg();
                   selectedVariantUnavailable = false;
                 }
             
@@ -1671,7 +1661,7 @@
                     updateProgressHeaderColors();
                   }
             
-                  if (isDeliveryCountdownEnabled && !qualityTypeButtons) {
+                  if (isDeliveryCountdownEnabled && !qualityTypeSelect) {
                     receivedDataVariantTitle(selectedVariantTitle);
                     receivedDataVariantSku(selectedSku);
                     getCountdownAndGeoValues();
