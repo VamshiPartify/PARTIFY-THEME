@@ -424,9 +424,9 @@
                         {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
                           {% assign base_variant_inventory = variant.inventory_quantity %}
                         {% endif %}
-                        {% if variant.metafields.custom.hide_paint_code == true %}
+              {% comment %}{% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
-                        {% endif %}
+                        {% endif %}{% endcomment %}
                         {% if variant.title contains "Custom Paint Code" %}
                           {% continue %}
                         {% endif %}
@@ -499,9 +499,9 @@
                         {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
                           {% assign base_variant_inventory = variant.inventory_quantity %}
                         {% endif %}
-                        {% if variant.metafields.custom.hide_paint_code == true %}
+              {% comment %}{% if variant.metafields.custom.hide_paint_code == true %}
                           {% continue %}
-                        {% endif %}
+                        {% endif %}{% endcomment %}
                         {% if variant.title contains "Custom Paint Code" %}
                           {% continue %}
                         {% endif %}
@@ -560,9 +560,9 @@
             current: [
               {% assign current_base_price = product.variants.first.price %}
               {% for variant in product.variants %}
-                {% if variant.metafields.custom.hide_paint_code == true %}
+              {% comment %}{% if variant.metafields.custom.hide_paint_code == true %}
                   {% continue %}
-                {% endif %}
+                {% endif %}{% endcomment %}
                 {% if variant.title contains "Custom Paint Code" %}
                   {% continue %}
                 {% endif %}
