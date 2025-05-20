@@ -290,7 +290,7 @@
         </label>
         {% comment %} {% endif %} {% endcomment %}
       </div>
-      <div class="painted-stock-key" style="display: none;">
+      <div class="painted-stock-key-paint-level" style="display: none;">
         {{ 'variant_instock_message' | t }}
       </div>
       <div class="paint-code-wrapper">
@@ -654,9 +654,9 @@
         const STOCK_POSTFIX = "{{ 'quality_level_painted_stock.postfix' | t }}";
         const AFTERMARKET_WORD = '{{ 'quality_level_painted_stock.aftermarket' | t }}';
         const AND_WORD = '{{ 'quality_level_painted_stock.and' | t }}';
-        aftermarketAvailability = {{ aftermarket_any_available_paint_options | default: false | json }};
-        capaAvailability = {{ capa_any_available_paint_options | default: false | json }};
-        oemAvailability = {{ oem_any_available_paint_options | default: false | json }};
+        aftermarketAvailability = {{ aftermarket_any_available_options | default: false | json }};
+        capaAvailability = {{ capa_any_available_options | default: false | json }};
+        oemAvailability = {{ oem_any_available_options | default: false | json }};
         const hasAvailableOptions = {
           aftermarket: aftermarketAvailability,
           capa: capaAvailability,

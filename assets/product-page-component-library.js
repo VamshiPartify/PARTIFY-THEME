@@ -94,8 +94,19 @@ function hideFitmentFailButton() {
     if (fitmentFailButtonLibrary) fitmentFailButtonLibrary.style.display = "none";
 }
 
-function clearProductTypeSelect() {
+function clearQualityTypeSelect() {
     if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.selectedIndex = 0;
+}
+
+function disablePrePaintedMessagingQualityLevel() {
+    if (paintedStockKeyQualityLevelLibrary) {
+        paintedStockKeyQualityLevelLibrary.classList.add("disabled")
+    }
+}
+
+function disableQualityTypeSelect() {
+    clearQualityTypeSelect();
+    if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.disabled = true;
 }
 
 function disableQualityDescriptionBtn() {
@@ -229,6 +240,12 @@ function showFitmentFailButton() {
     const fitmentFailButtonLibrary = document.getElementById('fitment-fail-button');
 
     if (fitmentFailButtonLibrary) fitmentFailButtonLibrary.style.display = "block";
+}
+
+function enablePrePaintedMessagingQualityLevel() {
+    if (paintedStockKeyQualityLevelLibrary) {
+        paintedStockKeyQualityLevelLibrary.classList.remove("disabled")
+    }
 }
 
 function enableProductTypeSelect() {

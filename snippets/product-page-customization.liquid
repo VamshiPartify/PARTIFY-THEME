@@ -1204,10 +1204,12 @@
               if(hiddenEl) {
                 resetAllHeaderColors(true);
                 hideFitmentFailButton();
+                disablePrePaintedMessagingQualityLevel();
 
                 if(qualityTypeSelect) {
                   {% comment %} clearQualityTypeButtons(); {% endcomment %}
                   {% comment %} disableQualityTypeButtons(); {% endcomment %}
+                  disableQualityTypeSelect();
                   disableQualityDescriptionBtn();
                 }
                 {% comment %} if(failedVinDecode) showGetPaintCodeUsingVINCheckbox(); {% endcomment %}
@@ -1259,6 +1261,7 @@
 
               // Currently filling out fitment verification
               } else if (successEl) {
+                enablePrePaintedMessagingQualityLevel();
                 // STEP 1: 
                 // - Ensure the fitmentFail button is hidden
                 // - Enable the quality select dropdown if it exists
