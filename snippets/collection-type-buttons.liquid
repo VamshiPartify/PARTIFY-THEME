@@ -5,26 +5,26 @@
 
   {% paginate collection.products by 1000 %}
     {%- for product in collection.products -%}
-      {% assign product_counter = product_counter | plus:1 %}
+      {% assign product_counter = product_counter | plus: 1 %}
 
       {% unless product.title contains 'Sample' %}
         {% assign current_type = product.type %}
         {% assign product_types_array = all_product_types | split: ',' %}
-    
+
         {% assign is_duplicate = false %}
         {% for existing_type in product_types_array %}
           {% if existing_type == current_type %}
             {% assign is_duplicate = true %}
           {% endif %}
         {% endfor %}
-    
+
         {% unless is_duplicate %}
           {% assign all_product_types = all_product_types | append: current_type | append: ',' %}
         {% endunless %}
       {% endunless %}
     {%- endfor -%}
   {% endpaginate %}
-  
+
   {% assign product_types_array = all_product_types | split: ',' | uniq %}
 
   {% for type in product_types_array %}
@@ -33,17 +33,17 @@
 
       {%- comment -%} Check if a predefined image is available for the type {%- endcomment -%}
       {% case type %}
-        {% when 'Front Bumper' %}
+        {% when 'Front Bumper', 'Parachoques delantero' %}
           {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Front_Bumper_Collection_Image_a68e5640-99b6-4af9-bb2a-15517cd2fbe4.jpg' %}
-        {% when 'Rear Bumper' %}
+        {% when 'Rear Bumper', 'Parachoques trasero' %}
           {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Rear_Bumper_Collection_Image.jpg' %}
-        {% when 'Hood' %}
+        {% when 'Hood', 'Capucha' %}
           {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Hood_Collection_Image.jpg' %}
-        {% when 'Passenger Side Fender' %}
+        {% when 'Passenger Side Fender', 'Guardabarros del lado del pasajero' %}
           {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Passenger_Side_Fender_Collection_Image.jpg' %}
-        {% when 'Driver Side Fender' %}
+        {% when 'Driver Side Fender', 'Guardabarros del lado del conductor' %}
           {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Driver_Side_Fender_Collection_Image.jpg' %}
-        {% when 'Tailgate' %}
+        {% when 'Tailgate', 'Portón' %}
           {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Tailgate_Collection_Image.jpg' %}
       {% endcase %}
 
@@ -62,7 +62,7 @@
       <div class="product-type-item">
         <div class="product-type-wrapper">
           <a
-            href="javascript:void(0);" 
+            href="javascript:void(0);"
             onclick="
                   var currentUrl = window.location.href;
                   var newFilter = 'filter.p.product_type={{ type | replace: ' ', '+' }}';
@@ -85,7 +85,13 @@
               {% endif %}
             </div>
           </a>
-          <span class="product-type-text"><b>{{ type }}s</b></span>
+          <span class="product-type-text">
+            {% if type == 'Capucha' %}
+              <b>Tapa de motors</b>
+            {% else %}
+              <b>{{ type }}s</b>
+            {% endif %}
+          </span>
         </div>
       </div>
     {% endunless %}
@@ -94,17 +100,17 @@
 {% assign available_aspirations = '' %}
 
 {% paginate collection.products by 1000 %}
-{%- for product in collection.products -%}
-  {%- assign aspiration_list = product.metafields.custom.aspiration -%}
-  {%- if aspiration_list != blank -%}
-    {%- assign aspiration = aspiration_list | remove: '["' | remove: '"]' | split: '","' -%}
-    {%- for asp in aspiration -%}
-      {%- unless available_aspirations contains asp -%}
-        {%- assign available_aspirations = available_aspirations | append: asp | append: ',' -%}
-      {%- endunless -%}
-    {%- endfor -%}
-  {%- endif -%}
-{%- endfor -%}
+  {%- for product in collection.products -%}
+    {%- assign aspiration_list = product.metafields.custom.aspiration -%}
+    {%- if aspiration_list != blank -%}
+      {%- assign aspiration = aspiration_list | remove: '["' | remove: '"]' | split: '","' -%}
+      {%- for asp in aspiration -%}
+        {%- unless available_aspirations contains asp -%}
+          {%- assign available_aspirations = available_aspirations | append: asp | append: ',' -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
 {% endpaginate %}
 
 {% assign aspiration_array = available_aspirations | split: ',' | uniq %}
@@ -118,7 +124,7 @@
           {% assign encoded_aspiration = aspiration | url_encode %}
           <script>
             var currentUrl = window.location.href;
-            var filterString = "filter.p.m.custom.aspiration={{ encoded_aspiration }}";
+            var filterString = 'filter.p.m.custom.aspiration={{ encoded_aspiration }}';
             var separator = '';
 
             if (currentUrl.endsWith('?')) {
@@ -141,23 +147,23 @@
 
 <!-- JavaScript to hide content if 'aspiration' is in the URL or if no filter has been selected -->
 <script>
-  if (window.location.href.includes("aspiration")) {
-    document.getElementById("aspiration-content").style.display = "none";
+  if (window.location.href.includes('aspiration')) {
+    document.getElementById('aspiration-content').style.display = 'none';
   }
 
   if (window.location.href.includes('filter.p.product_type=')) {
-    document.getElementById("product-type-id").style.display = "none";
+    document.getElementById('product-type-id').style.display = 'none';
   }
 </script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener('DOMContentLoaded', function () {
     let currentUrl = window.location.href;
-    
+
     if ((currentUrl.match(/filter\.p\.product_type=/g) || []).length === 1) {
-      let productTypeValue = currentUrl.split("filter.p.product_type=")[1].split("&")[0];
+      let productTypeValue = currentUrl.split('filter.p.product_type=')[1].split('&')[0];
       let productTypeDecoded = decodeURIComponent(productTypeValue.replace(/\+/g, ' '));
-      let header = document.querySelector(".collection-title");
+      let header = document.querySelector('.collection-title');
       if (header) {
         header.textContent += ' ' + productTypeDecoded + 's';
       }
@@ -165,138 +171,135 @@
   });
 </script>
 
-
-
 <style>
   .product-type-buttons {
-  display: grid;
-  gap: 10px;
-  justify-content: center;
-  grid-template-columns: repeat(6, 1fr);
-}
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+    grid-template-columns: repeat(6, 1fr);
+  }
 
-.product-type-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .product-type-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.product-type-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-}
-
-.product-type-buttons .btn {
-  display: flex;
-  justify-content: center;
-  padding: 0;
-  background-color: #ffffff;
-  text-decoration: none;
-  border-radius: 5px;
-  width: 200px;
-  height: auto;
-  cursor: pointer;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.product-type-buttons .btn .image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background-color: #ffffff;
-}
-
-.product-type-buttons .btn img.product-type-image {
-  max-width: 100%;
-  max-height: 150px;
-  object-fit: contain;
-  background-color: #ffffff;
-}
-
-.product-type-buttons .product-type-text {
-  color: #0C1A94;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 12px;
-}
-
-.product-type-buttons .btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.aspiration-question {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.question-title {
-  font-size: 24px;
-  color: #0C1A94;
-  margin-bottom: 15px;
-}
-
-.aspiration-options {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.aspiration-option {
-  padding: 10px 20px;
-  background-color: #ffffff;
-  text-decoration: none;
-  border-radius: 5px;
-  border: 1px solid #0C1A94;
-  color: #0C1A94;
-  font-weight: bold;
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.aspiration-option:hover {
-  background-color: #f0f0f0;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 768px) {
-  .product-type-buttons {
-    grid-template-columns: repeat(3, 1fr);
+  .product-type-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
   }
 
   .product-type-buttons .btn {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    background-color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .product-type-buttons .btn .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    background-color: #ffffff;
+  }
+
+  .product-type-buttons .btn img.product-type-image {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+    background-color: #ffffff;
   }
 
   .product-type-buttons .product-type-text {
-    font-size: 16px;
+    color: #0c1a94;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 12px;
+  }
+
+  .product-type-buttons .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .aspiration-question {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .question-title {
+    font-size: 24px;
+    color: #0c1a94;
+    margin-bottom: 15px;
   }
 
   .aspiration-options {
-    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
   }
 
   .aspiration-option {
-    width: 100%;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid #0c1a94;
+    color: #0c1a94;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
-}
 
-@media (min-width: 769px) and (max-width: 1280px) {
-  .product-type-buttons {
-    grid-template-columns: repeat(4, 1fr);
+  .aspiration-option:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
-}
 
-@media (max-width: 480px) {
-  .product-type-buttons {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 768px) {
+    .product-type-buttons {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .product-type-buttons .btn {
+      width: 100%;
+    }
+
+    .product-type-buttons .product-type-text {
+      font-size: 16px;
+    }
+
+    .aspiration-options {
+      flex-direction: column;
+    }
+
+    .aspiration-option {
+      width: 100%;
+    }
   }
-}
 
+  @media (min-width: 769px) and (max-width: 1280px) {
+    .product-type-buttons {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-type-buttons {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
 </style>
