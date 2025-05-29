@@ -4,7 +4,7 @@
         {% if block.settings.block_content != blank %}
             <button class="collapsible">
               {% if current_locale == 'es' %}
-                  <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title }}</b>
+                  <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
                 {% else %}
                   <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
               {% endif %}
