@@ -40,7 +40,11 @@
 
     {% if block.type == 'newsletter' %}
       {% assign form_id = 'footer_newsletter_' | append: block.id %}
-     <div class="klaviyo-form-Sz8jrM"></div>
+      {% if request.locale.iso_code == 'es' %}
+        <div class="klaviyo-form-SGsPJK"></div>
+      {% else %}
+        <div class="klaviyo-form-Sz8jrM"></div>
+      {% endif %}
     {% endif %}
   {% elsif block.type == 'social_accounts' %}
     {%
