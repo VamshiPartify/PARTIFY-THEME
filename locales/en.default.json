@@ -942,5 +942,10 @@
     "aftermarket": "Aftermarket",
     "postfix": "options have pre-painted stock available — no wait, no hassle.",
     "and": "and"
+  },
+  "policies_footer": {
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "refund_policy": "Refund Policy",
   }
 }

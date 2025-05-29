@@ -1032,6 +1032,11 @@
         "aftermarket": "Mercado de accesorios",
         "postfix": "disponemos de opciones de stock prepintado, sin esperas ni complicaciones.",
         "and": "y"
+      },
+      "policies_footer": {
+        "terms_of_service": "Términos de servicio",
+        "privacy_policy": "Política de privacidad",
+        "refund_policy": "Política de reembolso",
       }
     }
 
