@@ -1271,6 +1271,15 @@
                     enableAddToCartButton();
                   }
 
+                  if (isDeliveryCountdownEnabled) {
+                    let selectedOption = combinedVariantSelect.options[1];
+                    dataVariantTitle = selectedOption.getAttribute('data-variant-title');
+                    receivedDataVariantTitle(dataVariantTitle);
+                    dataVariantSku = selectedOption.getAttribute('data-variant-sku');
+                    receivedDataVariantSku(dataVariantSku);
+                    getCountdownAndGeoValues();
+                  }
+
                 //Match Paint by VIN option
                 } else {
                   // If vin decoder was used and successful
