@@ -1,26 +1,26 @@
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign ai_gen_id = section.id | replace: '_', '' | downcase %}
 
 {% style %}
   .ai-business-form-{{ ai_gen_id }} {
     max-width: 100%;
     margin: 0 auto;
     padding: 30px;
-    background-color: {{ block.settings.background_color }};
-    border-radius: {{ block.settings.border_radius }}px;
+    background-color: {{ section.settings.background_color }};
+    border-radius: {{ section.settings.border_radius }}px;
   }
 
   .ai-business-form__heading-{{ ai_gen_id }} {
     margin-top: 0;
     margin-bottom: 20px;
     color: #000;
-    font-size: {{ block.settings.heading_size }}px;
-    text-align: {{ block.settings.text_alignment }};
+    font-size: {{ section.settings.heading_size }}px;
+    text-align: {{ section.settings.text_alignment }};
   }
 
   .ai-business-form__description-{{ ai_gen_id }} {
     margin-bottom: 25px;
     color: #000;
-    text-align: {{ block.settings.text_alignment }};
+    text-align: {{ section.settings.text_alignment }};
   }
 
   .ai-business-form__fields-{{ ai_gen_id }} {
@@ -43,33 +43,33 @@
   .ai-business-form__input-{{ ai_gen_id }},
   .ai-business-form__select-{{ ai_gen_id }} {
     padding: 12px 16px;
-    border: 1px solid {{ block.settings.input_border_color }};
-    border-radius: {{ block.settings.input_border_radius }}px;
-    background-color: {{ block.settings.input_background_color }};
+    border: 1px solid {{ section.settings.input_border_color }};
+    border-radius: {{ section.settings.input_border_radius }}px;
+    background-color: {{ section.settings.input_background_color }};
     color: #000;
   }
 
   .ai-business-form__button-{{ ai_gen_id }} {
     margin-top: 20px;
     padding: 14px 28px;
-    background-color: {{ block.settings.button_color }};
+    background-color: {{ section.settings.button_color }};
     color: #000;
     border: none;
-    border-radius: {{ block.settings.button_border_radius }}px;
+    border-radius: {{ section.settings.button_border_radius }}px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
-    align-self: {{ block.settings.button_alignment }};
+    align-self: {{ section.settings.button_alignment }};
   }
 
   .ai-business-form__button-{{ ai_gen_id }}:hover {
-    background-color: {{ block.settings.button_hover_color }};
+    background-color: {{ section.settings.button_hover_color }};
   }
 
   .ai-business-form__success-{{ ai_gen_id }} {
     margin-top: 20px;
     padding: 15px;
-    background-color: {{ block.settings.success_color }};
+    background-color: {{ section.settings.success_color }};
     color: #ffffff;
     border-radius: 4px;
     display: none;
@@ -78,7 +78,7 @@
   .ai-business-form__error-{{ ai_gen_id }} {
     margin-top: 20px;
     padding: 15px;
-    background-color: {{ block.settings.error_color }};
+    background-color: {{ section.settings.error_color }};
     color: #ffffff;
     border-radius: 4px;
     display: none;
@@ -102,20 +102,20 @@
   }
 {% endstyle %}
 
-<div class="ai-business-form-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
-  {% if block.settings.heading != blank %}
-    <h2 class="ai-business-form__heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+<div class="ai-business-form-{{ ai_gen_id }}" {{ section.shopify_attributes }}>
+  {% if section.settings.heading != blank %}
+    <h2 class="ai-business-form__heading-{{ ai_gen_id }}">{{ section.settings.heading }}</h2>
   {% endif %}
   
-  {% if block.settings.description != blank %}
-    <div class="ai-business-form__description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+  {% if section.settings.description != blank %}
+    <div class="ai-business-form__description-{{ ai_gen_id }}">{{ section.settings.description }}</div>
   {% endif %}
   
   {%- form 'contact' -%}
     <div class="ai-business-form__fields-{{ ai_gen_id }}">
       <div class="ai-business-form__field-{{ ai_gen_id }}">
         <label for="BusinessName-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
-          {{ block.settings.business_name_label }}
+          {{ section.settings.business_name_label }}
           <span aria-hidden="true">*</span>
         </label>
         <input 
@@ -133,7 +133,7 @@
       
       <div class="ai-business-form__field-{{ ai_gen_id }}">
         <label for="ContactName-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
-          {{ block.settings.contact_name_label }}
+          {{ section.settings.contact_name_label }}
           <span aria-hidden="true">*</span>
         </label>
         <input 
@@ -151,7 +151,7 @@
       
       <div class="ai-business-form__field-{{ ai_gen_id }}">
         <label for="Email-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
-          {{ block.settings.email_label }}
+          {{ section.settings.email_label }}
           <span aria-hidden="true">*</span>
         </label>
         <input 
@@ -172,7 +172,7 @@
       
       <div class="ai-business-form__field-{{ ai_gen_id }}">
         <label for="State-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
-          {{ block.settings.state_label }}
+          {{ section.settings.state_label }}
           <span aria-hidden="true">*</span>
         </label>
         <select 
@@ -182,7 +182,7 @@
           required
           aria-required="true"
         >
-          <option value="">{{ block.settings.state_placeholder }}</option>
+          <option value="">{{ section.settings.state_placeholder }}</option>
           <option value="CA">California</option>
           <option value="NY">New York</option>
           <option value="TX">Texas</option>
@@ -195,19 +195,19 @@
       </div>
       
       <button type="submit" class="ai-business-form__button-{{ ai_gen_id }}">
-        {{ block.settings.button_text }}
+        {{ section.settings.button_text }}
       </button>
     </div>
     
     {%- if form.posted_successfully? -%}
-      <div class="ai-business-form__success-{{ ai_gen_id }}" style="display: block;">
-        {{ block.settings.success_message }}
+      <div class="ai-business-form__success-{{ ai_gen_id }}" style="display: section;">
+        {{ section.settings.success_message }}
       </div>
     {%- endif -%}
     
     {%- if form.errors -%}
-      <div class="ai-business-form__error-{{ ai_gen_id }}" style="display: block;">
-        {{ block.settings.error_message }}
+      <div class="ai-business-form__error-{{ ai_gen_id }}" style="display: section;">
+        {{ section.settings.error_message }}
       </div>
     {%- endif -%}
   {%- endform -%}
