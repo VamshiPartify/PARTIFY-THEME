@@ -217,17 +217,19 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-const forms = document.querySelectorAll('.ai-business-form-{{ ai_gen_id }} form');
+    const forms = document.querySelectorAll('form[action="/contact"]');
 
     forms.forEach(form => {
-      console.log('Validating form:', form);
+      console.log('Validating form:', form); // Should show a log now
 
       form.addEventListener('submit', function (event) {
         let isValid = true;
         const inputs = form.querySelectorAll('input[required], select[required]');
 
         inputs.forEach(input => {
-          const fieldName = input.name.replace(/^contact\[/, '').replace(/\]$/, '');
+          const fieldName = input.name
+            .replace(/^contact\[/, '')
+            .replace(/\]$/, '');
           const errorElement = form.querySelector(`[data-field-error="${fieldName}"]`);
 
           if (!input.value.trim()) {
@@ -247,6 +249,7 @@ const forms = document.querySelectorAll('.ai-business-form-{{ ai_gen_id }} form'
         });
 
         if (!isValid) {
+          console.warn('Form validation failed. Submission prevented.');
           event.preventDefault();
         }
       });
@@ -258,6 +261,7 @@ const forms = document.querySelectorAll('.ai-business-form-{{ ai_gen_id }} form'
     }
   });
 </script>
+
 
 
 {% schema %}
