@@ -12,14 +12,14 @@
   .ai-business-form__heading-{{ ai_gen_id }} {
     margin-top: 0;
     margin-bottom: 20px;
-    color: #000;
+    color: {{ section.settings.text_color }};
     font-size: {{ section.settings.heading_size }}px;
     text-align: {{ section.settings.text_alignment }};
   }
 
   .ai-business-form__description-{{ ai_gen_id }} {
     margin-bottom: 25px;
-    color: #000;
+    color: {{ section.settings.text_color }};
     text-align: {{ section.settings.text_alignment }};
   }
 
@@ -37,7 +37,7 @@
 
   .ai-business-form__label-{{ ai_gen_id }} {
     font-weight: 500;
-    color: #000;
+    color: {{ section.settings.text_color }};
   }
 
   .ai-business-form__input-{{ ai_gen_id }},
@@ -46,7 +46,7 @@
     border: 1px solid {{ section.settings.input_border_color }};
     border-radius: {{ section.settings.input_border_radius }}px;
     background-color: {{ section.settings.input_background_color }};
-    color: #000;
+    color: {{ section.settings.text_color }};
   }
 
   .ai-business-form__button-{{ ai_gen_id }} {
@@ -85,7 +85,7 @@
   }
 
   .ai-business-form__field-error-{{ ai_gen_id }} {
-    color: #000;
+    color: {{ section.settings.text_color }};
     font-size: 14px;
     display: none;
   }
