@@ -216,18 +216,18 @@
   {% endfor %}
 
 <script>
-  console.log('ai gen id: ', '{{ ai_gen_id }}');
-  (function() {
-    const form = document.querySelector('.ai-business-form-{{ ai_gen_id }} form');
-    
-    if (form) {
-      form.addEventListener('submit', function(event) {
+  document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('[class^="ai-business-form-"] form');
+
+    forms.forEach(form => {
+      form.addEventListener('submit', function (event) {
         let isValid = true;
         const inputs = form.querySelectorAll('input[required], select[required]');
-        
+
         inputs.forEach(input => {
-          const errorElement = form.querySelector(`[data-field-error="${input.name.replace('contact[', '').replace(']', '')}"]`);
-          
+          const fieldName = input.name.replace(/^contact\[/, '').replace(/\]$/, '');
+          const errorElement = form.querySelector(`[data-field-error="${fieldName}"]`);
+
           if (!input.value.trim()) {
             isValid = false;
             input.setAttribute('aria-invalid', 'true');
@@ -236,26 +236,27 @@
             input.removeAttribute('aria-invalid');
             if (errorElement) errorElement.style.display = 'none';
           }
-          
+
           if (input.type === 'email' && input.value.trim() && !validateEmail(input.value)) {
             isValid = false;
             input.setAttribute('aria-invalid', 'true');
             if (errorElement) errorElement.style.display = 'block';
           }
         });
-        
+
         if (!isValid) {
           event.preventDefault();
         }
       });
-      
-      function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-      }
+    });
+
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
     }
-  })();
+  });
 </script>
+
 
 {% schema %}
 {
