@@ -217,7 +217,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const forms = document.querySelectorAll('[class^="ai-business-form-"] form');
+const forms = document.querySelectorAll('.ai-business-form-{{ ai_gen_id }} form');
 
     forms.forEach(form => {
       console.log('Validating form:', form);
