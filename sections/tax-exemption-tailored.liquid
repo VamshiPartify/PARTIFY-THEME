@@ -1,5 +1,6 @@
-{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
-
+{% for block in section.blocks %}
+  {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% endfor %}
 {% style %}
   .ai-business-form-{{ ai_gen_id }} {
     max-width: 100%;
