@@ -105,11 +105,19 @@
         "small_promo_icon": "none",
         "cart_icon": "icon-cart"
       }
+    },
+    "dynamic_custom_liquid_wpTL6B": {
+      "type": "dynamic-custom-liquid",
+      "name": "t:sections.custom_liquid.presets.custom_liquid.name",
+      "settings": {
+        "custom_liquid": "{% form 'contact', id: '488634' %}\n<!-- Form fields will be rendered here -->\n{% endform %}"
+      }
     }
   },
   "order": [
     "announcement-bar",
     "utility-bar",
-    "header"
+    "header",
+    "dynamic_custom_liquid_wpTL6B"
   ]
 }
