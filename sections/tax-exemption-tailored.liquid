@@ -220,6 +220,8 @@
     const forms = document.querySelectorAll('[class^="ai-business-form-"] form');
 
     forms.forEach(form => {
+      console.log('Validating form:', form);
+
       form.addEventListener('submit', function (event) {
         let isValid = true;
         const inputs = form.querySelectorAll('input[required], select[required]');
