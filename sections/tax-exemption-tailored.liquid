@@ -1,5 +1,4 @@
-{% for block in section.blocks %}
-  {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 
 {% style %}
   .ai-business-form-{{ ai_gen_id }} {
@@ -213,25 +212,20 @@
     {%- endif -%}
   {%- endform -%}
 </div>
-  {% endfor %}
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const forms = document.querySelectorAll('form[action="/contact"]');
-
-    forms.forEach(form => {
-      console.log('Validating form:', form); // Should show a log now
-
-      form.addEventListener('submit', function (event) {
+  console.log('ai gen id: ', '{{ ai_gen_id }}');
+  (function() {
+    const form = document.querySelector('.ai-business-form-{{ ai_gen_id }} form');
+    
+    if (form) {
+      form.addEventListener('submit', function(event) {
         let isValid = true;
         const inputs = form.querySelectorAll('input[required], select[required]');
-
+        
         inputs.forEach(input => {
-          const fieldName = input.name
-            .replace(/^contact\[/, '')
-            .replace(/\]$/, '');
-          const errorElement = form.querySelector(`[data-field-error="${fieldName}"]`);
-
+          const errorElement = form.querySelector(`[data-field-error="${input.name.replace('contact[', '').replace(']', '')}"]`);
+          
           if (!input.value.trim()) {
             isValid = false;
             input.setAttribute('aria-invalid', 'true');
@@ -240,29 +234,26 @@
             input.removeAttribute('aria-invalid');
             if (errorElement) errorElement.style.display = 'none';
           }
-
+          
           if (input.type === 'email' && input.value.trim() && !validateEmail(input.value)) {
             isValid = false;
             input.setAttribute('aria-invalid', 'true');
             if (errorElement) errorElement.style.display = 'block';
           }
         });
-
+        
         if (!isValid) {
-          console.warn('Form validation failed. Submission prevented.');
           event.preventDefault();
         }
       });
-    });
-
-    function validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
+      
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
     }
-  });
+  })();
 </script>
-
-
 
 {% schema %}
 {
