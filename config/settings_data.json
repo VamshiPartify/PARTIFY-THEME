@@ -146,6 +146,21 @@
           "success_color": "#008060",
           "error_color": "#d82c0d"
         }
+      },
+      "company-wholesale-signup": {
+        "type": "company-wholesale-signup",
+        "blocks": {
+          "heading_F8rXGX": {
+            "type": "heading",
+            "settings": {
+              "heading_text": "Company Wholesale Signup"
+            }
+          }
+        },
+        "block_order": [
+          "heading_F8rXGX"
+        ],
+        "settings": {}
       }
     },
     "content_for_index": [],
