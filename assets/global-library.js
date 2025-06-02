@@ -113,6 +113,10 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
     }
     const data = await response.json();
     console.log('data: ', data);
+
+    if (data.data.companyCreate.userErrors.length) {
+      console.log('Company profile creation error: ', data.data.companyCreate.userErrors)
+    }
   } catch (error) {
     console.error("Error fetching vehicle data:", error);
   }
