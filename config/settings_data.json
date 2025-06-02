@@ -124,8 +124,6 @@
           "business_name_label": "Business Name",
           "contact_name_label": "Your Name",
           "email_label": "Email Address",
-          "state_label": "State",
-          "state_placeholder": "Select a state",
           "button_text": "Submit",
           "success_message": "Thank you! Your information has been submitted successfully.",
           "error_message": "There was a problem submitting your information. Please check the form and try again.",
@@ -146,10 +144,6 @@
           "success_color": "#008060",
           "error_color": "#d82c0d"
         }
-      },
-      "company-wholesale-signup": {
-        "type": "company-wholesale-signup",
-        "settings": {}
       }
     },
     "content_for_index": [],
