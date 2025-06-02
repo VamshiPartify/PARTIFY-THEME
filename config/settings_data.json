@@ -149,17 +149,6 @@
       },
       "company-wholesale-signup": {
         "type": "company-wholesale-signup",
-        "blocks": {
-          "heading_F8rXGX": {
-            "type": "heading",
-            "settings": {
-              "heading_text": "Company Wholesale Signup"
-            }
-          }
-        },
-        "block_order": [
-          "heading_F8rXGX"
-        ],
         "settings": {}
       }
     },
