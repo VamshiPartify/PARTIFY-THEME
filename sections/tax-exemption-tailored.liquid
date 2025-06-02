@@ -355,8 +355,6 @@
       console.log('state code: ', stateCode);
       updateFieldVisibilityBasedOnState(stateCode);
 
-      console.log('customer comapny: ', '{{ customer.company }}');
-
       form.addEventListener('submit', async function (event) {
         let isValid = true;
         const visibleInputs = form.querySelectorAll(
