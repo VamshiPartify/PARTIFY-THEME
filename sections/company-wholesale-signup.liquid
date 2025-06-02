@@ -1,6 +1,31 @@
 {% schema %}
-  {
-    "name": "Company Wholesale Signup",
-    "settings": []
-  }
+{
+  "name": "Company Wholesale Signup",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading_text",
+          "label": "Heading Text",
+          "default": "Company Wholesale Signup"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Company Wholesale Signup",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "heading"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}
