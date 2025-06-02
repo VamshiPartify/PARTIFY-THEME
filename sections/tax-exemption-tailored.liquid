@@ -355,6 +355,8 @@
       console.log('state code: ', stateCode);
       updateFieldVisibilityBasedOnState(stateCode);
 
+      console.log('customer comapny: ', '{{ customer.company }}');
+
       form.addEventListener('submit', async function (event) {
         let isValid = true;
         const visibleInputs = form.querySelectorAll(
@@ -399,8 +401,8 @@
         console.log('reason: ', reason);
 
         try {
-          const pdfUrl =
-            'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/streamline-tax-exemption.pdf?v=1731952965';
+          const pdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/streamline-tax-exemption.pdf?v=1731952965';
+          const examplePdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Streamline_Form_Example.pdf?v=1748888393';
           const pdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer());
 
           const { PDFDocument } = window.PDFLib;
