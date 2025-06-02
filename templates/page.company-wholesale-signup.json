@@ -40,18 +40,10 @@
       "settings": {
         "include_padding": true
       }
-    },
-    "dynamic_custom_liquid_4cytwA": {
-      "type": "dynamic-custom-liquid",
-      "name": "t:sections.custom_liquid.presets.custom_liquid.name",
-      "settings": {
-        "custom_liquid": "<script>\n  document.addEventListener('DOMContentLoaded', function () {\n    const form = document.querySelector('form[action*=\"/contact\"]'); // Adjust selector to your form\n\n    if (form) {\n      form.addEventListener('submit', function (event) {\n        event.preventDefault(); // Prevent default submit for now\n\n        const firstName = form.querySelector('input[name=\"contact[first_name]\"]')?.value || '';\n        const lastName = form.querySelector('input[name=\"contact[last_name]\"]')?.value || '';\n        const email = form.querySelector('input[name=\"contact[email]\"]')?.value || '';\n        const company = form.querySelector('input[name=\"contact[company]\"]')?.value || '';\n\n        const fullName = `${firstName} ${lastName}`.trim();\n\n        const params = new URLSearchParams({\n          name: fullName,\n          email,\n          company\n        });\n\n        // Now redirect\n        window.location.href = `/custom-tax-form?${params.toString()}`;\n      });\n    }\n  });\n</script>"
-      }
     }
   },
   "order": [
     "main",
-    "1748884216c7c6185a",
-    "dynamic_custom_liquid_4cytwA"
+    "1748884216c7c6185a"
   ]
 }
