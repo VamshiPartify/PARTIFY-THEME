@@ -1,3 +1,14 @@
+<!-- company-wholesale-signup.liquid -->
+
+<div class="wholesale-signup">
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'heading' %}
+        <h2>{{ block.settings.heading_text }}</h2>
+    {% endcase %}
+  {% endfor %}
+</div>
+
 {% schema %}
 {
   "name": "Company Wholesale Signup",
@@ -16,9 +27,10 @@
       ]
     }
   ],
+  "max_blocks": 5,
   "presets": [
     {
-      "name": "Company Wholesale Signup",
+      "name": "Default",
       "category": "Custom",
       "blocks": [
         {
