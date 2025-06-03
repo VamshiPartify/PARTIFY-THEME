@@ -723,7 +723,7 @@
           const pdfForm = pdfDoc.getForm();
           const fields = pdfForm.getFields();
 
-          {% comment %} createCompanyProfile(businessName, firstName, lastName, email, phoneNumber, title, streetAddress, city, zipcode, state, businessName, examplePdfUrl, taxRegistrationId); {% endcomment %}
+          createCompanyProfile(businessName, firstName, lastName, email, phoneNumber, title, streetAddress, city, zipcode, state, businessName, examplePdfUrl, taxRegistrationId);
 
           {% comment %} fields.forEach((field) => {
             const name = field.getName();
