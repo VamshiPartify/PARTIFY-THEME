@@ -88,7 +88,7 @@ const handleVinChange = (event, functionLocation) => {
   }
 };
 
-async function createCompanyProfile(companyName, firstName, lastName, email, phone, title, address, city, zipCode, stateAbbr, locationName) {
+async function createCompanyProfile(companyName, firstName, lastName, email, phone, title, address, city, zipCode, stateAbbr, locationName, pdf, taxRegistrationId) {
   try {
     const response = await fetch('https://tax-exemption-signup-505215902673.us-east5.run.app/createCustomerProfile', {
       method: 'POST',
@@ -105,6 +105,8 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
         zipCode,
         stateAbbr,
         locationName,
+        pdf,
+        taxRegistrationId,
       }),
     });
 
@@ -113,10 +115,6 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
     }
     const data = await response.json();
     console.log('data: ', data);
-
-    if (data.data.companyCreate.userErrors.length) {
-      console.log('Company profile creation error: ', data.data.companyCreate.userErrors)
-    }
   } catch (error) {
     console.error("Error fetching vehicle data:", error);
   }
