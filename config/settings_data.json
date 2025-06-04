@@ -122,7 +122,6 @@
           "heading": "Business Information",
           "description": "<p>Please fill out the form below with your business details.</p>",
           "business_name_label": "Business Name",
-          "contact_name_label": "Your Name",
           "email_label": "Email Address",
           "button_text": "Submit",
           "success_message": "Thank you! Your information has been submitted successfully.",
