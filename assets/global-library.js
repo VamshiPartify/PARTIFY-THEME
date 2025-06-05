@@ -88,6 +88,7 @@ const handleVinChange = (event, functionLocation) => {
   }
 };
 
+
 async function createCompanyProfile(companyName, firstName, lastName, email, phone, title, address, city, zipCode, stateAbbr, locationName, pdf, taxRegistrationId, typeText, reasonText) {
   try {
     const response = await fetch('https://tax-exemption-signup-505215902673.us-east5.run.app/createCustomerProfile', {
@@ -121,6 +122,8 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
     console.error("Error fetching vehicle data:", error);
   }
 }
+
+
 
 /*
     functionLocation - 1 = Garage
