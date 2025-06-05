@@ -942,5 +942,14 @@
     "aftermarket": "Aftermarket",
     "postfix": "options have pre-painted stock available — no wait, no hassle.",
     "and": "and"
+  },
+  "difficult_paint_messages": {
+    "oos_message": "This paint code is known to be difficult to match accurately.",
+    "acceptance_msg": "I understand this paint code may not be an exact match to my vehicle’s color and accept that some variation is possible."
+  },
+  "policies_footer": {
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "refund_policy": "Refund Policy",
   }
 }

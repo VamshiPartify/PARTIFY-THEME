@@ -1,0 +1,1233 @@
+{% assign ai_gen_id = section.id | replace: '_', '' | downcase %}
+
+{% style %}
+    .ai-business-form-{{ ai_gen_id }} {
+      max-width: 500px;
+      margin: 30px auto 0 auto;
+      padding: 30px;
+      background-color: {{ section.settings.background_color }};
+      border-radius: {{ section.settings.border_radius }}px;
+    }
+
+    .ai-business-form__heading-{{ ai_gen_id }} {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: {{ section.settings.text_color }};
+      font-size: {{ section.settings.heading_size }}px;
+      text-align: {{ section.settings.text_alignment }};
+    }
+
+    .ai-business-form__description-{{ ai_gen_id }} {
+      margin-bottom: 25px;
+      color: {{ section.settings.text_color }};
+      text-align: {{ section.settings.text_alignment }};
+    }
+
+    .basic-business-form,
+    .ai-business-form__fields-{{ ai_gen_id }} {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ai-business-form__field-{{ ai_gen_id }} {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .ai-business-form__label-{{ ai_gen_id }} {
+      font-weight: 500;
+      color: {{ section.settings.text_color }};
+    }
+
+    .ai-business-form__input-{{ ai_gen_id }},
+    .ai-business-form__select-{{ ai_gen_id }} {
+      padding: 12px 16px;
+      border: 1px solid {{ section.settings.input_border_color }};
+      border-radius: {{ section.settings.input_border_radius }}px;
+      background-color: {{ section.settings.input_background_color }};
+      color: {{ section.settings.text_color }};
+    }
+
+    .ai-business-form__continue-button,
+    .ai-business-form__previous-button-{{ ai_gen_id }},
+    .ai-business-form__button-{{ ai_gen_id }} {
+      position: relative;
+      margin-top: 20px;
+      padding: 14px 28px;
+      background-color: {{ section.settings.button_color }};
+      color: {{ section.settings.button_text_color}};
+      border: none;
+      border-radius: {{ section.settings.button_border_radius }}px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 120px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .ai-business-form__continue-button,
+    .ai-business-form__previous-button-{{ ai_gen_id }},
+    .ai-business-form__button-{{ ai_gen_id }}:hover {
+      background-color: {{ section.settings.button_hover_color }};
+    }
+
+    .ai-business-form__checkout-button-{{ ai_gen_id }} {
+      position: relative;
+      margin-top: 20px;
+      padding: 14px 28px;
+      background-color: {{ section.settings.button_color }};
+      color: {{ section.settings.button_text_color}};
+      border: none;
+      border-radius: {{ section.settings.button_border_radius }}px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .ai-business-form__continue-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .ai-business-form__button--loading::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: 4px solid transparent;
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: button-loading-spinner 1s ease infinite;
+    }
+
+    @keyframes button-loading-spinner {
+      from {
+        transform: rotate(0turn);
+      }
+      to {
+        transform: rotate(1turn);
+      }
+    }
+
+
+
+    .ai-business-form__success-{{ ai_gen_id }} {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: {{ section.settings.success_color }};
+      color: #ffffff;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .ai-business-form__error-{{ ai_gen_id }} {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: {{ section.settings.error_color }};
+      color: #ffffff;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .ai-business-form__field-error-{{ ai_gen_id }} {
+      color: {{ section.settings.text_color }};
+      font-size: 14px;
+      display: none;
+    }
+
+    #optional-italicize {
+      font-style: italic;
+      font-size: 14px;
+      color: {{ section.settings.text_color }};
+    }
+
+    @media screen and (max-width: 749px) {
+      .ai-business-form-{{ ai_gen_id }} {
+        padding: 20px;
+      }
+
+      .ai-business-form__continue-button {
+        width: 100%;
+        align-self: stretch;
+      }
+
+      .ai-business-form-{{ ai_gen_id }} {
+        background-color: #ffffff;
+      }
+    }
+  .city-state-zipcode-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%; /* Prevents overflow */
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    box-sizing: border-box;
+  }
+
+  .city-state-zipcode-container > .ai-business-form__field-{{ ai_gen_id }} {
+    flex: 1 1 0; /* Let each child shrink or grow equally */
+    min-width: 0; /* Prevents children from overflowing */
+    box-sizing: border-box;
+  }
+
+  .previous-submit-button-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .business-form-submission-message {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+{% endstyle %}
+
+<div class="ai-business-form-{{ ai_gen_id }}" {{ section.shopify_attributes }}>
+  <div class="business-form-wrapper">
+    {% if section.settings.heading != blank %}
+      <h2 class="ai-business-form__heading-{{ ai_gen_id }}">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if section.settings.description != blank %}
+      <div class="ai-business-form__description-{{ ai_gen_id }}">{{ section.settings.description }}</div>
+    {% endif %}
+
+    <form id="streamlineForm" method="POST" action="#">
+      <div class="ai-business-form__fields-{{ ai_gen_id }}">
+        <div class="basic-business-form">
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }}"
+            data-show-for="STREAMLINE"
+          >
+            {% comment %}
+              <label for="BusinessName-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                {{ section.settings.business_name_label }}
+                <span aria-hidden="true">*</span>
+              </label>
+            {% endcomment %}
+            <input
+              type="text"
+              id="BusinessName-{{ ai_gen_id }}"
+              name="contact[business_name]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              placeholder="Company Name"
+              required
+              aria-required="true"
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="business_name">
+              Please enter your business name
+            </span>
+          </div>
+
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }}"
+            data-show-for="STREAMLINE"
+          >
+            {% comment %}
+              <label for="FirstName-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                {{ section.settings.first_name_label }}
+                <span aria-hidden="true">*</span>
+              </label>
+            {% endcomment %}
+            <input
+              type="text"
+              id="FirstName-{{ ai_gen_id }}"
+              name="contact[firstName]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              placeholder="First Name"
+              required
+              aria-required="true"
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="first_name">
+              Please enter your first name
+            </span>
+          </div>
+
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }}"
+            data-show-for="STREAMLINE"
+          >
+            {% comment %}
+              <label for="LastName-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                {{ section.settings.last_name_label }}
+                <span aria-hidden="true">*</span>
+              </label>
+            {% endcomment %}
+            <input
+              type="text"
+              id="LastName-{{ ai_gen_id }}"
+              name="contact[lastName]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              placeholder="Last Name"
+              required
+              aria-required="true"
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="last_name">
+              Please enter your last name
+            </span>
+          </div>
+
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }}"
+            data-show-for="STREAMLINE"
+          >
+            {% comment %}
+              <label for="Title-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                {{ section.settings.contact_title_label }}
+                <span id="optional-italicize" aria-hidden="true">(optional)</span>
+              </label>
+            {% endcomment %}
+            <input
+              type="text"
+              id="Title-{{ ai_gen_id }}"
+              name="contact[title]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              placeholder="Title (optional)"
+              aria-required="true"
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="contact_title">
+              Please enter your title
+            </span>
+          </div>
+
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }}"
+            data-show-for="STREAMLINE"
+          >
+            {% comment %}
+              <label for="Email-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                {{ section.settings.email_label }}
+                <span aria-hidden="true">*</span>
+              </label>
+            {% endcomment %}
+            <input
+              type="email"
+              id="Email-{{ ai_gen_id }}"
+              name="contact[email]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              placeholder="Email"
+              required
+              aria-required="true"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="email">
+              Please enter a valid email address
+            </span>
+          </div>
+
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }}"
+            data-show-for="STREAMLINE"
+          >
+            {% comment %}
+              <label for="Phone-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                {{ section.settings.phone_number_label }}
+                <span aria-hidden="true">*</span>
+              </label>
+            {% endcomment %}
+            <input
+              type="text"
+              id="Phone-{{ ai_gen_id }}"
+              name="contact[phone]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              placeholder="Phone"
+              required
+              aria-required="true"
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="phone_number">
+              Please enter your phone number
+            </span>
+          </div>
+
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }}"
+            data-show-for="STREAMLINE"
+          >
+            {% comment %}
+              <label for="StreetAddress-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                {{ section.settings.street_address_label }}
+                <span aria-hidden="true">*</span>
+              </label>
+            {% endcomment %}
+            <input
+              type="text"
+              id="StreetAddress-{{ ai_gen_id }}"
+              name="contact[street_address]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              aria-required="true"
+              placeholder="Street Address"
+              required
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="street_address">
+              Please enter your street address
+            </span>
+          </div>
+
+          <div class="city-state-zipcode-container">
+            <div
+              class="ai-business-form__field-{{ ai_gen_id }}"
+              data-show-for="STREAMLINE"
+            >
+              {% comment %}
+                <label for="City-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                  {{ section.settings.city_label }}
+                  <span aria-hidden="true">*</span>
+                </label>
+              {% endcomment %}
+              <input
+                type="text"
+                id="City-{{ ai_gen_id }}"
+                name="contact[city]"
+                class="ai-business-form__input-{{ ai_gen_id }}"
+                aria-required="true"
+                placeholder="City"
+                required
+              >
+              <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="city">
+                Please enter your city
+              </span>
+            </div>
+
+            <div
+              class="ai-business-form__field-{{ ai_gen_id }}"
+              data-show-for="STREAMLINE"
+            >
+              {% comment %}
+                <label for="State-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                  {{ section.settings.state_label }}
+                  <span aria-hidden="true">*</span>
+                </label>
+              {% endcomment %}
+              <select
+                id="State-{{ ai_gen_id }}"
+                name="contact[state]"
+                class="ai-business-form__select-{{ ai_gen_id }}"
+                required
+                aria-required="true"
+              >
+                <option value="">{{ section.settings.state_placeholder }}</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+              <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="state">
+                Please select your state
+              </span>
+            </div>
+
+            <div
+              class="ai-business-form__field-{{ ai_gen_id }}"
+              data-show-for="STREAMLINE"
+            >
+              {% comment %}
+                <label for="Zipcode-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+                  {{ section.settings.zipcode_label }}
+                  <span aria-hidden="true">*</span>
+                </label>
+              {% endcomment %}
+              <input
+                type="text"
+                id="Zipcode-{{ ai_gen_id }}"
+                name="contact[zipcode]"
+                class="ai-business-form__input-{{ ai_gen_id }}"
+                placeholder="ZIP Code"
+                required
+                aria-required="true"
+              >
+              <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="zipcode">
+                Please enter your zip code
+              </span>
+            </div>
+          </div>
+          <button type="button" class="ai-business-form__continue-button">
+            {{ section.settings.continue_button_text }}
+          </button>
+        </div>
+
+        <div class="tailored-business-form-{{ ai_gen_id }}" style="display: none;">
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }} state-question"
+            data-show-for="STREAMLINE"
+            style="display: none;"
+          >
+            <label for="Type-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+              {{ section.settings.type_label }}
+              <span aria-hidden="true">*</span>
+            </label>
+            <select
+              id="Type-{{ ai_gen_id }}"
+              name="contact[type]"
+              class="ai-business-form__select-{{ ai_gen_id }}"
+              required
+              aria-required="true"
+            >
+              <option value="">{{ section.settings.type_placeholder }}</option>
+              <option value="01">Accommodation and food services</option>
+              <option value="02">Agriculture, forestry, fishing, hunting</option>
+              <option value="03">Construction</option>
+              <option value="04">Finance and insurance</option>
+              <option value="05">Information, publishing and communications</option>
+              <option value="06">Manufacturing</option>
+              <option value="07">Mining</option>
+              <option value="08">Real estate</option>
+              <option value="09">Rental and leasing</option>
+              <option value="10">Retail trade</option>
+              <option value="11">Transportation and warehousing</option>
+              <option value="12">Utilities</option>
+              <option value="13">Wholesale trade</option>
+              <option value="14">Business services</option>
+              <option value="15">Professional services</option>
+              <option value="16">Education and health-care services</option>
+              <option value="17">Nonprofit organization</option>
+              <option value="18">Government</option>
+              <option value="19">Not a business</option>
+              <option value="20">Other</option>
+            </select>
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="type">
+              Please select a type
+            </span>
+          </div>
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }} state-question"
+            data-show-for="STREAMLINE"
+            style="display: none;"
+          >
+            <label for="Reason-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+              {{ section.settings.reason_label }}
+              <span aria-hidden="true">*</span>
+            </label>
+            <select
+              id="Reason-{{ ai_gen_id }}"
+              name="contact[reason]"
+              class="ai-business-form__select-{{ ai_gen_id }}"
+              required
+              aria-required="true"
+            >
+              <option value="">{{ section.settings.reason_placeholder }}</option>
+              <option value="A">Federal government</option>
+              <option value="B">State or local government</option>
+              <option value="C">Tribal government</option>
+              <option value="D">Foreign diplomat</option>
+              <option value="E">Charitable organization</option>
+              <option value="F">Religious organization</option>
+              <option value="G">Resale</option>
+              <option value="H">Agriculture Production</option>
+              <option value="I">Industrial production/manufacturing</option>
+              <option value="J">Direct pay permit</option>
+              <option value="K">Direct Mail</option>
+              <option value="L">Other</option>
+              <option value="M">Educational Organization</option>
+            </select>
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="reason">
+              Reason for exemption
+            </span>
+          </div>
+
+          <div
+            class="ai-business-form__field-{{ ai_gen_id }} state-question"
+            data-show-for="STREAMLINE"
+            style="display: none;"
+          >
+            <label for="ID-{{ ai_gen_id }}" class="ai-business-form__label-{{ ai_gen_id }}">
+              {{ section.settings.id_label }}
+              <span aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="ID-{{ ai_gen_id }}"
+              name="contact[id]"
+              class="ai-business-form__input-{{ ai_gen_id }}"
+              required
+              aria-required="true"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="id"
+            >
+            <span class="ai-business-form__field-error-{{ ai_gen_id }}" data-field-error="id">
+              Please enter a valid identification number
+            </span>
+          </div>
+
+          <div class="previous-submit-button-wrapper">
+            <button type="button" class="ai-business-form__previous-button-{{ ai_gen_id }}">
+              {{ section.settings.previous_button_text }}
+            </button>
+            <button type="submit" class="ai-business-form__button-{{ ai_gen_id }}">
+              {{ section.settings.button_text }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="business-form-submission-message" style="display: none;">
+    {% if section.settings.heading != blank %}
+      <h2 class="ai-business-form__heading-{{ ai_gen_id }}">{{ section.settings.success_heading }}</h2>
+    {% endif %}
+
+    {% if section.settings.description != blank %}
+      <div class="ai-business-form__description-{{ ai_gen_id }}">{{ section.settings.success_description }}</div>
+    {% endif %}
+
+    <button type="button" class="ai-business-form__checkout-button-{{ ai_gen_id }}">
+      {{ section.settings.checkout_button_text }}
+    </button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const businessFormWrapper = document.querySelector('.business-form-wrapper');
+    const form = document.querySelector('.ai-business-form-{{ ai_gen_id }} form');
+    const basicForm = document.querySelector('.basic-business-form');
+    const tailoredForm = document.querySelector('.tailored-business-form-{{ ai_gen_id }}');
+    const continueButton = document.querySelector('.ai-business-form__continue-button');
+    const previousButton = document.querySelector('.ai-business-form__previous-button-{{ ai_gen_id }}');
+    const requiredFields = document.querySelectorAll('.basic-business-form [required]');
+    const submitButton = form.querySelector('.ai-business-form__button-{{ ai_gen_id }}');
+    const successMessage = document.querySelector('.business-form-submission-message');
+    const proceedToCheckoutBtn = document.querySelector('.ai-business-form__checkout-button-{{ ai_gen_id }}');
+
+
+    requiredFields.forEach(field => {
+      field.addEventListener('input', validateForm);
+      field.addEventListener('change', validateForm);
+    });
+
+    // Initial validation on page load
+    validateForm();
+
+
+    if (form) {
+      form.addEventListener('submit', async function (event) {
+         event.preventDefault();
+
+         console.log('wool is submitting the form');
+         submitButton.disabled = true;
+         submitButton.classList.add('ai-business-form__button--loading');
+         submitButton.textContent = '';
+
+        let isValid = true;
+        const visibleInputs = form.querySelectorAll(
+          '.state-question:not([style*="display: none"]) input[required], .state-question:not([style*="display: none"]) select[required]'
+        );
+
+        visibleInputs.forEach((input) => {
+          const errorElement = form.querySelector(
+            `[data-field-error="${input.name.replace('contact[', '').replace(']', '')}"]`
+          );
+
+          if (!input.value.trim()) {
+            isValid = false;
+            input.setAttribute('aria-invalid', 'true');
+            if (errorElement) errorElement.style.display = 'block';
+          } else {
+            input.removeAttribute('aria-invalid');
+            if (errorElement) errorElement.style.display = 'none';
+          }
+
+          if (input.type === 'email' && input.value.trim() && !validateEmail(input.value)) {
+            isValid = false;
+            input.setAttribute('aria-invalid', 'true');
+            if (errorElement) errorElement.style.display = 'block';
+          }
+        });
+
+        if (!isValid) {
+          return;
+        }
+
+        // ✨ Begin PDF logic after validation
+        const formData = new FormData(form);
+        const businessName = formData.get('contact[business_name]');
+        const firstName = formData.get('contact[firstName]');
+        const lastName = formData.get('contact[lastName]');
+        const phoneNumber = formData.get('contact[phone]');
+        const email = formData.get('contact[email]');
+        const title = formData.get('contact[title]');
+        const streetAddress = formData.get('contact[street_address]');
+        const city = formData.get('contact[city]');
+        const state = formData.get('contact[state]');
+        const zipcode = formData.get('contact[zipcode]');
+        const type = formData.get('contact[type]');
+        const reason = formData.get('contact[reason]');
+        const taxRegistrationId = formData.get('contact[id]');
+
+        const typeSelect = document.getElementById(`Type-{{ ai_gen_id }}`);
+        const reasonSelect = document.getElementById(`Reason-{{ ai_gen_id }}`);
+
+        // Then, get the selected option text
+        const typeText = typeSelect.options[typeSelect.selectedIndex].text;
+        const reasonText = reasonSelect.options[reasonSelect.selectedIndex].text;
+
+        console.log('type text:', typeText);
+        console.log('reason text:', reasonText);
+
+        console.log('type: ', type);
+        console.log('reason: ', reason);
+
+
+        try {
+          const pdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/streamline-tax-exemption.pdf?v=1731952965';
+          const examplePdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Streamline_Form_Example.pdf?v=1748888393';
+          {% comment %} const taxRegistrationId = '88-1231234'; {% endcomment %}
+          const pdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer());
+
+          const { PDFDocument } = window.PDFLib;
+          const pdfDoc = await PDFDocument.load(pdfBytes);
+          const pdfForm = pdfDoc.getForm();
+          const fields = pdfForm.getFields();
+
+          createCompanyProfile(businessName, firstName, lastName, email, phoneNumber, title, streetAddress, city, zipcode, state, businessName, examplePdfUrl, taxRegistrationId, typeText, reasonText);
+
+          {% comment %} fields.forEach((field) => {
+            const name = field.getName();
+            const type = field.constructor.name;
+            console.log('Field type: ', type);
+
+            if (type === 'e') {
+              console.log(`--- Checkbox Group: ${name} ---`);
+
+              // pdf-lib doesn't expose widget-level info directly,
+              // but we can peek into the internal structure.
+              const widgets = field.acroField.getWidgets();
+
+              widgets.forEach((widget, index) => {
+                const dict = widget.dict;
+                const ap = dict.lookup(PDFLib.PDFName.of("AP")); // Appearance dictionary
+                const n = ap?.lookup(PDFLib.PDFName.of("N"));     // Normal appearance
+
+                if (n) {
+                  const appearanceKeys = n.keys(); // all the possible ON values (like 'LLC', 'Corp')
+                  for (const key of appearanceKeys) {
+                    if (key !== PDFLib.PDFName.of("Off")) {
+                      console.log(`  ➤ Widget [${index}] option: ${key.decodeText ? key.decodeText() : key}`);
+                    }
+                  }
+                }
+
+                // Is it currently checked?
+                const currentValue = dict.get(PDFLib.PDFName.of('AS'));
+                console.log(`  ↳ Widget [${index}] current value: ${currentValue?.decodeText?.() || currentValue?.name}`);
+              });
+            }
+          });
+
+          pdfForm.getTextField('Item.Your.Name').setText(contactName);
+          pdfForm.getTextField('Item.BusinessAddress').setText(businessName);
+
+          const typeField = pdfForm.getCheckBox('Item.Checkbox');
+          console.log('typeField: ', typeField);
+
+          const reasonField = pdfForm.getCheckBox('Item.Checkbox2');
+          {% comment %} const reasonAppearances = reasonField.acroField.getOnValues(); {% endcomment %}
+          {% comment %} console.log('reasonAppearances: ', reasonAppearances); {% endcomment %}
+
+          // Optional: Set dropdowns if the PDF has them
+          try {
+            console.log('typeField: ', typeField);
+            console.log('reasonField: ', reasonField);
+            if (typeAppearances.includes(type)) {
+              typeField.check(type);
+            } else {
+              typeField.uncheckAll();
+            }
+            if (reasonAppearances.includes(reason)) {
+              reasonField.check(reason);
+            } else {
+              reasonField.uncheckAll();
+            }
+          } catch (err) {
+            console.warn('Dropdown fields may not exist in the PDF');
+          }
+
+          pdfForm.flatten(); // prevent further editing
+
+          const pdfBytesModified = await pdfDoc.save();
+
+          // Download the filled PDF
+          const blob = new Blob([pdfBytesModified], { type: 'application/pdf' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'streamlined-exemption.pdf';
+          document.body.appendChild(link);
+          link.click();
+          link.remove(); {% endcomment %}
+          successMessage.style.display = 'flex';
+          businessFormWrapper.style.display = 'none';
+        } catch (err) {
+          console.error('PDF generation/upload failed:', err);
+        } finally {
+          submitButton.disabled = false;
+          submitButton.classList.remove('ai-business-form__button--loading');
+          submitButton.textContent = 'Submit';
+        }
+      });
+    }
+
+
+    continueButton.addEventListener('click', function () {
+      const stateCode = getStateFromURL();
+      console.log('continue button clicked, state code: ', stateCode);
+      updateFieldVisibilityBasedOnState(stateCode);
+
+      basicForm.style.display = 'none';
+      tailoredForm.style.display = 'block';
+    });
+
+    previousButton.addEventListener('click', function () {
+      basicForm.style.display = 'flex';
+      tailoredForm.style.display = 'none';
+    });
+
+    proceedToCheckoutBtn.addEventListener('click', function() {
+      // Redirect to the checkout page
+      window.location.href = '/checkout';
+    });
+
+
+    function validateForm() {
+      let allValid = true;
+
+      requiredFields.forEach(field => {
+        // If it's an input/select and is invalid or empty, mark as not valid
+        if (field.type === 'select-one') {
+          if (field.value === '') {
+            allValid = false;
+          }
+        } else if (!field.value.trim()) {
+          allValid = false;
+        } else if (!field.checkValidity()) {
+          allValid = false;
+        }
+      });
+
+      console.log('wool allValid: ', allValid);
+
+      // Enable or disable the button based on validity
+      continueButton.disabled = !allValid;
+    }
+
+    function getStateFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('state')) {
+        return urlParams.get('state').toUpperCase();
+      } else {
+        return 'STREAMLINE'; // default fallback
+      }
+    }
+
+    function updateFieldVisibilityBasedOnState(stateCode) {
+      const allStateQuestions = document.querySelectorAll('.state-question');
+
+      allStateQuestions.forEach((field) => {
+        const showFor = field.getAttribute('data-show-for');
+        const acceptedStates = showFor ? showFor.split(',').map((s) => s.trim().toUpperCase()) : [];
+        console.log('wool acceptedStates: ', acceptedStates);
+
+        if (acceptedStates.includes(stateCode)) {
+          field.style.display = 'flex'; // or block, depending on your layout
+          const requiredInput = field.querySelector('[required]');
+          if (requiredInput) requiredInput.setAttribute('aria-required', 'true');
+        } else {
+          field.style.display = 'none';
+          const input = field.querySelector('input, select, textarea');
+          if (input) {
+            input.removeAttribute('required');
+            input.removeAttribute('aria-required');
+            input.removeAttribute('aria-invalid');
+            // Also hide any visible error
+            const errorEl = field.querySelector('[data-field-error]');
+            if (errorEl) errorEl.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Business Info Form",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Form Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Business Information"
+    },
+    {
+      "type": "text",
+      "id": "success_heading",
+      "label": "Success Heading",
+      "default": "Submission Successful"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Please fill out the form below with your business details.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "success_description",
+      "label": "Success Description",
+      "default": "<p>Thank you for filling out this information. You are now tax exempt! We will reach out to you after you place your order for your tax exempt form.</p>"
+    },
+    {
+      "type": "text",
+      "id": "business_name_label",
+      "label": "Business name label",
+      "default": "Business Name"
+    },
+    {
+      "type": "text",
+      "id": "first_name_label",
+      "label": "First name label",
+      "default": "First Name"
+    },
+    {
+      "type": "text",
+      "id": "last_name_label",
+      "label": "Last name label",
+      "default": "Last Name"
+    },
+    {
+      "type": "text",
+      "id": "phone_number_label",
+      "label": "Phone number label",
+      "default": "Phone Number"
+    },
+    {
+      "type": "text",
+      "id": "contact_title_label",
+      "label": "Contact title label",
+      "default": "Title"
+    },
+    {
+      "type": "text",
+      "id": "street_address_label",
+      "label": "Street address label",
+      "default": "Street Address"
+    },
+    {
+      "type": "text",
+      "id": "city_label",
+      "label": "City label",
+      "default": "City"
+    },
+    {
+      "type": "text",
+      "id": "state_placeholder",
+      "label": "state placeholder",
+      "default": "State"
+    },
+    {
+      "type": "text",
+      "id": "state_label",
+      "label": "State label",
+      "default": "State"
+    },
+    {
+      "type": "text",
+      "id": "zipcode_label",
+      "label": "Zip Code label",
+      "default": "Zip Code"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email label",
+      "default": "Email Address"
+    },
+    {
+      "type": "text",
+      "id": "type_label",
+      "label": "Type label",
+      "default": "Purchaser's type of business"
+    },
+    {
+      "type": "text",
+      "id": "type_placeholder",
+      "label": "type placeholder",
+      "default": "Select a type"
+    },
+    {
+      "type": "text",
+      "id": "reason_label",
+      "label": "Reason label",
+      "default": "Reason for exemption"
+    },
+    {
+      "type": "text",
+      "id": "reason_placeholder",
+      "label": "reason placeholder",
+      "default": "Reason for exemption"
+    },
+    {
+      "type": "text",
+      "id": "id_label",
+      "label": "ID label",
+      "default": "Tax Identification Number"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Submit"
+    },
+    {
+      "type": "text",
+      "id": "continue_button_text",
+      "label": "Continue button text",
+      "default": "Continue"
+    },
+    {
+      "type": "text",
+      "id": "previous_button_text",
+      "label": "Previous button text",
+      "default": "Previous"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you! Your information has been submitted successfully."
+    },
+    {
+      "type": "text",
+      "id": "checkout_button_text",
+      "label": "Checkout button text",
+      "default": "Proceed to Checkout"
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Error message",
+      "default": "There was a problem submitting your information. Please check the form and try again."
+    },
+    {
+      "type": "header",
+      "content": "Form Style"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": "Button alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Form border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Input border radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "input_background_color",
+      "label": "Input background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#000f9f"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Success color",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error color",
+      "default": "#d82c0d"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Business Info Form"
+    }
+  ]
+}
+{% endschema %}

@@ -13,7 +13,6 @@ const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
 const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
 const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
-const oosPaintVariantsLibrary = document.querySelector('.oos-paint-variants');
 const paintedStockKeyPaintLevelLibrary = document.querySelector('.painted-stock-key-paint-level');
 const paintedStockKeyQualityLevelLibrary = document.querySelector('.painted-stock-key-quality-level');
 const paintCodeAppContainerLibrary = document.getElementById('paintcode-app-container');
@@ -32,9 +31,12 @@ const priceContainerLargeScreen = document.querySelector('.price-container-large
 const priceContainerSmallScreen = document.querySelector('.price-container');
 const priceDisplay = document.getElementById('price-display');
 const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
+const productPartDescriptionLibrary = document.querySelector('.product-description-collapsible-text');
 const qualityTypeSelectLibrary = document.getElementById('quality-type-select');
+const qualityOptionsCheckboxLibrary = document.querySelectorAll('.quality-options-checkbox');
 const qualityDescriptionBtnLibrary = document.getElementById('quality-description-vindecoder');
 const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
+const titleElementLibrary = document.querySelector('.product-title');
 const vinInputLibrary = document.querySelector('#vin-textbox');
 const vinTextBoxOEMLibrary = document.getElementById('vin-textbox-for-oem');
 const vinTextboxContainer = document.getElementById("vin-textbox-container");
@@ -55,6 +57,7 @@ let decodedVINHasAvailableStock = false;
 let addedBadgeInPaintOptions = false;
 let selectedVariantUnavailable = false;
 let autoSelectedBanned = false;
+let matchingByVin = false;
 let aftermarketAvailability = '';
 let capaAvailability = '';
 let oemAvailability = '';
@@ -65,6 +68,7 @@ let autoSelectedOption = '';
 let selectedProductSku = '';
 let selectedProductColor = '';
 let selectedProductTitle = '';
+let productVariants = {};
 let amountOfVINPostMessages = 0;
 let amountOfOOSPaintVariants = 0;
 let currentAddToCartBtnLibrary;
@@ -95,7 +99,12 @@ function hideFitmentFailButton() {
 }
 
 function clearQualityTypeSelect() {
-    if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.selectedIndex = 0;
+    if (qualityOptionsCheckboxLibrary) {
+        const qualityRadioButtons = document.querySelectorAll('input[name="quality_type"]');
+        qualityRadioButtons.forEach(radio => radio.checked = false);
+    } else {
+        if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.selectedIndex = 0;
+    }
 }
 
 function disablePrePaintedMessagingQualityLevel() {
@@ -105,6 +114,16 @@ function disablePrePaintedMessagingQualityLevel() {
 }
 
 function disableQualityTypeSelect() {
+    if (qualityOptionsCheckboxLibrary) {
+        const qualityRadioButtons = document.querySelectorAll('input[name="quality_type"]');
+
+        // If quality options checkboxes
+        qualityRadioButtons.forEach(radio => {
+            radio.disabled = true;
+        });
+    }
+
+    // If quality select dropdown
     clearQualityTypeSelect();
     if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.disabled = true;
 }
@@ -219,7 +238,13 @@ function clearVinVerificationRadioButtons() {
 }
 
 function hideOOSPaintVariantsMsg() {
+    const oosPaintVariantsLibrary = document.querySelector('.oos-paint-variants');
     if (oosPaintVariantsLibrary && oosPaintVariantsLibrary.classList.contains('show')) oosPaintVariantsLibrary.classList.remove("show");
+}
+
+function clearOOSPaintCheckbox() {
+    const checkbox = document.querySelector(`input[name="acknowledge_difficult_paint"]`);
+    if (checkbox.checked === true) checkbox.checked = false;
 }
 
 function hideAddToCartButton() {
@@ -249,6 +274,14 @@ function enablePrePaintedMessagingQualityLevel() {
 }
 
 function enableProductTypeSelect() {
+    if (qualityOptionsCheckboxLibrary) {
+        const qualityRadioButtons = document.querySelectorAll('input[name="quality_type"]');
+
+        // If quality options checkboxes
+        qualityRadioButtons.forEach(radio => {
+            radio.disabled = false;
+        });
+    }
     if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.disabled = false;
 }
 
@@ -327,6 +360,7 @@ function enableVinVerificationBtns() {
 }
 
 function showOOSPaintVariantsMsg() {
+    const oosPaintVariantsLibrary = document.querySelector('.oos-paint-variants');
     if (oosPaintVariantsLibrary && !oosPaintVariantsLibrary.classList.contains('show')) oosPaintVariantsLibrary.classList.add("show");
 }
 
@@ -421,6 +455,200 @@ function togglePaintedStockKey(selectedType, hasAvailableOptions) {
     } else {
         selectedOptionHasAvailableStock = false;
     };
+}
+
+async function populateVariantDropdown(selectedType, disabledFirstOptionTranslation) {
+    const combinedVariantSelect = document.getElementById('variant-selector');
+    if (combinedVariantSelect) {
+        combinedVariantSelect.innerHTML = `<option value="" disabled selected>${disabledFirstOptionTranslation}</option>`;
+    }
+
+    if (combinedVariantSelect) {
+        clearCombinedVariantSelect(); // Reset to first option (Select Paint Code)
+        disableAddToCartButton();
+    }
+
+    // Get the relevant variants for selected product type
+    let variants = productVariants[selectedType] || [];
+
+    if (variants.length === 0) {
+        variants = productVariants.current;
+    }
+    const variantsUpdateEvent = new CustomEvent('variantsUpdated', { detail: { variants } });
+    document.dispatchEvent(variantsUpdateEvent);
+
+    if (variants.length > 0) {
+        if (combinedVariantSelect) {
+            enableCombinedVariantSelect();
+            updateProgressHeaderColors();
+        }
+        enablehowToFindPaintCodeBtn();
+        enableGetPaintCodeUsingVin();
+        enableSelectVinVariantBtn();
+
+        variants.forEach(function (variant) {
+            let isVariantAvailable = true;
+
+            // set it to true in the following because it is actually checking to see if the variant is hidden
+            if (variant.variantAvailable === "true" || variant.variantAvailable === true) {
+                isVariantAvailable = false;
+            } else {
+                isVariantAvailable = true;
+            }
+
+            window.selectedVariantId = variant.id;
+            let option;
+
+            // Compose base label
+            let optionLabel = `${variant.title}`;
+
+            // If it has extra inventory, append the tag to the text
+            if (window.enablePrepaintedMessaging) {
+                if (variant.hasExtraInventory && isVariantAvailable) {
+                    optionLabel += " 🚚";
+                }
+            }
+
+
+            if (boolMatchByVIN === false) {
+                // Check if the variant is "Match Paint by VIN"
+                if (variant.title.trim().startsWith("Match Paint by VIN") || variant.title.trim().startsWith("Pintura de combinación por VIN")) {
+                    // Create a div instead of an option
+                    const div = document.createElement("div");
+                    div.classList.add("hidden-vin-option");
+
+                    // Copy attributes to div
+                    div.setAttribute("data-price", variant.price || "");
+                    div.setAttribute("data-price-difference", variant.priceDifference || "");
+                    div.setAttribute("data-color", variant.color || "");
+                    div.setAttribute("data-variant-title", variant.variantTitle || "");
+                    div.setAttribute("data-product-title", variant.productTitle || "");
+                    div.setAttribute("data-variant-sku", variant.variantSku || "");
+
+                    // Set text content
+                    div.dataset.value = variant.id || "";
+                    div.textContent = variant.title;
+                    div.style.display = "none";
+
+                    // Append div after select
+                    combinedVariantSelect.insertAdjacentElement("afterend", div);
+                    return;
+                } else {
+                    // Create an option normally
+                    option = document.createElement("option");
+                    option.value = variant.id;
+
+                    if (!isVariantAvailable) {
+                        amountOfOOSPaintVariants++;
+                        option.dataset.unavailable = "true";
+                    } else {
+                        option.dataset.unavailable = "false";
+                    }
+
+                    option.textContent = optionLabel;
+                    option.dataset.price = variant.price;
+                    option.dataset.color = variant.color;
+                    option.dataset.variantTitle = variant.variantTitle;
+                    option.dataset.priceDifference = variant.priceDifference;
+                    option.dataset.productTitle = variant.productTitle;
+                    option.dataset.variantSku = variant.variantSku;
+                }
+            } else {
+                option = document.createElement('option');
+                option.value = variant.id;
+
+                if (!isVariantAvailable) {
+                    amountOfOOSPaintVariants++;
+                    option.dataset.unavailable = "true";
+                } else {
+                    option.dataset.unavailable = "false";
+                }
+
+                option.textContent = optionLabel;
+                option.dataset.price = variant.price;
+                option.dataset.color = variant.color;
+                option.dataset.priceDifference = variant.priceDifference;
+                option.dataset.productTitle = variant.productTitle;
+                option.dataset.variantSku = variant.variantSku;
+            }
+
+            if (failedVinDecode === true) {
+                option.style.display = "block";
+            }
+
+            if (variant.productTitle.length > 0) {
+                const productTitle = decodeHtmlEntities(variant.productTitle);
+                if (selectedType !== "oem") {
+                    titleElementLibrary.textContent = productTitle;
+                }
+                if (productTitle.includes("CAPA")) {
+                    const oemImg = document.getElementById('oem-badge');
+                    if (oemImg) {
+                        oemImg.remove();
+                    }
+                    const capaImgId = document.getElementById('capa-certified-badge');
+                    if (!capaImgId) {
+                        const capaImg = document.createElement('img');
+                        capaImg.src = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Capa_Certified_Icon_26a22ba1-e72d-4724-a44d-e73fbf1f0d2d.png';
+                        capaImg.alt = 'CAPA Certified';
+                        capaImg.id = 'capa-certified-badge';
+
+                        capaImg.style.position = 'relative';
+                        capaImg.style.height = "34px";
+                        capaImg.style.margin = "0 0 0 10px";
+
+                        if (window.innerWidth > 720) {
+                            priceContainerLargeScreen.appendChild(capaImg);
+                        } else {
+                            priceContainerSmallScreen.appendChild(capaImg);
+                        }
+
+                    }
+                } else {
+                    if (!productTitle.includes("OEM")) {
+                        const capaImg = document.getElementById('capa-certified-badge');
+                        if (capaImg) {
+                            capaImg.remove();
+                        }
+                        const oemImg = document.getElementById('oem-badge');
+                        if (oemImg) {
+                            oemImg.remove();
+                        }
+                    }
+                }
+            }
+
+            // Optionally add class to selected item or add tooltip
+            if (variant.hasExtraInventory) {
+                option.dataset.status = "ready-to-ship";
+                option.title = "Ready to ship"; // Tooltip when hovering
+            }
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = variant.productDescription;
+            if (productPartDescriptionLibrary) {
+                productPartDescriptionLibrary.innerHTML = tempElement.innerHTML;
+            }
+            if (combinedVariantSelect) {
+                combinedVariantSelect.appendChild(option);
+            }
+        });
+    } else {
+        if (combinedVariantSelect) {
+            disableCombinedVariantSelect();
+            clearCombinedVariantSelect();
+            disableAddToCartButton();
+            updateProgressHeaderColors();
+        }
+        disablehowToFindPaintCodeBtn();
+        disableGetPaintCodeUsingVin();
+        disableSelectVinVariantBtn();
+    }
+}
+
+function decodeHtmlEntities(text) {
+    const tempElement = document.createElement('textarea');
+    tempElement.innerHTML = text;
+    return tempElement.value;
 }
 
 /*******************************************************************************************************
@@ -566,13 +794,34 @@ function addOEMBadge() {
     }
 }
 
-function updatePriceDisplay(selectedType) {
-    const selectedText = qualityTypeSelectLibrary.options[qualityTypeSelectLibrary.selectedIndex].textContent;
-    const priceMatch = selectedText.match(/\$[\d,]+\.\d{2}/);
-    if (!priceMatch) return;
+function calculatePrice(inputElement) {
+    let price;
 
-    priceDisplay.textContent = priceMatch[0];
-    priceDisplaySmallScreen.textContent = priceMatch[0];
+    if (inputElement.tagName === 'SELECT') {
+        const selectedOption = inputElement.options[inputElement.selectedIndex];
+        price = selectedOption.getAttribute('data-price');
+    } else if (inputElement.type === 'radio') {
+        // Find the checked radio in the group
+        const checkedRadio = document.querySelector('input[name="quality_type"]:checked');
+        if (!checkedRadio) return;
+        price = checkedRadio.getAttribute('data-price');
+    } else {
+        console.warn('Unsupported element passed to calculatePrice:', inputElement);
+        return;
+    }
+
+    if (!price) return;
+
+    if (price.trim().startsWith('$')) {
+        document.getElementById('price-display').innerText = price;
+        document.getElementById('price-display-small-screen').innerText = price;
+        return;
+    }
+
+    const formattedPrice = (price / 100).toFixed(2);
+
+    document.getElementById('price-display').innerText = '$' + formattedPrice;
+    document.getElementById('price-display-small-screen').innerText = '$' + formattedPrice;
 }
 
 

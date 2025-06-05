@@ -1,0 +1,97 @@
+<style>
+  .oos-paint-variants {
+    background-color: #ffbc2c17;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    text-align: left;
+    color: #4b4b4b;
+    line-height: 1.3;
+    padding: 4px 10px;
+    border-left: 4px solid #ffae00;
+    border: 1px solid #ffae00;
+    border-radius: 6px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease, margin 0.5s ease;
+  }
+
+  .oos-paint-variants.show {
+    max-height: 500px;
+    opacity: 1;
+    margin: 8px 0 10px 0;
+  }
+
+  {% comment %} .oos-msg {
+    background-color: #ffbc2c17;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    text-align: left;
+    color: #4b4b4b;
+    line-height: 1.3;
+    padding: 4px 10px;
+    border-left: 4px solid #ffae00;
+    border: 1px solid #ffae00;
+    border-radius: 6px;
+  } {% endcomment %}
+
+  .oos-checkbox-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+  }
+
+  .acknowledge-difficult-paint {
+    cursor: pointer;
+  }
+
+  #difficult-paint-acceptance {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+    text-align: left;
+    color: #4b4b4b;
+    line-height: 1.3;
+    padding-left: 12px;
+    display: inline-block;
+    vertical-align: top;
+  }
+</style>
+
+<div class="oos-paint-variants">
+  <div class="oos-msg">{{ 'difficult_paint_messages.oos_message' | t }}</div>
+
+  <div class="oos-checkbox-wrapper">
+    <input
+      type="checkbox"
+      name="acknowledge_difficult_paint"
+      class="acknowledge-difficult-paint"
+      id="acknowledge-difficult-paint"
+    >
+    <label id="difficult-paint-acceptance" for="acknowledge-difficult-paint">
+      {{ 'difficult_paint_messages.acceptance_msg' | t }}
+    </label>
+    <input type="hidden" name="properties[Disclaimer]" id="acknowledge-troublesome-paint-note" value="">
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkbox = document.querySelector('.acknowledge-difficult-paint');
+    const noteInput = document.getElementById('acknowledge-troublesome-paint-note');
+
+    checkbox.addEventListener('change', function (e) {
+      if (e.target.checked) {
+        // Checkbox checked
+        noteInput.value = 'Acknowledged';
+        enableAddToCartButton();
+      } else {
+        // Checkbox unchecked
+        noteInput.value = '';
+        disableAddToCartButton();
+      }
+    });
+  });
+</script>
