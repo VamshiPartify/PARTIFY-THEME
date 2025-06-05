@@ -157,11 +157,13 @@
         padding: 20px;
       }
 
-      .ai-business-form__continue-button,
-      .ai-business-form__previous-button-{{ ai_gen_id }},
-      .ai-business-form__button-{{ ai_gen_id }} {
+      .ai-business-form__continue-button {
         width: 100%;
         align-self: stretch;
+      }
+
+      .ai-business-form-{{ ai_gen_id }} {
+        background-color: #ffffff;
       }
     }
   .city-state-zipcode-container {
@@ -711,11 +713,24 @@
         const reason = formData.get('contact[reason]');
         const taxRegistrationId = formData.get('contact[id]');
 
+        const typeSelect = document.getElementById(`Type-{{ ai_gen_id }}`);
+        const reasonSelect = document.getElementById(`Reason-{{ ai_gen_id }}`);
+
+        // Then, get the selected option text
+        const typeText = typeSelect.options[typeSelect.selectedIndex].text;
+        const reasonText = reasonSelect.options[reasonSelect.selectedIndex].text;
+
+        console.log('type text:', typeText);
+        console.log('reason text:', reasonText);
+
+        console.log('type: ', type);
+        console.log('reason: ', reason);
 
         try {
           const pdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/streamline-tax-exemption.pdf?v=1731952965';
           const examplePdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Streamline_Form_Example.pdf?v=1748888393';
-          const taxRegistrationId = '88-1231234';
+          {% comment %} const taxRegistrationId = '88-1231234'; {% endcomment %}
+
           const pdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer());
 
           const { PDFDocument } = window.PDFLib;
@@ -723,7 +738,7 @@
           const pdfForm = pdfDoc.getForm();
           const fields = pdfForm.getFields();
 
-          createCompanyProfile(businessName, firstName, lastName, email, phoneNumber, title, streetAddress, city, zipcode, state, businessName, examplePdfUrl, taxRegistrationId);
+          createCompanyProfile(businessName, firstName, lastName, email, phoneNumber, title, streetAddress, city, zipcode, state, businessName, examplePdfUrl, taxRegistrationId, typeText, reasonText);
 
           {% comment %} fields.forEach((field) => {
             const name = field.getName();
@@ -827,7 +842,7 @@
 
     proceedToCheckoutBtn.addEventListener('click', function() {
       // Redirect to the checkout page
-      window.location.href = 'https://partifyusa.com/checkouts/cn/Z2NwLXVzLWNlbnRyYWwxOjAxSldHVkM2QjQxM1dQQzdQR1pUVzNRSlg1?adminUrl=admin.shopify.com&cart_link_id=kY2Vfni6&editedAt=2025-05-29T20%3A13%3A50Z&isPublished=false&preview_theme_id=127234605141&profileName=Order+Editing+%28Tax+Exempt%29&profile_preview_token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwYXJ0aWZ5LXVzYS0xMjMubXlzaG9waWZ5LmNvbSIsImF1ZCI6InBhcnRpZnktdXNhLTEyMy5teXNob3BpZnkuY29tIiwibmJmIjoxNzQ4OTgxMTk4LCJjaGVja291dF9wcm9maWxlX2lkIjoxNTYzODg1NjUzLCJjaGVja291dF9wcm9maWxlX3B1Ymxpc2hlZCI6ZmFsc2UsImNoZWNrb3V0X3Byb2ZpbGVfdHlwX29zcF9hY3RpdmUiOnRydWUsImV4cCI6MTc0ODk4NDc5OH0.p4uqB9OO1JAXPg4DFFxpiDNGv9FECDEZBcGAO-HCUY8';
+      window.location.href = '/checkout';
     });
 
 
@@ -926,7 +941,7 @@
       "type": "richtext",
       "id": "success_description",
       "label": "Success Description",
-      "default": "<p>Success! You are now tax exempt.</p>"
+      "default": "<p>Thank you for filling out this information. You are now tax exempt! We will reach out to you after you place your order for your tax exempt form.</p>"
     },
     {
       "type": "text",

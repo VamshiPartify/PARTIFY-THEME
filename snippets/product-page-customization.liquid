@@ -1370,6 +1370,7 @@
                     updateProgressHeaderColors();
                 } else {
                     if(selectedVariantUnavailable === true) {
+                      form.action = `/cart/add?id=${combinedVariantSelect.value}`;
                       disableAddToCartButton();
                       return;
                     }
@@ -1760,19 +1761,12 @@
 
 {% comment %} Formats Price for Cart {% endcomment %}
 <script>
-  if({{ product.variants.size }} > 1) {
-    document.getElementById('variant-selector').addEventListener('change', function() {
-      var selectedOption = this.options[this.selectedIndex];
-      var price = selectedOption.getAttribute('data-price');
+  if ({{ product.variants.size }} > 1) {
+    const variantSelector = document.getElementById('variant-selector');
 
-
-      // Format the price (assuming it's in cents, divide by 100 for dollars)
-      var formattedPrice = (price / 100).toFixed(2);
-
-
-      // Display the price
-      document.getElementById('price-display').innerText = '$' + formattedPrice;
-      document.getElementById('price-display-small-screen').innerText = '$' + formattedPrice;
+    console.log('wool variantSelector: ', variantSelector);
+    variantSelector.addEventListener('change', function () {
+      calculatePrice(variantSelector);
     });
   }
 </script>

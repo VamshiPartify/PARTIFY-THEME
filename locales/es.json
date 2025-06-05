@@ -1033,6 +1033,10 @@
         "postfix": "disponemos de opciones de stock prepintado, sin esperas ni complicaciones.",
         "and": "y"
       },
+      "difficult_paint_messages": {
+        "oos_message": "Se sabe que es difícil lograr una coincidencia precisa con este código de pintura.",
+        "acceptance_msg": "Entiendo que este código de pintura puede no coincidir exactamente con el color de mi vehículo y acepto que es posible que haya alguna variación."
+      },
       "policies_footer": {
         "terms_of_service": "Términos de servicio",
         "privacy_policy": "Política de privacidad",

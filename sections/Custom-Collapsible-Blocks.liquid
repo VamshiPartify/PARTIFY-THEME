@@ -1,22 +1,23 @@
 <div class="collapsible-container">
   {% assign current_locale = shop.locale %}
-    {% for block in section.blocks %}
-        {% if block.settings.block_content != blank %}
-            <button class="collapsible">
-              {% if current_locale == 'es' %}
-                  <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
-                {% else %}
-                  <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
-              {% endif %}
-            </button>
-            <div class="content">
-                {{ block.settings.block_content | liquid }}  <!-- Render Liquid content -->
-            </div>
+  {% for block in section.blocks %}
+    {% if block.settings.block_content != blank %}
+      <button class="collapsible">
+        {% if current_locale == 'es' %}
+          <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
+        {% else %}
+          <span class="collapsible-icon">+</span> <b>{{ block.settings.block_title | t }}</b>
         {% endif %}
-    {% endfor %}
+      </button>
+      <div class="content">
+        {{ block.settings.block_content | liquid }}
+        <!-- Render Liquid content -->
+      </div>
+    {% endif %}
+  {% endfor %}
 </div>
 <style>
-.collapsible-container {
+  .collapsible-container {
     max-width: 90%; /* Increase maximum width for wider dropdowns */
     margin: 20px auto; /* Center the container */
     border: 1px solid #ddd; /* Subtle border around the container */
@@ -24,9 +25,9 @@
     overflow: hidden; /* Ensure inner elements don’t overflow */
     background-color: #f9f9f9; /* Light background color for the container */
     /*box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);  Add a subtle shadow for depth */
-}
+  }
 
-.collapsible {
+  .collapsible {
     background-color: #fff; /* Clean white background */
     color: #333; /* Darker text for contrast */
     cursor: pointer;
@@ -40,73 +41,72 @@
     border-bottom: 1px solid #ddd; /* Add a divider between items */
     transition: background-color 0.4s ease, padding 0.4s ease; /* Smooth transition */
     position: relative; /* Positioning for the icon */
-}
+  }
 
-.collapsible:hover {
+  .collapsible:hover {
     background-color: #ececec; /* Subtle background color change on hover */
     padding-left: 30px; /* Indentation on hover for a more interactive feel */
-}
+  }
 
-.collapsible.active {
-    background-color: #0C1A94; /* Cool blue background when active */
+  .collapsible.active {
+    background-color: #0c1a94; /* Cool blue background when active */
     color: white; /* White text when active */
     padding-left: 30px; /* Indentation when active */
-}
+  }
 
-.collapsible-icon {
+  .collapsible-icon {
     margin-right: 10px; /* Space between icon and text */
     font-weight: bold; /* Make the icon bold */
-}
+  }
 
-.content {
+  .content {
     padding: 15px 20px; /* Increased padding for content */
     display: none; /* Hidden by default */
     overflow: hidden;
     background-color: white; /* Clean background for content */
     border-top: 1px solid #ddd; /* Divider between items */
-  border-bottom: 1px solid #ddd; /* Divider between items */
+    border-bottom: 1px solid #ddd; /* Divider between items */
     transition: max-height 0.4s ease, opacity 0.4s ease; /* Smooth transition for height and opacity */
     opacity: 0; /* Start with opacity 0 for a fade-in effect */
     max-height: 0; /* Initially set max-height to 0 for smooth height transition */
-}
+  }
 
-.collapsible.active + .content {
+  .collapsible.active + .content {
     display: block; /* Display content when active */
     max-height: 500px; /* Set a reasonable maximum height */
     opacity: 1; /* Fade-in effect */
-}
+  }
 
-.collapsible-icon {
+  .collapsible-icon {
     position: absolute;
     right: 20px; /* Icon aligned to the right */
     top: 50%;
     transform: translateY(-50%); /* Center the icon vertically */
     font-size: 18px; /* Larger icon */
     transition: transform 0.4s ease; /* Smooth rotation transition */
-}
+  }
 
-.collapsible.active .collapsible-icon {
+  .collapsible.active .collapsible-icon {
     transform: translateY(-50%) rotate(180deg); /* Rotate icon when active */
-}
-
+  }
 </style>
 <script>
-    // JavaScript for collapsible functionality
-    document.querySelectorAll('.collapsible').forEach(button => {
-        button.addEventListener('click', () => {
-            button.classList.toggle('active');
-            const content = button.nextElementSibling;
-            const icon = button.querySelector('.collapsible-icon');
+  // JavaScript for collapsible functionality
+  document.querySelectorAll('.collapsible').forEach((button) => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('.collapsible-icon');
 
-            if (content.style.display === "block") {
-                content.style.display = "none";
-                icon.textContent = "+"; // Change icon to plus
-            } else {
-                content.style.display = "block";
-                icon.textContent = "−"; // Change icon to minus
-            }
-        });
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+        icon.textContent = '+'; // Change icon to plus
+      } else {
+        content.style.display = 'block';
+        icon.textContent = '−'; // Change icon to minus
+      }
     });
+  });
 </script>
 {% schema %}
 {
@@ -124,7 +124,7 @@
           "default": "Description"
         },
         {
-          "type": "liquid",  // Change to liquid type
+          "type": "liquid", // Change to liquid type
           "id": "block_content",
           "label": "Block Content",
           "default": "<p>Your content goes here.</p>"
@@ -140,6 +140,3 @@
   ]
 }
 {% endschema %}
-
-
-

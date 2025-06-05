@@ -712,7 +712,7 @@ var x_interval;
 let variantSku;
 let qualitySku;
 let baseSku;
-let productVariants;
+// let productVariants;
 let dataVariantSku;
 let dataVariantTitle;
 let productSku;

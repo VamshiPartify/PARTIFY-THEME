@@ -8,9 +8,9 @@
     {% assign base_variant_inventory = variant.inventory_quantity %}
   {% endif %}
 
-  {% if variant.metafields.custom.hide_paint_code == true %}
+  {% comment %} {% if variant.metafields.custom.hide_paint_code == true %}
     {% continue %}
-  {% endif %}
+  {% endif %} {% endcomment %}
 
   {% if variant.title contains 'Custom Paint Code' %}
     {% continue %}
@@ -41,7 +41,7 @@
     "price": "{{ variant.price | money }}",
     "priceDifference": "{{ price_difference }}",
     "color": "{{- variant.metafields.custom.paint_preview_hex_code -}}",
-    "variantAvailable": "{{ variant.available }}",
+    "variantAvailable": "{{ variant.metafields.custom.hide_paint_code }}",
     "variantTitle": "{{ variant.title }}",
     "variantSku": "{{- variant.sku -}}",
     "extraInventory": {{ extra_inventory }},
