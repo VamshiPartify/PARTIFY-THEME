@@ -393,17 +393,23 @@
   width: 100%;
   /* max-width: 100%; */
   text-align: left;
-  padding-left: 40px;
+  /* padding-left: 40px; */
   border-radius: 5px;
   right: -86px;
   border: solid 2px #334FB4;
   height: 46px;
   /* padding-top: 8px; */
   display: flex;
+  align-items: center;
   text-decoration: none;
   color: #334FB4;
   align-ite
   ms: center;
+}
+
+.garageCarIcon {
+  padding: 1px 10px 0 10px;
+  color: #334FB4;
 }
 
 @media screen and (min-width: 1024px) {
