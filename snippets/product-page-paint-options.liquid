@@ -909,6 +909,7 @@
 
                     variantSelectorArray.forEach(option => {
                       if(option.textContent.includes('Match Paint by VIN')) {
+                        changingPaintOptions(true);
                         combinedVariantSelect.value = option.value;
                         form.action = `/cart/add?id=${option.value}`;
                         {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
