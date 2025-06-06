@@ -814,7 +814,7 @@
       
       "instructions_heading_is_make_found": "Hay dos formas principales de obtener un código de pintura.",
       "instructions_is_make_found_listitem_1_beginning": "Seleccione la opción",
-      "instructions_is_make_found_listitem_1_vin_option": "Obtener el código de pintura mediante VIN",
+      "instructions_is_make_found_listitem_1_vin_option": "Usar número de bastidor",
       "instructions_is_make_found_listitem_1_mid": "para utilizar nuestro servicio gratuito",
       "instructions_is_make_found_listitem_1_bold": "Servicio de descifrado de VIN.",
       "instructions_is_make_found_listitem_1_end": "Simplemente ingrese su VIN y nos encargaremos de encontrar el código de pintura para usted.",
@@ -828,7 +828,7 @@
     
       "instructions_heading_is_bumperdotcom_make_found": "Hay dos formas principales de obtener un código de pintura.",
       "instructions_is_bumperdotcom_make_found_listitem_1_beginning": "Seleccione la opción",
-      "instructions_is_bumperdotcom_make_found_listitem_1_vin_option": "Obtener el código de pintura mediante VIN",
+      "instructions_is_bumperdotcom_make_found_listitem_1_vin_option": "Usar número de bastidor",
       "instructions_is_bumperdotcom_make_found_listitem_1_mid": "para utilizar nuestro servicio gratuito",
       "instructions_is_bumperdotcom_make_found_listitem_1_bold": "Servicio de descifrado de VIN.",
       "instructions_is_bumperdotcom_make_found_listitem_1_end": "Simplemente ingrese su VIN y nos encargaremos de encontrar el código de pintura para usted.",
@@ -837,7 +837,7 @@
     
       "instructions_heading_everything_else": "Hay dos formas principales de obtener un código de pintura.",
       "instructions_everything_else_listitem_1": "Seleccione la opción",
-      "instructions_everything_else_listitem_vin_option": "Obtener el código de pintura mediante VIN",
+      "instructions_everything_else_listitem_vin_option": "Usar número de bastidor",
       "instructions_everything_else_listitem_1_end": " para ingresar su VIN, el cual se adjuntará al pedido y lo usaremos para determinar el código de pintura.",
       "instructions_everything_else_listitem_2_beginning": "puede encontrar el código de pintura de su vehículo usando",
       "instructions_everything_else_listitem_2_link": "estas instrucciones aquí.",

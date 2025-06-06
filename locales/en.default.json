@@ -722,7 +722,7 @@
 
     "instructions_heading_is_make_found": "There are two main ways to get a paint code.",
     "instructions_is_make_found_listitem_1_beginning": "Select the option ",
-    "instructions_is_make_found_listitem_1_vin_option": "Get Paint Code Using VIN",
+    "instructions_is_make_found_listitem_1_vin_option": "Use VIN",
     "instructions_is_make_found_listitem_1_mid": "to use our free ",
     "instructions_is_make_found_listitem_1_bold": "VIN deciphering service.",
     "instructions_is_make_found_listitem_1_end": " Simply enter your VIN and we will take care of finding your paint code for you.",
@@ -736,7 +736,7 @@
 
     "instructions_heading_is_bumperdotcom_make_found": "There are two main ways to get a paint code.",
     "instructions_is_bumperdotcom_make_found_listitem_1_beginning": "Select the option ",
-    "instructions_is_bumperdotcom_make_found_listitem_1_vin_option": "Get Paint Code Using VIN",
+    "instructions_is_bumperdotcom_make_found_listitem_1_vin_option": "Use VIN",
     "instructions_is_bumperdotcom_make_found_listitem_1_mid": "to use our free ",
     "instructions_is_bumperdotcom_make_found_listitem_1_bold": "VIN deciphering service.",
     "instructions_is_bumperdotcom_make_found_listitem_1_end": "Simply enter your VIN and we will take care of finding your paint code for you.",
@@ -745,7 +745,7 @@
 
     "instructions_heading_everything_else": "There are two main ways to get a paint code.",
     "instructions_everything_else_listitem_1": "Select the option ",
-    "instructions_everything_else_listitem_vin_option": "Get Paint Code Using VIN",
+    "instructions_everything_else_listitem_vin_option": "Use VIN",
     "instructions_everything_else_listitem_1_end": " to enter your VIN. The VIN will be attached to the order and we will use it on our end to determine the paint code.",
     "instructions_everything_else_listitem_2_beginning": "You can find your paint code on your vehicle using ",
     "instructions_everything_else_listitem_2_link": "these instructions here.",
