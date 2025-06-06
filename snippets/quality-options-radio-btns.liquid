@@ -202,15 +202,18 @@
             value="aftermarket"
             data-quality-sku="{{ aftermarket_sku }}"
             data-price="{{ aftermarket_price }}"
-            {% unless aftermarket_product.available %}
+            {% if aftermarket_product.available %}
+              data-available="true"
+            {% else %}
+              data-available="false"
               disabled
-            {% endunless %}
+            {% endif %}
           >
           {% if aftermarket_product.available %}
             {{ 'quality_options.aftermarket_in_stock' | t }}
             {{ aftermarket_price }}
           {% else %}
-            <span style="color: gray;">{{ 'quality_options.aftermarket_oos' | t }}</span>
+            <span style="color: #ccc;">{{ 'quality_options.aftermarket_oos' | t }}</span>
           {% endif %}
         </label>
       {% endif %}
@@ -231,15 +234,18 @@
             value="capa"
             data-quality-sku="{{ capa_sku }}"
             data-price="{{ capa_price }}"
-            {% unless capa_product.available %}
+            {% if capa_product.available %}
+              data-available="true"
+            {% else %}
+              data-available="false"
               disabled
-            {% endunless %}
+            {% endif %}
           >
           {% if capa_product.available %}
             {{ 'quality_options.capa_in_stock' | t }}
             {{ capa_price }}
           {% else %}
-            <span style="color: gray;">{{ 'quality_options.capa_oos' | t }}</span>
+            <span style="color: #ccc;">{{ 'quality_options.capa_oos' | t }}</span>
           {% endif %}
         </label>
       {% endif %}
@@ -260,15 +266,18 @@
             value="oem"
             data-quality-sku="{{ oem_sku }}"
             data-price="{{ oem_price }}"
-            {% unless oem_product.available %}
+            {% if oem_product.available %}
+              data-available="true"
+            {% else %}
+              data-available="false"
               disabled
-            {% endunless %}
+            {% endif %}
           >
           {% if oem_product.available %}
             {{ 'quality_options.oem_in_stock' | t }}
             {{ oem_price }}
           {% else %}
-            <span style="color: gray;">{{ 'quality_options.oem_oos' | t }}</span>
+            <span style="color: #ccc;">{{ 'quality_options.oem_oos' | t }}</span>
           {% endif %}
         </label>
       {% endif %}
@@ -402,7 +411,7 @@ function updatePriceDisplay(selectedType) {
       oem = null;
       await populateVariantDropdown(selectedType, disabledFirstOptionTranslation);
 
-      if (matchingByVin) changingPaintOptions(true);
+      // if (matchingByVin) changingPaintOptions(true);
       updateProgressHeaderColors();
     }
 
@@ -445,8 +454,8 @@ function updatePriceDisplay(selectedType) {
       }
 
       if (vinDecoderJustUsed) {
-        await populateVariantDropdown(oem, disabledFirstOptionTranslation);
-        changingPaintOptions(matchingByVin);
+        await populateVariantDropdown("oem", disabledFirstOptionTranslation);
+        // changingPaintOptions(matchingByVin);
       }
       updateProgressHeaderColors();
     }
@@ -548,14 +557,14 @@ if (qualityRadioInputs.length > 0) {
           disablehowToFindPaintCodeBtn();
           disableGetPaintCodeUsingVin();
           disableAddToCartButton();
-          await populateVariantDropdown(oem, disabledFirstOptionTranslation);
+          await populateVariantDropdown("oem", disabledFirstOptionTranslation);
           if (matchingByVin) {
             changingPaintOptions(true);
           }
           updateProgressHeaderColors();
           // Ensure VIN input is 17 characters before enabling Add to Cart
         } else if (vinInput.length === 17) {
-          await populateVariantDropdown(oem, disabledFirstOptionTranslation);
+          await populateVariantDropdown("oem", disabledFirstOptionTranslation);
           if (!combinedVariantSelect) enableAddToCartButton();
           updateProgressHeaderColors();
         } else {

@@ -136,6 +136,10 @@ function disableVINTextboxForOEM() {
     if (vinTextBoxOEMLibrary) vinTextBoxOEMLibrary.disabled = true;
 }
 
+function hideVINTextboxForOEM() {
+    if (oemVinContainerLibrary && oemVinContainerLibrary.classList.contains("show")) oemVinContainerLibrary.classList.remove("show");
+}
+
 function disableCombinedVariantSelect() {
     if (combinedVariantSelectLibrary) combinedVariantSelectLibrary.disabled = true;
 }
@@ -279,7 +283,9 @@ function enableProductTypeSelect() {
 
         // If quality options checkboxes
         qualityRadioButtons.forEach(radio => {
-            radio.disabled = false;
+            if (radio.dataset.available === "true") {
+                radio.disabled = false;
+            }
         });
     }
     if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.disabled = false;
@@ -472,8 +478,14 @@ async function populateVariantDropdown(selectedType, disabledFirstOptionTranslat
     let variants = productVariants[selectedType] || [];
 
     if (variants.length === 0) {
-        variants = productVariants.current;
+        if (productVariants.single) {
+            // If no variants for the selected type, use the single variant
+            variants = productVariants.single;
+        } else {
+            variants = productVariants.current;
+        }
     }
+
     const variantsUpdateEvent = new CustomEvent('variantsUpdated', { detail: { variants } });
     document.dispatchEvent(variantsUpdateEvent);
 
@@ -576,7 +588,12 @@ async function populateVariantDropdown(selectedType, disabledFirstOptionTranslat
                 option.style.display = "block";
             }
 
-            if (variant.productTitle.length > 0) {
+            let currentProductTitle = variant.productTitle || "";
+            if (currentProductTitle.length === 0) {
+                currentProductTitle = variant.name;
+            }
+
+            if (currentProductTitle.length > 0) {
                 const productTitle = decodeHtmlEntities(variant.productTitle);
                 if (selectedType !== "oem") {
                     titleElementLibrary.textContent = productTitle;
@@ -663,6 +680,11 @@ function resortToGetPaintCodeByVin(eventVin, eventMatchByVIN) {
     const vin = eventVin;
     let hiddenDiv;
     storedDecodedVin = vin;
+
+    if (vinTextBoxOEMLibrary && vinTextBoxOEMLibrary.value.length) {
+        vinTextBoxOEMLibrary.value = "";
+        hideVINTextboxForOEM();
+    }
 
     if (amountOfVINPostMessages > 0 && eventMatchByVIN === false) {
         return;
