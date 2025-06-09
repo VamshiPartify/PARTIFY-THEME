@@ -85,13 +85,32 @@
               {% endif %}
             </div>
           </a>
-          <span class="product-type-text">
-            {% if type == 'Capucha' %}
-              <b>Tapa de motors</b>
-            {% else %}
-              <b>{{ type }}s</b>
-            {% endif %}
-          </span>
+          <a
+            href="javascript:void(0);"
+            onclick="
+                  var currentUrl = window.location.href;
+                  var newFilter = 'filter.p.product_type={{ type | replace: ' ', '+' }}';
+
+                  if (currentUrl.includes('filter.p.product_type=')) {
+                    var regex = /filter\.p\.product_type=[^&]*/;
+                    var urlWithFilter = currentUrl.replace(regex, newFilter);
+                  } else {
+                    var separator = currentUrl.includes('?') ? '&' : '?';
+                    var urlWithFilter = currentUrl + separator + newFilter;
+                  }
+
+              window.location.href = urlWithFilter;
+            "
+            class="product-type-text-link"
+          >
+            <span class="product-type-text">
+              {% if type == 'Capucha' %}
+                <b>Tapa de motors</b>
+              {% else %}
+                <b>{{ type }}s</b>
+              {% endif %}
+            </span>
+          </a>
         </div>
       </div>
     {% endunless %}
@@ -233,6 +252,12 @@
   .product-type-buttons .btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .product-type-text-link {
+    text-decoration: none;
+    color: #0c1a94;
+    margin-top: 12px;
   }
 
   .aspiration-question {
