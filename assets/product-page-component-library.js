@@ -844,12 +844,22 @@ function calculatePrice(inputElement) {
         return;
     }
 
-    const formattedPrice = (price / 100).toFixed(2);
+    const formattedPrice = formatPriceToUSD(price);
 
-    document.getElementById('price-display').innerText = '$' + formattedPrice;
-    document.getElementById('price-display-small-screen').innerText = '$' + formattedPrice;
-    document.getElementById('price-display-sticky').innerText = '$' + formattedPrice;
-    document.getElementById('price-display-a2c').innerText = '$' + formattedPrice;
+    document.getElementById('price-display').innerText = formattedPrice;
+    document.getElementById('price-display-small-screen').innerText = formattedPrice;
+    document.getElementById('price-display-sticky').innerText = formattedPrice;
+    document.getElementById('price-display-a2c').innerText = formattedPrice;
+}
+
+function formatPriceToUSD(price) {
+    if (!price) return;
+
+    if (price.trim().startsWith('$')) {
+        return price;
+    }
+    const formattedPrice = (price / 100).toFixed(2);
+    return '$' + formattedPrice;
 }
 
 

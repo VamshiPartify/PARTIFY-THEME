@@ -724,11 +724,12 @@
             const selectedColor = selectedOption ? selectedOption.dataset.color : null;
             const selectedTitle = selectedOption ? selectedOption.dataset.variantTitle : null;
 
+            const formattedPrice = formatPriceToUSD(selectedPrice);
             if (selectedPrice) {
-                priceDisplay.textContent = selectedPrice;
-                priceDisplaySmallScreen.textContent = selectedPrice;
-                priceDisplaySticky.textContent = selectedPrice;
-                priceDisplayA2C.textContent = selectedPrice;
+                priceDisplay.textContent = formattedPrice;
+                priceDisplaySmallScreen.textContent = formattedPrice;
+                priceDisplaySticky.textContent = formattedPrice;
+                priceDisplayA2C.textContent = formattedPrice;
             }
 
             {% comment %} updatePaintOptionPriceDisplay(selectedPriceDifference); {% endcomment %}
@@ -805,12 +806,15 @@
                 } else if (checkboxUnpainted.checked) {
                   const colorPreviewContainer = document.querySelector('.color-preview-container-for-customizations');
                   if(colorPreviewContainer.classList.contains('show')) colorPreviewContainer.classList.remove('show');
+
+                  const dataSetPrice = combinedVariantSelect.options[1].dataset.price;
+                  const formattedPrice = formatPriceToUSD(dataSetPrice);
                   //Set the combined variant select to unpainted
                   combinedVariantSelect.value = combinedVariantSelect.options[1].value;
-                  priceDisplay.textContent = combinedVariantSelect.options[1].dataset.price;
-                  priceDisplaySmallScreen.textContent =  combinedVariantSelect.options[1].dataset.price;
-                  priceDisplaySticky.textContent =  combinedVariantSelect.options[1].dataset.price;
-                  priceDisplayA2C.textContent =  combinedVariantSelect.options[1].dataset.price;
+                  priceDisplay.textContent = formattedPrice;
+                  priceDisplaySmallScreen.textContent =  formattedPrice;
+                  priceDisplaySticky.textContent =  formattedPrice;
+                  priceDisplayA2C.textContent =  formattedPrice;
                   form.action = `/cart/add?id=${combinedVariantSelect.options[1].value}`;
                   {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
                   //Show combined variant select dropdown for now
