@@ -7,6 +7,7 @@
 
 const addToCartButtonLibrary = document.querySelector('.add-to-cart');
 const addToCartForUnpaintedLibrary = document.querySelector('.add-to-cart-for-unpainted');
+const addToCartStickyLibrary = document.querySelector('.sticky-add-to-cart');
 const checkboxGetPaintCodeWithVINAndLabel = document.querySelector('input#checkbox-get-paint-code-with-vin')?.closest('label');
 const combinedVariantSelectLibrary = document.getElementById('variant-selector');
 const form = document.getElementById('product-form');
@@ -30,7 +31,6 @@ const precisionMatchVinWrapper = document.getElementById('precision-match-textbo
 const priceContainerLargeScreen = document.querySelector('.price-container-large-screen');
 const priceContainerSmallScreen = document.querySelector('.price-container');
 const priceDisplay = document.getElementById('price-display');
-const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
 const productPartDescriptionLibrary = document.querySelector('.product-description-collapsible-text');
 const qualityTypeSelectLibrary = document.getElementById('quality-type-select');
 const qualityOptionsCheckboxLibrary = document.querySelectorAll('.quality-options-checkbox');
@@ -257,6 +257,7 @@ function hideAddToCartButton() {
 
 function disableAddToCartButton() {
     if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.disabled = true;
+    if (addToCartStickyLibrary) addToCartStickyLibrary.disabled = true;
 }
 
 
@@ -376,6 +377,7 @@ function showAddToCartButton() {
 
 function enableAddToCartButton() {
     if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.disabled = false;
+    if (addToCartStickyLibrary) addToCartStickyLibrary.disabled = false;
 }
 
 
@@ -837,6 +839,8 @@ function calculatePrice(inputElement) {
     if (price.trim().startsWith('$')) {
         document.getElementById('price-display').innerText = price;
         document.getElementById('price-display-small-screen').innerText = price;
+        document.getElementById('price-display-sticky').innerText = price;
+        document.getElementById('price-display-a2c').innerText = price;
         return;
     }
 
@@ -844,6 +848,8 @@ function calculatePrice(inputElement) {
 
     document.getElementById('price-display').innerText = '$' + formattedPrice;
     document.getElementById('price-display-small-screen').innerText = '$' + formattedPrice;
+    document.getElementById('price-display-sticky').innerText = '$' + formattedPrice;
+    document.getElementById('price-display-a2c').innerText = '$' + formattedPrice;
 }
 
 

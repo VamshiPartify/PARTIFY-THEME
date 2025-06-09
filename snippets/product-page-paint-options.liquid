@@ -604,6 +604,8 @@
         const priceInfo = document.querySelector('.price-info');
         const priceDisplay = document.getElementById('price-display');
         const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
+        const priceDisplaySticky = document.getElementById('price-display-sticky');
+        const priceDisplayA2C = document.getElementById('price-display-a2c');
         const priceContainerLargeScreen = document.querySelector('.price-container-large-screen');
         const priceContainerSmallScreen = document.querySelector('.price-container');
         const addToCartButton = document.querySelector('.add-to-cart');
@@ -725,6 +727,8 @@
             if (selectedPrice) {
                 priceDisplay.textContent = selectedPrice;
                 priceDisplaySmallScreen.textContent = selectedPrice;
+                priceDisplaySticky.textContent = selectedPrice;
+                priceDisplayA2C.textContent = selectedPrice;
             }
 
             {% comment %} updatePaintOptionPriceDisplay(selectedPriceDifference); {% endcomment %}
@@ -803,6 +807,10 @@
                   if(colorPreviewContainer.classList.contains('show')) colorPreviewContainer.classList.remove('show');
                   //Set the combined variant select to unpainted
                   combinedVariantSelect.value = combinedVariantSelect.options[1].value;
+                  priceDisplay.textContent = combinedVariantSelect.options[1].dataset.price;
+                  priceDisplaySmallScreen.textContent =  combinedVariantSelect.options[1].dataset.price;
+                  priceDisplaySticky.textContent =  combinedVariantSelect.options[1].dataset.price;
+                  priceDisplayA2C.textContent =  combinedVariantSelect.options[1].dataset.price;
                   form.action = `/cart/add?id=${combinedVariantSelect.options[1].value}`;
                   {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
                   //Show combined variant select dropdown for now

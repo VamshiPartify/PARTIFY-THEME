@@ -4,16 +4,25 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 9999; /* make sure it's above everything else */
+    z-index: 99; /* make sure it's above everything else */
     width: 100vw;
     background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 16px;
+    padding: 10px 16px;
     border-top: 1px solid #ccc;
     box-shadow: 0 1px 4px #80808040;
+  }
+
+  .conditional-small-screen {
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .conditional-small-screen.show {
+    transform: translateY(0);
   }
 
   /* On screens >= 720px, make it behave normally (not fixed) */
@@ -67,6 +76,7 @@
     border-radius: 12px;
   }
 
+  .sticky-add-to-cart:disabled,
   .add-to-cart:disabled {
     background-color: #f0f0f08c;
     color: #ccccccde;
@@ -93,8 +103,26 @@
     background-color: #051d59;
     transform: translateY(0);
   }
+
+  .price-container-sticky {
+    width: 100%;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .price-container-a2c {
+    width: 100%;
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+  }
+  #price-display-a2c {
+    width: fit-content;
+  }
 </style>
 
+<div class="price-container-a2c">
+  <div id="price-display-a2c">{{ product.price_min | money }}</div>
+</div>
 {% if unpainted == true %}
   <div class="unpainted-add-to-cart-btn-container">
     <input type="hidden" name="id" value="{{ product.variants.first.id }}">
@@ -111,15 +139,43 @@
   </div>
 {% endif %}
 
-{% comment %}
-  <div class="conditional-small-screen">
-    <button
-      type="submit"
-      class="sticky-add-to-cart"
-      form="product-form"
-      disabled
-    >
-      {{ 'add_to_cart_text' | t }}
-    </button>
+<div class="conditional-small-screen">
+  <div class="price-container-sticky">
+    <div id="price-display-sticky">{{ product.price_min | money }}</div>
   </div>
-{% endcomment %}
+  <button
+    type="submit"
+    class="sticky-add-to-cart"
+    form="product-form"
+    disabled
+  >
+    {{ 'add_to_cart_text' | t }}
+  </button>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const stickyBar = document.querySelector('.conditional-small-screen');
+    const mainAddToCart = document.querySelector('.add-to-cart');
+
+    if (!stickyBar || !mainAddToCart) return;
+
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      const isScrollingDown = currentScrollY > lastScrollY;
+
+      const addToCartRect = mainAddToCart.getBoundingClientRect();
+      const isBelowAddToCart = addToCartRect.top < 0;
+
+      if (isBelowAddToCart && isScrollingDown) {
+        stickyBar.classList.add('show');
+      } else {
+        stickyBar.classList.remove('show');
+      }
+
+      lastScrollY = currentScrollY;
+    });
+  });
+</script>
