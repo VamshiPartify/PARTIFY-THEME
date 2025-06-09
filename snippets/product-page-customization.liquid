@@ -1764,7 +1764,6 @@
   if ({{ product.variants.size }} > 1) {
     const variantSelector = document.getElementById('variant-selector');
 
-    console.log('wool variantSelector: ', variantSelector);
     variantSelector.addEventListener('change', function () {
       calculatePrice(variantSelector);
     });
@@ -1851,6 +1850,8 @@
               // Display the price
               document.getElementById('price-display').innerText = variantPrice;
               document.getElementById('price-display-small-screen').innerText = variantPrice;
+              document.getElementById('price-display-sticky').innerText = variantPrice;
+              document.getElementById('price-display-a2c').innerText = variantPrice;
             }
             popup.style.display = "none";
           })
