@@ -728,8 +728,9 @@
 
 
         try {
-          const pdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/streamline-tax-exemption.pdf?v=1731952965';
-          const examplePdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Streamline_Form_Example.pdf?v=1748888393';
+          // const pdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/streamline-tax-exemption.pdf?v=1731952965';
+          // const examplePdfUrl = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Streamline_Form_Example.pdf?v=1748888393';
+          const examplePdfUrl = '';
           {% comment %} const taxRegistrationId = '88-1231234'; {% endcomment %}
           const pdfBytes = await fetch(pdfUrl).then((res) => res.arrayBuffer());
 
@@ -780,8 +781,8 @@
           console.log('typeField: ', typeField);
 
           const reasonField = pdfForm.getCheckBox('Item.Checkbox2');
-          {% comment %} const reasonAppearances = reasonField.acroField.getOnValues(); {% endcomment %}
-          {% comment %} console.log('reasonAppearances: ', reasonAppearances); {% endcomment %}
+          const reasonAppearances = reasonField.acroField.getOnValues();
+          console.log('reasonAppearances: ', reasonAppearances);
 
           // Optional: Set dropdowns if the PDF has them
           try {
