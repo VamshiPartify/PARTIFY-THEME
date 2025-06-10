@@ -9,6 +9,7 @@ const addToCartButtonLibrary = document.querySelector('.add-to-cart');
 const addToCartForUnpaintedLibrary = document.querySelector('.add-to-cart-for-unpainted');
 const addToCartStickyLibrary = document.querySelector('.sticky-add-to-cart');
 const checkboxGetPaintCodeWithVINAndLabel = document.querySelector('input#checkbox-get-paint-code-with-vin')?.closest('label');
+const colorPreviewContainerLibrary = document.querySelector('.color-preview-container-for-customizations');
 const combinedVariantSelectLibrary = document.getElementById('variant-selector');
 const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
@@ -205,6 +206,10 @@ function disableGetPaintCodeUsingVin() {
     if (getPaintCodeUsingVinLibrary) getPaintCodeUsingVinLibrary.disabled = true;
 }
 
+function hideColorPreviewContainer() {
+    if (colorPreviewContainerLibrary && colorPreviewContainerLibrary.classList.contains('show')) colorPreviewContainerLibrary.classList.remove("show");
+}
+
 function disableSelectVinVariantBtn() {
     if (selectVinVariantButtonLibrary) selectVinVariantButtonLibrary.disabled = true;
 }
@@ -348,6 +353,10 @@ function enablehowToFindPaintCodeBtn() {
 
 function enableGetPaintCodeUsingVin() {
     if (getPaintCodeUsingVinLibrary) getPaintCodeUsingVinLibrary.disabled = false;
+}
+
+function showColorPreviewContainer() {
+    if (colorPreviewContainerLibrary && !colorPreviewContainerLibrary.classList.contains('show')) colorPreviewContainerLibrary.classList.add("show");
 }
 
 function enableSelectVinVariantBtn() {
