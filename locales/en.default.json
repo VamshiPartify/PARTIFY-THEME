@@ -915,7 +915,9 @@
     "success": "VIN is valid",
     "tailored_success_message": "VIN matched to a ",
     "remaining_attempts": "Attempts remaining: ",
-    "fetching_vin_data": "Please wait while we verify your vin..."
+    "fetching_vin_data": "Please wait while we verify your vin...",
+    "optional": "(Optional)",
+    "description": "Ensure compatibility—provide VIN to confirm fitment."
   },
   "precision_match": {
     "label": "Precision Paint Match",
