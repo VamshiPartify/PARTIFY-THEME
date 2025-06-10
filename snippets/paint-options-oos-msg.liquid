@@ -81,17 +81,23 @@
   document.addEventListener('DOMContentLoaded', function () {
     const checkbox = document.querySelector('.acknowledge-difficult-paint');
     const noteInput = document.getElementById('acknowledge-troublesome-paint-note');
+    const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
+    const hasFitmentVerification = !!vinVerificationCheckboxGroup;
 
     checkbox.addEventListener('change', function (e) {
       if (e.target.checked) {
         // Checkbox checked
         noteInput.value = 'Acknowledged';
+        if (hasFitmentVerification) {
+          enableVinVerificationBtns();
+        }
         enableAddToCartButton();
       } else {
         // Checkbox unchecked
         noteInput.value = '';
         disableAddToCartButton();
       }
+      updateProgressHeaderColors();
     });
   });
 </script>
