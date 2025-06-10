@@ -45,7 +45,7 @@ const vinVerificationCheckboxGroupLibrary = document.querySelector('.vin-verific
 const vinVerifyCheckbboxYesLibrary = document.getElementById('fitment-yes');
 const vinVerifyCheckboxNoLibrary = document.getElementById('fitment-no');
 const vinVerificationButtonLibrary = document.getElementById('vin-verification-button');
-const vinVerificationWrapper = document.getElementById('vin-textbox-for-verification-wrapper');
+const vinVerificationWrapper = document.getElementById('vin-textbox-for-verification-wrapper show');
 const vinVerificationInput = document.getElementById('vin-textbox-for-verification');
 
 let emptyVinVerificationRadioButtons = true;
@@ -234,6 +234,7 @@ function disableVinVerificationBtns() {
     if (vinVerifyCheckbboxYesLibrary) vinVerifyCheckbboxYesLibrary.disabled = true;
     if (vinVerifyCheckboxNoLibrary) vinVerifyCheckboxNoLibrary.disabled = true;
     if (vinVerificationButtonLibrary) vinVerificationButtonLibrary.disabled = true;
+    if (vinVerificationInput) vinVerificationInput.disabled = true;
 }
 
 function clearVinVerificationRadioButtons() {
@@ -241,7 +242,7 @@ function clearVinVerificationRadioButtons() {
         const radios = document.querySelectorAll(`input[name="fitment_guarantee"]`);
         radios.forEach(radio => radio.checked = false);
         vinVerificationWrapper.classList.remove('show');
-        vinVerificationInput.value = '';
+        // vinVerificationInput.value = '';
         emptyVinVerificationRadioButtons = true;
     }
 }
@@ -254,6 +255,10 @@ function hideOOSPaintVariantsMsg() {
 function clearOOSPaintCheckbox() {
     const checkbox = document.querySelector(`input[name="acknowledge_difficult_paint"]`);
     if (checkbox.checked === true) checkbox.checked = false;
+}
+
+function hideVinVerificationTextbox() {
+    if (vinVerificationWrapper && vinVerificationWrapper.classList.contains('show')) vinVerificationWrapper.classList.remove('show');
 }
 
 function hideAddToCartButton() {
@@ -373,11 +378,18 @@ function enableVinVerificationBtns() {
     if (vinVerifyCheckbboxYesLibrary) vinVerifyCheckbboxYesLibrary.disabled = false;
     if (vinVerifyCheckboxNoLibrary) vinVerifyCheckboxNoLibrary.disabled = false;
     if (vinVerificationButtonLibrary) vinVerificationButtonLibrary.disabled = false;
+    if (!finalVinVerificationSubmissionVin) {
+        if (vinVerificationInput) vinVerificationInput.disabled = false;
+    }
 }
 
 function showOOSPaintVariantsMsg() {
     const oosPaintVariantsLibrary = document.querySelector('.oos-paint-variants');
     if (oosPaintVariantsLibrary && !oosPaintVariantsLibrary.classList.contains('show')) oosPaintVariantsLibrary.classList.add("show");
+}
+
+function showVinVerificationTextbox() {
+    if (vinVerificationWrapper) vinVerificationWrapper.classList.add('show');
 }
 
 function showAddToCartButton() {

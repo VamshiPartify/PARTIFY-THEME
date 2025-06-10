@@ -1005,7 +1005,9 @@
         "success": "VIN es válido",
         "tailored_success_message": "VIN emparejado a un ",
         "remaining_attempts": "Intentos restantes: ",
-        "fetching_vin_data": "Por favor espere mientras verificamos su VIN..."
+        "fetching_vin_data": "Por favor espere mientras verificamos su VIN...",
+        "optional": "(Opcional)",
+        "description": "Asegúrese de la compatibilidad: proporcione el VIN para confirmar el ajuste."
       },
       "precision_match": {
         "label": "Combinación de pintura de precisión",
