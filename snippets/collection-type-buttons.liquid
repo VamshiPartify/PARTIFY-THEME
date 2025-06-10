@@ -54,6 +54,8 @@
             {% if product.type == type and product.featured_image %}
               {% assign image_url = product.featured_image | img_url: 'medium' %}
               {% break %}
+            {% elsif product.type == type %}
+              {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Partify_Photo_Coming_Soon.png?v=1747228850' %}
             {% endif %}
           {% endfor %}
         {% endpaginate %}
