@@ -131,19 +131,7 @@
       margin-bottom: 3px;
       display: flex;
       justify-content: start;
-      align-items: center;
   }
-
-  .fitment-verification-description {
-      font-size: 16px;
-      color: #ccc;
-      margin-bottom: 5px;
-      margin-top: 2px;
-      line-height: 1.4;
-      text-align: left;
-      font-weight: 500;
-  }
-
   .vin-verification-checkbox-group {
       display: flex;
       flex-direction: row;
@@ -183,13 +171,6 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       height: 45px;
-  }
-
-  #vin-textbox-for-verification:disabled {
-      background-color: #f0f0f0;
-      color: #ccc;
-      cursor: no-drop;
-      opacity: 0.6;
   }
 
   #vin-textbox-for-verification-wrapper {
@@ -325,21 +306,9 @@
 </style>
 
 <div class="vin-guarantee-container">
-  <label class="fitment-guarantee">
-    {{- 'fitment_verification.label' | t -}}
-    &nbsp;
-    <span
-      class="fitment-verification-optional"
-      style="font-size: 16px; font-style: italic; font-weight: 500; color: #ccc;"
-    >
-      {{- 'fitment_verification.optional' | t -}}
-    </span></label
-  >
-  <h4 class="fitment-verification-description">
-    {{ 'fitment_verification.description' | t }}
-  </h4>
+  <label class="fitment-guarantee">{{ 'fitment_verification.label' | t }}</label>
 
-  <div class="vin-verification-checkbox-group" style="display: none;">
+  <div class="vin-verification-checkbox-group">
     <label class="checkbox-option">
       <input
         type="radio"
@@ -362,15 +331,13 @@
       {{ 'fitment_verification.no' | t }}
     </label>
   </div>
-  <div id="vin-textbox-for-verification-wrapper show">
+  <div id="vin-textbox-for-verification-wrapper">
     <input
       type="text"
       id="vin-textbox-for-verification"
       placeholder="Enter your VIN"
       maxlength="17"
-      name="properties[Fitment Verification]"
-      value=""
-      {% comment %} disabled {% endcomment %}
+      value="{{ vinValue | default: "" }}"
     >
     <div class="vin-verification-remaining-attempts" style="display: none;">
       {{ 'fitment_verification.remaining_attempts' | t }}
@@ -474,7 +441,7 @@
 
 
             // Show/hide VIN input based on radio selection
-            {% comment %} const radios = document.querySelectorAll('input[name="fitment_guarantee"]');
+            const radios = document.querySelectorAll('input[name="fitment_guarantee"]');
             radios.forEach(radio => {
                 radio.addEventListener('change', function () {
                     const priceDisplayElement = document.getElementById('price-display');
@@ -482,7 +449,7 @@
                     const originalPriceValue = parseFloat(originalPriceText.replace(/[^0-9.]/g, ''));
 
                     if (fitmentYes.checked) {
-                        showVinVerificationTextbox();
+                        vinInputWrapper.classList.add('show');
                         let newTotal;
                 
                         // Displays the updated price for adding on this feature
@@ -501,7 +468,7 @@
                         window.vinVerificationCheckedYes = true;
                         if(finalVinVerificationSubmissionVin.length) vinInput.value = finalVinVerificationSubmissionVin;
                     } else {
-                        hideVinVerificationTextbox();
+                        vinInputWrapper.classList.remove('show');
                         vinInput.value = '';
                         let newTotal;
                         // Displays the updated price for adding on this feature
@@ -520,9 +487,9 @@
                     emptyVinVerificationRadioButtons = false;
                     updateProgressHeaderColors();
                 });                
-            }); {% endcomment %}
+            });
 
-            document.getElementById('vin-textbox-for-verification').addEventListener('input', async function(event) {
+            document.getElementById('vin-textbox-for-verification').addEventListener('input', function(event) {
                 const originalValue = event.target.value;
                 let vinInput = originalValue.toUpperCase();
                 const isRetryed = handleVinChange(event, 2);
@@ -545,23 +512,12 @@
                 // Check for VIN length
                 if (vinInput.length === 17) {
                     attemptedVinsVinVerification.push(vinInput);
-                    vinInput.value = vinInput;
-
-                    await handleVinValidation(vinInput, 2);
-
-                    // No matter what, enable the button if three vins have been attempted
-                    if(attemptedVinsVinVerification.length === 3) {
-                      if(successfulVinVerificationVin === false) {
-                        document.getElementById('vin-textbox-for-verification').value = '';
-                      }
-                        enableAddToCartButton();
-                    }
-                  } else if(vinInput.length === 0) {
-                    enableAddToCartButton();
-                  } else {
+              
+                    handleVinValidation(vinInput, 2);
+                } else {
                     currentAddToCartBtn.disabled = true;
+                    updateProgressHeaderColors();
                 }
-                updateProgressHeaderColors();
             });
 
 
@@ -594,6 +550,8 @@
               
                 if (validVin) {
                   currentAddToCartBtn.disabled = false;
+                } else {
+                  currentAddToCartBtn.disabled = true;
                 }
                 updateProgressHeaderColors();
 
