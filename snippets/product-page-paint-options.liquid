@@ -808,8 +808,7 @@
 
                 //Unpainted
                 } else if (checkboxUnpainted.checked) {
-                  const colorPreviewContainer = document.querySelector('.color-preview-container-for-customizations');
-                  if(colorPreviewContainer.classList.contains('show')) colorPreviewContainer.classList.remove('show');
+                  hideColorPreviewContainer();
 
                   const dataSetPrice = combinedVariantSelect.options[1].dataset.price;
                   const formattedPrice = formatPriceToUSD(dataSetPrice);
@@ -851,6 +850,7 @@
                 } else {
                   // If vin decoder was used and successful
                   if(hasDotVinOptionAftermarket || hasDotVinOptionCapa || hasDotVinOptionOem) {
+                    hideColorPreviewContainer();
                     if (boolMatchByVIN === false) {
 
                       // If autoSelectedColor.length, then vin decoder has been used and successful
