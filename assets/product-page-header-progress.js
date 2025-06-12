@@ -4,6 +4,8 @@ const qualityHeader = document.querySelector('.option-title-quality');
 const vinHeader = document.querySelector('.option-title-vin');
 const optionTitle = document.querySelector('.option-title');
 const fitmentVerificationTitle = document.querySelector('.fitment-guarantee');
+const fitmentVerificationOptional = document.querySelector('.fitment-verification-optional');
+const fitmentVerificationSubtitle = document.querySelector('.fitment-verification-description');
 const oemVinContainer = document.querySelector('.oem-vin-container');
 const qualityTypeSelect = document.getElementById('quality-type-select');
 const combinedVariantSelect = document.getElementById('variant-selector');
@@ -38,7 +40,8 @@ if (fitmentHolder && fitmentHolder.classList.contains('easysearch-hidden')) {
 const COLORS = {
     red: '#e61b24',
     gray: '#ccc',
-    black: '#333'
+    black: '#333',
+    optional: '#5c5c5c',
 };
 
 
@@ -282,7 +285,16 @@ function updateProgressHeaderColors() {
     if (vinVerifyCheckbboxYes) {
         vinVerificationHeaderColor = isVinVerified();
     }
-    if (fitmentVerificationTitle) fitmentVerificationTitle.style.color = vinVerificationHeaderColor;
+    if (fitmentVerificationTitle) {
+        fitmentVerificationTitle.style.color = vinVerificationHeaderColor;
+        if (vinVerificationHeaderColor !== COLORS.gray) {
+            fitmentVerificationOptional.style.color = COLORS.optional;
+            fitmentVerificationSubtitle.style.color = COLORS.optional;
+        } else {
+            fitmentVerificationOptional.style.color = COLORS.gray;
+            fitmentVerificationSubtitle.style.color = COLORS.gray;
+        }
+    }
 
     if (precisionMatchCheckboxYesLibrary) {
         precisionMatchHeaderColor = isPrecisionMatchSelected();
