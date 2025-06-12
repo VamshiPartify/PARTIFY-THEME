@@ -42,15 +42,81 @@
         "custom_liquid": "{% assign custom_title = collection.title %}\n\n{% if request.query_string contains 'aspiration' %}\n  {% assign aspiration_value = request.query_string | split: 'aspiration=' | last | split: '&' | first %}\n  {% assign aspiration_value_decoded = aspiration_value | url_decode %}\n  {% assign custom_title = custom_title | append: ' - ' | append: aspiration_value_decoded %}\n{% endif %}\n\n<h1 class=\"collection-title\">{{ custom_title }}</h1>"
       }
     },
-    "dynamic_custom_liquid_MmJekE": {
-      "type": "dynamic-custom-liquid",
-      "custom_css": [
-
+    // Add the collection-type-buttons section
+    "collection_type_buttons": {
+      "type": "collection-type-buttons",
+      "blocks": {
+        "mapping_jVweqq": {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Hood",
+            "spanish_part_type": "Capucha",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Hood_Collection_Image.jpg"
+          }
+        },
+        "mapping_pXLdLt": {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Front Bumper",
+            "spanish_part_type": "Parachoques delantero",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Front_Bumper_Collection_Image_a68e5640-99b6-4af9-bb2a-15517cd2fbe4.jpg"
+          }
+        },
+        "mapping_V6Hgxp": {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Rear Bumper",
+            "spanish_part_type": "Parachoques trasero",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Rear_Bumper_Collection_Image.jpg"
+          }
+        },
+        "mapping_RCDMwW": {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Passenger Side Fender",
+            "spanish_part_type": "Guardabarros del lado del pasajero",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Passenger_Side_Fender_Collection_Image.jpg"
+          }
+        },
+        "mapping_LajXwH": {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Driver Side Fender",
+            "spanish_part_type": "Guardabarros del lado del conductor",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Driver_Side_Fender_Collection_Image.jpg"
+          }
+        },
+        "mapping_WBmTk4": {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Tailgate",
+            "spanish_part_type": "Portón",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Tailgate_Collection_Image.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "mapping_jVweqq",
+        "mapping_pXLdLt",
+        "mapping_V6Hgxp",
+        "mapping_RCDMwW",
+        "mapping_LajXwH",
+        "mapping_WBmTk4"
       ],
-      "settings": {
-        "custom_liquid": "{% if collection.all_products_count <= 1000 %}\n{% render 'collection-type-buttons' %}\n{% endif %}"
-      }
+      "settings": {}
+
+
     },
+
+    // "dynamic_custom_liquid_MmJekE": {
+    //   "type": "dynamic-custom-liquid",
+    //   "custom_css": [
+
+    //   ],
+    //   "settings": {
+    //     "custom_liquid": "{% if collection.all_products_count <= 1000 %}\n{% render 'collection-type-buttons' %}\n{% endif %}"
+    //   }
+    // },
     "dynamic_custom_liquid_WgDwT6": {
       "type": "dynamic-custom-liquid",
       "settings": {
@@ -126,7 +192,8 @@
   "order": [
     "1716221076fc128fdb",
     "dynamic_custom_liquid_izV9Jp",
-    "dynamic_custom_liquid_MmJekE",
+    "collection_type_buttons",
+    // "dynamic_custom_liquid_MmJekE",
     "dynamic_custom_liquid_WgDwT6",
     "15a95124-fa2c-4f51-ac0c-105f5675693d",
     "main",
