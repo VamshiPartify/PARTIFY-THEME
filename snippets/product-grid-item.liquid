@@ -351,7 +351,15 @@
               %}
             {% else %}
               {% if product %}
-                {{ 'image' | placeholder_svg_tag: 'placeholder--image' }}
+                <img
+                  src="https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Partify_Photo_Coming_Soon.png?v=1747228850"
+                  alt="Photo Coming Soon"
+                  class="productitem--image-placeholder"
+                  style="width:100%;height:auto;object-fit:contain;"
+                  width="512"
+                  height="512"
+                >
+                {% comment %} {{ 'image' | placeholder_svg_tag: 'placeholder--image' }} {% endcomment %}
               {% else %}
                 {%- capture index -%}
                   {%- cycle '1', '2', '3', '4', '5', '6' -%}
