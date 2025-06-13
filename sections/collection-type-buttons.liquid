@@ -131,7 +131,7 @@
           {% endif %}
         {% endfor %}
         {% if image_url == '' %}
-          {% paginate collection.products by 50 %}
+          {% paginate collection.products by 1000 %}
             {% for product in collection.products %}
               {% if product.type == type and product.featured_image %}
                 {% assign image_url = product.featured_image | image_url: width: 300 %}
