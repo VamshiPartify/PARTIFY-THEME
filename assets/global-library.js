@@ -6,6 +6,8 @@
 
 let attemptedVinsInGarage = [];
 let attemptedVinsVinVerification = [];
+let attemptedOEMVins = [];
+let attemptedDecodedVins = [];
 let garageVinSubmissionBool = false;
 let finalVinVerificationSubmissionVin = '';
 let successfulVinVerificationVin = false;
@@ -564,17 +566,20 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
     functionLocation - 1 = Garage
     functionLocation - 2 = Vin Verification
 */
-async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, remainingAttempts) {
+async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, remainingAttempts, troublesomeMake) {
   const vinSearchBtn = document.getElementById("vin-to-collection-btn");
   const errorMessageVIN = document.querySelector('.errorMessageVIN');
   const maxAttempts = 3;
   const calculatedRemainingAttempts = maxAttempts - attemptedVinsVinVerification.length;
   const vinGuaranteeFetchingMsg = document.querySelector('.vin-verification-fetching-vin-data');
+  const vinDecoderFetchingMsg = document.querySelector('.vin-decoder-fetching-vin-data');
+  let invalidVin = false;
 
   console.log('fetchVehicleDataByVin::vin: ', vin);
 
   try {
     if (vinGuaranteeFetchingMsg) vinGuaranteeFetchingMsg.style.display = "block";
+    if (vinDecoderFetchingMsg) vinDecoderFetchingMsg.style.display = "block";
     const response = await fetch('https://garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -587,7 +592,19 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
       throw new Error(`Error fetching order details. Status: ${response.status}. Message: ${response.statusText}.`);
     }
     const data = await response.json();
+    if (data.vehicleData.message === "The VIN passed was modified to convert invalid characters") {
+      invalidVin = true;
+    }
+    if (!response.ok) {
+      if (data.vehicleData.message === "Invalid vin") {
+        invalidVin = true;
+      }
+      throw new Error(`API request failed with status ${response.status} - ${data.message} | ${response.url}`);
+    }
 
+    console.log('fetchVehicleData data: ', data);
+
+    // Garage
     if (functionLocation === 1) {
       // NOTE: The data returns the paint code here! No need to alter gcr function as I can 
       // just use the paint code from the data object here.
@@ -621,6 +638,8 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
         }
         updateGarageAndNavigate(data.year, data.make, data.model, data.submodel, data.engine, vin);
       }
+
+      // Vin Verification
     } else if (functionLocation === 2) {
       if (data.handle === '' || data.isVinValid === false) {
         if (attemptedVinsVinVerification.length < maxAttempts) {
@@ -650,6 +669,44 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
         successfulVinVerificationVin = true;
 
         return true;
+      }
+
+      // Vin Decoder
+    } else if (functionLocation === 3) {
+      if (attemptedDecodedVins.length < maxAttempts) {
+        attemptedDecodedVins.push(vin);
+        let troublesomeMake = false;
+        let dataResult = data.vehicleData.result;
+        if (Object.keys(troublesomeMakesColors).length > 0) troublesomeMake = true;
+        const description = dataResult.exteriorColors[0]?.description || '';
+
+        if (data.vehicleData.error === false || dataResult.validVin === true) {
+          if (dataResult.exteriorColors.length === 1) {
+            if (troublesomeMake === true) {
+              const keys = Object.keys(troublesomeMakesColors);
+              let matchedKey = keys.find((key) => {
+                const colorArray = key.split(',').map(color => color.trim()); // Trim spaces for clean comparison
+                return colorArray.some(color => color === description); // Check for an exact match
+              });
+              return { validVin: true, paintCode: matchedKey ? troublesomeMakesColors[matchedKey] : '' };
+            } else {
+              return { validVin: true, paintCode: dataResult.exteriorColors[0].colorCode || '' };
+            }
+          } else {
+            return { validVin: true, paintCode: '' };
+          }
+        } else {
+          document.querySelector('.vin-decoder-submission-failed-message').innerHTML = noResults;
+          document.querySelector('.vin-decoder-remaining-attempts').style.display = "block";
+          document.querySelector('.vin-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
+          return { validVin: false, paintCode: '' };
+        }
+      } else {
+        document.querySelector('.vin-decoder-submission-failed-message').innerHTML = failed3timesMsg;
+        document.querySelector('.vin-decoder-submission-failed-message').style.display = "block";
+        document.querySelector('.vin-decoder-remaining-attempts').style.display = "block";
+        document.querySelector('.vin-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
+        return { validVin: false, paintCode: '' };
       }
     }
   } catch (error) {
@@ -685,10 +742,13 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
       document.querySelector('.vin-verification-submission-failed-message').style.display = "block";
       console.error("Error fetching vehicle data:", error);
       return false;
+    } else if (functionLocation === 3) {
+      return { validVin: false, paintCode: '' };
     }
     console.error("Error fetching vehicle data:", error);
   } finally {
     if (vinGuaranteeFetchingMsg) vinGuaranteeFetchingMsg.style.display = "none";
+    if (vinDecoderFetchingMsg) vinDecoderFetchingMsg.style.display = "none";
 
     if (functionLocation === 1) {
       vinSearchBtn.classList.remove("vin-to-collection-btn--loading");
@@ -881,5 +941,24 @@ function showShopifyChat() {
   const shopifyChat = document.getElementById('shopify-chat');
   if (shopifyChat) {
     shopifyChat.style.display = 'block';
+  }
+}
+
+async function fetchVehicalDataFromBumper(vin) {
+  try {
+    const response = await fetch(`https://bumperdotcom-api-345230973812.us-east5.run.app/bumperdotcom-api?vin=${vin}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+
+    data = await response.json();
+    console.log('data from bumper.com: ', data);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching order details. Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching vehicle data:", error);
   }
 }

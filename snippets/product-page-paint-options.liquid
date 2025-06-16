@@ -282,7 +282,8 @@
           {{- 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span
           >&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}
         </div>
-        {% render 'Vin-Decoder-app' %}
+        {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
+        {% render 'vin-decoder-input-box' %}
       </div>
       {% comment %} {% endif %} {% endcomment %}
       {% render 'how-to-find-paint-code' %}
