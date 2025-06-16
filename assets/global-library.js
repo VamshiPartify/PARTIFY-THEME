@@ -566,7 +566,7 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
     functionLocation - 1 = Garage
     functionLocation - 2 = Vin Verification
 */
-async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, remainingAttempts, troublesomeMake) {
+async function fetchVehicalDataByVin(vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, remainingAttempts, troublesomeMakesColors) {
   const vinSearchBtn = document.getElementById("vin-to-collection-btn");
   const errorMessageVIN = document.querySelector('.errorMessageVIN');
   const maxAttempts = 3;
@@ -574,8 +574,6 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
   const vinGuaranteeFetchingMsg = document.querySelector('.vin-verification-fetching-vin-data');
   const vinDecoderFetchingMsg = document.querySelector('.vin-decoder-fetching-vin-data');
   let invalidVin = false;
-
-  console.log('fetchVehicleDataByVin::vin: ', vin);
 
   try {
     if (vinGuaranteeFetchingMsg) vinGuaranteeFetchingMsg.style.display = "block";
