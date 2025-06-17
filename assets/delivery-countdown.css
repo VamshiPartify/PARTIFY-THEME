@@ -1,0 +1,326 @@
+#asm-ajax-partify {
+	display: none;
+}
+
+#delivery-countdown-outer-partify {
+    display: none;
+}
+
+#delivery-countdown-partify {
+	display: none;
+ 	float: left;
+	width: 100%;
+	font-size: 16px;
+	line-height: normal;
+    margin-bottom: 10px;
+	/* padding-left: 10px; */
+}
+
+#delivery-countdown-partify span {
+	vertical-align: unset;
+}
+
+#dc-error-partify {
+	display: none;
+}
+
+#dc-truck-partify {
+	float: left;
+	width: 40px;
+	height: 30px;
+}
+
+#dc-trucker-helper-partify {
+	display: inline-block;
+	height: 100%;
+	vertical-align: top;	
+}
+
+#dc-truck-img-partify {
+	max-height: 30px;
+	max-width: 30px;
+	vertical-align: top;	
+}
+
+#dc-info-partify {
+	float: left;
+  	width: calc(100% - 40px);
+    line-height: normal;
+}
+
+#dc-top-partify {
+	color: #000000;
+	font-weight: normal;
+	margin-bottom: 3px;
+}
+
+#dc-top-partify span {
+	font-weight: bold;
+}
+
+#dc-bottom-partify {
+	color: #000000;
+	font-weight: normal;
+}
+
+#dc-bottom-partify span {
+	color: #E61B24;
+	font-weight: bold;
+}
+
+#dc-incorrect-zip-message {
+	color: #E61B24;
+	font-weight: bold;
+}
+
+#dc-ship-partify {
+	/* float: right; */
+	/* margin-top: 10px; */
+	margin-left: 5px;
+	color: #334FB4;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+#dc-location-wrapper-partify {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-top: 10px;
+}
+
+/* #dc-zip-partify {
+	cursor: pointer;
+	text-decoration: underline;
+} */
+
+#dc-alt-zip-holder-partify {
+	display: none;
+	margin-top: 5px;
+    clear: both;
+}
+
+#dc-alt-zip-partify {
+	float: right;
+	/* width: 100px; */
+	height: 40px;
+	padding: 10px;
+	border: 1px solid #cecece;
+	border-radius: 5px;
+	outline: none;
+	max-width: 50%;
+}
+#dc-alt-zip-apply-partify:disabled {
+	float: right;
+	height: 40px;
+	padding: 10px;
+	color: #666;
+	background-color: #ccc;
+	border: 1px solid #cecece;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	cursor: no-drop;
+	min-width: 120px;
+}
+
+#dc-alt-zip-apply-partify {
+	float: right;
+	height: 40px;
+	padding: 10px;
+	color: #ffffff;
+	background-color: #000000;
+	/* border: 1px solid #cecece;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px; */
+	/* cursor: pointer; */
+	min-width: 120px;
+	font-size: 16px;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.2s;
+	font-family: 'Lato', sans-serif;
+}
+
+.clear-both-partify {
+	clear: both;
+}
+
+#dc-details-partify {
+    float: left;
+    color: #307962;
+	font-weight: bold;
+	text-decoration: underline;
+	cursor: pointer;
+	margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#dc-details-info-partify {
+	display: none;
+	position: relative;
+}
+
+#asm-calc-details-partify {
+	width: 320px;
+	box-shadow: 0 12px 30px 0 rgba(31,31,92,0.12);
+	border: 1px solid #c3c3c3;
+	padding: 15px;
+	margin-top: 10px;
+	margin-left: 15px;
+	position: absolute;
+	z-index: 10;
+	background-color: #fff;
+}
+
+#asm-calc-details-close-holder-partify {
+	position: relative;
+}
+
+#asm-calc-details-close-partify {
+	position: absolute;
+	right: 5px;
+	width: 16px;
+	height: 16px;
+	opacity: 0.3;
+	cursor: pointer;
+}
+
+#asm-calc-details-close-partify:hover {
+	opacity: 1;
+}
+
+#asm-calc-details-close-partify:before, #asm-calc-details-close-partify:after {
+	position: absolute;
+	left: 15px;
+	content: ' ';
+	height: 17px;
+	width: 2px;
+	background-color: #333;
+}
+
+#asm-calc-details-close-partify:before {
+	transform: rotate(45deg);
+}
+
+#asm-calc-details-close-partify:after {
+	transform: rotate(-45deg);
+}
+
+#asm-calc-title-left-partify, #asm-calc-title-right-partify {
+    float: left;
+	width: 125px;
+	color: #8e8e8e;
+	font-size: 11px;
+	font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#asm-calc-title-right-partify {
+	text-align: right;
+}
+
+.asm-calc-method-partify {
+	margin-top: 10px;
+}
+
+.asm-calc-method-top-left-partify {
+	float: left;
+	width: 200px;
+	color: #474747;
+	font-size: 16px;
+	font-weight: bold;
+  	margin-top: 10px;
+}
+
+.asm-calc-method-top-right-partify {
+	float: right;
+	width: 75px;
+	color: #0b8c44;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: right;
+  	margin-top: 10px;
+}
+
+.asm-calc-method-bottom-partify {
+	width: 200px;
+	color: #474747;
+	font-size: 12px;
+}
+
+#asm-calc-message-partify {
+	color: #474747;
+	text-align: center;
+	font-size: 12px;
+	margin-top: 15px;
+}
+
+#asm-calc-msg-line-partify {
+	margin: 15px 0px;
+	height: 1px;
+	border: 0;
+	color: #8e8e8e;
+	background-color: #8e8e8e;
+}
+
+#asm-calc-note-partify {
+	color: #8e8e8e;
+	font-size: 12px;
+}
+
+/* Skeleton Loader Styles */
+#delivery-countdown-placeholder {
+	width: 100%;
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	/* line-height: 25px; */
+	color: #000000;
+	margin-bottom: 10px;
+}
+
+.countdown-skeleton-text {
+	line-height: 20px;
+	font-weight: normal;
+}
+
+.countdown-skeleton-text::before {
+	font-size: 18px;
+  }
+  
+.countdown-skeleton-text span {
+font-weight: 700;
+color: #003f70;
+}
+
+
+.countdown-skeleton-title {
+	margin-top: 8px;
+	font-size: 15px;
+	color: #6a7a89;
+	font-weight: 500;
+	font-style: italic;
+	padding-bottom: 10px;
+	line-height: 1.5;
+  }
+
+  .countdown-skeleton-title span {
+	margin-top: 8px;
+	font-size: 16px;
+	color: #000000;
+	font-weight: normal;
+	padding-bottom: 10px;
+	font-style: normal;
+	/* line-height: 40px; */
+  }
+  
+  
+  
+
+/* Hide countdown initially */
+.delivery-countdown-hidden {
+    display: none;
+}

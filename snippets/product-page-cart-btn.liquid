@@ -1,0 +1,181 @@
+<style>
+  .conditional-small-screen {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99; /* make sure it's above everything else */
+    width: 100vw;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px 16px;
+    border-top: 1px solid #ccc;
+    box-shadow: 0 1px 4px #80808040;
+  }
+
+  .conditional-small-screen {
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .conditional-small-screen.show {
+    transform: translateY(0);
+  }
+
+  /* On screens >= 720px, make it behave normally (not fixed) */
+  @media (min-width: 720px) {
+    .conditional-small-screen {
+      position: relative;
+      bottom: 0;
+      z-index: 50;
+      width: 100%;
+      display: none;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+
+  .unpainted-add-to-cart-btn-container {
+    width: 100%;
+    display: flex;
+  }
+
+  .add-to-cart-button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+
+  @media (max-width: 720px) {
+    .add-to-cart-button-wrapper {
+      min-width: 160px;
+      display: flex;
+      justify-content: end;
+    }
+  }
+
+  .add-to-cart,
+  .sticky-add-to-cart,
+  .add-to-cart-for-unpainted {
+    background-color: #0c1a94;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .sticky-add-to-cart:disabled,
+  .add-to-cart:disabled {
+    background-color: #f0f0f08c;
+    color: #ccccccde;
+    cursor: not-allowed;
+    pointer-events: none;
+    border: 1px solid #f0f0f0;
+  }
+
+  .add-to-cart-for-unpainted:disabled {
+    background-color: #f0f0f0;
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+    border: 1px solid;
+  }
+
+  .add-to-cart:hover {
+    background-color: #063175;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .add-to-cart:active {
+    background-color: #051d59;
+    transform: translateY(0);
+  }
+
+  .price-container-sticky {
+    width: 100%;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .price-container-a2c {
+    width: 100%;
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+  }
+  #price-display-a2c {
+    width: fit-content;
+  }
+</style>
+
+<div class="price-container-a2c">
+  <div id="price-display-a2c">{{ product.price_min | money }}</div>
+</div>
+{% if unpainted == true %}
+  <div class="unpainted-add-to-cart-btn-container">
+    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+    <button type="submit" class="add-to-cart-for-unpainted" disabled>
+      {{ 'add_to_cart_text' | t }}
+    </button>
+  </div>
+{% else %}
+  <!-- Add to Cart Button for correct fitment and selected paint option -->
+  <div class="add-to-cart-button-wrapper">
+    <button type="submit" class="add-to-cart" disabled>
+      {{ 'add_to_cart_text' | t }}
+    </button>
+  </div>
+{% endif %}
+
+<div class="conditional-small-screen">
+  <div class="price-container-sticky">
+    <div id="price-display-sticky">{{ product.price_min | money }}</div>
+  </div>
+  <button
+    type="submit"
+    class="sticky-add-to-cart"
+    form="product-form"
+    disabled
+  >
+    {{ 'add_to_cart_text' | t }}
+  </button>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const stickyBar = document.querySelector('.conditional-small-screen');
+    const mainAddToCart = document.querySelector('.add-to-cart');
+
+    if (!stickyBar || !mainAddToCart) return;
+
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      const isScrollingDown = currentScrollY > lastScrollY;
+
+      const addToCartRect = mainAddToCart.getBoundingClientRect();
+      const isBelowAddToCart = addToCartRect.top < 0;
+
+      if (isBelowAddToCart && isScrollingDown) {
+        stickyBar.classList.add('show');
+      } else {
+        stickyBar.classList.remove('show');
+      }
+
+      lastScrollY = currentScrollY;
+    });
+  });
+</script>

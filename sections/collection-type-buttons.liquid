@@ -1,0 +1,308 @@
+{% schema %}
+{
+  "name": "Collection Type Buttons",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "mapping",
+      "name": "Mapping",
+      "settings": [
+        {
+          "type": "text",
+          "id": "part_type",
+          "label": "Part Type"
+        },
+        {
+          "type": "text",
+          "id": "spanish_part_type",
+          "label": "Spanish Part Type"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "Image URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50,
+  "presets": [
+    {
+      "name": "Collection Type Buttons",
+      "blocks": [
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Front Bumper",
+            "spanish_part_type": "Parachoques delantero",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Front_Bumper_Collection_Image_a68e5640-99b6-4af9-bb2a-15517cd2fbe4.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Rear Bumper",
+            "spanish_part_type": "Parachoques trasero",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Rear_Bumper_Collection_Image.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Hood",
+            "spanish_part_type": "Capucha",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Hood_Collection_Image.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Passenger Side Fender",
+            "spanish_part_type": "Guardabarros del lado del pasajero",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Passenger_Side_Fender_Collection_Image.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Driver Side Fender",
+            "spanish_part_type": "Guardabarros del lado del conductor",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Driver_Side_Fender_Collection_Image.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Tailgate",
+            "spanish_part_type": "Portón",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Tailgate_Collection_Image.jpg"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div class="product-type-buttons" id="product-type-id">
+  {% assign all_product_types = '' %}
+  {% assign product_types_array = '' %}
+  {% assign product_counter = 0 %}
+
+  {% paginate collection.products by 1000 %}
+    {%- for product in collection.products -%}
+      {% assign product_counter = product_counter | plus: 1 %}
+      {% unless product.title contains 'Sample' %}
+        {% assign current_type = product.type %}
+        {% assign product_types_array = all_product_types | split: ',' %}
+        {% assign is_duplicate = false %}
+        {% for existing_type in product_types_array %}
+          {% if existing_type == current_type %}
+            {% assign is_duplicate = true %}
+          {% endif %}
+        {% endfor %}
+        {% unless is_duplicate %}
+          {% assign all_product_types = all_product_types | append: current_type | append: ',' %}
+        {% endunless %}
+      {% endunless %}
+    {%- endfor -%}
+  {% endpaginate %}
+
+  {% assign product_types_array = all_product_types | split: ',' | uniq %}
+
+  {% for type in product_types_array %}
+    {% unless type == '' %}
+      {% assign image_url = '' %}
+      {%- assign metaobject_key = type | downcase | replace: ' ', '_' | append: '_collections_image' -%}
+      {%- assign metaobject_value = collection.metafields.custom[metaobject_key] | default: '' -%}
+      {% if metaobject_value and metaobject_value != blank %}
+        {% if metaobject_value.value and metaobject_value.value.image %}
+          {% assign image_url = metaobject_value.value.image | image_url: width: 300 %}
+        {% elsif metaobject_value.value %}
+          {% assign image_url = metaobject_value.value %}
+        {% else %}
+          {% assign image_url = metaobject_value %}
+        {% endif %}
+      {% else %}
+        {% for block in section.blocks %}
+          {% if block.settings.part_type == type or block.settings.spanish_part_type == type %}
+            {% assign image_url = block.settings.image_url %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+        {% if image_url == '' %}
+          {% paginate collection.products by 1000 %}
+            {% for product in collection.products %}
+              {% if product.type == type and product.featured_image %}
+                {% assign image_url = product.featured_image | image_url: width: 300 %}
+                {% break %}
+              {% elsif product.type == type %}
+                {% assign image_url = 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Partify_Photo_Coming_Soon.png?v=1747228850' %}
+              {% endif %}
+            {% endfor %}
+          {% endpaginate %}
+        {% endif %}
+      {% endif %}
+      <div class="product-type-item">
+        <div class="product-type-wrapper">
+          <a
+            href="javascript:void(0);"
+            onclick="
+                  var currentUrl = window.location.href;
+                  var newFilter = 'filter.p.product_type={{ type | replace: ' ', '+' }}';
+                  if (currentUrl.includes('filter.p.product_type=')) {
+                    var regex = /filter\.p\.product_type=[^&]*/;
+                    var urlWithFilter = currentUrl.replace(regex, newFilter);
+                  } else {
+                    var separator = currentUrl.includes('?') ? '&' : '?';
+                    var urlWithFilter = currentUrl + separator + newFilter;
+                  }
+              window.location.href = urlWithFilter;
+            "
+            class="btn btn-primary {% if image_url == '' %}no-image{% endif %}"
+          >
+            <div class="image-container">
+              {% if image_url != '' %}
+                <img src="{{ image_url }}" alt="{{ type }} image" class="product-type-image" height="150" width="150">
+              {% endif %}
+            </div>
+          </a>
+          <a
+            href="javascript:void(0);"
+            onclick="
+                  var currentUrl = window.location.href;
+                  var newFilter = 'filter.p.product_type={{ type | replace: ' ', '+' }}';
+                  if (currentUrl.includes('filter.p.product_type=')) {
+                    var regex = /filter\.p\.product_type=[^&]*/;
+                    var urlWithFilter = currentUrl.replace(regex, newFilter);
+                  } else {
+                    var separator = currentUrl.includes('?') ? '&' : '?';
+                    var urlWithFilter = currentUrl + separator + newFilter;
+                  }
+              window.location.href = urlWithFilter;
+            "
+            class="product-type-text-link"
+          >
+            <span class="product-type-text">
+              {% if type == 'Capucha' %}
+                <b>Tapa de motors</b>
+              {% else %}
+                <b>{{ type }}s</b>
+              {% endif %}
+            </span>
+          </a>
+        </div>
+      </div>
+    {% endunless %}
+  {% endfor %}
+</div>
+
+<!-- JavaScript to hide content if 'aspiration' is in the URL or if no filter has been selected -->
+<script>
+  if (window.location.href.includes('aspiration')) {
+    document.getElementById('aspiration-content').style.display = 'none';
+  }
+
+  if (window.location.href.includes('filter.p.product_type=')) {
+    document.getElementById('product-type-id').style.display = 'none';
+  }
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let currentUrl = window.location.href;
+
+    if ((currentUrl.match(/filter\.p\.product_type=/g) || []).length === 1) {
+      let productTypeValue = currentUrl.split('filter.p.product_type=')[1].split('&')[0];
+      let productTypeDecoded = decodeURIComponent(productTypeValue.replace(/\+/g, ' '));
+      let header = document.querySelector('.collection-title');
+      if (header) {
+        header.textContent += ' ' + productTypeDecoded + 's';
+      }
+    }
+  });
+</script>
+
+<style>
+  .product-type-buttons {
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .product-type-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .product-type-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+  .product-type-buttons .btn {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    background-color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .product-type-buttons .btn .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #ffffff;
+  }
+  .product-type-buttons .btn img.product-type-image {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+    background-color: #ffffff;
+  }
+  .product-type-buttons .product-type-text {
+    color: #0c1a94;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 12px;
+  }
+  .product-type-buttons .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  .product-type-text-link {
+    text-decoration: none;
+    color: #0c1a94;
+    margin-top: 12px;
+  }
+  @media (max-width: 768px) {
+    .product-type-buttons {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .product-type-buttons .btn {
+      width: 100%;
+    }
+    .product-type-buttons .product-type-text {
+      font-size: 16px;
+    }
+  }
+  @media (min-width: 769px) and (max-width: 1280px) {
+    .product-type-buttons {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @media (max-width: 480px) {
+    .product-type-buttons {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

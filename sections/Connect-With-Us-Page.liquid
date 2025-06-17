@@ -1,0 +1,229 @@
+<!-- Font Awesome for social media icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{% schema %}
+{
+  "name": "Social Linktree",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header_title",
+      "label": "Header Title",
+      "default": "Connect with Partify"
+    },
+    {
+      "type": "text",
+      "id": "header_subtitle",
+      "label": "Header Subtitle",
+      "default": "Stay in touch with us for updates, tips, and support."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social",
+      "name": "Social Link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "social_platform",
+          "label": "Social Media Platform",
+          "options": [
+            { "value": "instagram", "label": "Instagram" },
+            { "value": "facebook", "label": "Facebook" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "youtube", "label": "YouTube" },
+            { "value": "twitter", "label": "Twitter" },
+            { "value": "email", "label": "Email" }
+          ]
+        },
+        {
+          "type": "url",
+          "id": "social_link",
+          "label": "Social Link"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Other Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Learn More"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Linktree",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.custom-linktree-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  font-family: 'Lato', sans-serif;
+  font-size: 26px;
+  color: #0C1A94;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.header p {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  color: #555;
+  margin: 0;
+}
+
+.social-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+
+.social-button.instagram { background: #E4405F; }
+.social-button.facebook { background: #1877F2; }
+.social-button.tiktok { background: #010101; }
+.social-button.youtube { background: #FF0000; }
+.social-button.twitter { background: #1DA1F2; }
+.social-button.email { background: #D44638; }
+
+.social-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.link-button {
+  display: block;
+  padding: 14px;
+  background: #f8f9fa;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.link-button:hover {
+  background: #0C1A94;
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .custom-linktree-container {
+    padding: 20px;
+  }
+
+  .header h2 {
+    font-size: 22px;
+  }
+
+  .header p {
+    font-size: 14px;
+  }
+
+  .social-buttons {
+    gap: 15px;
+  }
+
+  .social-button {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .link-button {
+    font-size: 14px;
+  }
+}
+</style>
+
+<div class="custom-linktree-container">
+  <!-- Header -->
+  <div class="header">
+    <h2>{{ section.settings.header_title }}</h2>
+    <p>{{ section.settings.header_subtitle }}</p>
+  </div>
+
+  <!-- Social Media Buttons -->
+  <div class="social-buttons">
+    {% for block in section.blocks %}
+      {% if block.type == 'social' and block.settings.social_link != blank %}
+        <a 
+          href="{{ block.settings.social_link }}" 
+          target="_blank" 
+          class="social-button {{ block.settings.social_platform }}"
+          aria-label="{{ block.settings.social_platform | capitalize }}"
+        >
+          {% if block.settings.social_platform == 'email' %}
+            <i class="fas fa-envelope"></i>
+          {% else %}
+            <i class="fab fa-{{ block.settings.social_platform }}"></i>
+          {% endif %}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Other Links -->
+  <div class="links">
+    {% for block in section.blocks %}
+      {% if block.type == 'button' %}
+        <a href="{{ block.settings.button_link }}" class="link-button">
+          {{ block.settings.button_label }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

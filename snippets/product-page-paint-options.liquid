@@ -1,0 +1,986 @@
+<style>
+  .easysearch-fitment-search-widget {
+    border: none;
+    padding: 3px 0 0 0;
+  }
+    .option-dropdowns {
+        color: #0073e6;
+        font-weight: bold;
+        border-radius: 4px;
+        display: inline-block;
+        margin-top: 5px;
+        height: fit-content;
+        width: 100%;
+    }
+
+    .option-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #333;
+        margin-bottom: 3px;
+    }
+
+    .paint-code-wrapper {
+        {% comment %} margin-top: 3px; {% endcomment %}
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
+    }
+    .paint-code-wrapper.show {
+      max-height: fit-content;
+      opacity: 1;
+      margin-top: 3px;
+    }
+
+    #paintcode-app-container {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
+    }
+
+    #paintcode-app-container.show {
+      max-height: 1000px;
+      opacity: 1;
+      margin-top: 3px;
+    }
+
+    .two-tone-message {
+      background-color: #ffbc2c17;
+      font-size: 16px;
+      font-weight: 500;
+      margin-top: 5px;
+      text-align: left;
+      color: #4b4b4b;
+      line-height: 1.2;
+      padding: 5px;
+      border-left: 4px solid #ffae00;
+      border-top: 1px solid #ffae00;
+      border-bottom: 1px solid #ffae00;
+      border-right: 1px solid #ffae00;
+      border-radius: 5px;
+    }
+    .two-tone-message b {
+      font-weight: 800;
+    }
+    .two-tone-message span {
+      font-weight: 800;
+      color:#0000EE;
+    }
+
+    .product-options .price-info {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #333;
+        margin-top: 1rem;
+    }
+
+    .combined-variant-dropdown {
+        height: fit-content;
+    }
+    .combined-variant-dropdown select {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        pointer-events: auto;
+        opacity: 1;
+    }
+    .combined-variant-dropdown select[disabled] {
+        background-color: #f0f0f0;
+        color: #ccc;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    .find-paint-option-link-container {
+      display: flex;
+      justify-content: start;
+      width: 100%;
+      font-size: 14px;
+      color: #0000EE;
+    }
+
+    .paint-option-and-how-to-find-paint-code-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+    }
+
+        .paint-options-checkbox-group {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          align-items: start;
+          font-weight: 500;
+          margin: 10px 0;
+          color: #444;
+          transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+        }
+
+        .paint-options-checkbox-group.hide {
+          margin-top: 0;
+          max-height: 0;
+          overflow: hidden;
+          opacity: 0;
+        }
+
+        input[type="checkbox"] {
+          width: 16px;
+          height: 16px;
+        }
+
+        .paint-options-checkbox-option:has(input:disabled) {
+          color: #ccc;
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .paint-options-checkbox-option input[type="radio"]:disabled {
+          color: #ccc;
+          cursor: not-allowed;
+        }
+
+        .paint-options-checkbox-option input[type="radio"]:hover {
+          cursor: pointer;
+        }
+
+        .paint-options-checkbox-option:hover {
+          cursor: pointer;
+        }
+
+    .find-paint-option-link-container {
+      order: 1;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: #0000EE;
+      margin: 3px 0 8px 0;
+    }
+
+    .option-title {
+      order: 2;
+    }
+
+    @media only screen and (min-width: 769px) {
+      .paint-option-and-how-to-find-paint-code-wrapper {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .find-paint-option-link-container {
+        order: 2;
+        margin-bottom: 0;
+        width: fit-content;
+      }
+
+      .option-title {
+        order: 1;
+      }
+    }
+</style>
+
+{% assign makes = settings.makes_list | split: ', ' %}
+{% assign excluded_makes = settings.excluded_makes_list | split: ', ' %}
+{% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ', ' %}
+{% assign is_make_found = false %}
+{% assign is_excluded_make_found = false %}
+{% assign is_bumperdotcom_make_found = false %}
+{% assign downcase_handle = product.handle | downcase %}
+
+{% for make in makes %}
+  {% assign downcase_make = make | downcase %}
+  {% if downcase_handle contains downcase_make %}
+    {% assign is_make_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for excluded_make in excluded_makes %}
+  {% assign downcase_excluded_make = excluded_make | downcase %}
+  {% if downcase_handle contains downcase_excluded_make %}
+    {% assign is_excluded_make_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% for bumperdotcom_make in bumperdotcom_makes %}
+  {% assign downcase_bumperdotcom_make = bumperdotcom_make | downcase %}
+  {% if downcase_handle contains downcase_bumperdotcom_make %}
+    {% assign is_bumperdotcom_make_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="option-dropdowns">
+  {% if product.variants.size > 1 %}
+    {% comment %} <div class="divider"></div> {% endcomment %}
+    <div class="combined-variant-dropdown">
+      <div class="paint-option-and-how-to-find-paint-code-wrapper">
+        {% comment %}
+          <div class="find-paint-option-link-container" style="display: none;">
+            <a href="#" id="open-paint-code-modal">How To Find Your Paint Code</a>
+          </div>
+        {% endcomment %}
+        <label class="option-title" for="quality-type-select">{{ 'paint_options.title' | t }}</label>
+      </div>
+      <div class="paint-options-checkbox-group">
+        <label class="paint-options-checkbox-option">
+          <input
+            type="radio"
+            name="select_paint_option"
+            value="select"
+            id="checkbox-select-unpainted"
+            disabled
+          >
+          {{ 'paint_options_radio_labels.unpainted' | t }}
+        </label>
+        <label class="paint-options-checkbox-option">
+          <input
+            type="radio"
+            name="select_paint_option"
+            value="select"
+            id="checkbox-select-paint-option"
+            disabled
+          >
+          {{ 'paint_options_radio_labels.selection' | t }}
+        </label>
+        <label class="paint-options-checkbox-option" id="paint-code-vin-option">
+          <input
+            type="radio"
+            name="select_paint_option"
+            value="select"
+            id="checkbox-get-paint-code-with-vin"
+            disabled
+          >
+          {{ 'paint_options_radio_labels.VIN' | t }}
+        </label>
+      </div>
+      <div class="painted-stock-key-paint-level" style="display: none;">
+        {{ 'variant_instock_message' | t }}
+      </div>
+      <div class="paint-code-wrapper">
+        <select id="variant-selector" name="id" disabled>
+          <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
+        </select>
+        {% render 'paint-options-oos-msg' %}
+      </div>
+      {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
+      <div id="paintcode-app-container">
+        <div class="two-tone-message">
+          {{ 'paintcode_popup.two_tone_message_beg' | t }}&nbsp;<b>{{ 'paintcode_popup.two_tone_two_tone' | t }}</b>
+          {{- 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span
+          >&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}
+        </div>
+        {% render 'Vin-Decoder-app' %}
+      </div>
+      {% comment %} {% endif %} {% endcomment %}
+      {% render 'how-to-find-paint-code' %}
+      {% comment %} NOTE: the vin-decoder is the exact same as 'excluded-chromedata-makes.... maybe combine them and delete the other' {% endcomment %}
+      {% comment %}
+        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+          {% render 'vin-decoder' %}
+        {% endif %}
+      {% endcomment %}
+    </div>
+  {% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        {% comment %} const productSku = '{{ product.variants.first.sku }}'; {% endcomment %}
+        productVariants = {
+            aftermarket: [
+              {% if product.metafields.custom.aftermarket_product %}
+                {% assign aftermarket_product_handle = product.metafields.custom.aftermarket_product %}
+                {% if aftermarket_product_handle %}
+                  {% assign aftermarket_product = all_products[aftermarket_product_handle] %}
+                  {% assign aftermarket_variant_count = aftermarket_product.variants | size %}
+                  {% if aftermarket_variant_count > 0 %}
+                    {% if aftermarket_product %}
+                      {% assign aftermarket_base_price = aftermarket_product.variants.first.price %}
+                      {% assign base_variant_inventory = 0 %}
+                      {% assign aftermarket_any_available_options = false %}
+                      {% assign has_dot_vin_option_aftermarket = false %}
+
+              
+                      {% for variant in aftermarket_product.variants %}
+                        {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
+                          {% assign base_variant_inventory = variant.inventory_quantity %}
+                        {% endif %}
+                        {% comment %} {% if variant.metafields.custom.hide_paint_code == true %}
+                          {% continue %}
+                        {% endif %} {% endcomment %}
+                        {% if variant.title contains "Custom Paint Code" %}
+                          {% continue %}
+                        {% endif %}
+                        {% if variant.title contains "Match Paint by VIN" %}
+                          {% assign has_dot_vin_option_aftermarket = true %}
+                        {% endif %}
+                        {% assign aftermarket_variant_price = variant.price %}
+                        {% assign price_difference = aftermarket_variant_price | minus: aftermarket_base_price %}
+
+                        
+                        {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                        {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                        {% if extra_inventory > 0 %}
+                          {% assign aftermarket_any_available_options = true %}
+                          {% assign has_extra_inventory = true %}
+                        {% else %}
+                          {% assign has_extra_inventory = false %}
+                        {% endif %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            {% if variant.title contains "Unpainted" and shop.locale == "es"%}
+                              "title": "Sin pintar +{{ price_difference | money }}",
+                            {% elsif variant.title contains "Custom Paint Code" and shop.locale == "es" %}
+                              "title": "Código de pintura personalizado (Te contactaremos) +{{ price_difference | money }}",
+                            {% elsif variant.title contains "Match Paint by VIN" and shop.locale == "es" %}
+                              "title": "Pintura de combinación por VIN +{{ price_difference | money }}",
+                            {% else %}
+                              "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            {% endif %} 
+                            "price": "{{ variant.price | money }}",
+                            "priceDifference": "{{ price_difference }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                            "variantAvailable": "{{ variant.metafields.custom.hide_paint_code }}",
+                            "variantTitle": "{{ variant.title }}",
+                            "variantSku": "{{ variant.sku }}",
+                            "variantInventory": "{{ variant.inventory_quantity }}",
+                            "extraInventory": {{ extra_inventory }},
+                            "baseInventory": {{ base_variant_inventory }},
+                            "hasExtraInventory": {{ has_extra_inventory }},
+                            "productTitle": "{{ aftermarket_product.title | escape  }}",
+                            "productDescription": {{ aftermarket_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% comment %} "productSku": " {{ aftermarket_product.sku }}" {% endcomment %}
+                            {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                "class": "hidden-vin-option"
+                              {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No Aftermarket Options Available</option>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <option value="" disabled>No Aftermarket Product Assigned</option>
+                {% endif %}
+              {% endif %}
+            ],
+            capa: [
+              {% if product.metafields.custom.capa_product %}
+                {% assign capa_product_handle = product.metafields.custom.capa_product %}
+                {% if capa_product_handle %}
+                  {% assign capa_product = all_products[capa_product_handle] %}
+                  {% assign capa_variant_count = capa_product.variants | size %}
+                  {% if capa_variant_count > 0 %}
+                    {% if capa_product %}
+                      {% assign capa_base_price = capa_product.variants.first.price %}
+                      {% assign base_variant_inventory = 0 %}
+                      {% assign capa_any_available_options = false %}
+                      {% assign has_dot_vin_option_capa = false %}
+
+              
+                      {% for variant in capa_product.variants %}
+                        {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
+                          {% assign base_variant_inventory = variant.inventory_quantity %}
+                        {% endif %}
+                        {% comment %} {% if variant.metafields.custom.hide_paint_code == true %}
+                          {% continue %}
+                        {% endif %} {% endcomment %}
+                        {% if variant.title contains "Custom Paint Code" %}
+                          {% continue %}
+                        {% endif %}
+                        {% if variant.title contains "Match Paint by VIN" %}
+                          {% assign has_dot_vin_option_capa = true %}
+                        {% endif %}
+                        {% assign capa_variant_price = variant.price %}
+                        {% assign price_difference = capa_variant_price | minus: capa_base_price %}
+                        
+                        {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                        {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                        {% if extra_inventory > 0 %}
+                          {% assign capa_any_available_options = true %}
+                          {% assign has_extra_inventory = true %}
+                        {% else %}
+                          {% assign has_extra_inventory = false %}
+                        {% endif %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            {% if variant.title contains "Unpainted" and shop.locale == "es"%}
+                              "title": "Sin pintar +{{ price_difference | money }}",
+                            {% elsif variant.title contains "Custom Paint Code" and shop.locale == "es" %}
+                              "title": "Código de pintura personalizado (Te contactaremos) +{{ price_difference | money }}",
+                            {% elsif variant.title contains "Match Paint by VIN" and shop.locale == "es" %}
+                              "title": "Pintura de combinación por VIN +{{ price_difference | money }}",
+                            {% else %}
+                              "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            {% endif %}
+                            "price": "{{ variant.price | money }}",
+                            "priceDifference": "{{ price_difference }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                            "variantAvailable": "{{ variant.metafields.custom.hide_paint_code }}",
+                            "variantTitle": "{{ variant.title }}",
+                            "variantSku": "{{ variant.sku }}",
+                            "extraInventory": {{ extra_inventory }},
+                            "baseInventory": {{ base_variant_inventory }},
+                            "hasExtraInventory": {{ has_extra_inventory }},
+                            "variantInventory": "{{ variant.inventory_quantity }}",
+                            "productTitle": "{{ capa_product.title | escape  }}",
+                            "productDescription": {{ capa_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% comment %} "productSku": " {{ capa_product.sku }}" {% endcomment %}
+                            {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                "class": "hidden-vin-option"
+                              {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No CAPA Options Available</option>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <option value="" disabled>No CAPA Product Assigned</option>
+                {% endif %}
+              {% endif %}
+            ],
+            oem: [
+              {% if product.metafields.custom.oem_product %}
+                {% assign oem_product_handle = product.metafields.custom.oem_product %}
+                {% if oem_product_handle %}
+                  {% assign oem_product = all_products[oem_product_handle] %}
+                  {% assign oem_variant_count = oem_product.variants | size %}
+                  {% if oem_variant_count > 0 %}
+                    {% if oem_product %}
+                      {% assign oem_base_price = oem_product.variants.first.price %}
+                      {% assign base_variant_inventory = 0 %}
+                      {% assign oem_any_available_options = false %}
+                      {% assign has_dot_vin_option_oem = false %}
+
+              
+                      {% for variant in oem_product.variants %}
+                        {% if variant.title contains "Unpainted" or variant.title contains "Sin pintar" %}
+                          {% assign base_variant_inventory = variant.inventory_quantity %}
+                        {% endif %}
+                        {% comment %} {% if variant.metafields.custom.hide_paint_code == true %}
+                          {% continue %}
+                        {% endif %} {% endcomment %}
+                        {% if variant.title contains "Custom Paint Code" %}
+                          {% continue %}
+                        {% endif %}
+                        {% if variant.title contains "Match Paint by VIN" %}
+                          {% assign has_dot_vin_option_oem = true %}
+                        {% endif %}
+                        {% assign oem_variant_price = variant.price %}
+                        {% assign price_difference = oem_variant_price | minus: oem_base_price %}
+
+                        {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+                        {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+                        {% if extra_inventory > 0 %}
+                          {% assign oem_any_available_options = true %}
+                          {% assign has_extra_inventory = true %}
+                        {% else %}
+                          {% assign has_extra_inventory = false %}
+                        {% endif %}
+                          { 
+                            "id": "{{ variant.id }}",
+                            {% if variant.title contains "Unpainted" and shop.locale == "es" %}
+                              "title": "Sin pintar +{{ price_difference | money }}",
+                            {% elsif variant.title contains "Custom Paint Code" and shop.locale == "es" %}
+                              "title": "Código de pintura personalizado (Te contactaremos) +{{ price_difference | money }}",
+                            {% elsif variant.title contains "Match Paint by VIN" and shop.locale == "es" %}
+                              "title": "Pintura de combinación por VIN +{{ price_difference | money }}",
+                            {% else %}
+                              "title": "{{ variant.title }} +{{ price_difference | money }}",
+                            {% endif %} 
+                            "price": "{{ variant.price | money }}",
+                            "priceDifference": "{{ price_difference }}",
+                            "color": "{{ variant.metafields.custom.paint_preview_hex_code }}" ,
+                            "variantAvailable": "{{ variant.metafields.custom.hide_paint_code }}",
+                            "variantTitle": "{{ variant.title }}",
+                            "variantSku": "{{ variant.sku }}",
+                            "extraInventory": {{ extra_inventory }},
+                            "baseInventory": {{ base_variant_inventory }},
+                            "hasExtraInventory": {{ has_extra_inventory }},
+                            "variantInventory": "{{ variant.inventory_quantity }}",
+                            "productTitle": "{{ oem_product.title | escape  }}",
+                            "productDescription": {{ oem_product.description | json }},
+                            "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                            {% comment %} "productSku": " {{ oem_product.sku }}" {% endcomment %}
+                            {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
+                              {% if variant.title contains "Match Paint by VIN" %}
+                                "class": "hidden-vin-option"
+                              {% endif %}
+                            {% comment %} {% endif %} {% endcomment %}
+                          },
+                      {% endfor %}
+                    {% else %}
+                      <option value="" disabled>No OEM Options Available</option>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <option value="" disabled>No OEM Product Assigned</option>
+                {% endif %}
+              {% endif %}
+            ],
+            current: [
+              {% assign current_base_price = product.variants.first.price %}
+              {% for variant in product.variants %}
+                {% comment %} {% if variant.metafields.custom.hide_paint_code == true %}
+                  {% continue %}
+                {% endif %} {% endcomment %}
+                {% if variant.title contains "Custom Paint Code" %}
+                  {% continue %}
+                {% endif %}
+                {% assign current_variant_price = variant.price %}
+                {% assign price_difference = current_variant_price | minus: current_base_price %}
+                { 
+                  "id": "{{ variant.id }}",
+                  {% if variant.title contains "Unpainted" and shop.locale == "es" %}
+                    "title": "Sin pintar +{{ price_difference | money }}",
+                  {% elsif variant.title contains "Custom Paint Code" and shop.locale == "es" %}
+                    "title": "Código de pintura personalizado (Te contactaremos) +{{ price_difference | money }}",
+                  {% elsif variant.title contains "Match Paint by VIN" and shop.locale == "es" %}
+                    "title": "Pintura de combinación por VIN +{{ price_difference | money }}",
+                  {% else %}
+                    "title": "{{ variant.title }} +{{ price_difference | money }}",
+                  {% endif %} 
+                  "price": "{{ variant.price | money }}",
+                  "priceDifference": "{{ price_difference }}",
+                  "color": "{{ variant.metafields.custom.paint_preview_hex_code }}",
+                  "variantAvailable": "{{ variant.metafields.custom.hide_paint_code }}",
+                  "variantTitle": "{{ variant.title }}",
+                  "variantSku": "{{ variant.sku }}",
+                  "variantInventory": "{{ variant.inventory_quantity }}",
+                  "productTitle": "{{ product.title | escape }}",
+                  "productDescription": {{ product.description | json }},
+                  "matchPercentage": "{{ variant.metafields.custom.match_percentage }}",
+                  {% comment %} "productSku": " {{ product.sku }}" {% endcomment %}
+                  {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
+                    {% if variant.title contains "Match Paint by VIN" %}
+                      "class": "hidden-vin-option"
+                    {% endif %}
+                  {% endif %}
+                },
+              {% endfor %}
+            ]
+        };
+
+        {% comment %} const productVariants = {
+          aftermarket: [
+            {% assign handle = product.metafields.custom.aftermarket_product %}
+            {% if handle %}
+              {% assign product_obj = all_products[handle] %}
+              {% render 'paint-options-variants', product_obj: product_obj %}
+            {% endif %}
+          ],
+          capa: [
+            {% assign handle = product.metafields.custom.capa_product %}
+            {% if handle %}
+              {% assign product_obj = all_products[handle] %}
+              {% render 'paint-options-variants', product_obj: product_obj %}
+            {% endif %}
+          ],
+          oem: [
+            {% assign handle = product.metafields.custom.oem_product %}
+            {% if handle %}
+              {% assign product_obj = all_products[handle] %}
+              {% render 'paint-options-variants', product_obj: product_obj %}
+            {% endif %}
+          ]
+        }; {% endcomment %}
+
+
+        const qualityTypeSelect = document.getElementById('quality-type-select');
+        const combinedVariantSelect = document.getElementById('variant-selector');
+        const priceInfo = document.querySelector('.price-info');
+        const priceDisplay = document.getElementById('price-display');
+        const priceDisplaySmallScreen = document.getElementById('price-display-small-screen');
+        const priceDisplaySticky = document.getElementById('price-display-sticky');
+        const priceDisplayA2C = document.getElementById('price-display-a2c');
+        const priceContainerLargeScreen = document.querySelector('.price-container-large-screen');
+        const priceContainerSmallScreen = document.querySelector('.price-container');
+        const addToCartButton = document.querySelector('.add-to-cart');
+        const addToCartForUnpainted = document.querySelector('.add-to-cart-for-unpainted');
+        const howToFindPaintCodeBtn = document.getElementById('how-to-find-your-paint-code-vindecoder');
+        const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
+        const asmSettings = document.getElementById("asm-settings");
+        const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === "Enabled";
+        const paintCodeWrapper = document.querySelector(".paint-code-wrapper");
+        const checkboxUnpainted = document.getElementById('checkbox-select-unpainted');
+        const checkboxPaintOptions = document.getElementById('checkbox-select-paint-option');
+        const paintCodeAppContainer = document.getElementById('paintcode-app-container');
+        const paintOptionPriceDisplay = document.querySelector('#paint-option-price-display');
+        const vinOptionPriceDisplay = document.querySelector('#vin-option-price-display');
+        const STOCK_POSTFIX = "{{ 'quality_level_painted_stock.postfix' | t }}";
+        const AFTERMARKET_WORD = '{{ 'quality_level_painted_stock.aftermarket' | t }}';
+        const AND_WORD = '{{ 'quality_level_painted_stock.and' | t }}';
+        const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}'
+        aftermarketAvailability = {{ aftermarket_any_available_options | default: false | json }};
+        capaAvailability = {{ capa_any_available_options | default: false | json }};
+        oemAvailability = {{ oem_any_available_options | default: false | json }};
+
+        let dataVariantTitle = '';
+        let dataVariantSku = '';
+        let oem = '';
+        let unpainted = false;
+        let bannedPaintCode = false;
+        let currentAddToCartBtn;
+        let hasDotVinOptionAftermarket = {{ has_dot_vin_option_aftermarket | default: false | json }};
+        let hasDotVinOptionCapa = {{ has_dot_vin_option_capa | default: false | json }};
+        let hasDotVinOptionOem = {{ has_dot_vin_option_oem | default: false | json }};
+
+        if('{{ product.variants.size }}' <= 1) {
+          unpainted = true;
+        }; 
+
+        if(!hasDotVinOptionAftermarket && !hasDotVinOptionCapa && !hasDotVinOptionOem) {
+          const vinOptionLabel = document.getElementById('paint-code-vin-option');
+          if (vinOptionLabel) {
+            vinOptionLabel.style.display = 'none';
+          }
+        }
+
+        if(addToCartButton) {
+          currentAddToCartBtn = addToCartButton;
+        } else if(addToCartForUnpainted) {
+          currentAddToCartBtn = addToCartForUnpainted;
+        }
+
+        if(!qualityTypeSelect) {
+          console.log('No quality options available');
+          populateVariantDropdown('current', disabledFirstOptionTranslation);
+        }
+
+        if(window.enablePrepaintedMessaging) {
+          if (aftermarketAvailability || capaAvailability || oemAvailability) {
+
+            // Only aftermarket is necessary to translate as the others are acronyms
+            handleQualityLevelPrePaintMsg(STOCK_POSTFIX, AFTERMARKET_WORD, AND_WORD);
+
+            // Add the pre-painted in stock badge to qualities
+            {% comment %} addInStockBadgeInQualityOptions(); {% endcomment %}
+          }
+        }
+
+        // For unpainted products that have multiple qualities available, need to query all possible etas 
+        // on DOM content load
+        if (isDeliveryCountdownEnabled) {
+          // The following is for unpainted products that have quality selection
+            if (!combinedVariantSelect) {
+              const variants = productVariants;
+              receivedProductVariants(variants);
+
+              let unpaintedSku;
+              for (let key in variants) {
+                if (variants.hasOwnProperty(key)) {
+                  let variant = variants[key];
+
+                  if(variant.length) {
+                    unpaintedSku = variant[0].variantSku;
+                    setProductSku(unpaintedSku);
+                    queryAllETAs(key, 0);
+                  }
+                }
+              }
+            }
+          }
+
+        /*******************************************************************************************************
+        **                                                                                                    **
+        **                                         FUNCTIONS                                                  **
+        **                                                                                                    **
+        *******************************************************************************************************/
+                
+          function changingPaintOptions(matchPaintByVin) {
+            let selectedOption;
+
+            if(!matchPaintByVin) {
+              selectedOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex];
+            } else {
+              selectedOption = combinedVariantSelect.options[2];
+            };
+            dataVariantTitle = selectedOption.getAttribute('data-variant-title');
+            receivedDataVariantTitle(dataVariantTitle);
+            dataVariantSku = selectedOption.getAttribute('data-variant-sku');
+            receivedDataVariantSku(dataVariantSku);
+
+            if(dataVariantTitle === 'Match Paint by VIN') {
+              matchingByVin = true;
+            } else {
+              matchingByVin = false;
+            }
+
+            const selectedPrice = selectedOption ? selectedOption.dataset.price : null;
+            const selectedPriceDifference = selectedOption ? selectedOption.dataset.priceDifference : "";
+            const selectedColor = selectedOption ? selectedOption.dataset.color : null;
+            const selectedTitle = selectedOption ? selectedOption.dataset.variantTitle : null;
+
+            const formattedPrice = formatPriceToUSD(selectedPrice);
+            if (selectedPrice) {
+                priceDisplay.textContent = formattedPrice;
+                priceDisplaySmallScreen.textContent = formattedPrice;
+                priceDisplaySticky.textContent = formattedPrice;
+                priceDisplayA2C.textContent = formattedPrice;
+            }
+
+            {% comment %} updatePaintOptionPriceDisplay(selectedPriceDifference); {% endcomment %}
+
+            selectedProductColor = selectedColor;
+            if (selectedColor) {
+              selectedProductTitle = selectedTitle
+            }
+
+            if (isDeliveryCountdownEnabled) {
+              getCountdownAndGeoValues();
+            }
+            clearOOSPaintCheckbox();
+            clearVinVerificationRadioButtons();
+            updateProgressHeaderColors();
+          }
+
+          function updatePaintOptionPriceDisplay(priceInCents) {
+            if (!paintOptionPriceDisplay) return;
+          
+            // Convert cents to dollars (assuming Shopify money format)
+            const formattedPrice = (priceInCents / 100).toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD'
+            });
+          
+            // IF: vindecoder was not just used, change price on Select Paint Code button
+            // ELSE: Change price on Use VIN button
+            const wasVinJustUsed = vinDecoderJustUsed;
+            vinDecoderJustUsed = false;
+                  
+            if (!wasVinJustUsed) {
+              paintOptionPriceDisplay.textContent = `+${formattedPrice}`;
+            } else {
+              if (vinOptionPriceDisplay) {
+                vinOptionPriceDisplay.textContent = `+${formattedPrice}`;
+              }
+            }
+          }
+        
+
+        /*******************************************************************************************************
+        **                                                                                                    **
+        **                                         EVENT LISTENERS                                            **
+        **                                                                                                    **
+        *******************************************************************************************************/
+
+
+          // Show/hide VIN input based on radio selection
+          const radios = document.querySelectorAll('input[name="select_paint_option"]');
+          radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+              const vinMessageParagraph = document.querySelector('.vin-decoder-message');
+
+                //Select Paint Code
+                if (checkboxPaintOptions.checked) {
+                  if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
+                  if(paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
+                  combinedVariantSelect.value = combinedVariantSelect.options[0].value;
+      
+                  hideVinMessageParagraph();
+
+                  if(window.enablePrepaintedMessaging) {
+                    if (selectedOptionHasAvailableStock === true) showPaintedStockKeyPaintDisclaimer();
+                  }
+                  hideOOSPaintVariantsMsg();
+                  disablePrecisionMatchBtns();
+                  clearPrecisionMatchRadioButtons();
+                  disableVinVerificationBtns();
+                  clearVinVerificationRadioButtons();
+                  disableAddToCartButton();
+
+                //Unpainted
+                } else if (checkboxUnpainted.checked) {
+                  hideColorPreviewContainer();
+
+                  const dataSetPrice = combinedVariantSelect.options[1].dataset.price;
+                  const formattedPrice = formatPriceToUSD(dataSetPrice);
+                  //Set the combined variant select to unpainted
+                  combinedVariantSelect.value = combinedVariantSelect.options[1].value;
+                  priceDisplay.textContent = formattedPrice;
+                  priceDisplaySmallScreen.textContent =  formattedPrice;
+                  priceDisplaySticky.textContent =  formattedPrice;
+                  priceDisplayA2C.textContent =  formattedPrice;
+                  form.action = `/cart/add?id=${combinedVariantSelect.options[1].value}`;
+                  {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
+                  //Show combined variant select dropdown for now
+                  if(paintCodeWrapper) paintCodeWrapper.classList.remove('show');
+                  if(paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
+                  if(window.enablePrepaintedMessaging) {
+                    hidePaintedStockKeyPaintDisclaimer();
+                  }
+                  //If precision match exists, enable it
+                  //If vin verification exists, but precision match does not, enable it
+                  //If neither exist, enable add to cart
+                  if(precisionMatchContainerLibrary) {
+                    enablePrecisionMatchBtns();
+                  } else if(vinVerificationCheckboxGroupLibrary) {
+                    enableAddToCartButton();
+                    enableVinVerificationBtns();
+                  } else {
+                    enableAddToCartButton();
+                  }
+
+                  if (isDeliveryCountdownEnabled) {
+                    let selectedOption = combinedVariantSelect.options[1];
+                    dataVariantTitle = selectedOption.getAttribute('data-variant-title');
+                    receivedDataVariantTitle(dataVariantTitle);
+                    dataVariantSku = selectedOption.getAttribute('data-variant-sku');
+                    receivedDataVariantSku(dataVariantSku);
+                    getCountdownAndGeoValues();
+                  }
+
+                //Match Paint by VIN option
+                } else {
+                  // If vin decoder was used and successful
+                  if(hasDotVinOptionAftermarket || hasDotVinOptionCapa || hasDotVinOptionOem) {
+                    hideColorPreviewContainer();
+                    if (boolMatchByVIN === false) {
+
+                      // If autoSelectedColor.length, then vin decoder has been used and successful
+                      if (autoSelectedColor.length) {
+                        combinedVariantSelect.value = autoSelectedColor;
+
+                        const options = Array.from(combinedVariantSelect.options);
+                        options.find(option => {
+                          const unavailableSelection = option.dataset.unavailable;
+                          const optionVariantTitle = option.dataset.variantTitle;
+                          const autoSelectedOptionTitle = autoSelectedOption.dataset.variantTitle;
+                          
+                          // If a user has a successful vin decode, but then changes quality and then
+                          // comes back to select Use VIN, this will be blank due to the autoSelectedColor
+                          // value being associated with an entirely different product
+                          if(combinedVariantSelect.value === '') {
+                              if(optionVariantTitle === autoSelectedOptionTitle) {
+                                  combinedVariantSelect.value = option.value;
+                                  if(unavailableSelection === "true") {
+                                    showOOSPaintVariantsMsg();
+                                    selectedVariantUnavailable = true;
+                                    bannedPaintCode = true;
+                                  } else {
+                                    form.action = `/cart/add?id=${option.value}`;
+                                  }
+                                  return;
+                              }
+                          
+                          // If a user has a successful vin decode, but then changes paint option and comes
+                          // back to selec Use VIN, then banned paint codes message will have disappeared.
+                          // The following brings the message back
+                          } else {
+                            if(optionVariantTitle === autoSelectedOptionTitle) {
+                              if(unavailableSelection === "true") {
+                                showOOSPaintVariantsMsg();
+                                selectedVariantUnavailable = true;
+                                bannedPaintCode = true;
+                              } else {
+                                form.action = `/cart/add?id=${option.value}`;
+                              }
+                            }
+                          }
+                        });
+
+                        changingPaintOptions(true);
+
+                        if (paintCodeWrapper) paintCodeWrapper.classList.add('show');
+
+                        // Enable or disable the following components based off of whether or the VIN Decoder
+                        // resulted in a banned paint code
+                        if(bannedPaintCode === false) {
+                          if (precisionMatchContainerLibrary) {
+                            enablePrecisionMatchBtns();
+                          } else if (vinVerificationCheckboxGroupLibrary) {
+                            enableVinVerificationBtns();
+                          } else {
+                            enableAddToCartButton();
+                          }
+                        } else {
+                          if (precisionMatchContainerLibrary) {
+                            disablePrecisionMatchBtns();
+                          } else if (vinVerificationCheckboxGroupLibrary) {
+                            disableVinVerificationBtns();
+                          } else {
+                            disableAddToCartButton();
+                          }
+                        }
+
+                      // ELSE: Vin Decoder has not been used
+                      } else {
+                        if (paintCodeWrapper) paintCodeWrapper.classList.remove('show');
+                        if (paintCodeAppContainer) paintCodeAppContainer.classList.add('show');
+                        disablePrecisionMatchBtns();
+                        clearPrecisionMatchRadioButtons();
+                        disableVinVerificationBtns();
+                        clearVinVerificationRadioButtons();
+                        disableAddToCartButton();
+                      }
+
+                      if(window.enablePrepaintedMessaging) {
+                        if(decodedVINHasAvailableStock) {
+                          showPaintedStockKeyPaintDisclaimer();
+                        } else {
+                          hidePaintedStockKeyPaintDisclaimer();
+                        }
+
+
+                      }
+
+                    // If vin decoder failed
+                    } else {
+                      let variantSelectorArray = Array.from(combinedVariantSelect.options);
+
+                      variantSelectorArray.forEach(option => {
+                        if(option.textContent.includes('Match Paint by VIN')) {
+                          changingPaintOptions(true);
+                          combinedVariantSelect.value = option.value;
+                          form.action = `/cart/add?id=${option.value}`;
+                          {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
+                        }
+                      });
+
+                      showVinMessageParagraph();
+
+                      //Show combined variant select dropdown for now
+                      if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
+                      if(paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
+
+                      //If precision match exists, enable it
+                      //If vin verification exists, but precision match does not, enable it
+                      //If neither exist, enable add to cart
+                      if(window.enablePrepaintedMessaging) {
+                        hidePaintedStockKeyPaintDisclaimer();
+                      }
+                      if(precisionMatchContainerLibrary) {
+                        enablePrecisionMatchBtns();
+                      } else if(vinVerificationCheckboxGroupLibrary) {
+                        enableVinVerificationBtns();
+                      } else {
+                        enableAddToCartButton();
+                      }
+                    }
+                  }
+                }
+                clearOOSPaintCheckbox();
+                updateProgressHeaderColors();
+            });    
+          });
+
+          if(combinedVariantSelect) { 
+            combinedVariantSelect.addEventListener('change', function() {
+              changingPaintOptions(false);
+            });
+          }
+    });
+</script>

@@ -1,0 +1,220 @@
+{% comment %} <style>
+  .product-quality-popup-dark-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: auto;
+    animation-name: animateopacity;
+    animation-duration: 0.5s;
+    z-index: 3000;
+  }
+  @keyframes animateopacity {
+    from { background-color: rgba(0,0,0,0.0); }
+    to { background-color: rgba(0,0,0,0.7); }
+  }
+
+  /* Phone */
+  @media only screen and (max-width: 450px) {
+    .quality-popup-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5000;
+      overflow-y: auto;
+      font-family: 'Lato', sans-serif;
+    }
+    .quality-popup-modal {
+      position: relative;
+      width: 90%;
+      max-width: 400px; /* Limit maximum width */
+      background-color: white;
+      margin: 10% auto; /* Center modal vertically and horizontally */
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      border-radius: 8px;
+    }
+    .quality-popup-modal img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .quality-popup-modal h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .popup-modal-content {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    #modal-exit {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      color: #888;
+      cursor: pointer;
+    }
+    #quality-modal-button {
+      color: #fff;
+      background-color: #0C1A94;
+      border: none;
+      font-size: 16px;
+      padding: 12px 0; /* Adjust vertical padding */
+      width: 100%; /* Full width button */
+      max-width: 300px; /* Limit maximum width */
+      margin: 10px auto; /* Center button */
+      display: block;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #quality-modal-button:hover {
+      background-color: #063175;
+    }
+  }
+
+  /* Desktop */
+  @media only screen and (min-width: 451px) {
+    .quality-popup-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5000;
+      overflow-y: auto;
+    }
+    .quality-popup-modal {
+      position: relative;
+      width: 60%; /* Adjusted width for desktop */
+      max-width: 800px; /* Limit maximum width */
+      background-color: white;
+      margin: 5% auto; /* Center modal vertically and horizontally */
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      border-radius: 8px;
+    }
+    .quality-popup-modal img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .quality-popup-modal h1 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .popup-modal-content {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    #modal-exit {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 28px;
+      color: #888;
+      cursor: pointer;
+    }
+    #quality-modal-button {
+      color: #fff;
+      background-color: #0C1A94;
+      border: none;
+      font-size: 18px;
+      padding: 10px 20px; /* Adjust padding */
+      max-width: 500px; /* Limit maximum width */
+      margin: 20px 0; /* Adjust margin */
+      display: block;
+      text-align: left; /* Align text to left */
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #quality-modal-button:hover {
+      background-color: #063175;
+    }
+  }
+
+  @keyframes drop-in {
+    0% { opacity: 0; transform: translateY(-50px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<button id="quality-modal-button" class="btn">How To Find Your Paint Code</button>
+
+<div class="product-quality-popup-dark-overlay"></div>
+
+<div class="quality-popup-container">
+  <div class="quality-popup-modal">
+    <button id="modal-exit">&#x2715;</button>
+    <h1>How To Find Your Paint Code</h1>
+    <div class="popup-modal-content">
+      <!-- Placeholder for dynamically inserted content -->
+    </div>
+  </div>
+</div>
+
+<script>
+  const showOverlay = () => document.querySelector(".product-quality-popup-dark-overlay").style.display = "block";
+  const showModal = (content) => {
+    const modalContent = document.querySelector(".popup-modal-content");
+    modalContent.innerHTML = content;
+    document.querySelector(".quality-popup-container").style.display = "block";
+  };
+  const hideOverlay = () => document.querySelector(".product-quality-popup-dark-overlay").style.display = "none";
+  const hideModal = () => document.querySelector(".quality-popup-container").style.display = "none";
+
+  // Function to fetch content from Shopify page using Liquid
+  const fetchPageContent = async () => {
+    try {
+      const response = await fetch('{{ product.metafields.custom.qualitydetailsurl | escape }}.json');
+      if (!response.ok) {
+        throw new Error('Failed to fetch content');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Fetch error:', error);
+      throw error;
+    }
+  };
+
+  // Open Modal
+  document.querySelector("#quality-modal-button").onclick = async function(){
+    showOverlay();
+    try {
+      const pageContent = await fetchPageContent();
+      showModal(pageContent.page.body_html); // Assuming the content is in the body_html of the page
+    } catch (error) {
+      console.error('Error fetching page content:', error);
+    }
+  };
+
+  // Close Modal
+  document.getElementById("modal-exit").onclick = function(){
+    hideOverlay();
+    hideModal();
+  };
+
+  window.onclick = function(event) {
+    if(event.target === document.querySelector('.quality-popup-container')){
+      hideOverlay();
+      hideModal();
+    }
+  };
+</script> {% endcomment %}

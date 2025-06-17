@@ -1,0 +1,127 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "1716221076fc128fdb": {
+      "type": "apps",
+      "blocks": {
+        "easysearch_year_make_model_easysearch_widget_pxkw7C": {
+          "type": "shopify://apps/easysearch-ymm/blocks/easysearch-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
+          "settings": {
+            "placement_selector": "",
+            "insert_method": "prepend"
+          }
+        }
+      },
+      "block_order": [
+        "easysearch_year_make_model_easysearch_widget_pxkw7C"
+      ],
+      "custom_css": [
+        "div {margin-top: 0; margin-bottom: 0; background-color: #0c1a94;}",
+        "#easysearch-search {background: #fdac3a !important; min-width: 200px; text-align: center; font-size: 16pt !important;}",
+        ".easysearch-btn {color: #0c1a94 !important; margin: 0 auto;}",
+        "#easysearch_field_4973 {min-width: 200px; font-size: 16pt !important;}",
+        "#easysearch_field_4974 {min-width: 200px; font-size: 16pt !important;}",
+        "#easysearch_field_4975 {min-width: 200px; font-size: 16pt !important;}",
+        ".easysearch-vertical-mode .easysearch-btn-holder {width: 100% !important;}"
+      ],
+      "settings": {
+        "include_padding": false
+      }
+    },
+    "dynamic_custom_liquid_izV9Jp": {
+      "type": "dynamic-custom-liquid",
+      "custom_css": [],
+      "settings": {
+        "custom_liquid": "{% assign full_url = request.host | append: request.path | split: 'type_' %}\n\n<h1>{{collection.title}}</h1>"
+      }
+    },
+    "dynamic_custom_liquid_MmJekE": {
+      "type": "dynamic-custom-liquid",
+      "custom_css": [],
+      "settings": {
+        "custom_liquid": "{% render 'collection-type-buttons' %}"
+      }
+    },
+    "15a95124-fa2c-4f51-ac0c-105f5675693d": {
+      "type": "apps",
+      "disabled": true,
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "dynamic_custom_liquid_r7nEqV": {
+      "type": "dynamic-custom-liquid",
+      "custom_css": [
+        "p {max-width: 80%; margin: 0 auto;}"
+      ],
+      "settings": {
+        "custom_liquid": "<p>{{collection.description}}</p>"
+      }
+    },
+    "main": {
+      "type": "static-collection",
+      "blocks": {
+        "filter-1": {
+          "type": "filter",
+          "settings": {
+            "filter_option": "tag",
+            "filter_groups": "expand_all",
+            "show_filter_product_count": true,
+            "filter_style": "groups",
+            "filter_limit": "99999",
+            "grid_categories": "",
+            "custom_ordered_categories": "Type",
+            "custom_ordered_tags": "",
+            "excluded_tags": "",
+            "excluded_groups": "YGroup,Year,Model"
+          }
+        }
+      },
+      "block_order": [
+        "filter-1"
+      ],
+      "custom_css": [
+        ".quickshop-button {display: none;}",
+        "b {text-decoration: none; color: inherit; pointer-events: none;}",
+        ".collection--description {display: none;}",
+        ".collection--title {display: none;}"
+      ],
+      "settings": {
+        "show_collection_image": false,
+        "products_per_page_range": 24,
+        "products_per_row": "4",
+        "sort_by": true,
+        "grid_list": true,
+        "default_view": "list-view",
+        "enable_subcollection": true,
+        "show_product_count": true,
+        "thumbnail_image": "product-image",
+        "image_crop": "original"
+      }
+    },
+    "static-recently-viewed": {
+      "type": "static-recently-viewed",
+      "settings": {
+        "enable_recently_viewed_products": true
+      }
+    }
+  },
+  "order": [
+    "1716221076fc128fdb",
+    "dynamic_custom_liquid_izV9Jp",
+    "dynamic_custom_liquid_MmJekE",
+    "15a95124-fa2c-4f51-ac0c-105f5675693d",
+    "dynamic_custom_liquid_r7nEqV",
+    "main",
+    "static-recently-viewed"
+  ],
+  "wrapper": ".boost-sd__product-filter-fallback"
+}

@@ -1,0 +1,157 @@
+<style>
+  #vin-to-collection {
+    padding: 10px 20px 10px 20px;
+    background-color: #fff;
+    max-width: 440px;
+    margin: 0 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #vin-to-collection-input-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .vin-input-to-collection {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+
+  .errorMessage {
+    color: red;
+    text-align: start;
+    padding-top: 5px;
+  }
+
+  #vin-to-collection-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 90px;
+    min-width: 90px;
+    min-height: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 14px;
+  }
+
+  #vin-to-collection-btn:disabled {
+    background-color: #334FB4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: no-drop;
+    min-height: 40px;
+    opacity: 0.7;
+  }
+
+  .vin-to-collection-btn--loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    {% comment %} margin: auto; {% endcomment %}
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+  }
+
+  .disclaimer {
+    font-size: 12px;
+    color: #333;
+    margin-top: 10px;
+    font-style: italic;
+    text-align: start;
+  }
+  
+  @keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
+  }
+</style>
+
+
+<div>
+  <form id="vin-to-collection" class="vin-to-collection-form">
+    <div id="vin-to-collection-input-wrapper">
+      <input
+        type="text"
+        id="vin-to-collection-input"
+        name="vin"
+        class="vin-input-to-collection"
+        placeholder="{{ 'garage.placeholder' | t }}"
+        onChange="handleVinChange(event)"
+        required
+      />
+      <button id="vin-to-collection-btn" type="button" disabled>{{ 'garage.search_btn' | t }}</button>
+    </div>
+    <div class="errorMessage" style="visibility: hidden;">{{ 'garage.failed_vin' | t }}</div>
+    <div class="disclaimer">{{ 'garage.disclaimer' | t }}</div>
+  </form>
+</div>
+
+<script>
+
+
+
+  // Get reference to the form
+  document.addEventListener("DOMContentLoaded", function () {
+    const vinForm = document.getElementById("vin-to-collection");
+    const vinSearchBtn = document.getElementById("vin-to-collection-btn");
+    const vinInputField = document.getElementById("vin-to-collection-input");
+    const errorMessage = document.querySelector('.errorMessage');
+
+    vinInputField.addEventListener("input", (event) => {
+      handleVinChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}');
+    });
+
+    vinForm.addEventListener("submit", async function (event) {
+      event.preventDefault(); // Prevent page reload
+      if (garageVinSubmissionBool || vinSearchBtn.disabled) {
+        return;
+      }
+
+      garageVinSubmissionBool = true;
+
+      vinSearchBtn.innerHTML = "";
+      vinSearchBtn.classList.add("vin-to-collection-btn--loading");
+      {% comment %} const vinInputField = document.getElementById("vin-to-collection-input"); {% endcomment %}
+      const vin = vinInputField.value.trim(); // Get VIN input value
+
+      if (vin.length !== 17) {
+        alert("{{ 'garage.exactly_17_characters' | t }}");
+        return;
+      }
+
+      attemptedVinsInGarage.push(vin);
+      const noResults = '{{ 'garage.no_results' | t }}';
+      const useYMM = '{{ 'garage.use_YMM_dropdown' | t }}';
+      const searchBtn = '{{ 'garage.search_btn' | t }}';
+
+      fetchVehicalDataByVin(vin, 1, noResults, useYMM, searchBtn, '');
+    });
+
+    vinSearchBtn.addEventListener("click", function () {
+      vinForm.dispatchEvent(new Event('submit'));
+    });
+  });
+</script>

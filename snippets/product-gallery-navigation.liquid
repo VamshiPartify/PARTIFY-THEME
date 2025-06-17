@@ -1,0 +1,354 @@
+{% comment %}
+  @param product {Product}
+    The product object in question
+
+  @param selected_media {Media}
+    The current selected media in the gallery
+
+  @param aspect_ratio {string}
+    The aspect ratio setting, which is either 'short', 'tall', or 'square'
+
+  @param image_crop {boolean}
+    Defines if the image should be cropped or not
+{% endcomment %}
+
+{% comment %} {% if product.media.size > 0 %} {% endcomment %}
+{% assign thumb_dimensions = 'x75' %}
+{% assign thumb_width = 75 %}
+{% assign thumb_height = 75 %}
+{% if image_crop %}
+  {% case aspect_ratio %}
+    {% when 'short' %}
+      {% assign thumb_dimensions = '100x75' %}
+      {% assign thumb_width = 100 %}
+      {% assign thumb_height = 75 %}
+    {% when 'tall' %}
+      {% assign thumb_dimensions = '50x75' %}
+      {% assign thumb_width = 50 %}
+      {% assign thumb_height = 75 %}
+    {% when 'square' %}
+      {% assign thumb_dimensions = '75x75' %}
+      {% assign thumb_width = 75 %}
+      {% assign thumb_height = 75 %}
+  {% endcase %}
+{% endif %}
+
+{% assign fallback_image_url = images['Partify_Photo_Coming_Soon.png'] %}
+{% assign media_image = product.media.first %}
+{% assign default_image = media_image | default: fallback_image_url %}
+{% assign primary_image = product.metafields.custom.site_primary_image | default: default_image -%}
+{%- assign lifestyle_reference = product.metafields.custom.lifestyle_image %}
+{% assign quality_reference = product.metafields.custom.quality_infographic_image.value.image %}
+{% assign paint_infographic_reference = product.metafields.custom.paint_infographic_image.value.image %}
+{% assign how_to_find_paint_code_reference = product.metafields.custom.how_to_find_your_paint_code_image.value.image %}
+{% assign additional_product_images = product.metafields.custom.additional_product_image_storage.value %}
+{% assign reordered_counter = 0 %}
+
+{%- comment -%}
+  Collect media images excluding the primary image to avoid duplication.
+{%- endcomment -%}
+{% assign reordered_media = '' %}
+{% assign reordered_media = reordered_media | append: primary_image | append: ',' %}
+
+<!-- Ensure lifestyle_reference is next -->
+{% if lifestyle_reference != blank %}
+  {% assign reordered_media = reordered_media | append: lifestyle_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure quality_reference is next -->
+{% if quality_reference != blank %}
+  {% assign reordered_media = reordered_media | append: quality_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure paint_infographic_reference is next -->
+{% if paint_infographic_reference != blank %}
+  {% assign reordered_media = reordered_media | append: paint_infographic_reference | append: ',' %}
+{% endif %}
+
+<!-- Ensure how_to_find_paint_code_reference is next -->
+{% if how_to_find_paint_code_reference != blank %}
+  {% assign reordered_media = reordered_media | append: how_to_find_paint_code_reference | append: ',' %}
+{% endif %}
+
+{% if additional_product_images != blank %}
+  {% for current_image in additional_product_images %}
+    {% assign file_url_current_image = current_image.preview_image %}
+    {% assign reordered_media = reordered_media | append: file_url_current_image | append: ',' %}
+  {% endfor %}
+{% endif %}
+
+{% assign reordered_media = reordered_media | split: ',' %}
+
+{% assign gallery_size = reordered_media.size %}
+
+<!-- gallery skeleton -->
+<div class="product-gallery--skeleton-thumbnails">
+  {% for i in (1..gallery_size) %}
+    <div class="product-gallery--media-thumbnail-img-wrapper skeleton"></div>
+  {% endfor %}
+</div>
+
+<div
+  class="product-gallery--navigation loading"
+  data-gallery-navigation
+>
+  <button
+    class="gallery-navigation--scroll-button scroll-left"
+    aria-label="Scroll thumbnails left"
+    data-gallery-scroll-button
+  >
+    {% render 'icon-chevron-down' %}
+  </button>
+  <button
+    class="gallery-navigation--scroll-button scroll-right"
+    aria-label="Scroll thumbnails right"
+    data-gallery-scroll-button
+  >
+    {% render 'icon-chevron-down' %}
+  </button>
+  <div
+    class="gallery-navigation--scroller"
+    data-gallery-scroller
+  >
+    <!-- Must be less than 2 because there will always be something in the first index of the reorder_media array -->
+    {% if reordered_media.size < 2 %}
+      {% if primary_image != blank %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--image-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="Primary Image Thumbnail"
+          data-gallery-thumbnail
+          data-gallery-index="0"
+          data-gallery-selected="true"
+          data-media="primary-image"
+          data-media-type="image"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            <img
+              src="{{ primary_image | image_url: width: thumb_width, height: thumb_height }}"
+              class="product-gallery--media-thumbnail-img"
+              alt="Primary Image"
+            >
+          </span>
+        </button>
+        {% assign first_image_skipped = true %}
+      {% endif %}
+      {% for media in product.media %}
+        {% if first_image_skipped %}
+          {% assign first_image_skipped = false %}
+          {% continue %}
+        {% endif %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--{{ media.media_type }}-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="{{ media.alt }} {{ 'general.accessibility.nav_product_thumbnail' | t }}"
+          data-gallery-thumbnail
+          data-gallery-index="{{ forloop.index0 }}"
+          data-gallery-selected="{%- if selected_media.id == media.id -%}true{%- else -%}false{%- endif -%}"
+          data-media="{{ media.id }}"
+          data-media-type="{{ media.media_type }}"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            {% if media.media_type == 'video' or media.media_type == 'external_video' %}
+              {% render 'icon-library', id: 'icon-play-thumb' %}
+            {% elsif media.media_type == 'model' %}
+              {% render 'icon-library', id: 'icon-model-thumb' %}
+            {% endif %}
+            {% render 'rimg',
+              class: 'product-gallery--media-thumbnail-img',
+              img: media.preview_image,
+              size: thumb_dimensions,
+              crop: 'center'
+            %}
+          </span>
+        </button>
+      {% endfor %}
+    {% endif %}
+
+    <!-- This case is if there are metaobject references in the metafields other than the primary image -->
+    {% if reordered_media.size >= 2 %}
+      {% if primary_image != blank %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--image-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="Primary Image Thumbnail"
+          data-gallery-thumbnail
+          data-gallery-index="0"
+          data-gallery-selected="true"
+          data-media="primary-image"
+          data-media-type="image"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            <img
+              src="{{ primary_image | image_url: width: thumb_width, height: thumb_height }}"
+              class="product-gallery--media-thumbnail-img"
+              alt="Primary Image"
+            >
+          </span>
+        </button>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+
+        {% assign first_image_skipped = true %}
+      {% endif %}
+
+      {% if lifestyle_reference != blank and product.variants.size > 1 %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--image-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="Lifestyle Image Thumbnail"
+          data-gallery-thumbnail
+          data-gallery-index="{{ reordered_counter }}"
+          data-gallery-selected="false"
+          data-media="lifestyle-image"
+          data-media-type="image"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            <img
+              src="{{ lifestyle_reference | image_url: width: thumb_width, height: thumb_height }}"
+              class="product-gallery--media-thumbnail-img"
+              alt="Primary Image"
+            >
+          </span>
+        </button>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+
+        {% assign first_image_skipped = true %}
+      {% endif %}
+
+      {% if quality_reference != blank %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--image-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="Quality Reference Image Thumbnail"
+          data-gallery-thumbnail
+          data-gallery-index="{{ reordered_counter }}"
+          data-gallery-selected="false"
+          data-media="quality-reference-image"
+          data-media-type="image"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            <img
+              src="{{ quality_reference | image_url: width: thumb_width, height: thumb_height }}"
+              class="product-gallery--media-thumbnail-img"
+              alt="Primary Image"
+            >
+          </span>
+        </button>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+
+        {% assign first_image_skipped = true %}
+      {% endif %}
+
+      {% if paint_infographic_reference != blank and product.variants.size > 1 %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--image-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="Paint Infographic Image Thumbnail"
+          data-gallery-thumbnail
+          data-gallery-index="{{ reordered_counter }}"
+          data-gallery-selected="false"
+          data-media="paint-infographic-image"
+          data-media-type="image"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            <img
+              src="{{ paint_infographic_reference | image_url: width: thumb_width, height: thumb_height }}"
+              class="product-gallery--media-thumbnail-img"
+              alt="Primary Image"
+            >
+          </span>
+        </button>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+
+        {% assign first_image_skipped = true %}
+      {% endif %}
+
+      {% if how_to_find_paint_code_reference != blank and product.variants.size > 1 %}
+        <button
+          class="
+            product-gallery--media-thumbnail
+            product-gallery--image-thumbnail
+          "
+          type="button"
+          tab-index="0"
+          aria-label="How To Find Paint Code Image Thumbnail"
+          data-gallery-thumbnail
+          data-gallery-index="{{ reordered_counter }}"
+          data-gallery-selected="false"
+          data-media="paint-code-finder-image"
+          data-media-type="image"
+        >
+          <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+            <img
+              src="{{ how_to_find_paint_code_reference | image_url: width: thumb_width, height: thumb_height }}"
+              class="product-gallery--media-thumbnail-img"
+              alt="Primary Image"
+            >
+          </span>
+        </button>
+        {% assign reordered_counter = reordered_counter | plus: 1 %}
+
+        {% assign first_image_skipped = true %}
+      {% endif %}
+
+      {% if additional_product_images != blank %}
+        {% for current_image in additional_product_images %}
+          {% if current_image == '' %}
+            {% continue %}
+          {% endif %}
+          {% assign file_url_current_image = current_image.preview_image %}
+          <button
+            class="
+              product-gallery--media-thumbnail
+              product-gallery--image-thumbnail
+            "
+            type="button"
+            tab-index="0"
+            aria-label="How To Find Paint Code Image Thumbnail"
+            data-gallery-thumbnail
+            data-gallery-index="{{ reordered_counter }}"
+            data-gallery-selected="false"
+            data-media="paint-code-finder-image"
+            data-media-type="image"
+          >
+            <span class="product-gallery--media-thumbnail-img-wrapper" tabindex="-1">
+              <img
+                src="{{ file_url_current_image | image_url: width: thumb_width, height: thumb_height }}"
+                class="product-gallery--media-thumbnail-img"
+                alt="Primary Image"
+              >
+            </span>
+          </button>
+          {% assign reordered_counter = reordered_counter | plus: 1 %}
+
+          {% assign first_image_skipped = true %}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% comment %} {% endif %} {% endcomment %}

@@ -1,0 +1,135 @@
+{% assign current_date = 'now' | date: '%B %d, %Y' %}
+<h1>{{ 'testimonials.title' | t }}</h1>
+<br>
+<div class="Review-Block">
+  <div class="row">
+    <div class="column border-right">
+      <br>
+      <h2>4.5/5</h2>
+      <small>{{ 'testimonials.overall_rating' | t }}</small>
+      <p>
+        <b>{{ 'testimonials.message_1' | t }}</b>
+        -David S.
+      </p>
+      <p><a href="https://www.trustpilot.com/review/partify.store"></a></p>
+      <u
+        ><a target="_blank" rel="noopener noreferrer" href="https://www.trustpilot.com/review/partify.store"
+          >TrustPilot, {{ current_date -}}
+        </a></u
+      ><br>
+      <br>
+
+      <a target="_blank" rel="noopener noreferrer" href="https://www.trustpilot.com/review/partify.store"
+        ><img
+          src="https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Trustpilot_Reviews_Partify.png?v=1709764082"
+          height="75"
+      ></a>
+    </div>
+
+    <div class="column border-right">
+      <hr>
+      <br>
+      <h2>4.9/5</h2>
+      <small>{{ 'testimonials.overall_rating' | t }}</small>
+      <p>
+        <b>{{ 'testimonials.message_2' | t }}</b>
+        -Mike S.
+      </p>
+      <u
+        ><a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://customerreviews.google.com/v/merchant?q=partifyusa.com&amp;c=US&amp;v=19&amp;hl=en"
+          >Google Reviews, {{ current_date -}}
+        </a></u
+      ><br>
+      <br>
+
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://customerreviews.google.com/v/merchant?q=partifyusa.com&amp;c=US&amp;v=19&amp;hl=en"
+        ><img
+          src="https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Google-Review-Logo.png?v=1709764368"
+          height="75"
+      ></a>
+    </div>
+
+    <div class="column">
+      <hr>
+      <br>
+      <h2>4.9/5</h2>
+      <small>{{ 'testimonials.overall_rating' | t }}</small>
+      <p>
+        <b>{{ 'testimonials.message_3' | t }}</b>
+        -Eugene I.
+      </p>
+      <u
+        ><a target="_blank" rel="noopener noreferrer" href="https://partifyusa.com/pages/reviews"
+          >Yotpo, {{ current_date -}}
+        </a></u
+      ><br>
+      <br>
+
+      <a target="_blank" rel="noopener noreferrer" href="https://partifyusa.com/pages/reviews"
+        ><img
+          src="https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Yotpo_Reviews_Logo.png?v=1709765979"
+          height="60"
+        >
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+    .Review-Block{
+    background:000000;
+    padding-bottom:30px;
+    width:100%;
+    display: inline-block;
+    overflow: none;
+    min-width: 100%;
+  margin: 0 auto;
+
+    }
+
+
+    .column {
+      float: left;
+      width: 33.333%;
+    text-align: center;
+
+    }
+    .column h2{
+    margin:0 auto;
+    text-align: center;
+    }
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+    padding:10px;
+      }
+    }
+
+    @media screen and (min-width: 600px){
+      .Review-Block hr{display: none;}
+    .border-right{
+    border-right: 1px solid black;
+    height:400px;
+
+    }
+    .column{padding-left:20px;padding-right: 20px;
+    }
+</style>
+{% schema %}
+{
+"name": "Site Review Columns",
+"settings": [],
+"presets": [
+{
+"name": "Site Review Columns",
+"category": "ADVANCED LAYOUT"
+}
+]
+}
+{% endschema %}

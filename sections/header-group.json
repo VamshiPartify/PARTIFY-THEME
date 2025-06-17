@@ -1,0 +1,115 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "static-announcement",
+      "disabled": true,
+      "settings": {
+        "show_announcement": true,
+        "homepage_announcement": false,
+        "announcement_text": "Attention: Our Phone lines are down—please contact us via email or live chat. Thanks for your patience!",
+        "announcement_text_mobile": "",
+        "announcement_link": "",
+        "announcement_color": "#000000",
+        "announcement_background": "#e5a210"
+      }
+    },
+    "utility-bar": {
+      "type": "static-utility-bar",
+      "settings": {
+        "use_full_width": true,
+        "background_color": "#0c1a94",
+        "link_color": "#ffffff",
+        "link_hover_color": "#ffffff",
+        "border_color": "#ffffff",
+        "menu": "blog-post-menu",
+        "show_menu_mobile": true,
+        "mobile_layout": "above",
+        "show_locale_selector": true,
+        "show_currency_selector": true,
+        "show_social_icons": true
+      }
+    },
+    "header": {
+      "type": "static-header",
+      "blocks": {
+        "multi_column_menu_PkfwEL": {
+          "type": "multi_column_menu",
+          "settings": {
+            "menu_trigger": "Front Bumpers"
+          }
+        },
+        "multi_column_menu_9w6PtE": {
+          "type": "multi_column_menu",
+          "settings": {
+            "menu_trigger": "Rear Bumpers"
+          }
+        },
+        "multi_column_menu_eQHWMJ": {
+          "type": "multi_column_menu",
+          "settings": {
+            "menu_trigger": "Fenders"
+          }
+        },
+        "multi_column_menu_L8aKtD": {
+          "type": "multi_column_menu",
+          "settings": {
+            "menu_trigger": "Tailgates"
+          }
+        },
+        "multi_column_menu_thpLcR": {
+          "type": "multi_column_menu",
+          "settings": {
+            "menu_trigger": "Hoods"
+          }
+        }
+      },
+      "block_order": [
+        "multi_column_menu_PkfwEL",
+        "multi_column_menu_9w6PtE",
+        "multi_column_menu_eQHWMJ",
+        "multi_column_menu_L8aKtD",
+        "multi_column_menu_thpLcR"
+      ],
+      "custom_css": [
+        "#HeaderMenu-MenuList-3 {min-width: 360px;}",
+        ".site-header-mobile-search-button {display: none;}"
+      ],
+      "settings": {
+        "sticky_header": true,
+        "full_width_header": true,
+        "logo": "shopify://shop_images/partifylogo_35beb9f9-a2bd-45b0-a72c-c2440aa56976.png",
+        "logo_height": 40,
+        "logo_width": 150,
+        "filter_search_by": "disabled",
+        "enable_live_search": true,
+        "show_mobile_search_bar": false,
+        "enable_live_search_images": true,
+        "quick_links": "",
+        "menu": "top-menu",
+        "secondary_menu": "",
+        "small_promo_heading": "",
+        "small_promo_text": "",
+        "small_promo_text_mobile": "",
+        "small_promo_link": "",
+        "small_promo_icon": "none",
+        "cart_icon": "icon-cart"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "utility-bar",
+    "header"
+  ]
+}

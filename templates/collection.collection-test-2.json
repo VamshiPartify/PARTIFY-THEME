@@ -1,0 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "15a95124-fa2c-4f51-ac0c-105f5675693d": {
+      "type": "apps",
+      "settings": {
+        "include_padding": true
+      }
+    },
+    "main": {
+      "type": "static-collection",
+      "blocks": {
+        "filter-1": {
+          "type": "filter",
+          "settings": {
+            "filter_option": "tag",
+            "filter_groups": "expand_all",
+            "show_filter_product_count": true,
+            "filter_style": "groups",
+            "filter_limit": "999",
+            "grid_categories": "",
+            "custom_ordered_categories": "Type",
+            "custom_ordered_tags": "",
+            "excluded_tags": "",
+            "excluded_groups": ""
+          }
+        }
+      },
+      "block_order": [
+        "filter-1"
+      ],
+      "custom_css": [
+        ".quickshop-button {display: none;}"
+      ],
+      "settings": {
+        "show_collection_image": false,
+        "products_per_page_range": 24,
+        "products_per_row": "4",
+        "sort_by": true,
+        "grid_list": true,
+        "default_view": "list-view",
+        "enable_subcollection": false,
+        "show_product_count": true,
+        "thumbnail_image": "product-image",
+        "image_crop": "original"
+      }
+    },
+    "static-recently-viewed": {
+      "type": "static-recently-viewed",
+      "disabled": true,
+      "settings": {
+        "enable_recently_viewed_products": true
+      }
+    }
+  },
+  "order": [
+    "15a95124-fa2c-4f51-ac0c-105f5675693d",
+    "main",
+    "static-recently-viewed"
+  ],
+  "wrapper": ".boost-sd__product-filter-fallback"
+}

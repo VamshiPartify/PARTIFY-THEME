@@ -1,0 +1,58 @@
+{% assign base_variant_inventory = 0 %}
+{% assign base_price = product_obj.variants.first.price %}
+{% assign any_available_options = false %}
+
+<!-- prettier-ignore -->
+{% for variant in product_obj.variants %}
+  {% if variant.title contains 'Unpainted' or variant.title contains 'Sin pintar' %}
+    {% assign base_variant_inventory = variant.inventory_quantity %}
+  {% endif %}
+
+  {% comment %} {% if variant.metafields.custom.hide_paint_code == true %}
+    {% continue %}
+  {% endif %} {% endcomment %}
+
+  {% if variant.title contains 'Custom Paint Code' %}
+    {% continue %}
+  {% endif %}
+
+  {% assign variant_price = variant.price %}
+  {% assign price_difference = variant_price | minus: base_price %}
+
+  {% assign variant_inventory = variant.inventory_quantity | default: 0 %}
+  {% assign extra_inventory = variant_inventory | minus: base_variant_inventory %}
+  {% if extra_inventory > 0 %}
+    {% assign has_extra_inventory = true %}
+  {% else %}
+    {% assign has_extra_inventory = false %}
+  {% endif %}
+
+  { 
+    "id": "{{ variant.id }}",
+    {% if variant.title contains 'Unpainted' and shop.locale == 'es' %}
+        "title": "Sin pintar +{{ price_difference | money }}",
+    {% elsif variant.title contains 'Custom Paint Code' and shop.locale == 'es' %}
+        "title": "Código de pintura personalizado (Te contactaremos) +{{ price_difference | money }}",
+    {% elsif variant.title contains 'Match Paint by VIN' and shop.locale == 'es' %}
+        "title": "Pintura de combinación por VIN +{{ price_difference | money }}",
+    {% else %}
+        "title": "{{ variant.title }} +{{ price_difference | money }}",
+    {% endif %}
+    "price": "{{ variant.price | money }}",
+    "priceDifference": "{{ price_difference }}",
+    "color": "{{- variant.metafields.custom.paint_preview_hex_code -}}",
+    "variantAvailable": "{{ variant.metafields.custom.hide_paint_code }}",
+    "variantTitle": "{{ variant.title }}",
+    "variantSku": "{{- variant.sku -}}",
+    "extraInventory": {{ extra_inventory }},
+    "baseInventory": {{ base_variant_inventory }},
+    "hasExtraInventory":{{ has_extra_inventory }},
+    "variantInventory": "{{ variant.inventory_quantity }}",
+    "productTitle": "{{- product_obj.title | escape -}}",
+    "productDescription": {{ product_obj.description | json }},
+    "matchPercentage": "{{- variant.metafields.custom.match_percentage -}}",
+    {% if variant.title contains 'Match Paint by VIN' %}
+        "class": "hidden-vin-option"
+    {% endif %}
+  },
+{% endfor %}

@@ -1,0 +1,49 @@
+{% if settings.asm_delivery_countdown == 'Enabled' %}
+	<!-- Advanced Shipping Manager Delivery Countdown -->
+	<link
+		rel="stylesheet"
+		href="{{ 'delivery-countdown.css' | asset_url }}"
+		media="print"
+		onload="this.media='all'"
+	  >
+	  <noscript>
+		<link rel="stylesheet" href="{{ 'delivery-countdown.css' | asset_url }}">
+	  </noscript>
+  
+      {% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
+	<div id="delivery-countdown-partify" class="delivery-countdown-hidden"  style="display: none;">
+		
+		<div id="dc-info-partify">
+			<div id="dc-incorrect-zip-message" style="display: none;">{{ 'asm_eta.eta_incorrect_zip_message' | t }}</div>
+			<div id="dc-top-partify">{{ 'asm_eta.eta_top_beg' | t }}&nbsp;<span id="dc-weekday-partify"></span>, <span id="dc-month-short-partify"></span> <span id="dc-day-partify"></span></div>
+			<div id="dc-bottom-partify">{{ 'asm_eta.eta_bottom_beg' | t }}&nbsp;<span id="dc-hours-partify"></span><span id="dc-hours-and">&nbsp;{{ 'asm_eta.eta_bottom_mid' | t }}&nbsp;</span><span id="dc-minutes-partify"></span><span id="dc-minutes-and">&nbsp;{{ 'asm_eta.eta_bottom_end' | t }}</span></div>
+			<div id="dc-details-info-partify"></div>
+			<div id='dc-location-wrapper-partify'>
+				<svg stroke="#334FB4" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 48c-79.5 0-144 61.39-144 137 0 87 96 224.87 131.25 272.49a15.77 15.77 0 0 0 25.5 0C304 409.89 400 272.07 400 185c0-75.61-64.5-137-144-137z"></path><circle cx="256" cy="192" r="48" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></circle></svg>
+				<div id="dc-ship-partify" onclick="toggleZipInput();">{{ 'asm_eta.eta_location' | t }}&nbsp;<span id="dc-zip-partify"></span>&nbsp;{{ 'asm_eta.eta_update_location' | t }}</div>
+			</div>
+
+		</div>
+		<div class="clear-both-partify"></div>
+	</div>
+
+	<!-- Placeholder (Shown Until Data Loads) -->
+	<div id="delivery-countdown-placeholder">
+         {% if product.variants.size > 1 %}
+      		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title' | t }}</div>
+         {% else %}
+      		<div class="skeleton-delivery-countdown countdown-skeleton-title"><span>{{ 'asm_eta.skeleton_title_beg' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_title_unpainted' | t }}</div>
+         {% endif %}
+        <div class="skeleton-delivery-countdown countdown-skeleton-text"><span>{{ 'asm_eta.skeleton_text_header_bold' | t }}</span>&nbsp;{{ 'asm_eta.skeleton_text_header' | t }}</div>
+	</div>
+
+	<div id="asm-ajax-partify"></div>
+	<script type="text/javascript">
+		try {
+			deliveryCountdown ('{{ shop.permanent_domain }}', '{{ product.variants.first.sku }}');
+		} catch (e) {
+			console.warn('Await deliveryCountdown...');
+		}
+    </script>
+	<!-- Advanced Shipping Manager Delivery Countdown -->
+	{% endif %}

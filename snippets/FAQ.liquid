@@ -1,0 +1,249 @@
+<div class="faq-container">
+  <!-- Title of the FAQ Section -->
+  <h2 class="faq-title">{{ 'FAQ.title' | t }}</h2>
+
+  <!-- Category Filter -->
+  <div class="faq-filter">
+    <label for="faq-category-filter">{{ 'FAQ.filter_title' | t }}&nbsp;</label>
+    <select id="faq-category-filter">
+      <option value="all">{{ 'FAQ.all_categories' | t }}</option>
+      {% assign category_list = '' %}
+      {% for faq in shop.metaobjects.faq.values %}
+        {% if faq.category.value != blank %}
+          {% assign category_list = category_list | append: faq.category.value | append: ',' %}
+        {% endif %}
+      {% endfor %}
+      
+      {% assign category_array = category_list | split: ',' | uniq %}
+      
+      {% for category in category_array %}
+        {% if category != blank %}
+          <option value="{{ category | downcase }}">{{ category }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- FAQ Items -->
+  {% assign sorted_faqs = shop.metaobjects.faq.values | sort: "order.value" %}
+  
+  <div class="collapsible-container">
+    {% for faq in sorted_faqs %}
+      <div class="faq-item" data-category="{{ faq.category.value | downcase }}">
+        <button class="collapsible">
+          <b>{{ faq.question.value }}</b>
+          <span class="collapsible-icon">+</span>
+        </button>
+        <div class="content">
+          <p>{{ faq.answer.value }}</p>
+          <!-- Display Category below the answer -->
+          <p class="faq-category">{{ 'FAQ.category' | t }}&nbsp;<span>{{ faq.category.value }}</span></p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  /* Container for the FAQ Section */
+  .faq-container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: transparent;
+  }
+
+  /* Title for FAQ */
+  .faq-title {
+    text-align: center;
+    color: #0C1A94;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  /* Category Filter Style */
+  .faq-filter {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .faq-filter label {
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+
+  .faq-filter select {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%; /* Make it full width on mobile */
+    max-width: 300px; /* Limit max width */
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Collapsible Container */
+  .collapsible-container {
+    margin-top: 20px;
+  }
+
+  /* Each FAQ Item */
+  .faq-item {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+  }
+
+  /* Button for Collapsible FAQ */
+  .collapsible {
+    background-color: #fff;
+    color: #0C1A94;
+    cursor: pointer;
+    padding: 15px 20px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.4s ease, padding 0.4s ease;
+    position: relative;
+    display: flex;
+    justify-content: space-between; /* Distribute space between title and icon */
+    align-items: center; /* Vertically center content */
+    flex-wrap: wrap; /* Allow text to wrap */
+  }
+
+  /* Max-width for the question text to prevent overlap */
+  .collapsible b {
+    max-width: 85%; /* Adjust this percentage as needed */
+    white-space: normal; /* Ensure the text wraps when needed */
+    word-wrap: break-word; /* Break long words if needed */
+  }
+
+  .collapsible:hover {
+    background-color: #ececec;
+  }
+
+  .collapsible.active {
+    background-color: #0C1A94;
+    color: white;
+  }
+
+  .collapsible-icon {
+    font-weight: bold;
+    font-size: 18px;
+    transition: transform 0.4s ease;
+    position: absolute;
+    right: 20px; /* Move icon to the right */
+  }
+
+  .collapsible.active .collapsible-icon {
+    transform: rotate(180deg);
+  }
+
+  /* Content inside collapsible */
+  .content {
+    padding: 15px 20px;
+    display: none;
+    overflow: hidden;
+    background-color: white;
+    border-top: 1px solid #ddd;
+    opacity: 0;
+    max-height: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+  }
+
+  .collapsible.active + .content {
+    display: block;
+    max-height: 500px;
+    opacity: 1;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .faq-title {
+      font-size: 1.6rem;
+    }
+
+    .collapsible {
+      font-size: 16px;
+      padding: 15px 20px;
+    }
+
+    .faq-filter select {
+      max-width: 100%;
+    }
+
+    .faq-item {
+      padding-bottom: 10px; /* Ensure proper spacing between collapsibles */
+    }
+
+    .collapsible-icon {
+      font-size: 20px;
+    }
+
+    .collapsible b {
+      max-width: 75%; /* Adjust text max-width for smaller screens */
+    }
+
+    .faq-category {
+      font-size: 0.8rem; /* Smaller font size for category */
+      color: #777; /* Light gray color */
+      margin-top: 10px;
+      font-style: italic; /* Make it look like a disclaimer */
+    }
+  }
+</style>
+
+<script>
+  // Function to close all collapsible tabs
+  function closeAllCollapsibles() {
+    const collapsibles = document.querySelectorAll('.collapsible');
+    collapsibles.forEach(button => {
+      button.classList.remove('active');
+      const content = button.nextElementSibling;
+      content.style.display = "none";
+      button.querySelector('.collapsible-icon').textContent = "+"; // Change icon to plus
+    });
+  }
+
+  // Collapsible Functionality
+  document.querySelectorAll('.collapsible').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('.collapsible-icon');
+
+      if (content.style.display === "block") {
+        content.style.display = "none";
+        icon.textContent = "+"; // Change icon to plus
+      } else {
+        content.style.display = "block";
+        icon.textContent = "−"; // Change icon to minus
+      }
+    });
+  });
+
+  // Filter FAQ by Category
+  const filterSelect = document.getElementById('faq-category-filter');
+  filterSelect.addEventListener('change', function() {
+    // Close all collapsibles first
+    closeAllCollapsibles();
+
+    const selectedCategory = this.value.toLowerCase();
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+      const itemCategory = item.getAttribute('data-category');
+
+      if (selectedCategory === 'all' || selectedCategory === itemCategory) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+</script>

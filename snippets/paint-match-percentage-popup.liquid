@@ -1,0 +1,248 @@
+<style>
+  body.no-scroll {
+    overflow: hidden !important;
+  }
+
+  #paint-match-percentage-message {
+    margin: 10px 0 20px;
+    font-size: 1.1em;
+    line-height: 1.8;
+    text-align: left;
+  }
+
+  #paint-match-percentage-message strong {
+    color: #007bff;
+  }
+
+  #paint-match-percentage-message span {
+    display: block;
+    color: #d9534f;
+    font-size: 1.1em;
+    text-align: center;
+  }
+
+  @media (max-width: 720px) {
+    #paint-match-percentage-message {
+      font-size: 1em;
+      line-height: 1.6;
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .paint-match-percentage-popup-overlay {
+    animation: fadeIn 0.5s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 99998;
+  }
+
+  @keyframes popIn {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .paint-match-percentage-popup-container {
+    animation: popIn 0.4s ease-in-out;
+    background-color: #fff;
+    color: #333;
+    max-width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+  }
+
+  @media (min-width: 720px) {
+    .paint-match-percentage-popup-container {
+      animation: popIn 0.4s ease-in-out;
+      background-color: #fff;
+      color: #333;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+    }
+  }
+
+  #paint-match-percentage-button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #paint-match-percentage-button-container button {
+    margin: 0 5px;
+    padding: 16px 10px 0 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    font-family: 'Lato', sans-serif;
+    text-decoration: underline;
+  }
+
+  #acknowledge-paint-mismatch-btn {
+    width: 100%;
+    background-color: unset;
+    color: #007bff;
+  }
+
+  #paint-swatch-link {
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 10px;
+    font-family: 'Lato', sans-serif;
+    width: 100%;
+    background-color: #007bff;
+    text-decoration: none;
+  }
+
+  #paint-swatch-link:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<div id="paint-match-percentage-popup" style="display: none;">
+  <div class="paint-match-percentage-popup-overlay">
+    <div class="paint-match-percentage-popup-container">
+      <p id="paint-match-percentage-message">
+        When it comes to painted body panels, it’s important to note that while we take great care to match the color to
+        your vehicle’s specifications, <strong>achieving a 100% perfect match can sometimes be challenging</strong>.
+        <br>
+        <br>
+        Factors like the <strong>age of your vehicle</strong>, <strong>exposure to sunlight</strong>, and
+        <strong>variations in manufacturing batches</strong> may cause differences in color or finish. <br>
+        <br>
+
+        <span style="font-weight: bold;">
+          For this paint code, we cannot guarantee a perfect match and strongly recommend purchasing a paint swatch
+          first.
+          {% comment %} <br><br> {% endcomment %}
+        </span>
+        {% comment %} We expect you to be aware that there may be a difference in shade. {% endcomment %}
+      </p>
+      {% assign associated_paint_swatch = product.vendor | downcase | replace: ' ', '-' %}
+      <a
+        type="button"
+        id="paint-swatch-link"
+        href="/products/{{ associated_paint_swatch }}-paint-swatch-sample"
+      >
+        View Available Paint swatches
+      </a>
+      <div id="paint-match-percentage-button-container">
+        <button id="acknowledge-paint-mismatch-btn">Continue Anyways</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    let receivedVariants = {};
+    document.addEventListener('variantsUpdated', function(event) {
+        receivedVariants = event.detail.variants
+    });
+
+  //Acknowledge that the paint will be mismatched popup
+  document.addEventListener('DOMContentLoaded', function () {
+    const productForm = document.getElementById('product-form');
+    const addToCartButton = document.querySelector('.add-to-cart');
+    const paintMatchPercentagePopup = document.getElementById('paint-match-percentage-popup');
+    const acknowledgeMismatch = document.getElementById('acknowledge-paint-mismatch-btn');
+    const variantSelectorForPaintMatchPercentage = document.getElementById('variant-selector');
+
+    const variantMatchPercentage = {};
+
+    {% comment %} function hideShopifyChat() {
+        const shopifyChat = document.getElementById('shopify-chat');
+        if (shopifyChat) {
+          shopifyChat.style.display = 'none';
+        }
+      }
+    
+    function showShopifyChat() {
+      const shopifyChat = document.getElementById('shopify-chat');
+      if (shopifyChat) {
+        shopifyChat.style.display = 'block';
+      }
+    } {% endcomment %}
+
+     {% for variant in product.variants %}
+        {% assign matchpercentage = variant.metafields.custom.match_percentage %}
+        {% assign swatchlink = variant.metafields.custom.associated_paint_swatch %}
+        variantMatchPercentage[{{ variant.id }}] = {
+            matchPercentage: "{{ matchpercentage | escape }}",
+            associatedSwatch: "{{ swatchlink | escape }}"
+        };
+    {% endfor %}
+
+    let scrollPosition = 0;
+
+    variantSelectorForPaintMatchPercentage.addEventListener('change', function() {
+        const selectedOption = variantSelectorForPaintMatchPercentage.options[variantSelectorForPaintMatchPercentage.selectedIndex];
+        const selectedLabel = selectedOption.label;
+
+        const extractedValue = selectedLabel.split(' ')[0];
+        const variantId = variantSelectorForPaintMatchPercentage.value;
+
+        if(receivedVariants.length) {
+            receivedVariants.forEach((variant) => {
+                if(variant.id === variantId) {
+                  if(variant.matchPercentage) {
+                    if(parseFloat(variant.matchPercentage) <= 95) {
+                        hideShopifyChat()
+                        paintMatchPercentagePopup.style.display = 'block';
+                        document.body.classList.add('no-scroll');
+                        document.body.style.top = `-${scrollPosition}px`;
+                    }
+                  }
+                }
+            })
+        } else {
+            let currentMatchPercentage = variantMatchPercentage[variantId];
+            const swatchLink = variantMatchPercentage[variantId];
+
+            if(currentMatchPercentage.length) {
+                document.getElementById('paint-swatch-link').href = swatchLink || "#";
+                
+                paintMatchPercentagePopup.style.display = 'block';
+                document.body.classList.add('no-scroll');
+                document.body.style.top = `-${scrollPosition}px`;
+            }
+        }
+    });
+
+    acknowledgeMismatch.addEventListener('click', function() {
+        showShopifyChat()
+        paintMatchPercentagePopup.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+        document.body.style.top = '';
+    });
+  });
+</script>

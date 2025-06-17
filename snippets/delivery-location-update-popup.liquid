@@ -1,0 +1,221 @@
+<style>
+    body.delivery-popup-no-scroll {
+        overflow: hidden !important;
+    }
+
+    #dc-alt-zip-holder-partify {
+      position: absolute;
+      color: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: start;
+      z-index: 99999;
+      font-family: Arial, sans-serif;
+    }
+
+    @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      
+      .delivery-location-popup-overlay {
+        animation: fadeIn 0.5s ease-out;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 99998;
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      
+      .delivery-location-popup-container {
+        animation: popIn 0.4s ease-in-out;
+        background-color: #fff;
+        color: #333;
+        max-width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        {% comment %} padding: 20px; {% endcomment %}
+      }
+
+      @media (min-width: 720px) {
+        .delivery-location-popup-container {
+          animation: popIn 0.4s ease-in-out;
+          background-color: #fff;
+          color: #333;
+          max-width: 400px;
+          border-radius: 10px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          {% comment %} padding: 20px; {% endcomment %}
+        }
+      }
+
+    .delivery-location-body-wrapper {
+        padding: 15px 20px 20px 20px;
+        text-align: start;
+    }
+
+    .delivery-location-header-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        height: fit-content;
+        background-color: #F0F2F2;
+        border-bottom: 1px solid #E0E0E0;
+        padding: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+      #delivery-location-message-h1 {
+        font-size: 20px;
+        line-height: 1.5;
+        margin: 0;
+        padding-left: 10px;
+      }
+
+    .delivery-location-close-btn {
+        cursor: pointer;
+    }
+
+      #delivery-location-message-h4 {
+        font-size: 16px;
+        line-height: normal;
+        margin: 0;
+        font-weight: 500;
+      }
+
+      #delivery-location-message-p {
+        font-size: 14px;
+        line-height: normal;
+        font-weight: 700;
+        margin-top: 20px;
+        margin-bottom: 5px;
+      }
+  
+      #delivery-location-message span {
+        font-size: 1.3em;
+        line-height: 1.7;
+      }
+      
+      #delivery-location-button-container {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      {% comment %} #delivery-location-button-container button {
+        {% comment %} margin: 0 5px; {% endcomment %}
+        {% comment %} padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s;
+        font-family: 'Lato', sans-serif; {% endcomment %}
+      } {% endcomment %}
+
+      #continue-shopping-btn {
+        width: 50%;
+        background-color: #007bff;
+        color: #fff;
+      }
+  
+      #continue-shopping-btn:hover {
+        background-color: #0056b3;
+      }
+  
+      #go-to-cart-btn {
+        background-color: #e0e0e0;
+        color: #333;
+        width: 50%;
+      }
+  
+      #go-to-cart-btn:hover {
+        background-color: #d5d5d5;
+      }
+</style>
+
+{% comment %} <script type="text/javascript" src="{{ 'delivery-countdown.js' | asset_url }}"></script> {% endcomment %}
+
+
+<div id="dc-alt-zip-holder-partify" style="display: none;">
+    <div class="delivery-location-popup-overlay">
+      <div class="delivery-location-popup-container">
+        <div class="delivery-location-header-wrapper">
+            <h1 id="delivery-location-message-h1">{{ 'asm_eta.eta_choose_location' | t }}</h1>
+            <div class="delivery-location-close-btn" onclick="toggleZipInput();">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="22px" width="22px" xmlns="http://www.w3.org/2000/svg"><path d="m289.94 256 95-95A24 24 0 0 0 351 127l-95 95-95-95a24 24 0 0 0-34 34l95 95-95 95a24 24 0 1 0 34 34l95-95 95 95a24 24 0 0 0 34-34z"></path></svg>
+            </div>
+        </div>
+        <div class="delivery-location-body-wrapper">
+            <h4 id="delivery-location-message-h4">{{ 'asm_eta.delivery_location_msg' | t }}</h4>
+            <p id="delivery-location-message-p">{{ 'asm_eta.enter_zip' | t }}</p>
+            <div id="delivery-location-button-container">
+                <input type="text" id="dc-alt-zip-partify" />
+                <button 
+                  id="dc-alt-zip-apply-partify" 
+                  onclick="deliveryRecalc(1); return false;"
+                  disabled
+                >
+                  {{ 'asm_eta.apply' | t }}
+                </button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const zipInput = document.getElementById("dc-alt-zip-partify");
+        const applyButton = document.getElementById("dc-alt-zip-apply-partify");
+  
+        zipInput.addEventListener('input', function(event) {
+            // Remove any non-numeric characters
+            this.value = this.value.replace(/\D/g, '').slice(0,5); 
+  
+            // Enable button only if exactly 5 digits are entered
+            applyButton.disabled = this.value.length !== 5;
+        });
+  
+        zipInput.addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+              event.preventDefault(); // Stop default form behavior
+              
+              if (this.value.length === 5) {
+                  applyButton.click(); // Simulate button click
+              }
+            }
+        });
+  
+        applyButton.addEventListener('click', function(event) {
+            // Prevent clicking the button if the ZIP isn't valid
+            if (zipInput.value.length !== 5) {
+                event.preventDefault(); // Stop button action
+            }
+        });
+    });
+  </script>
+  
+  

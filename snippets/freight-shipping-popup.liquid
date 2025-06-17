@@ -1,0 +1,133 @@
+<style>
+    body.no-scroll {
+        overflow: hidden !important;
+    }
+
+    #freight-item-popup{
+      position: absolute;
+      color: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      z-index: 99999;
+      font-family: Arial, sans-serif;
+    }
+
+    @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      
+      .freight-item-popup-overlay {
+        animation: fadeIn 0.5s ease-out;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 99998;
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      
+      .freight-item-popup-container {
+        animation: popIn 0.4s ease-in-out;
+        background-color: #fff;
+        color: #333;
+        max-width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+      }
+
+      @media (min-width: 720px) {
+        .freight-item-popup-container {
+          animation: popIn 0.4s ease-in-out;
+          background-color: #fff;
+          color: #333;
+          max-width: 400px;
+          border-radius: 10px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          padding: 20px;
+        }
+      }
+
+      #free-shipping-message {
+        margin: 5px 0 20px;
+        font-size: 1.1em;
+        line-height: 1.5;
+      }
+  
+      #free-shipping-message span {
+        font-size: 1.3em;
+        line-height: 1.7;
+      }
+      
+      #free-shipping-button-container {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #free-shipping-button-container button {
+        margin: 0 5px;
+        padding: 10px;
+        font-size: 1.1em;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s;
+        font-family: 'Lato', sans-serif;
+      }
+
+      #continue-shopping-btn {
+        width: 50%;
+        background-color: #007bff;
+        color: #fff;
+      }
+  
+      #continue-shopping-btn:hover {
+        background-color: #0056b3;
+      }
+  
+      #go-to-cart-btn {
+        background-color: #e0e0e0;
+        color: #333;
+        width: 50%;
+      }
+  
+      #go-to-cart-btn:hover {
+        background-color: #d5d5d5;
+      }
+</style>
+
+
+
+<div id="freight-item-popup" style="display: none;">
+    <div class="freight-item-popup-overlay">
+      <div class="freight-item-popup-container">
+        <p id="free-shipping-message"><span><b>🎉&nbsp;{{ 'freight_shipping_popup.congratulations' | t }}&nbsp;🎉</b></span><br>{{ 'freight_shipping_popup.message_first_part' | t }}&nbsp;<br><b>{{ 'freight_shipping_popup.no_additional_cost' | t }}</b><br>&nbsp;{{ 'freight_shipping_popup.message_second_part' | t }}</p>
+        <div id="free-shipping-button-container">
+          <button id="continue-shopping-btn">{{ 'freight_shipping_popup.continue_shopping' | t }}</button>
+          <button id="go-to-cart-btn">{{ 'freight_shipping_popup.go_to_cart' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>

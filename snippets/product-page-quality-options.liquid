@@ -1,0 +1,32 @@
+<style>
+  .product-type-dropdown select {
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    display: block;
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+    min-height: 45px;
+    height: 45px;
+    margin-bottom: 10px;
+  }
+  .product-type-dropdown {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .product-type-dropdown select[disabled] {
+    background-color: #f0f0f0;
+    color: #ccc;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+</style>
+
+<div class="product-type-dropdown">
+  {% comment %} {% render 'quality-options-select', is_only_oem: is_only_oem, is_no_quality_options: is_no_quality_options %} {% endcomment %}
+  {% render 'quality-options-radio-btns', is_only_oem: is_only_oem, is_no_quality_options: is_no_quality_options %}
+</div>

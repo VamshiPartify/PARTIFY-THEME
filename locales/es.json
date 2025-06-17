@@ -1,0 +1,1048 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "404": {
+    "general": {
+      "title": "Página no encontrada",
+      "text": "La página que estabas buscando no existe.",
+      "continue_shopping": "Continuar comprando"
+    }
+  },
+  "product": {
+    "variants": {
+      "choose_option": "Elija una {{ option }}",
+      "chosen_option_html": "{{ option }}: <span>{{ value }}</span>",
+      "choose_variant": "Elige una variante"
+    },
+    "general": {
+      "by_vendor": "por {{ vendor }}",
+      "by_vendor_html": "por {{ vendor_link }}",
+      "sku_html": "<strong>SKU</strong> <span data-product-sku>{{ sku }}</span>",
+      "customer_reviews_title": "Reseñas de clientes",
+      "zoom": "Haga clic o desplácese para acercar",
+      "zoomTap": "Pulse o apriete para acercar",
+      "zoomTapMobile": "Pulse para acercar",
+      "discounts": "Descuentos",
+      "select_variant": "Por favor seleccione una variante",
+      "price_per_unit_html": "{{ total_quantity }} | {{ unit_price }} / {{ unit_measure }}"
+    },
+    "media": {
+      "view_in_your_space": "Ver en tu espacio"
+    },
+    "buttons": {
+      "quick_shop": "Tienda rápida",
+      "add_to_cart": "Añadir al carrito",
+      "choose_options": "Elegir opciones",
+      "view_details": "Ver todos los detalles",
+      "sold_out": "Agotado",
+      "unavailable": "Indisponible",
+      "pre_order": "Hacer un pedido"
+    },
+    "status": {
+      "sold_out": "Agotado",
+      "availability": "Disponibilidad",
+      "in_stock": "{{ inventory_quantity }} en stock",
+      "in_stock_hidden": "En stock",
+      "in_stock_verbose": "{{ inventory_quantity }} en stock, listo para ser enviado",
+      "in_stock_threshold": "{{ inventory_quantity }}+ en stock",
+      "in_stock_threshold_verbose": "{{ inventory_quantity }}+ en stock, listo para ser enviado",
+      "low_stock": "¡Solo {{ inventory_quantity }} izquierda!",
+      "low_stock_hidden": "Stock bajo",
+      "no_stock": "Agotado",
+      "incoming_stock": "¡Mas en el camino!",
+      "pre_order": "Próximamente",
+      "continue_selling": "En stock"
+    },
+    "color_swatches": {
+      "swatches_count": {
+        "one": "{{ count }} color disponible",
+        "other": "{{ count }} colores disponibles"
+      }
+    },
+    "onboarding": {
+      "tab_title": "Descripción",
+      "tab_content": "Agregar una descripción del producto para compartir información sobre su producto."
+    },
+    "blocks": {
+      "request_quote": {
+        "email": "Correo electrónico",
+        "message": "Mensaje",
+        "name": "Nombre",
+        "request_message": "Un cliente ha solicitado una cita para {{ product_title }} - {{ product_url }}",
+        "request_message_empty": "Solicitud de cotización",
+        "success": "Gracias por contactarnos.Nos pondremos en contacto con usted lo antes posible.",
+        "submit": "Solicitud de cotización",
+        "quantity": "Cantidad"
+      }
+    }
+  },
+  "store_availability": {
+    "general": {
+      "in_stock": "En stock",
+      "out_of_stock": "Agotado",
+      "view_store_info": "Ver información de la tienda",
+      "check_other_stores": "Consultar disponibilidad en otras tiendas",
+      "available_for_pick_up_at_html": "Recogida disponible en <b>{{ location_name }}</b>",
+      "unavailable_for_pick_up_at_html": "Recolección no disponible actualmente en <b>{{ location_name }}</b>",
+      "available_for_pick_up_at_time_html": "Recogida disponible, {{ pick_up_time }}",
+      "unavailable_for_pick_up_at_time_html": "Recogida no disponible actualmente",
+      "kilometers": "km",
+      "miles": "mi"
+    }
+  },
+  "structured_data": {
+    "breadcrumbs": {
+      "cart": "Ver carrito",
+      "collections": "Colecciones",
+      "page": "Página {{ page }}",
+      "products": "Productos",
+      "search": "Buscar",
+      "tags_html": "Etiquetado \"{{ tags }}\""
+    }
+  },
+  "product_price": {
+    "price": {
+      "original": "Precio original",
+      "current": "Precio actual",
+      "range_html": "<span class=\"price--label\">desde</span> {{ price }}",
+      "price_per_unit_html": "{{total_quantity}} | {{unit_price}} / {{unit_measure}}",
+      "tax_line_html": " "
+    },
+    "badge": {
+      "sale_percentage_range_html": "Ahorre hasta <span data-price-percent-saved>{{ savings }}</span>%",
+      "sale_percentage_single_html": "Ahorre <span data-price-percent-saved>{{ savings }}</span>%",
+      "sale_money_range_html": "Ahorre hasta <span class=\"money\" data-price-money-saved>{{ savings }}</span>",
+      "sale_money_single_html": "Ahorre <span class=\"money\" data-price-money-saved>{{ savings }}</span>",
+      "sold_out": "Agotado",
+      "sale": "Oferta",
+      "pre_order": "Hacer un pedido"
+    }
+  },
+  "general": {
+    "language": {
+      "dropdown_label": "Idioma",
+      "submit_button_label": "Actualizar idioma"
+    },
+    "country": {
+      "dropdown_label": "País",
+      "submit_button_label": "País de actualización"
+    },
+    "breadcrumbs": {
+      "home": "Inicio",
+      "collections": "Colecciones"
+    },
+    "general": {
+      "email": "Correo electrónico",
+      "quantity": "Cantidad",
+      "see_more": "Ver más",
+      "see_less": "Ver menos"
+    },
+    "pagination": {
+      "prev": "Anterior",
+      "next": "Siguiente"
+    },
+    "title": {
+      "tags": " — Etiquetado \"{{ tags }}\"",
+      "page": " — Página {{ page }}",
+      "shop": " — {{ shop }}",
+      "product_compare": "Comparación de productos"
+    },
+    "newsletter": {
+      "subscribe": "Registrarse",
+      "placeholder": "Dirección de correo electrónico",
+      "success": "¡Gracias por registrarse!"
+    },
+    "share_buttons": {
+      "title": "Compartir esto:",
+      "title_short": "Compartir:"
+    },
+    "accessibility": {
+      "skip_to_content": "Ir a contenido",
+      "cart": "Ver carrito",
+      "menu": "Menú",
+      "rss": "RSS",
+      "search": "Buscar",
+      "search_results": "Buscar resultados para “{{ terms }}”",
+      "search_products": "Productos",
+      "swatch_options": "Opciones de {{swatch_trigger}} para {{product_title}}",
+      "swatches_toggle": "Alternar muestras",
+      "close": "Cerrar",
+      "nav_main": "Principal",
+      "nav_secondary": "Secundario",
+      "nav_sidebar": "Barra lateral",
+      "nav_footer": "Pie de página",
+      "nav_product_thumbnail": "miniatura",
+      "product_zoom_dialog": "Diálogo de zoom del producto",
+      "nav_collection_utilities": "Utilidades de la colección",
+      "nav_breadcrumbs": "Migas",
+      "social_media_icon": "Encuéntrenos en {{ platform }}",
+      "share_on_facebook": "Compartir en Facebook",
+      "share_on_pinterest": "Guardar en Pinterest",
+      "share_on_twitter": "Publicar en Twitter",
+      "share_on_linkedin": "Compartir en LinkedIn",
+      "no_matched_products": "{{ tag }} no tiene coincidencias de productos",
+      "total_reviews": "reseñas totales",
+      "star_review_text": "Revisar",
+      "star_reviews_text": "Reseñas",
+      "star_reviews_info": "{{ rating_value }} de {{ rating_max }} estrellas",
+      "increase_quantity": "Aumentar la cantidad por {{ increment }}",
+      "decrease_quantity": "Disminuir la cantidad por {{ increment }}"
+    },
+    "time": {
+      "clear": "Borrar lo visto recientemente",
+      "previous": "Usted vio recientemente",
+      "second": "segundo",
+      "seconds": "segundos",
+      "minute": "minuto",
+      "minutes": "minutos",
+      "hour": "hora",
+      "hours": "horas",
+      "ago": "hace"
+    }
+  },
+  "sections": {
+    "slideshow": {
+      "slideshow": "Diapositivas",
+      "slide_index": "Diapositiva {{ count }}",
+      "slide_counter": "Diapositiva {{ count }} de {{ total }}",
+      "next_slide": "La siguiente diapositiva",
+      "previous_slide": "Diapositiva anterior"
+    },
+    "shoppable-image": {
+      "onboarding": {
+        "product": "Producto",
+        "tooltip_link": "Ver el producto"
+      }
+    },
+    "countdown-timer": {
+      "days": "Días",
+      "hours": "Horas",
+      "minutes": "Minutos",
+      "seconds": "Segundos"
+    },
+    "complementary_product_block": {
+      "from": "De",
+      "now": "Ahora",
+      "price_per_unit_html": "{{ total_quantity }} | {{ unit_price }} / {{ unit_measure }}",
+      "view_details": "Ver el producto"
+    },
+    "pxs-newsletter": {
+      "form": {
+        "placeholder": "Dirección de correo electrónico",
+        "submit": "Suscribir",
+        "success": "¡Gracias por suscribirte!"
+      }
+    }
+  },
+  "recipient": {
+    "form": {
+      "checkbox_label": "Quiero enviar esto como regalo",
+      "email_label": "Correo electrónico del destinatario",
+      "email_placeholder": "Correo electrónico del destinatario *",
+      "error_message": "El correo electrónico no es válido",
+      "name_label": "Nombre del destinatario (opcional)",
+      "name_placeholder": "Nombre del destinatario (opcional)",
+      "message_label": "Mensaje (opcional)",
+      "message_placeholder": "Mensaje (opcional)",
+      "max_characters": "Máximo de {{ max_characters }} caracteres"
+    }
+  },
+  "age_gate": {
+    "form": {
+      "confirm": "Confirmar edad y proceder {{ shop }}",
+      "error": "El acceso a la tienda está limitado a adultos. {{ age }} y mayores.",
+      "day": "Día",
+      "month": "Mes",
+      "year": "Año",
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Puede",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "Octubre",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    }
+  },
+  "header": {
+    "account": {
+      "title": "Mi cuenta",
+      "login": "Ingresar",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "footer": {
+    "general": {
+      "copyright_html": "Propiedad artística © {{ year }} {{ shop_name }}.",
+      "follow_us": "Síganos"
+    }
+  },
+  "blog": {
+    "general": {
+      "empty_blog": "Lo siento, no hay artículos publicados para este blog.",
+      "read_more": "Leer ahora",
+      "see_more": "Ver más"
+    },
+    "article": {
+      "filed_in": "Archivado en:",
+      "previous_article": "Artículo anterior",
+      "next_article": "Siguiente artículo"
+    },
+    "comments": {
+      "title": "Comentario",
+      "name": "Su nombre",
+      "email": "Correo electrónico",
+      "message": "Mensaje",
+      "submit": "Publicar comentario",
+      "moderated": "Los comentarios deben ser aprobados antes de aparecer",
+      "success": "¡Lindo! Su comentario ha sido publicado con éxito.",
+      "success_moderated": "¡Lindo! Hemos recibido su comentario y se revisará en breve.",
+      "author_html": "{{ author }} - {{ date }}",
+      "leave_comment": "Deja un comentario",
+      "required_fields": "* Campos requeridos"
+    }
+  },
+  "cart": {
+    "general": {
+      "your_cart": "Tu carrito",
+      "continue_shopping": "Continuar comprando",
+      "price": "Precio",
+      "quantity": "Cantidad",
+      "checkout": "Verificar",
+      "update": "Actualizar carrito",
+      "subtotal": "Total parcial",
+      "enter_order_note": "Ingrese una nota de regalo o instrucciones especiales de entrega a continuación:",
+      "special_instructions": "Instrucciones especiales",
+      "tax_and_shipping": "Impuestos y envíos calculados al finalizar",
+      "taxes_and_shipping_policy_at_checkout_html": "Impuestos y <a href=\"{{ link }}\">envío</a> calculado al finalizar la compra",
+      "taxes_included_but_shipping_at_checkout": "Impuestos incluidos y envíos calculados al finalizar",
+      "taxes_included_and_shipping_policy_html": "Impuesto incluido. <a href=\"{{ link }}\">Envío</a> Calculado al finalizar la compra.",
+      "total_line_price": "Precio de línea total",
+      "cart_empty": "Tu carro esta vacío"
+    },
+    "shipping": {
+      "calculate_shipping": "Calcular el envío",
+      "hide_shipping_calculator": "Ocultar calculadora de envío",
+      "country": "País",
+      "province": "Provincia",
+      "zip": "Código postal / postal",
+      "calculating": "Calculador",
+      "multiple_rates": "Encontramos {{ number_of_rates }} Tarifas de envío disponibles para {{ address }}, a partir de {{ rate }}.",
+      "one_rate": "Encontramos una tarifa de envío disponible para {{ address }}.",
+      "no_rates": "Lo siento, no enviamos a este destino.",
+      "rate_value": "{{ rate_title }} en {{ rate }}",
+      "no_shipping_required": "Su carrito no requiere envío.",
+      "shipment_too_heavy": "Lo siento, pero este envío es demasiado pesado para enviar.",
+      "error_general": "Lo siento, no podemos calcular su envío en este momento."
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "phone": "Número de teléfono",
+      "message": "Mensaje",
+      "send": "Enviar",
+      "post_success": "Gracias por contactarnos. Nos pondremos en contacto con usted lo antes posible."
+    }
+  },
+  "customers": {
+    "forms": {
+      "address_1": "Dirección 1",
+      "address_2": "Dirección 2",
+      "cancel": "Cancelar",
+      "city": "Ciudad",
+      "company": "Empresa",
+      "country": "País",
+      "email": "Correo electrónico",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "password": "Contraseña",
+      "repeat_password": "Repetir contraseña",
+      "phone": "Teléfono",
+      "province": "Estado / Provincia",
+      "set_default": "Establecer predeterminada",
+      "submit": "Enviar",
+      "zip": "Código postal"
+    },
+    "account": {
+      "title": "Mi cuenta",
+      "order_history": "Historial de pedidos",
+      "order": "Hacer pedido",
+      "payment": "Pago",
+      "fulfillment": "Cumplimiento",
+      "total": "Total",
+      "default_address": "Dirección predeterminada",
+      "view_addresses": "Ver direcciones ({{ count }})",
+      "empty": "No tiene pedidos",
+      "new_address_link": "Añadir nueva dirección",
+      "logout": "Cerrar sesión"
+    },
+    "activate_account": {
+      "title": "Activar cuenta",
+      "submit": "Activar cuenta",
+      "decline_activation": "Rechazar invitación"
+    },
+    "addresses": {
+      "title": "Mis direcciones",
+      "addresses_list_title": "Direcciones",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "add_new_address": "Añadir nueva dirección",
+      "default_address_message": "Dirección predeterminada",
+      "set_default": "Establecer como dirección predeterminada",
+      "submit": "Añadir dirección",
+      "update": "Actualizar dirección",
+      "add_new_title": "Añadir nueva dirección",
+      "edit_existing_title": "Editar dirección"
+    },
+    "guest_login": {
+      "title": "Continuar como invitado",
+      "submit": "Continuar"
+    },
+    "login": {
+      "title": "Ingresar",
+      "forgot_password": "¿Olvidó su contraseña?",
+      "sign_in": "Iniciar sesión"
+    },
+    "new_customer": {
+      "title": "¿Cliente nuevo?",
+      "message": "Abra una cuenta para aprovechar el rastreo e historial de pedidos, así como formularios previamente llenados durante el proceso de pago en pedidos posteriores.",
+      "register": "Registrarse"
+    },
+    "order": {
+      "title": "Pedido {{ order_number }}",
+      "date": "Realizado el {{ date }}",
+      "cancelled": "Pedido cancelado el {{ date }}",
+      "cancelled_reason": "Motivo: {{ reason }}",
+      "billing_address": "Dirección de facturación",
+      "payment_status": "Estado del pago",
+      "shipping_address": "Dirección de envío",
+      "fulfillment_status": "Estado del cumplimiento",
+      "discount": "Descuento ({{ code }})",
+      "shipping": "Envío ({{ shipping_method }})",
+      "tax": "Impuesto ({{ title }} {{ rate }}%)",
+      "product": "Producto",
+      "item": "Artículo",
+      "sku": "SKU",
+      "price": "Precio",
+      "quantity": "Cantidad",
+      "total": "Total",
+      "fulfilled_at": "Completado {{ date }}",
+      "subtotal": "Subtotal",
+      "order_notes": "Notas del pedido",
+      "additional_notes": "Otras notas",
+      "back_to_account": "Volver a Cuenta",
+      "select_all_items": "Seleccionar todos los artículos",
+      "selected": "Seleccionados",
+      "product_missing": "Este producto ya no existe.",
+      "variant_missing": "Este variante ya no existe.",
+      "add_selected_items": "Agregar artículos seleccionados al carrito",
+      "atc_success": "¡Artículos agregados con éxito al carrito!"
+    },
+    "recover_password": {
+      "title": "Restablecer su contraseña",
+      "cancel": "Cancelar",
+      "subtitle": "Le enviaremos un correo electrónico para restablecer su contraseña.",
+      "success": "Le enviamos un correo electrónico con un enlace para actualizar su contraseña."
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "submit": "Crear",
+      "returning_customer": "¿Cliente registrado?",
+      "success": "Le enviamos un correo electrónico, haga clic en el enlace incluido para verificar su dirección de correo electrónico."
+    },
+    "reset_password": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Restablecer contraseña para {{ user }}",
+      "submit": "Recuperar contraseña"
+    }
+  },
+  "date_formats": {
+    "month_day_year": "%B %e, %Y",
+    "short_day_month_year": "%d %b, %Y"
+  },
+  "giftcard": {
+    "issued": {
+      "title_html": "¡Esta es su {{ value }} tarjeta de regalo por {{ shop }}!",
+      "subtext": "Su tarjeta de regalo",
+      "disabled": "Desactivado",
+      "expired": "Venció el {{ expiry }}",
+      "active": "Vence el {{ expiry }}",
+      "redeem_html": "Use este código en el proceso de pago para canjear su {{ value }} tarjeta de regalo",
+      "shop_link": "Empezar a comprar",
+      "print": "Imprimir esta tarjeta de regalo",
+      "remaining_html": "quedan {{ balance }}",
+      "add_to_apple_wallet": "Añadir a Apple Wallet"
+    }
+  },
+  "password": {
+    "general": {
+      "title": "Abrirá pronto"
+    },
+    "password_entry": {
+      "title": "Ingrese a la tienda utilizando la contraseña",
+      "password": "Contraseña",
+      "submit": "Enviar",
+      "store_owner": "¿Es el propietario de la tienda?",
+      "log_in": "Ingrese aquí."
+    },
+    "mailing_list": {
+      "your_email": "Su correo electrónico",
+      "submit": "Enviar"
+    },
+    "social": {
+      "follow_us": "Síganos allá afuera"
+    }
+  },
+  "product_grid": {
+    "filters": {
+      "title_count": {
+        "zero": "Filtros",
+        "other": "Filtros ({{ count }})"
+      },
+      "remove_filter": "Eliminar filtro",
+      "clear_all": "Limpiar todo"
+    },
+    "sort_by": {
+      "title": "Ordenar por"
+    },
+    "show_per_page": {
+      "title": "Mostrar"
+    },
+    "view_as": {
+      "title": "Ver como"
+    },
+    "no_results": {
+      "empty": "Esta colección está vacía",
+      "tags_empty": "No hay productos que coincidan con su búsqueda"
+    }
+  },
+  "add_to_cart_banner": {
+    "general": {
+      "product_added": "Agregado a su carrito:",
+      "sub_total": "Carro subtotal",
+      "view_cart_html": "Ver carrito ({{ count }})",
+      "checkout": "Verificar"
+    }
+  },
+  "search": {
+    "form": {
+      "cancel": "Cancelar",
+      "label": "Buscar",
+      "placeholder": "¿Qué está buscando?",
+      "filter_all": "Todas las categorías"
+    },
+    "general": {
+      "breadcrumbs_count": "{{ count }} {{ results }} para \"{{ terms }}\"",
+      "breadcrumbs_count_when_filtered": {
+        "zero": "No hay resultados para “{{ terms }}” en {{ category }}",
+        "one": "Un resultado para “{{ terms }}” en {{ category }}",
+        "other": "Resultados de la búsqueda de “{{ terms }}” in {{ category }} ({{ count }})"
+      },
+      "view_all_results": "Ver todos los resultados",
+      "view_all_products": "Ver todos los productos",
+      "no_search_performed": "Usar la barra de búsqueda de arriba para realizar una búsqueda.",
+      "no_results_title": "{{ count }} {{ results }} para \"{{ terms }}\". Verifique la ortografía o use una palabra o frase diferente.",
+      "results": {
+        "one": "resulta",
+        "other": "resultados"
+      },
+      "no_results_products_title_in_category": "No hay productos para \"{{terms}}\" en {{category}}.",
+      "no_more_results_products_title": "No hay más productos para “{{ terms }}”.",
+      "no_more_results_products_title_in_category": "No hay más productos para “{{ terms }}” en {{ category }}.",
+      "pages_title": "Páginas",
+      "posts_title": "Publicaciones"
+    },
+    "predictive_search": {
+      "suggestions": "Sugerencias",
+      "products_label": "Productos",
+      "pages_title": "Páginas",
+      "posts_title": "Publicaciones",
+      "pages_and_posts_title": "Páginas y Publicaciones",
+      "view_all_results": "Busque \"{{ terms }}\"",
+      "no_results": "No se encontraron resultados coincidentes.",
+      "products_title": "Productos"
+    }
+  },
+  "onboarding": {
+    "article": {
+      "title": "Título del artículo",
+      "author_name": "Nombre del autor"
+    },
+    "collection": {
+      "title": "Título de la colección"
+    },
+    "featured_collection": {
+      "title": "Colección",
+      "subtitle": "Ver todo"
+    },
+    "menu_list": {
+      "title": "Lista del menú",
+      "link_text": "Enlace"
+    },
+    "product": {
+      "title": "Título del producto",
+      "vendor": "Proveedor del producto",
+      "by_vendor": "por Proveedor del producto"
+    },
+    "twitter": {
+      "title": "Cuenta de Twitter",
+      "tweet_html": "¡Conecte su cuenta de Twitter para atraer clientes dentro y fuera de su sitio!",
+      "username": "nombre de usuario",
+      "time": "Hace 8 horas"
+    },
+    "page": {
+      "title": "Título de la página"
+    }
+  },
+  "product_compare": {
+    "compare": "Comparar",
+    "clear_all": "Borrar todos los productos",
+    "drawer_title": "Comparar productos",
+    "drawer_notification": {
+      "one": "Seleccione 2 o 3 artículos para comparar",
+      "other": "{{ count }} de 3 artículos seleccionados"
+    },
+    "drawer_notification_placeholder": {
+      "first": "Seleccione el primer artículo para comparar",
+      "second": "Seleccione el segundo artículo para comparar",
+      "third": "Seleccione el tercer elemento para comparar"
+    },
+    "card_placeholder_text": "Seleccione otro artículo para comparar",
+    "drawer_clear_all": "Limpiar todo",
+    "no_products_selected": "No hay productos seleccionados",
+    "vendor": "Vendedor",
+    "vendor_html": "{{ vendor_link }}",
+    "availability": "Disponibilidad",
+    "description": "Descripción",
+    "rating": "Reseñas de productos",
+    "breadcrumb": "Volver a {{ location }}",
+    "breadcrumb_generic": "atrás",
+    "remove": "Eliminar"
+  },
+  "pagefly": {
+    "products": {
+      "product": {
+        "regular_price": "Regular price",
+        "sold_out": "Sold out",
+        "unavailable": "Unavailable",
+        "on_sale": "Sale",
+        "quantity": "Quantity",
+        "add_to_cart": "Add to cart",
+        "back_to_collection": "Back to {{ title }}",
+        "view_details": "View details"
+      }
+    },
+    "article": {
+      "tags": "Tags:",
+      "all_topics": "All topics",
+      "by_author": "by {{ author }}",
+      "posted_in": "Posted in",
+      "read_more": "Read more",
+      "back_to_blog": "Back to {{ title }}"
+    },
+    "comments": {
+      "title": "Leave a comment",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "post": "Post comment",
+      "moderated": "Please note, comments must be approved before they are published",
+      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
+      "success": "Your comment was posted successfully! Thank you!",
+      "comments_with_count": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      }
+    },
+    "password_page": {
+      "login_form_message": "Enter store using password:",
+      "login_form_password_label": "Password",
+      "login_form_password_placeholder": "Your password",
+      "login_form_submit": "Enter",
+      "signup_form_email_label": "Email",
+      "signup_form_success": "We will send you an email right before we open!",
+      "password_link": "Enter using password"
+    }
+  },
+  "customer_accounts": {
+    "B2B": {
+      "account_information": {
+        "company_card_name_label": "Nombre de empresa",
+        "company_card_section_accessibility_label": "Compañía"
+      },
+      "addresses": {
+        "add_billing_address_button": "Agregar dirección de facturación",
+        "add_billing_address_section_accessibility_label": "Agregar dirección de facturación",
+        "add_shipping_address_button": "Agregar dirección de envío",
+        "add_shipping_address_section_accessibility_label": "Agregar dirección de envío",
+        "billing_address_card_title": "Dirección de Envio",
+        "cancel_adding_billing_address_accessibility_label": "Cancelar agregando la dirección de facturación",
+        "cancel_adding_shipping_address_accessibility_label": "Cancelar agregando dirección de envío",
+        "save_new_billing_address_accessibility_label": "Guardar dirección de facturación",
+        "save_new_shipping_address_accessibility_label": "Guardar dirección de envío",
+        "shipping_address_card_title": "Dirección de envío"
+      },
+      "draft_order_details": {
+        "draft_order_subtitle": "Confirmado {{date}} del pedido {{draftOrderName}}",
+        "loading": "Detalles del orden de carga",
+        "loading_finished_accessibility_message": "Los detalles del pedido se han cargado",
+        "order_timeline": {
+          "expand_events_accessibility_label": "Mostrar el borrador de detalles del pedido",
+          "expand_events_label": "Mostrar detalles",
+          "hide_events_accessibility_label": "Ocultar detalles del pedido",
+          "hide_events_label": "Ocultar detalles"
+        },
+        "payment_status": {
+          "canceled": {
+            "description": "No te acusaron.",
+            "title": "Pago cancelado"
+          },
+          "draft": {
+            "deposit": {
+              "due_later": "{{depositAmount}} Se deberá pagar cuando se confirme su pedido. El saldo se abonará en {{translatedName}} términos.",
+              "due_on_date": "{{depositAmount}} Se deberá pagar cuando se confirme su pedido. El saldo deberá pagarse el {{dueDate}}.",
+              "due_on_fulfillment": "{{depositAmount}} El pago se realizará al confirmar su pedido. El saldo restante se abonará al completarse el pedido.",
+              "due_on_receipt": "{{depositAmount}} Se deberá abonar al confirmar su pedido. El saldo restante se abonará posteriormente."
+            },
+            "description": "Los detalles del pago se deciden cuando se confirma el pedido.",
+            "in_review": {
+              "description": "Los detalles del pago se deciden cuando se confirma el pedido.",
+              "title": "Pago aún no vencido"
+            },
+            "submitted": {
+              "deposit": {
+                "due_later": "El equilibrio está en juego {{translatedName}} términos y vence el {{dueDate}}.",
+                "due_on_date": "El saldo debe pagarse el {{dueDate}}.",
+                "due_on_fulfillment": "El saldo se debe una vez que se cumplen todos los elementos en este orden.",
+                "due_on_receipt": "Recibirá una factura para el saldo restante.",
+                "title": "El pago se debe"
+              },
+              "description": "Envíe el pago para confirmar esta orden.",
+              "title": "Pagar para confirmar"
+            },
+            "title": "Pago aún no vencido"
+          },
+          "paid": {
+            "description": "Su pedido está completamente pagado.",
+            "title": "Pagado",
+            "title_with_date": "Pagado {{date}}"
+          },
+          "pay_now": "Pagar ahora",
+          "pay_now_accessibility_label": "Pagar ahora por el pedido {{orderName}}",
+          "pending": {
+            "banner_due": {
+              "one": "Su pago vence en {{count}} día",
+              "other": "Su pago vence en {{count}} días"
+            },
+            "banner_due_today": "Su pago vence hoy",
+            "banner_overdue": {
+              "one": "Su pago es {{count}} día de retraso",
+              "other": "Su pago es {{count}} días de retraso"
+            },
+            "description_authorized": "Su método de pago se cobrará en la fecha de vencimiento, o puede pagar ahora.",
+            "description_due_on_fulfillment": "El pago se debe una vez que se cumplen todos los artículos en este pedido.",
+            "description_due_on_fulfillment_partially_paid": "Esta orden se pagó parcialmente. Tienes un equilibrio restante. El pago se debe una vez que se cumplen todos los artículos en este pedido.",
+            "description_due_on_receipt": "Recibirá una factura cuando se debe el pago.",
+            "description_due_on_receipt_partially_paid": "Esta orden se pagó parcialmente. Tienes un equilibrio restante. Recibirá una factura cuando se debe el pago.",
+            "description_overdue": "Su pago llega tarde.",
+            "description_partially_paid": "Esta orden se pagó parcialmente. Tienes un equilibrio restante.",
+            "description_waiting_for_manual_payment": "Esta orden tiene un pago pendiente. El saldo se actualizará cuando se reciba el pago.",
+            "title": "Pago adeudado",
+            "title_due_on_fulfillment": "Pago adeudado en cumplimiento"
+          }
+        }
+      }
+    }
+  },
+    "quality_popup": {
+        "button_heading": "¿Necesita ayuda para elegir una calidad?",
+        "button_description": "Obtenga una mejor comprensión de las diferentes opciones.",
+        "heading": "¿No estás seguro de qué significa realmente la calidad?",
+        "subheading": "No te preocupes. Estamos aquí para ayudarte.",
+        "aftermarket_title": "Mercado de accesorios",
+        "aftermarket_description_header": "Las piezas de recambio ofrecen una alternativa económica para reparaciones de vehículos, proporcionando un ajuste y una funcionalidad confiables a un precio más asequible.",
+        "aftermarket_listitem_1_bold": "Solución asequible:",
+        "aftermarket_listitem_1": " Una opción económica que le ayuda a ahorrar sin comprometer la calidad esencial.",
+        "aftermarket_listitem_2_bold": "Ajuste confiable:",
+        "aftermarket_listitem_2": " Diseñado para alinearse estrechamente con los estándares OEM, asegurando un ajuste confiable y funcional.",
+        "aftermarket_listitem_3_bold": "Rendimiento diario:",
+        "aftermarket_listitem_3": " Diseñado para soportar reparaciones estándar y mantener una operación confiable del vehículo.",
+        "aftermarket_listitem_4_bold": "Valor excepcional:",
+        "aftermarket_listitem_4": " Combina ahorro de costos con un rendimiento sólido, ofreciendo una opción inteligente para la mayoría de las reparaciones.",
+        "capa_title": "CAPA",
+        "capa_description_header": "Las piezas certificadas CAPA cumplen o superan los estándares OEM, lo que garantiza reemplazos confiables y de alta calidad a un precio más asequible.",
+        "capa_listitem_1_bold": "Garantía de calidad:",
+        "capa_listitem_1": " Las piezas CAPA se prueban rigurosamente para cumplir o superar los estándares de rendimiento OEM.",
+        "capa_listitem_2_bold": "Ajuste exacto:",
+        "capa_listitem_2": " Diseñado para adaptarse perfectamente a su modelo de vehículo, al igual que las piezas OEM.",
+        "capa_listitem_3_bold": "Rentable:",
+        "capa_listitem_3": " Reemplazos asequibles sin comprometer la calidad o la seguridad.",
+        "capa_listitem_4_bold": "Seguridad certificada:",
+        "capa_listitem_4": " Las piezas CAPA pasan pruebas de seguridad y durabilidad para cumplir con los estándares de la industria.",
+        "oem_title": "OEM",
+        "oem_description_header": "Las piezas OEM están fabricadas por el mismo fabricante de su vehículo, lo que garantiza un ajuste perfecto.",
+        "oem_listitem_1_bold": "Ajuste exacto:",
+        "oem_listitem_1": " Hecho específicamente para su modelo, garantizando una instalación y rendimiento perfectos.",
+        "oem_listitem_2_bold": "Materiales de primera calidad:",
+        "oem_listitem_2": " Elaborado con materiales de alta calidad para mayor durabilidad y longevidad.",
+        "oem_listitem_3_bold": "Seguridad:",
+        "oem_listitem_3": " Cumple con los estándares de seguridad originales para su tranquilidad."
+    },
+    "paintcode_popup": {
+      "button_heading": "¿No estás seguro de cuál es tu código de pintura?",
+      "button_description": "Explora las diferentes formas en que puedes obtener tu código de pintura.",
+      "heading": "¿No estás seguro de cuál es tu código de pintura?",
+      "subheading": "No te preocupes. Estamos aquí para ayudarte.",
+      "two_tone_message_beg": "Usamos el código de pintura principal de su VIN. Para",
+      "two_tone_two_tone": "dos tonos",
+      "two_tone_mid": "vehículos, contacto",
+      "two_tone_message_bold": "info@partify.store",
+      "two_tone_message_end": "con su VIN.",
+      
+      "instructions_heading_is_make_found": "Hay dos formas principales de obtener un código de pintura.",
+      "instructions_is_make_found_listitem_1_beginning": "Seleccione la opción",
+      "instructions_is_make_found_listitem_1_vin_option": "Usar número de bastidor",
+      "instructions_is_make_found_listitem_1_mid": "para utilizar nuestro servicio gratuito",
+      "instructions_is_make_found_listitem_1_bold": "Servicio de descifrado de VIN.",
+      "instructions_is_make_found_listitem_1_end": "Simplemente ingrese su VIN y nos encargaremos de encontrar el código de pintura para usted.",
+      "instructions_is_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
+      "instructions_is_make_found_listitem_2_link": "estas instrucciones aquí.",
+    
+      "instructions_heading_is_excluded_make_found": "Hay dos formas principales de obtener un código de pintura.",
+      "instructions_is_excluded_make_found_listitem_1": "Simplemente ingrese su VIN y le responderemos con su código lo antes posible.",
+      "instructions_is_excluded_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
+      "instructions_is_excluded_make_found_listitem_2_link": "estas instrucciones aquí.",
+    
+      "instructions_heading_is_bumperdotcom_make_found": "Hay dos formas principales de obtener un código de pintura.",
+      "instructions_is_bumperdotcom_make_found_listitem_1_beginning": "Seleccione la opción",
+      "instructions_is_bumperdotcom_make_found_listitem_1_vin_option": "Usar número de bastidor",
+      "instructions_is_bumperdotcom_make_found_listitem_1_mid": "para utilizar nuestro servicio gratuito",
+      "instructions_is_bumperdotcom_make_found_listitem_1_bold": "Servicio de descifrado de VIN.",
+      "instructions_is_bumperdotcom_make_found_listitem_1_end": "Simplemente ingrese su VIN y nos encargaremos de encontrar el código de pintura para usted.",
+      "instructions_is_bumperdotcom_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
+      "instructions_is_bumperdotcom_make_found_listitem_2_link": "estas instrucciones aquí.",
+    
+      "instructions_heading_everything_else": "Hay dos formas principales de obtener un código de pintura.",
+      "instructions_everything_else_listitem_1": "Seleccione la opción",
+      "instructions_everything_else_listitem_vin_option": "Usar número de bastidor",
+      "instructions_everything_else_listitem_1_end": " para ingresar su VIN, el cual se adjuntará al pedido y lo usaremos para determinar el código de pintura.",
+      "instructions_everything_else_listitem_2_beginning": "puede encontrar el código de pintura de su vehículo usando",
+      "instructions_everything_else_listitem_2_link": "estas instrucciones aquí.",
+      "accordion_title_1": "Obtener el código de pintura con VIN",
+      "accordion_title_2": "Cómo encontrar el código de pintura"
+    },
+    "asm_eta": {
+      "skeleton_text_header_bold": "¿Lo necesitas rápido?",
+      "skeleton_text_header": "Envío acelerado disponible al finalizar la compra.",
+      "skeleton_title": "(Fecha de entrega disponible después de seleccionar una opción de pintura).",
+      "skeleton_title_unpainted": "(Fecha de entrega disponible después de seleccionar una calidad).",
+      "skeleton_title_beg": "Llega tan temprano como",
+      "eta_incorrect_zip_message": "Por favor, introduzca un código postal válido",
+      "eta_top_beg": "Llega tan temprano como",
+      "eta_bottom_beg": "Si se ordena dentro de",
+      "eta_bottom_mid": "horas y",
+      "eta_bottom_end": "minutos",
+      "eta_location": "Entregando a",
+      "eta_update_location": "- Actualizar ubicación",
+      "eta_choose_location": "Elige tu ubicación",
+      "delivery_location_msg": "Las opciones de entrega y las velocidades de entrega pueden variar según la ubicación.",
+      "enter_zip": "Introduzca un código postal de EE. UU.",
+      "apply": "Aplicar",
+      "applying": "Aplicando..."
+    },
+    "product_recommendations": {
+      "heading": "Más piezas para el",
+      "fits_the": "Se adapta a la:",
+      "might_also_like": "También te puede gustar"
+    },
+    "model_fitment": "Montaje del modelo",
+    "verify_fitment": "Año, marca y modelo",
+    "paint_options": {
+      "select_paint_options": "Seleccionar opciones de pintura",
+      "title": "Opciones de pintura",
+      "disabled_first_option": "Seleccionar código de pintura"
+    },
+    "quality_options": {
+      "title": "Opciones de calidad",
+      "disabled_first_option": "Seleccione Calidad",
+      "aftermarket_in_stock": "Mercado de accesorios",
+      "aftermarket_oos": "Mercado de accesorios (Agotado)",
+      "capa_in_stock": "CAPA",
+      "capa_oos": "CAPA (Agotado)",
+      "oem_in_stock": "OEM",
+      "oem_oos": "OEM (Agotado)"
+    },
+    "garage_changer": "CAMBIAR",
+    "garage": {
+      "title": "Mi garaje",
+      "subtitle": "Necesitamos más información para ayudarte a encontrar las piezas adecuadas para tu vehículo. Selecciona un vehículo para refinar los resultados.",
+      "browse_btn": "Explorar el catálogo",
+      "add_vehicle_btn": "Agregar vehículo",
+      "select_vehicle_title": "Seleccione su vehículo",
+      "or": "o",
+      "search_btn": "Buscar",
+      "failed_vin": "No se encontraron resultados. Pruebe con otro VIN.",
+      "placeholder": "Ingrese el número de bastidor",
+      "disclaimer": "Aviso legal: Introducir su VIN es una forma simplificada de indicar el año, la marca y el modelo. No utilizamos el VIN para verificar la compatibilidad. Utilice la información de compatibilidad del producto para solicitar las piezas correctas.",
+      "no_results": "No pudimos encontrar una coincidencia para este VIN.",
+      "use_YMM_dropdown": "Utilice los menús desplegables de año, marca y modelo para encontrar su vehículo.",
+      "enter_valid_characters": "Introduzca caracteres válidos. No se permiten caracteres especiales como I, O, Q ni ningún otro en los VIN.",
+      "exactly_17_characters": "El VIN debe tener exactamente 17 caracteres."
+    },
+    "collapsing_description": {
+      "description": "Descripción",
+      "capa_quality": "Calidad de Capa",
+      "headlight_washer_holes": "¿Qué son los orificios del lavafaros?",
+      "sensor_holes": "¿Qué son los agujeros de los sensores?",
+      "oem_part_numbers": "Números de piezas OEM",
+      "why_choose_capa": "¿Por qué elegir CAPA?",
+      "why_choose_oem": "¿Por qué elegir OEM?"
+    },
+    "parts_that_fit_your_vehicle": "Piezas que se adaptan a su vehículo",
+    "add_to_cart_text": "añadir a la cesta",
+    "unfolded_shipping": {
+      "bold": "Envío desplegado",
+      "message": "Este parachoques se envía desplegado. Listo para instalar en su vehículo de inmediato. Garantizamos que llegará sin daños. A diferencia de nuestros competidores, que lo pliegan agresivamente, lo que provoca deformaciones y grietas en la pintura."
+    },
+    "fitment_data": "Datos de ajuste",
+    "color_preview_label": "Vista previa de color",
+    "additional_fitment_details": "Detalles de ajuste adicionales",
+    "cart_customer_reviews_header": "Por qué le encantarán nuestros productos: opiniones de clientes",
+    "order_status_tracking": {
+      "title": "Seguimiento de su pedido",
+      "email_placeholder": "Correo electrónico",
+      "track_order": "Seguimiento de pedidos",
+      "order_details": "Detalles del pedido",
+      "awaiting_courier": "Esperando mensajero",
+      "ready_for_pickup": "Listo para ser recogido",
+      "packaged": "Empaquetado",
+      "painted": "Pintado",
+      "prepped_for_painting": "Preparado para pintar",
+      "ordered": "Ordenado",
+      "pending_completion": "Pendiente de finalización",
+      "TBD": "Por determinar",
+      "expand_for_details": "Expandir para más detalles",
+      "in_transit": "En tránsito",
+      "out_for_delivery": "En salida para entrega",
+      "delivered": "Entregado",
+      "completed": "Terminado",
+      "error_fetching": "Error al obtener los detalles del pedido.",
+      "cancelled_order": "Este pedido ha sido cancelado.",
+      "not_found": "Pedido no encontrado.",
+      "invalid_email": "El correo electrónico proporcionado no coincide con nuestros registros para este pedido."
+    },
+    "FAQ": {
+      "title": "Preguntas frecuentes",
+      "filter_title": "Filtrar por categoría:",
+      "all_categories": "Todas las categorías",
+      "category": "Categoría:"
+    },
+    "chat_widget": {
+      "message": "👋 ¡Hola! Contáctanos si tienes preguntas o quieres darnos una idea de lo que buscas. Con gusto te haremos recomendaciones.",
+    },
+    "blog_posts_title": "Publicaciones de blog",
+    "mismatch_color_msgs": {
+      "keep_color": "El color que seleccionaste es diferente al de los artículos que ya tienes en el carrito. ¿Quieres continuar con este color?",
+      "change_color": "El color que seleccionaste es diferente al de los artículos que ya tienes en el carrito. ¿Te gustaría cambiar a...?",
+      "just_notify": "El color que usted seleccionó es diferente del color de los artículos que ya están en su carrito.",
+      "yes": "Sí",
+      "no": "No",
+      "continue_anyway": "Continuar de todos modos",
+      "update_color": "Sí, actualizar color"
+    },
+    "vin_decoder_product_page": {
+      "first": "Usando el VIN:",
+      "end": "hemos determinado que el código de pintura de su vehículo es",
+      "auto_attach_msg_strong": "El VIN",
+      "will_be_attached": "se adjuntará a esta orden y",
+      "bold": "coincide con el código de pintura correcto",
+      "for_this_item": "para este articulo."
+    },
+    "freight_shipping_popup": {
+      "congratulations": "¡Felicidades!",
+      "message_first_part": "Acabas de añadir una pieza a tu carrito que se enviará por camión de carga. Cualquier otra pieza que añadas a tu carrito se enviará por",
+      "no_additional_cost": "¡SIN COSTO ADICIONAL!",
+      "message_second_part": "¡Aprovecha esta gran oferta hoy!",
+      "continue_shopping": "Seguir comprando",
+      "go_to_cart": "Ir al carrito"
+    },
+    "follow_us": "Síganos",
+    "testimonials": {
+      "title": "Lo que dicen nuestros clientes",
+      "overall_rating": "Calificación general",
+      "message_1": "“Siempre soy un poco escéptico al pedir piezas como esta por internet (guardabarros delantero para Nissan Rogue), pero como los talleres me cotizaban un precio de más de $1700, decidí arriesgarme. ¡Me alegro mucho de haberlo hecho! El guardabarros encajaba bien y el color combinaba a la perfección.”",
+      "message_2": "“Ford Escape 2012. Me sorprendió gratamente lo bien que le quedó este guardabarros al vehículo y lo bien que combinaba la pintura. Se ve genial. Además, lo enviaron a casa rapidísimo. ¡Excelente relación calidad-precio!”",
+      "message_3": "“La coincidencia de color fue increíblemente precisa. ¡¡¡99.9%!!! Creo que es una coincidencia de color del 100%. Compré el parachoques con certificación Capa, que es la única opción. El parachoques llegó desplegado y en perfecto estado, sin problemas con la pintura. ¡La pintura quedó increíble! No tuve ningún problema al colocarlo y quedó perfecto.”"
+    },
+      "fitment": "Mueble:",
+      "variant_instock_message": "Las opciones de pintura marcadas con 🚚 están prepintadas y se encuentran en nuestro estante, sin esperas ni complicaciones.",
+      "fitment_verification": {
+        "label": "Verificación de ajuste",
+        "yes": "Sí",
+        "no": "No",
+        "button_heading": "¿Tienes curiosidad por nuestra verificación de ajuste?",
+        "button_description": "Descubra cómo le aseguramos que obtendrá la pieza correcta.",
+        "modal_heading": "¿Tienes curiosidad por nuestra verificación de ajuste?",
+        "modal_subheading": "No te preocupes. Estamos aquí para ayudarte.",
+        "first_message": "Nuestro servicio de verificación de ajuste de VIN le brinda la seguridad de que está solicitando la pieza correcta para su vehículo.",
+        "point_1": "Analizaremos su VIN utilizando datos de fabricación OEM para confirmar el ajuste preciso para el año exacto, la marca, el modelo, el equipamiento y el paquete de opciones de su vehículo.",
+        "point_2": "Esta verificación adicional puede ayudarle a evitar retrasos y la frustración de recibir la pieza incorrecta. Es un paso adicional, pero le ahorrará tiempo, dinero y molestias.",
+        "point_3": "Al elegir la verificación de ajuste de VIN, Partify garantizará que la pieza que usted solicita se ajuste a su vehículo.",
+        "failed_3_times_message": "No pudimos validar su VIN. Puede comprar su pieza sin verificación de compatibilidad.",
+        "success": "VIN es válido",
+        "tailored_success_message": "VIN emparejado a un ",
+        "remaining_attempts": "Intentos restantes: ",
+        "fetching_vin_data": "Por favor espere mientras verificamos su VIN...",
+        "optional": "(Opcional)",
+        "description": "Asegúrese de la compatibilidad: proporcione el VIN para confirmar el ajuste."
+      },
+      "precision_match": {
+        "label": "Combinación de pintura de precisión",
+        "standard": "Igualación de pintura estándar",
+        "precision": "Combinación de pintura de precisión",
+        "button_heading": "¿Quieres una combinación de pintura aún mejor?",
+        "button_description": "Veamos cómo podemos lograr una mejor combinación.",
+        "modal_heading": "¿Cuál es la diferencia entre la pintura estándar y la de precisión?",
+        "modal_subheading": "Nuestro servicio de igualación de pintura de precisión garantiza que su pieza esté pintada lo más cerca posible de su color original.",
+        "first_message": "Tendrás dos opciones:",
+        "point_1_label": "Partido estándar:",
+        "point_1": "Utilizaremos una línea de pintura estándar y pintaremos su pieza sin realizar ajustes. Esto garantiza una igualación del 80-90%.",
+        "point_2_label": "Coincidencia de precisión:",
+        "point_2": "Utilizaremos una línea de pintura premium y pintaremos su pieza con los ajustes que determine su VIN. Con datos de fabricación del fabricante original, adaptamos la mezcla de pintura para que coincida exactamente con el color de su vehículo, con una coincidencia de hasta el 99 %.",
+        "final_message": "Este nivel adicional de precisión es ideal para los clientes que desean una combinación de colores perfecta, especialmente al reemplazar piezas en áreas visibles del vehículo."
+      },
+      "paint_options_radio_labels": {
+        "unpainted": "Sin pintar",
+        "selection": "Seleccionar código",
+        "VIN": "Usar número de bastidor",
+        "select_for_price": "Seleccionar por precio"
+      },
+      "quality_level_painted_stock": {
+        "aftermarket": "Mercado de accesorios",
+        "postfix": "disponemos de opciones de stock prepintado, sin esperas ni complicaciones.",
+        "and": "y"
+      },
+      "difficult_paint_messages": {
+        "oos_message": "Se sabe que es difícil lograr una coincidencia precisa con este código de pintura.",
+        "acceptance_msg": "Entiendo que este código de pintura puede no coincidir exactamente con el color de mi vehículo y acepto que es posible que haya alguna variación."
+      },
+      "policies_footer": {
+        "terms_of_service": "Términos de servicio",
+        "privacy_policy": "Política de privacidad",
+        "refund_policy": "Política de reembolso",
+      }
+    }
+

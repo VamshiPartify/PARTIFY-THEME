@@ -1,0 +1,82 @@
+{% schema %}
+{
+  "name": "Part Type Image Map",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "mapping",
+      "name": "Mapping",
+      "settings": [
+        {
+          "type": "text",
+          "id": "part_type",
+          "label": "Part Type"
+        },
+        {
+          "type": "text",
+          "id": "image_url",
+          "label": "Image URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50,
+  "presets": [
+    {
+      "name": "Part Type Image Map",
+      "blocks": [
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Front Bumper",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Front_Bumper_Collection_Image_a68e5640-99b6-4af9-bb2a-15517cd2fbe4.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Rear Bumper",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Rear_Bumper_Collection_Image_2b0f4c7d-5a6e-4b9c-8d0e-2f3a6d7c5f9b.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Hood",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Hood_Collection_Image_2b0f4c7d-5a6e-4b9c-8d0e-2f3a6d7c5f9b.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Passenger Side Fender",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Passenger_Side_Fender_Collection_Image_2b0f4c7d-5a6e-4b9c-8d0e-2f3a6d7c5f9b.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Driver Side Fender",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Driver_Side_Fender_Collection_Image_2b0f4c7d-5a6e-4b9c-8d0e-2f3a6d7c5f9b.jpg"
+          }
+        },
+        {
+          "type": "mapping",
+          "settings": {
+            "part_type": "Tailgate",
+            "image_url": "https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Painted_Tailgate_Collection_Image_2b0f4c7d-5a6e-4b9c-8d0e-2f3a6d7c5f9b.jpg"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% assign image_url = '' %}
+{% for block in section.blocks %}
+  {% if block.settings.part_type == type %}
+    {% assign image_url = block.settings.image_url %}
+    {% break %}
+  {% endif %}
+{% endfor %}
