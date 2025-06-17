@@ -808,7 +808,7 @@
     "disclaimer": "Disclaimer: Entering your VIN is a simplified way of submitting your year, make, and model. We do not use the VIN to verify fitment. Please use product fitment details for ordering the correct parts.",
     "no_results": "We couldn’t find a match for this VIN.",
     "use_YMM_dropdown": "Please use the year, make, model dropdowns to find your vehicle",
-    "enter_valid_characters": "Please enter valid characters. I, O, & Q and other special characters are not allowed in VINs.",
+    "enter_valid_characters": "Please enter valid characters. I, O, Q and other special characters are not allowed in VINs.",
     "exactly_17_characters": "VIN must be exactly 17 characters.",
   },
   "collapsing_description": {

@@ -183,6 +183,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       height: 45px;
+      font-size: 16px;
   }
 
   #vin-textbox-for-verification:disabled {
@@ -525,7 +526,7 @@
             document.getElementById('vin-textbox-for-verification').addEventListener('input', async function(event) {
                 const originalValue = event.target.value;
                 let vinInput = originalValue.toUpperCase();
-                const isRetryed = handleVinChange(event, 2);
+                const isRetryed = handleVinChange(event, 2, '{{ 'garage.enter_valid_characters' | t }}');
                 if(isRetryed) {
                     return;
                 }
