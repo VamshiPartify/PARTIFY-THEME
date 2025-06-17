@@ -1579,13 +1579,17 @@
             };
         
 
-            if(qualityTypeSelect) {
-              if(addToCartButtonForUnpaintedItems !== null) {
-                addToCartButtonForUnpaintedItems.addEventListener("click", function () {
-                    form.action = `/cart/add?id=${window.selectedVariantId}`;
-                });
-              }
+           if (qualityTypeSelect) {
+            if (addToCartButtonForUnpaintedItems !== null) {
+              addToCartButtonForUnpaintedItems.addEventListener("click", function () {
+                // Update the hidden input value
+                const hiddenInput = document.querySelector('.unpainted-add-to-cart-btn-container input[name="id"]');
+                if (hiddenInput) {
+                  hiddenInput.value = window.selectedVariantId;
+                }
+              });
             }
+          }
 
 
 
