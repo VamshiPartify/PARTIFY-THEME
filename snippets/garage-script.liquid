@@ -39,7 +39,7 @@
   .vehicle-selection-blurb {
     font-size: 14px;
     margin: 5px 0 10px 0;
-    color:#313131;
+    color: #313131;
     text-align: left;
   }
   .clear-garage {
@@ -131,341 +131,407 @@
 </style>
 
 {% comment %} GARAGE SCRIPT {% endcomment %}
+<!--
+  >
+  * Garage Script
+  *
+  * This script manages the "My Garage" feature for a vehicle selection UI, handling vehicle storage, UI updates, and user interactions.
+  *
+  * Modules:
+  *
+  * 1. GarageUtils
+  *    - Provides utility functions for interacting with localStorage to get/set search terms (vehicles) and fitment objects.
+  *      - getSearchTerms(): Retrieves the list of saved vehicles from localStorage.
+  *      - setSearchTerms(terms): Saves the list of vehicles to localStorage.
+  *      - getFitmentObject(): Retrieves the fitment object from localStorage.
+  *      - setFitmentObject(obj): Saves the fitment object to localStorage.
+  *
+  * 2. GarageUI
+  *    - Handles UI updates for vehicle selection and the garage popup.
+  *      - updateVehicleSelectionElement(firstSearchTerm): Updates the vehicle selection element in the header based on the selected vehicle.
+  *      - buildVehicleListHTML(searchTerms): Builds the HTML for the list of saved vehicles.
+  *      - renderGaragePopup(searchTerms, easyYMMContent): Renders the garage popup with the list of vehicles and the EasyYMM component.
+  *
+  * 3. GarageEvents
+  *    - Attaches event listeners for user interactions in the garage popup.
+  *      - attachEventListeners(): Handles add vehicle, delete vehicle, browse catalog, and clear garage actions.
+  *
+  * 4. GarageLogic
+  *    - Contains main logic for manipulating the garage data and updating the UI.
+  *      - removeVehicleFromLocalStorage(index): Removes a vehicle from localStorage and updates the UI.
+  *      - moveVehicleToFront(vehicleData): Moves a selected vehicle to the front of the list and updates localStorage.
+  *      - updateGaragePopup(searchTerms): Updates the garage popup UI and reattaches event listeners.
+  *
+  * Initialization:
+  * - On DOMContentLoaded, initializes the garage UI, sets fitment data if a vehicle is selected, renders the popup, and attaches event listeners.
+  *
+  * Usage:
+  * - Vehicles are stored in localStorage as search terms.
+  * - The fitment object is updated based on the selected vehicle.
+  * - Users can add, remove, or browse vehicles, and clear the entire garage.
+  *
+  * Dependencies:
+  * - Assumes presence of certain HTML elements (e.g., .easyYMM, .garage-easyYMM-popup-container).
+  * - Uses Liquid templating for translations and dynamic content.
+-->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const isMobile = window.matchMedia("(max-width: 900px)").matches;
-      const elementId = isMobile ? "vehicleSelection-mobile" : "vehicleSelection-desktop";
+  // Utility functions module
+  const GarageUtils = (() => {
+    function getSearchTerms() {
+      let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
+      // Migrate if needed
+      if (terms.length && typeof terms[0] === 'string') {
+        terms = terms.map((ymm) => ({ ymm, vin: null, paintCode: null }));
+        localStorage.setItem('searchTerms', JSON.stringify(terms));
+      }
+      return terms;
+    }
+    function setSearchTerms(terms) {
+      localStorage.setItem('searchTerms', JSON.stringify(terms));
+    }
+    function getFitmentObject() {
+      return JSON.parse(localStorage.getItem('easysearch-preselect-fitment'));
+    }
+    function setFitmentObject(obj) {
+      localStorage.setItem('easysearch-preselect-fitment', JSON.stringify(obj));
+    }
+    // New: add or update a vehicle object
+    function addOrUpdateVehicle({ ymm, vin = null, paintCode = null }) {
+      let terms = getSearchTerms();
+      const idx = terms.findIndex((obj) => obj.ymm === ymm);
+      if (idx > -1) {
+        terms[idx] = { ymm, vin, paintCode };
+      } else {
+        terms.unshift({ ymm, vin, paintCode });
+        if (terms.length > 5) terms.pop();
+      }
+      setSearchTerms(terms);
+      return terms;
+    }
+    return { getSearchTerms, setSearchTerms, getFitmentObject, setFitmentObject, addOrUpdateVehicle };
+  })();
+
+  // Main logic module
+  const GarageLogic = (() => {
+    function removeVehicleFromLocalStorage(index) {
+      let searchTerms = GarageUtils.getSearchTerms();
+      searchTerms.splice(index, 1);
+      GarageUtils.setSearchTerms(searchTerms);
+      if (index === '0') {
+        window.location.reload();
+      } else {
+        updateGaragePopup(searchTerms);
+      }
+    }
+
+    function moveVehicleToFront(vehicleData) {
+      let currentSearchTerms = GarageUtils.getSearchTerms();
+      // vehicleData can be a string (ymm) or an object
+      let ymm = typeof vehicleData === 'string' ? vehicleData : vehicleData.ymm;
+      const vehicleIndex = currentSearchTerms.findIndex((obj) => obj.ymm === ymm);
+      let vehicleObj =
+        vehicleIndex > -1
+          ? currentSearchTerms.splice(vehicleIndex, 1)[0]
+          : typeof vehicleData === 'object'
+          ? vehicleData
+          : { ymm, vin: null, paintCode: null };
+      currentSearchTerms.unshift(vehicleObj);
+      if (currentSearchTerms.length > 5) currentSearchTerms.pop();
+      GarageUtils.setSearchTerms(currentSearchTerms);
+      return currentSearchTerms;
+    }
+
+    function updateGaragePopup(searchTerms) {
+      const easyYMMElement = document.querySelector('.easyYMM');
+      GarageUI.renderGaragePopup(searchTerms, easyYMMElement);
+      GarageEvents.attachEventListeners();
+      // Hide easyYMM if there are still vehicles in the garage
+      if (searchTerms.length) {
+        const easyYMM = document.querySelector('.easyYMM');
+        if (easyYMM) easyYMM.style.display = 'none';
+      }
+    }
+
+    return { removeVehicleFromLocalStorage, moveVehicleToFront, updateGaragePopup };
+  })();
+
+  // UI update module
+  const GarageUI = (() => {
+    function updateVehicleSelectionElement(firstSearchTerm) {
+      const isMobile = window.matchMedia('(max-width: 900px)').matches;
+      const elementId = isMobile ? 'vehicleSelection-mobile' : 'vehicleSelection-desktop';
       const vehicleSelectionElement = document.getElementById(elementId);
       const selectedVehicleBtn = document.querySelector('.easyContainer.mobile #easyBtn');
-
-    
-      // Retrieve search terms and update the text content
-      let searchTerms = JSON.parse(localStorage.getItem("searchTerms"));
-
-      let firstSearchTerm = searchTerms && searchTerms.length ? searchTerms[0] : null;
       if (firstSearchTerm) {
-        // Split the firstSearchTerm into at most three parts: first two words and the rest
-        let fitmentParts = firstSearchTerm.split(" ");
-        let firstTwoParts = fitmentParts.slice(0, 2); // Get the first two parts
-        let remainingParts = fitmentParts.slice(2).join(" "); // Combine the rest into a single string
-        
-        // Join the parts with the delimiter, keeping the correct format
-        let fitmentValue = firstTwoParts.join("easysearch-preselect-delimiter");
-        if (remainingParts) {
-            fitmentValue += "easysearch-preselect-delimiter" + remainingParts;
+        if (selectedVehicleBtn) {
+          selectedVehicleBtn.style.backgroundColor = '#f1f1f1';
         }
-    
-        // Append the final delimiter to match the required format
-        fitmentValue += "easysearch-preselect-delimiter";
-    
-        // Generate an expiration timestamp (e.g., 7 days from now)
-        let expires = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-    
-        // Construct the JSON object to store
-        let fitmentObject = {
-            value: fitmentValue,
-            expires: expires.toString() // Convert timestamp to string
-        };
-    
-        // Save the JSON object to localStorage
-        localStorage.setItem("easysearch-preselect-fitment", JSON.stringify(fitmentObject));
-    }
-    
-      // Set the text content, adding "| Change" if there's a selected vehicle
-      if (firstSearchTerm) {
-        selectedVehicleBtn.style.backgroundColor = "#f1f1f1";
-        vehicleSelectionElement.outerHTML = `
+        // Try to update the ss_megamenu_title and related elements if they exist
+        const menuTitleEl = document.querySelector('.ss_megamenu_title');
+        if (menuTitleEl) {
+          menuTitleEl.textContent = firstSearchTerm;
+          // Also update or insert the change-divider and change-option
+          let divider = menuTitleEl.nextElementSibling;
+          if (!divider || !divider.classList.contains('change-divider')) {
+            divider = document.createElement('span');
+            divider.className = 'change-divider';
+            menuTitleEl.parentNode.insertBefore(divider, menuTitleEl.nextSibling);
+          }
+          divider.textContent = '|';
+          let changeOption = divider.nextElementSibling;
+          if (!changeOption || !changeOption.classList.contains('change-option')) {
+            changeOption = document.createElement('span');
+            changeOption.className = 'change-option';
+            divider.parentNode.insertBefore(changeOption, divider.nextSibling);
+          }
+          changeOption.textContent = "{{ 'garage_changer' | t }}";
+          changeOption.style.color = '#0c1a94';
+        } else if (vehicleSelectionElement) {
+          vehicleSelectionElement.outerHTML = `
         <span class="ss_megamenu_title">${firstSearchTerm}</span> 
         <span class="change-divider">|</span> 
         <span class="change-option">{{ 'garage_changer' | t }}</span>
-        `;
-        const changeOption = document.querySelector('.change-option');
-        if (changeOption) {
-            changeOption.style.color = "#0c1a94";
+      `;
+          const changeOption = document.querySelector('.change-option');
+          if (changeOption) {
+            changeOption.style.color = '#0c1a94';
           }
-      } else {
+        }
+      } else if (vehicleSelectionElement) {
         vehicleSelectionElement.textContent = "{{ 'garage.select_vehicle_title' | t }}";
         if (window.innerWidth < 900) {
-            vehicleSelectionElement.style.color = "#fff";
+          vehicleSelectionElement.style.color = '#fff';
         } else {
-            vehicleSelectionElement.style.color = "#334FB4";
+          vehicleSelectionElement.style.color = '#334FB4';
         }
       }
+    }
 
+    function buildVehicleListHTML(searchTerms) {
+      let vehicleListHTML = `<ul class="vehicle-list">`;
+      searchTerms.slice(0, 5).forEach((vehicle, index) => {
+        console.log('Building vehicle item for:', vehicle);
+        const isFirstVehicle = index === 0 ? 'first-vehicle-item-container' : '';
+        vehicleListHTML += `
+            <li class="vehicle-item">
+              <div class="vehicle-item-container ${isFirstVehicle}">
+                <div class="vehicle-browse-catalog-container">
+                  <strong data-vehicle="${vehicle.ymm}">${vehicle.ymm}</strong>
+                  <div style="font-size:12px;color:#888;">
+                    ${vehicle.vin ? 'VIN: ' + vehicle.vin + '<br>' : ''}
+                    ${vehicle.paintCode ? 'Paint: ' + vehicle.paintCode : ''}
+                  </div>
+                  <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
+                </div>
+                <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+              </div>
+            </li>
+          `;
+      });
+      vehicleListHTML += `</ul>`;
+      return vehicleListHTML;
+    }
 
-      const garagePopupContainer = document.querySelector(".garage-easyYMM-popup-container");
-      const easyYMMContent = document.querySelector(".easyYMM");
-      if (garagePopupContainer) {
-        let vehicleListHTML = `<ul class="vehicle-list">`;
-            if (searchTerms && searchTerms.length) {
-              searchTerms.slice(0, 5).forEach((vehicle, index) => {
-                {% comment %} let currentVehicle = vehicle
-                    ? vehicle
-                        .toLowerCase()
-                        .split(/(\s|-)/)
-                        .map(word => (word.match(/\s|-/) ? word : word.charAt(0).toUpperCase() + word.slice(1)))
-                        .join(' ')
-                    : null; {% endcomment %}
-                const isFirstVehicle = index === 0 ? 'first-vehicle-item-container' : ''; // Add this class to the first item
-                  vehicleListHTML += `
-                    <li class="vehicle-item">
-                        <div class="vehicle-item-container ${isFirstVehicle}">
-                            <div class="vehicle-browse-catalog-container">
-                                <strong data-vehicle="${vehicle}">${vehicle}</strong>
-                                <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
-                            </div>
-                            <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
-                        </div>
-                    </li>
-                    `;
-              });
-            }
-
-              vehicleListHTML += `</ul>`;
-            if (searchTerms && searchTerms.length) {
-                garagePopupContainer.innerHTML = `
-                <div class="garage-close-button" role="button">&times;</div>
-                <div class="select-your-vehicle-header" style="display: none;">
-                    <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
-                </div>
-                <div class="garage-block">
-                    <div class="my-garage-header">
-                    <h1>{{ 'garage.title' | t }}</h1>
-                    {% comment %} <button class="clear-garage">
-                        <h4>Clear All</h4>
-                    </button> {% endcomment %}
-                    </div>
-                    <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
-                    ${vehicleListHTML}
-                    </div>
-                    <button id="add-vehicle-btn">{{ 'garage.add_vehicle_btn' | t }}</button>
-                </div>
-                <div class="easyYMM">${document.querySelector(".easyYMM").innerHTML}</div>
-                `
-            } else {
-                garagePopupContainer.innerHTML = `
-                <div class="garage-close-button" role="button">&times;</div>
-                <div class="my-garage-header">
-                    <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
-                </div>
-                <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
-                <div>
-                ${easyYMMContent.outerHTML}
-                </div>
-              `
-              garagePopupContainer.style.paddingBottom = "0";
-              {% comment %} document.getElementById("vin-to-collection").style.padding = "10px 20px 10px 20px"; {% endcomment %}
-              {% comment %} document.getElementById("vin-to-collection").style.margin = "0"; {% endcomment %}
-              document.querySelector(".easyYMM").style.marginBottom = "15px";
-              const vinToCollection = document.getElementById("vin-to-collection-placeholder");
-              const vinToCollectionOr = document.getElementById("vin-to-collection-or");
-              const vinFormOr = `
-                <div style="display: flex; align-items: center; text-align: center; font-weight: 500; font-size: 14px; color: #555; background-color: #fff; margin: 0 16px;">
-                  <span style="flex: 1; border-bottom: 2px solid #ccc; margin: 0 20px;"></span>
-                  ${vinToCollectionOr.textContent.trim()}
-                  <span style="flex: 1; border-bottom: 2px solid #ccc; margin: 0 20px;"></span>
-                </div>
-              `;
-              vinToCollection.style.display = "block";
-              vinToCollectionOr.style.display = "flex";
-              {% comment %} garagePopupContainer.insertAdjacentHTML("beforeend", vinFormOr);
-              const vinForm = document.getElementById("vin-to-collection-placeholder").innerHTML;
-              garagePopupContainer.insertAdjacentHTML("beforeend", vinForm); {% endcomment %}
-            }
+    function renderGaragePopup(searchTerms, easyYMMContent) {
+      const garagePopupContainer = document.querySelector('.garage-easyYMM-popup-container');
+      if (!garagePopupContainer) return;
+      const vinToCollection = document.getElementById('vin-to-collection-placeholder');
+      const vinToCollectionOr = document.getElementById('vin-to-collection-or');
+      if (searchTerms.length) {
+        garagePopupContainer.innerHTML = `
+            <div class="garage-close-button" role="button">&times;</div>
+            <div class="select-your-vehicle-header" style="display: none;">
+              <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
+            </div>
+            <div class="garage-block">
+              <div class="my-garage-header">
+                <h1>{{ 'garage.title' | t }}</h1>
+                {% comment %} <button class="clear-garage">
+                  <h4>Clear All</h4>
+                </button> {% endcomment %}
+              </div>
+              <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
+              ${GarageUI.buildVehicleListHTML(searchTerms)}
+            </div>
+            <button id="add-vehicle-btn">{{ 'garage.add_vehicle_btn' | t }}</button>
+            <div class="easyYMM">${easyYMMContent.innerHTML}</div>
+          `;
+        if (vinToCollection) {
+          vinToCollection.style.display = 'none';
         }
-        const deleteButtons = document.querySelectorAll('.delete-trashbin');
-        const vehicleCatalogButtons = document.querySelectorAll('.browse-catalog-btn');
-        const addVehicleBtn = document.getElementById("add-vehicle-btn");
-        const easyYMMElement = garagePopupContainer.querySelector(".easyYMM");
-        const vinToCollection = document.getElementById("vin-to-collection-placeholder");
-        const vinToCollectionOr = document.getElementById("vin-to-collection-or");
-        const garageBlock = document.querySelector(".garage-block");
-        const selectYourVehicleHeader = document.querySelector(".select-your-vehicle-header");
-
-
-        const clearGarage = document.querySelector(".clear-garage");
-        if (searchTerms && searchTerms.length) {
-            easyYMMElement.style.display = "none";
+        if (vinToCollectionOr) {
+          vinToCollectionOr.style.display = 'none';
         }
+        garagePopupContainer.style.paddingBottom = '15px';
+      } else {
+        garagePopupContainer.innerHTML = `
+            <div class="garage-close-button" role="button">&times;</div>
+            <div class="my-garage-header">
+              <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
+            </div>
+            <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
+            <div>
+              ${easyYMMContent.outerHTML}
+            </div>
+          `;
+        garagePopupContainer.style.paddingBottom = '0';
+        document.querySelector('.easyYMM').style.marginBottom = '15px';
+        vinToCollection.style.display = 'block';
+        vinToCollectionOr.style.display = 'flex';
+      }
+    }
 
-        //Add vehicle button
-        if(addVehicleBtn) {
-            addVehicleBtn.addEventListener("click", function () {
-                easyYMMElement.style.display = "block";
-                addVehicleBtn.style.display = "none";
-                vinToCollection.style.display = "block";
-                vinToCollectionOr.style.display = "flex";
+    return { updateVehicleSelectionElement, buildVehicleListHTML, renderGaragePopup };
+  })();
 
-                garageBlock.style.display = "none";
-                selectYourVehicleHeader.style.display = "block";
-            });
-        }
+  // Event handlers module
+  const GarageEvents = (() => {
+    function attachEventListeners() {
+      const deleteButtons = document.querySelectorAll('.delete-trashbin');
+      const vehicleCatalogButtons = document.querySelectorAll('.browse-catalog-btn');
+      const addVehicleBtn = document.getElementById('add-vehicle-btn');
+      const easyYMMElement = document.querySelector('.easyYMM');
+      const vinToCollection = document.getElementById('vin-to-collection-placeholder');
+      const vinToCollectionOr = document.getElementById('vin-to-collection-or');
+      const garageBlock = document.querySelector('.garage-block');
+      const selectYourVehicleHeader = document.querySelector('.select-your-vehicle-header');
+      const clearGarage = document.querySelector('.clear-garage');
 
-        //Trash can buttons
-        deleteButtons.forEach(button => {
-          button.addEventListener('click', function(event) {
-            easyYMMElement.style.display = "none";
-            addVehicleBtn.style.display = "flex";
-            const index = event.currentTarget.getAttribute('data-index');
-            removeVehicleFromLocalStorage(index);
-          });
+      if (addVehicleBtn) {
+        addVehicleBtn.addEventListener('click', function () {
+          easyYMMElement.style.display = 'block';
+          addVehicleBtn.style.display = 'none';
+          vinToCollection.style.display = 'block';
+          vinToCollectionOr.style.display = 'flex';
+          garageBlock.style.display = 'none';
+          selectYourVehicleHeader.style.display = 'block';
         });
+      }
 
-        //Browse Catalog buttons
-        vehicleCatalogButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                const strongElement = event.currentTarget.closest('.vehicle-item').querySelector('strong');
-                const vehicleData = strongElement.getAttribute('data-vehicle');
-                let collectionHandle = vehicleData.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/--+/g, '-');
-                moveVehicleToFront(vehicleData);
-                window.location.href = `/collections/${collectionHandle}`;
-              });
-        })
+      deleteButtons.forEach((button) => {
+        button.addEventListener('click', function (event) {
+          easyYMMElement.style.display = 'none';
+          addVehicleBtn.style.display = 'flex';
+          const index = event.currentTarget.getAttribute('data-index');
+          GarageLogic.removeVehicleFromLocalStorage(index);
+        });
+      });
 
-        //Clear Garage
-        if(clearGarage) {
-            clearGarage.addEventListener("click", function() {
-                localStorage.setItem("searchTerms", JSON.stringify([]));  
-                let fitmentObject = JSON.parse(localStorage.getItem("easysearch-preselect-fitment"));
+      vehicleCatalogButtons.forEach((button) => {
+        button.addEventListener('click', function (event) {
+          const strongElement = event.currentTarget.closest('.vehicle-item').querySelector('strong');
+          const vehicleData = strongElement.getAttribute('data-vehicle');
+          let collectionHandle = vehicleData
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/--+/g, '-');
+          GarageLogic.moveVehicleToFront(vehicleData);
+          window.location.href = `/collections/${collectionHandle}`;
+        });
+      });
 
-                if (fitmentObject) {
-                    fitmentObject.value = "";
-                    localStorage.setItem("easysearch-preselect-fitment", JSON.stringify(fitmentObject));
-                }         
-                window.location.reload(); 
-            });
+      if (clearGarage) {
+        clearGarage.addEventListener('click', function () {
+          GarageUtils.setSearchTerms([]);
+          let fitmentObject = GarageUtils.getFitmentObject();
+          if (fitmentObject) {
+            fitmentObject.value = '';
+            GarageUtils.setFitmentObject(fitmentObject);
+          }
+          window.location.reload();
+        });
+      }
+    }
+    return { attachEventListeners };
+  })();
+
+  // Monitor changes to easysearch-preselect-fitment in localStorage
+  (function monitorFitmentObject() {
+    const FITMENT_KEY = 'easysearch-preselect-fitment';
+    let lastValue = localStorage.getItem(FITMENT_KEY);
+
+    // Patch setItem to detect changes in this tab
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key, value) {
+      originalSetItem.apply(this, arguments);
+      if (key === FITMENT_KEY) {
+        if (lastValue !== value) {
+          lastValue = value;
+          console.log('easysearch-preselect-fitment changed:', value);
         }
+      }
+    };
 
-
-        function removeVehicleFromLocalStorage(index) {
-            let searchTerms = JSON.parse(localStorage.getItem("searchTerms")) || [];
-            searchTerms.splice(index, 1);
-            localStorage.setItem("searchTerms", JSON.stringify(searchTerms));
-            if(index === "0") {
-                window.location.reload();
-            } else {
-                updateGaragePopup(searchTerms);
-            }
+    // Listen for changes from other tabs
+    window.addEventListener('storage', function (event) {
+      if (event.key === FITMENT_KEY) {
+        if (lastValue !== event.newValue) {
+          lastValue = event.newValue;
+          console.log('easysearch-preselect-fitment changed (other tab):', event.newValue);
         }
-
-        function moveVehicleToFront(vehicleData) {     
-            let currentSearchTerms = JSON.parse(localStorage.getItem("searchTerms")); 
-            const vehicleIndex = currentSearchTerms.indexOf(vehicleData);
-            
-            if (vehicleIndex > -1 && vehicleIndex !== 0) {
-                currentSearchTerms.splice(vehicleIndex, 1);
-                currentSearchTerms.unshift(vehicleData);
-              localStorage.setItem("searchTerms", JSON.stringify(currentSearchTerms));
-            }
-        }
-
-        function updateGaragePopup(searchTerms) {
-            const garagePopupContainer = document.querySelector(".garage-easyYMM-popup-container");
-            
-            if (searchTerms.length === 0) {
-                window.location.reload();
-            } else {
-                // Rebuild the vehicle list
-                let vehicleListHTML = `<ul class="vehicle-list">`;
-        
-                searchTerms.slice(0, 5).forEach((vehicle, index) => {
-                    const isFirstVehicle = index === 0 ? 'first-vehicle-item-container' : '';
-                    vehicleListHTML += `
-                        <li class="vehicle-item">
-                            <div class="vehicle-item-container ${isFirstVehicle}">
-                                <div class="vehicle-browse-catalog-container">
-                                    <strong data-vehicle="${vehicle}">${vehicle}</strong>
-                                    <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
-                                </div>
-                                <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
-                            </div>
-                        </li>
-                    `;
-                });
-        
-                vehicleListHTML += `</ul>`;
-                const garageCloseBtn = document.querySelector('.garage-close-button');
-                const firstChild = garagePopupContainer.firstChild;
-                garagePopupContainer.insertBefore(garageCloseBtn, firstChild);
-        
-                garagePopupContainer.innerHTML = `
-                <div class="garage-close-button" role="button">&times;</div>
-                <div class="select-your-vehicle-header" style="display: none;">
-                    <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
-                </div>
-                <div class="garage-block">
-                    <div class="my-garage-header">
-                        <h1>{{ 'garage.title' | t }}</h1>
-                        {% comment %} <button class="clear-garage">
-                            <h4>Clear All</h4>
-                        </button> {% endcomment %}
-                    </div>
-                    <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
-                    ${vehicleListHTML}
-                    <button id="add-vehicle-btn">{{ 'garage.add_vehicle_btn' | t }}</button>
-                </div>
-                `;
-                garagePopupContainer.appendChild(easyYMMElement);
-
-                // Reattach event listeners
-                attachGarageEventListeners();
-            }
-        }
-
-        function attachGarageEventListeners() {
-            const deleteButtons = document.querySelectorAll('.delete-trashbin');
-            const vehicleCatalogButtons = document.querySelectorAll('.browse-catalog-btn');
-            const addVehicleBtn = document.getElementById("add-vehicle-btn");
-            const clearGarage = document.querySelector(".clear-garage");
-            const easyYMMElement = document.querySelector(".easyYMM");
-            const vinToCollection = document.getElementById("vin-to-collection-placeholder");
-            const vinToCollectionOr = document.getElementById("vin-to-collection-or");
-            const garageBlock = document.querySelector(".garage-block");
-            const selectYourVehicleHeader = document.querySelector(".select-your-vehicle-header");
-        
-            // Add vehicle button
-            if (addVehicleBtn) {
-                addVehicleBtn.addEventListener("click", function () {
-                    easyYMMElement.style.display = "block";
-                    addVehicleBtn.style.display = "none";
-                    vinToCollection.style.display = "block";
-                    vinToCollectionOr.style.display = "flex";
-
-                    garageBlock.style.display = "none";
-                    selectYourVehicleHeader.style.display = "block";
-                });
-            }
-        
-            // Trash can buttons
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function (event) {
-                    easyYMMElement.style.display = "none";
-                    addVehicleBtn.style.display = "flex";
-                    const index = event.currentTarget.getAttribute('data-index');
-                    removeVehicleFromLocalStorage(index);
-                });
-            });
-        
-            // Browse Catalog buttons
-            vehicleCatalogButtons.forEach(button => {
-                button.addEventListener('click', function (event) {
-                    const strongElement = event.currentTarget.closest('.vehicle-item').querySelector('strong');
-                    const vehicleData = strongElement.getAttribute('data-vehicle');
-                    let collectionHandle = vehicleData.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/--+/g, '-');
-                    moveVehicleToFront(vehicleData);
-                    window.location.href = `/collections/${collectionHandle}`;
-                });
-            });
-        
-            // Clear Garage
-            if (clearGarage) {
-                clearGarage.addEventListener("click", function () {
-                    localStorage.setItem("searchTerms", JSON.stringify([]));
-                    updateGaragePopup([]);
-                });
-            }
-        }
-        
-        
+      }
     });
+
+    // Polling fallback for any other changes
+    setInterval(function () {
+      const currentValue = localStorage.getItem(FITMENT_KEY);
+      if (currentValue !== lastValue) {
+        lastValue = currentValue;
+        // Parse and extract productPageYMM
+        try {
+          const fitmentObj = JSON.parse(currentValue);
+          if (fitmentObj && fitmentObj.value) {
+            // Remove trailing delimiter, split, and join with spaces
+            let productPageYMM = fitmentObj.value
+              .replace(/easysearch-preselect-delimiter$/, '')
+              .split('easysearch-preselect-delimiter')
+              .join(' ');
+
+            let searchTerms = GarageLogic.moveVehicleToFront(productPageYMM);
+            GarageUI.updateVehicleSelectionElement(productPageYMM);
+            GarageLogic.updateGaragePopup(searchTerms);
+          }
+        } catch (e) {
+          // Ignore parse errors
+          console.error('Error parsing fitment object:', e);
+        }
+      }
+    }, 500);
+  })();
+
+  // Initialization
+  document.addEventListener('DOMContentLoaded', function () {
+    let searchTerms = GarageUtils.getSearchTerms();
+    let firstSearchTerm = searchTerms.length ? searchTerms[0].ymm : null;
+
+    // Fitment logic
+    if (firstSearchTerm) {
+      let fitmentParts = firstSearchTerm.split(' ');
+      let firstTwoParts = fitmentParts.slice(0, 2);
+      let remainingParts = fitmentParts.slice(2).join(' ');
+      let fitmentValue = firstTwoParts.join('easysearch-preselect-delimiter');
+      if (remainingParts) {
+        fitmentValue += 'easysearch-preselect-delimiter' + remainingParts;
+      }
+      fitmentValue += 'easysearch-preselect-delimiter';
+      let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
+      let fitmentObject = {
+        value: fitmentValue,
+        expires: expires.toString(),
+      };
+      GarageUtils.setFitmentObject(fitmentObject);
+    }
+
+    GarageUI.updateVehicleSelectionElement(firstSearchTerm);
+
+    const easyYMMContent = document.querySelector('.easyYMM');
+    GarageUI.renderGaragePopup(searchTerms, easyYMMContent);
+
+    if (searchTerms.length) {
+      document.querySelector('.easyYMM').style.display = 'none';
+    }
+
+    GarageEvents.attachEventListeners();
+  });
 </script>

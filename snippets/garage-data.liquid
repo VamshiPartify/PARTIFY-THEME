@@ -1,4 +1,14 @@
 <script>
+  /*
+      This script manages the storage of recent search terms in localStorage for a collection page.
+      - Checks if the current template is 'collection'.
+      - Compares the current collection title with the last stored search term and ensures it's not null.
+      - Validates that the collection title starts with four digits and contains at least three words.
+      - Initializes the 'searchTerms' array in localStorage if it doesn't exist.
+      - Adds the new search term to the beginning of the array if it's not already present.
+      - Limits the stored search terms to the five most recent entries.
+      - Updates localStorage with the new array of search terms.
+  */
     if('{{ template.name }}' === 'collection') {
         if({{ collection.title | json }} !== localStorage.getItem("searchTerms") && {{ collection.title | json }} !== null) {
             let newSearchTerm = {{ collection.title | json }};
@@ -11,17 +21,20 @@
                         localStorage.setItem("searchTerms", "[]");
                     }
 
-                    let oldSearchTerms = JSON.parse(localStorage.getItem("searchTerms"));
-                    if(!oldSearchTerms.includes(newSearchTerm)) {
-                        oldSearchTerms.unshift(newSearchTerm);
-                        if (oldSearchTerms.length > 5) {
-                            oldSearchTerms.pop();
-                        }
-
-                        localStorage.setItem("searchTerms", JSON.stringify(oldSearchTerms));
-                    }
+                    let oldSearchTerms = JSON.parse(localStorage.getItem("searchTerms")) || [];
+                  // Migrate if old format
+                  if (oldSearchTerms.length && typeof oldSearchTerms[0] === "string") {
+                      oldSearchTerms = oldSearchTerms.map(ymm => ({ ymm, vin: null, paintCode: null }));
+                  }
+                  if (!oldSearchTerms.some(obj => obj.ymm === newSearchTerm)) {
+                      oldSearchTerms.unshift({ ymm: newSearchTerm, vin: null, paintCode: null });
+                      if (oldSearchTerms.length > 5) {
+                          oldSearchTerms.pop();
+                      }
+                      localStorage.setItem("searchTerms", JSON.stringify(oldSearchTerms));
+                  }
                 }
             }
         }
     }
-  </script>
+</script>
