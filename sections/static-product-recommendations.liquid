@@ -1,135 +1,135 @@
 <style>
-/* Product Recommendations Section */
-.product-recommendations--container {
-  padding: 0;
-}
-
-/* Title of the Recommendations */
-.product-recommendations--title {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.horizontal-scroll-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-}
-
-/* Individual Product Item */
-.product-grid-item {
-  background-color: #fff;
-  padding: 0px 15px 0px 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align:center;
-  margin-bottom: 5px !important;
-  min-width: 175px;
-}
-
-.product-grid-item:hover {
-  {% comment %} transform: translateY(-5px); {% endcomment %}
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Product Image Styling */
-.product-grid-item img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 1px;
-}
-
-/* Links and Text Styling */
-.product-grid-item a,
-.product-grid-item p,
-.product-section--content .product-row a {
-  text-decoration: none !important;
-  color: inherit;
-  margin: 8px 0 8px 0 !important;
-  width: 100%;
-}
-
-/* Price Styling */
-.product-grid-item p:last-of-type {
-  font-size: 14px;
-  color: #1d1d1d;
-  text-align: center;
-}
-
-/* Product Image */
-.product-image {
-  width: 100%;
-  height: auto;
-  border-radius: 3px;
-}
-
-
-/* Recommended Price */
-.recommended-price{
-  font-size: 24px !important;
-  text-align: left !important;
-  color: #ea4335 !important;
-  font-weight: 600 !important;
-}
-
-/* Recommended Product Title */
-.rec-product-title {
-  font-size: 18px !important;
-  font-weight: 600;
-  text-align: left !important;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Product Fitment */
-.product-fitment {
-  font-size: 14px;
-  color: #666;
-  text-wrap: pretty;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 1440px) {
-  .product-row {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(225px, auto); /* Each item gets at least 175px */
-    gap: 15px;
-    list-style: none;
-    padding: 0 15px; /* Gives space on both ends */
-    margin: 0;
-    overflow-x: auto;
-  }
-}
-
-/* Horizontal scrolling grid */
-@media (min-width: 1441px) {
-  .product-row {
-    display: grid;
-    grid-auto-flow: column; /* Forces grid items to line up horizontally */
-    grid-auto-columns: minmax(225px, 1fr); /* Each item gets at least 175px */
-    gap: 20px;
-    list-style: none;
+  /* Product Recommendations Section */
+  .product-recommendations--container {
     padding: 0;
-    margin: 0;
   }
-}
 
-@media (max-width: 480px) {
-  {% comment %} .product-row {
-    grid-template-columns: 2fr;
-  } {% endcomment %}
+  /* Title of the Recommendations */
   .product-recommendations--title {
-    font-size: 20px;
-  }
-}
-  .yotpo.bottomLine {
-  margin-bottom: 0px !important;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
     text-align: center;
-}
+  }
+
+  .horizontal-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+
+  /* Individual Product Item */
+  .product-grid-item {
+    background-color: #fff;
+    padding: 0px 15px 0px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align:center;
+    margin-bottom: 5px !important;
+    min-width: 175px;
+  }
+
+  .product-grid-item:hover {
+    {% comment %} transform: translateY(-5px); {% endcomment %}
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Product Image Styling */
+  .product-grid-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 1px;
+  }
+
+  /* Links and Text Styling */
+  .product-grid-item a,
+  .product-grid-item p,
+  .product-section--content .product-row a {
+    text-decoration: none !important;
+    color: inherit;
+    margin: 8px 0 8px 0 !important;
+    width: 100%;
+  }
+
+  /* Price Styling */
+  .product-grid-item p:last-of-type {
+    font-size: 14px;
+    color: #1d1d1d;
+    text-align: center;
+  }
+
+  /* Product Image */
+  .product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+  }
+
+
+  /* Recommended Price */
+  .recommended-price{
+    font-size: 24px !important;
+    text-align: left !important;
+    color: #ea4335 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Recommended Product Title */
+  .rec-product-title {
+    font-size: 18px !important;
+    font-weight: 600;
+    text-align: left !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Product Fitment */
+  .product-fitment {
+    font-size: 14px;
+    color: #666;
+    text-wrap: pretty;
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 1440px) {
+    .product-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(225px, auto); /* Each item gets at least 175px */
+      gap: 15px;
+      list-style: none;
+      padding: 0 15px; /* Gives space on both ends */
+      margin: 0;
+      overflow-x: auto;
+    }
+  }
+
+  /* Horizontal scrolling grid */
+  @media (min-width: 1441px) {
+    .product-row {
+      display: grid;
+      grid-auto-flow: column; /* Forces grid items to line up horizontally */
+      grid-auto-columns: minmax(225px, 1fr); /* Each item gets at least 175px */
+      gap: 20px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    {% comment %} .product-row {
+      grid-template-columns: 2fr;
+    } {% endcomment %}
+    .product-recommendations--title {
+      font-size: 20px;
+    }
+  }
+    .yotpo.bottomLine {
+    margin-bottom: 0px !important;
+      text-align: center;
+  }
 </style>
 
 {% if section.settings.show_product_recommendations %}
@@ -141,27 +141,26 @@
     data-section-type="static-product-recommendations"
     data-section-id="{{ section.id }}"
     data-section-data
-    >
-  {
-    "settings": {
-      "limit": {{ product_limit }}
-    },
-    "productId": {{ product.id | json }},
-    "sectionId": {{ section.id | json }}
-  }
+  >
+    {
+      "settings": {
+        "limit": {{ product_limit }}
+      },
+      "productId": {{ product.id | json }},
+      "sectionId": {{ section.id | json }}
+    }
   </script>
 
   <section
     class="product-section--container product-row--container product-recommendations--container"
     data-html
     data-product-recommendations
->
+  >
     <div class="horizontal-scroll-wrapper">
       <ul id="dynamic-recommendations" class="product-section--content product-row">
         <!-- JavaScript dynamically injects recommendations here -->
       </ul>
     </div>
-  
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -169,8 +168,11 @@
 
         try {
           var searchTermsArray = JSON.parse(searchTermRaw);
+          // If array of objects, get ymm from first object
           var searchTerm = Array.isArray(searchTermsArray) && searchTermsArray.length > 0 
-            ? searchTermsArray[0] 
+            ? (typeof searchTermsArray[0] === 'object' && searchTermsArray[0] !== null && 'ymm' in searchTermsArray[0]
+                ? searchTermsArray[0].ymm
+                : searchTermsArray[0])
             : "";
         } catch (e) {
           var searchTerm = "";
@@ -490,15 +492,10 @@ function fetchShopifyDefaultRecommendations() {
     })
     .catch(error => console.log("Failed to fetch Shopify recommendations:", error));
 }
-
     </script>
 
- 
-
-  {% render 'quick-shop' %}
+    {% render 'quick-shop' %}
 {% endif %}
-
-
 
 {% schema %}
 {
