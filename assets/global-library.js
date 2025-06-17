@@ -32,7 +32,7 @@ async function updateGarageAndNavigate(handle) {
     functionLocation - 2 = Vin Verification
 */
 // Function to handle VIN change
-const handleVinChange = (event, functionLocation) => {
+const handleVinChange = (event, functionLocation, errorMsg) => {
   let vinInput = event.target.value.toUpperCase();
   const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
   const truncatedValue = filteredValue.slice(0, 17);
@@ -60,7 +60,7 @@ const handleVinChange = (event, functionLocation) => {
     }
 
     if (vinInput !== filteredValue) {
-      alert("{{ 'garage.enter_valid_characters' | t }}");
+      alert(errorMsg);
     }
   } else if (functionLocation === 2) {
     if (attemptedVinsVinVerification.length) {
@@ -83,7 +83,7 @@ const handleVinChange = (event, functionLocation) => {
     }
 
     if (vinInput !== filteredValue) {
-      alert("{{ 'garage.enter_valid_characters' | t }}");
+      alert(errorMsg);
     }
   }
 };
