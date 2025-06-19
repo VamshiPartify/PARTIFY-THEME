@@ -267,33 +267,38 @@
           selectedVehicleBtn.style.backgroundColor = '#f1f1f1';
         }
         // Try to update the ss_megamenu_title and related elements if they exist
-        const menuTitleEl = document.querySelector('.ss_megamenu_title');
+        let menuTitleEl = document.querySelector('.ss_megamenu_title');
         if (menuTitleEl) {
-          menuTitleEl.textContent = firstSearchTerm;
-          // Also update or insert the change-divider and change-option
-          let divider = menuTitleEl.nextElementSibling;
-          if (!divider || !divider.classList.contains('change-divider')) {
-            divider = document.createElement('span');
-            divider.className = 'change-divider';
-            menuTitleEl.parentNode.insertBefore(divider, menuTitleEl.nextSibling);
-          }
-          divider.textContent = '|';
-          let changeOption = divider.nextElementSibling;
-          if (!changeOption || !changeOption.classList.contains('change-option')) {
-            changeOption = document.createElement('span');
-            changeOption.className = 'change-option';
-            divider.parentNode.insertBefore(changeOption, divider.nextSibling);
-          }
-          changeOption.textContent = "{{ 'garage_changer' | t }}";
-          changeOption.style.color = '#0c1a94';
-        } else if (vehicleSelectionElement) {
-          vehicleSelectionElement.outerHTML = `
-        <span class="ss_megamenu_title">${firstSearchTerm}</span> 
-        <span class="change-divider">|</span> 
-        <span class="change-option">{{ 'garage_changer' | t }}</span>
-      `;
-          const changeOption = document.querySelector('.change-option');
-          if (changeOption) {
+          // On mobile, replace the whole container's innerHTML if parent is .vehicleSelection-mobile-select-your-vehicle
+          const mobileContainer = menuTitleEl.closest('.vehicleSelection-mobile-select-your-vehicle');
+          if (isMobile && vehicleSelectionElement) {
+            vehicleSelectionElement.outerHTML = `
+              <span class="ss_megamenu_title">${firstSearchTerm}</span>
+              <span class="change-divider">|</span>
+              <span class="change-option">{{ 'garage_changer' | t }}</span>
+            `;
+            const changeOption = document.querySelector('.change-option');
+            if (changeOption) changeOption.style.color = '#0c1a94';
+          } else {
+            // Desktop logic as before
+            menuTitleEl.textContent = firstSearchTerm;
+            // ... ensure divider/change-option as siblings ...
+            let divider = menuTitleEl.nextElementSibling;
+            if (!divider || !divider.classList.contains('change-divider')) {
+              divider = document.createElement('span');
+              divider.className = 'change-divider';
+              divider.textContent = '|';
+              menuTitleEl.parentNode.insertBefore(divider, menuTitleEl.nextSibling);
+            } else {
+              divider.textContent = '|';
+            }
+            let changeOption = divider.nextElementSibling;
+            if (!changeOption || !changeOption.classList.contains('change-option')) {
+              changeOption = document.createElement('span');
+              changeOption.className = 'change-option';
+              divider.parentNode.insertBefore(changeOption, divider.nextSibling);
+            }
+            changeOption.textContent = "{{ 'garage_changer' | t }}";
             changeOption.style.color = '#0c1a94';
           }
         }
