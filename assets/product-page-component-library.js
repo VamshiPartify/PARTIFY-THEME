@@ -14,7 +14,6 @@ const combinedVariantSelectLibrary = document.getElementById('variant-selector')
 const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
 const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
-const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
 const paintedStockKeyPaintLevelLibrary = document.querySelector('.painted-stock-key-paint-level');
 const paintedStockKeyQualityLevelLibrary = document.querySelector('.painted-stock-key-quality-level');
 const paintCodeAppContainerLibrary = document.getElementById('paintcode-app-container');
@@ -39,7 +38,6 @@ const qualityDescriptionBtnLibrary = document.getElementById('quality-descriptio
 const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
 const titleElementLibrary = document.querySelector('.product-title');
 const vinInputLibrary = document.querySelector('#vin-textbox');
-const vinTextBoxOEMLibrary = document.getElementById('vin-textbox-for-oem');
 const vinTextboxContainer = document.getElementById("vin-textbox-container");
 const vinVerificationCheckboxGroupLibrary = document.querySelector('.vin-verification-checkbox-group');
 const vinVerifyCheckbboxYesLibrary = document.getElementById('fitment-yes');
@@ -69,10 +67,12 @@ let autoSelectedOption = '';
 let selectedProductSku = '';
 let selectedProductColor = '';
 let selectedProductTitle = '';
+let selectedProductType = '';
 let productVariants = {};
 let amountOfVINPostMessages = 0;
 let amountOfOOSPaintVariants = 0;
 let currentAddToCartBtnLibrary;
+let isOnlyOEM = false;
 if (addToCartButtonLibrary) {
     currentAddToCartBtnLibrary = addToCartButtonLibrary;
 }
@@ -131,14 +131,6 @@ function disableQualityTypeSelect() {
 
 function disableQualityDescriptionBtn() {
     if (qualityDescriptionBtnLibrary) qualityDescriptionBtnLibrary.disabled = true;
-}
-
-function disableVINTextboxForOEM() {
-    if (vinTextBoxOEMLibrary) vinTextBoxOEMLibrary.disabled = true;
-}
-
-function hideVINTextboxForOEM() {
-    if (oemVinContainerLibrary && oemVinContainerLibrary.classList.contains("show")) oemVinContainerLibrary.classList.remove("show");
 }
 
 function disableCombinedVariantSelect() {
@@ -257,6 +249,14 @@ function clearOOSPaintCheckbox() {
     if (checkbox.checked === true) checkbox.checked = false;
 }
 
+function hideFitmentVerificationComponent(isBannedString) {
+    const vinGuaranteeContainer = document.querySelector('.vin-guarantee-container');
+    if (vinGuaranteeContainer && !vinGuaranteeContainer.classList.contains('hide')) {
+        vinGuaranteeContainer.classList.add('hide');
+    }
+    enableOrDisableAddToCartForOEM(isBannedString);
+}
+
 function hideVinVerificationTextbox() {
     if (vinVerificationWrapper && vinVerificationWrapper.classList.contains('show')) vinVerificationWrapper.classList.remove('show');
 }
@@ -304,10 +304,6 @@ function enableProductTypeSelect() {
 
 function enableQualityDescriptionBtn() {
     if (qualityDescriptionBtnLibrary) qualityDescriptionBtnLibrary.disabled = false;
-}
-
-function enableVINTextboxForOEM() {
-    if (vinTextBoxOEMLibrary) vinTextBoxOEMLibrary.disabled = false;
 }
 
 function enableCombinedVariantSelect() {
@@ -386,6 +382,10 @@ function enableVinVerificationBtns() {
 function showOOSPaintVariantsMsg() {
     const oosPaintVariantsLibrary = document.querySelector('.oos-paint-variants');
     if (oosPaintVariantsLibrary && !oosPaintVariantsLibrary.classList.contains('show')) oosPaintVariantsLibrary.classList.add("show");
+    // if the add to cart btn is enabled, disable it
+    if (currentAddToCartBtnLibrary && !currentAddToCartBtnLibrary.disabled) {
+        currentAddToCartBtnLibrary.disabled = true;
+    }
 }
 
 function showVinVerificationTextbox() {
@@ -401,6 +401,26 @@ function enableAddToCartButton() {
     if (addToCartStickyLibrary) addToCartStickyLibrary.disabled = false;
 }
 
+
+// Enable or Disable
+
+// finalVinVerificationSubmissionVin: This is the VIN that is submitted for verification, if it exists.
+function enableOrDisableAddToCartForOEM(finalVinVerificationOrBanned) {
+    if (!vinDecoderJustUsed) {
+        if ((selectedProductType === 'oem' || isOnlyOEM) && finalVinVerificationOrBanned === '') {
+            disableAddToCartButton();
+        } else if ((selectedProductType === 'oem' || isOnlyOEM) && finalVinVerificationOrBanned !== '' && !successfulVinVerificationVin) {
+            // disable add to cart if vin verification failed three times and OEM has been selected
+            disableAddToCartButton();
+        } else {
+            enableAddToCartButton();
+        }
+    } else if (vinDecoderJustUsed && finalVinVerificationOrBanned === 'ISBANNED') {
+        disableAddToCartButton();
+    } else {
+        enableAddToCartButton();
+    }
+}
 
 /*******************************************************************************************************
 **                                                                                                    **
@@ -703,11 +723,6 @@ function resortToGetPaintCodeByVin(eventVin, eventMatchByVIN) {
     const vin = eventVin;
     let hiddenDiv;
     storedDecodedVin = vin;
-
-    if (vinTextBoxOEMLibrary && vinTextBoxOEMLibrary.value.length) {
-        vinTextBoxOEMLibrary.value = "";
-        hideVINTextboxForOEM();
-    }
 
     if (amountOfVINPostMessages > 0 && eventMatchByVIN === false) {
         return;

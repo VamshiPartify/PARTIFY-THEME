@@ -72,48 +72,11 @@
     cursor: not-allowed;
   }
 
-    .oem-vin-container {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
-    }
-
-    .oem-vin-container.show {
-      opacity: 1;
-      margin-top: 10px;
-      max-height: fit-content;
-    }
-
     .option-title-vin {
       font-size: 1.2rem;
       font-weight: 800;
       margin-bottom: 3px;
       color: #333;
-    }
-    #vin-textbox-container-for-oem {
-      width: 100%;
-      margin-bottom: 10px;
-      margin-top: 2px;
-    }
-
-    #vin-textbox-container-for-oem input {
-      margin: 0;
-    }
-
-    #vin-textbox-for-oem {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      height: 45px;
-      min-height: 45px;
-    }
-
-    #vin-warning-for-oem {
-      color: red;
-      font-size: 14px;
-      margin-top: 5px;
     }
 
     .vin-input-wrapper {
@@ -283,41 +246,8 @@
       {% endif %}
     {% endif %}
   </div>
-  <div class="oem-vin-container">
-    <label class="option-title-vin" for="quality-type-select">VIN</label>
-    <div id="vin-textbox-container-for-oem">
-      <input
-        type="text"
-        id="vin-textbox-for-oem"
-        name="properties[Vin]"
-        placeholder="Enter your VIN"
-        maxlength="17"
-        autocomplete="off"
-        autocapitalize="characters"
-        inputmode="latin"
-      >
-      <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-    </div>
-  </div>
   <div class="quality-description-container">
     {% render 'quality-description-modal', qualityTypes: available_product_types %}
-  </div>
-{% elsif is_only_oem == true and is_no_quality_options == false %}
-  <div class="oem-vin-container show" style="display: block;">
-    <label class="option-title-vin" for="quality-type-select">VIN</label>
-    <div id="vin-textbox-container-for-oem">
-      <input
-        type="text"
-        id="vin-textbox-for-oem"
-        name="properties[Vin]"
-        placeholder="Enter your VIN"
-        maxlength="17"
-        autocomplete="off"
-        autocapitalize="characters"
-        inputmode="latin"
-      >
-      <p id="vin-warning-for-oem" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-    </div>
   </div>
 {% endif %}
 
@@ -328,10 +258,8 @@
     const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
     const asmSettings = document.getElementById('asm-settings');
     const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === 'Enabled';
-    const oemVinContainer = document.querySelector('.oem-vin-container');
     const vinTextBoxForPaintOption = document.getElementById('vin-textbox');
     const selectVinVariantButton = document.getElementById('select-vin-variant');
-    const vinTextBoxForOEM = document.getElementById('vin-textbox-for-oem');
     const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}'
     const titleElement = document.querySelector('.product-title');
     const productPartDescription = document.querySelector('.product-description-collapsible-text');
@@ -381,9 +309,10 @@ function updatePriceDisplay(selectedType) {
     function handleVINUIChanges(selectedType) {
       const container = document.querySelector('.vin-options-container');
       const vinMessageParagraph = document.querySelector('.vin-decoder-message');
+      const vinVerificationOptional = document.querySelector('.fitment-verification-optional');
 
       // Vin Decoder hasn't been used -- reset the paint options vin textbox
-      if (!vinMessageParagraph && combinedVariantSelect && vinTextBoxForPaintOption) {
+      if (!vinMessageParagraph && combinedVariantSelect && vinTextBoxForPaintOption && !autoSelectedBanned) {
         vinTextBoxForPaintOption.value = '';
         vinTextBoxForPaintOption.style.display = 'none';
       }
@@ -391,22 +320,14 @@ function updatePriceDisplay(selectedType) {
       if (selectVinVariantButton) selectVinVariantButton.style.display = 'block';
 
       if (selectedType === 'oem') {
-        if (!vinDecoderJustUsed) {
-          oemVinContainer.classList.add('show');
-        }
-        if (container) container.style.display = 'none';
+        if(vinVerificationOptional) vinVerificationOptional.style.display = 'none';
       } else {
-        oemVinContainer.classList.remove('show');
-        if (container && container.style.display === 'none') {
-          container.style.display = 'flex';
-        }
+        if(vinVerificationOptional) vinVerificationOptional.style.display = 'block';
       }
     }
 
     async function handleNonOEMSelection(selectedType) {
       if (!combinedVariantSelect) enableAddToCartButton();
-
-      if (!failedVinDecode) vinTextBoxForOEM.value = '';
 
       oem = null;
       await populateVariantDropdown(selectedType, disabledFirstOptionTranslation);
@@ -415,7 +336,7 @@ function updatePriceDisplay(selectedType) {
       updateProgressHeaderColors();
     }
 
-    async function handleOEMSelection() {
+    {% comment %} async function handleOEMSelection() {
       const variants = productVariants['oem'];
       if (!variants || variants.length === 0) return;
 
@@ -435,12 +356,6 @@ function updatePriceDisplay(selectedType) {
       tempElement.innerHTML = variants[0].productDescription;
       if (productPartDescription) productPartDescription.innerHTML = tempElement.innerHTML;
 
-      if (storedDecodedVin.length) {
-        vinTextBoxForOEM.value = storedDecodedVin;
-      } else if (!failedVinDecode) {
-        vinTextBoxForOEM.value = '';
-      }
-
       oem = 'oem';
 
       // If the vin decoder was used, then don't disable the combined variant select section
@@ -458,7 +373,7 @@ function updatePriceDisplay(selectedType) {
         // changingPaintOptions(matchingByVin);
       }
       updateProgressHeaderColors();
-    }
+    } {% endcomment %}
 
 
     
@@ -478,6 +393,7 @@ if (qualityRadioInputs.length > 0) {
       calculatePrice(input);
       const selectedInput = event.target;
       const selectedType = selectedInput.value;
+      selectedProductType = selectedType;
       const selectedProductSku = selectedInput.getAttribute('data-quality-sku');
 
       const hasAvailableOptions = {
@@ -508,81 +424,20 @@ if (qualityRadioInputs.length > 0) {
       hidePaintedStockKeyPaintDisclaimer();
       clearPaintOptionRadioBtns();
       clearCombinedVariantSelect();
-      disableVinVerificationBtns();
       clearVinVerificationRadioButtons();
       disablePrecisionMatchBtns();
       clearPrecisionMatchRadioButtons();
-
-      if (combinedVariantSelect) disableVinVerificationBtns();
-
       hideVinMessageParagraph();
 
-      if (selectedType !== 'oem') {
-        await handleNonOEMSelection(selectedType);
-      } else {
-        await handleOEMSelection();
+      if (combinedVariantSelect) {
+        disableVinVerificationBtns();
       }
+
+      await handleNonOEMSelection(selectedType);
     });
   });
 }
 
-    }
-    
-
-    // VIN Textbox for OEM event listener
-    if (vinTextBoxForOEM) {
-      document.getElementById('vin-textbox-for-oem').addEventListener('input', async function (event) {
-        storedVin = event.target.value;
-
-        const vinInput = event.target.value.toUpperCase();
-        const warning = document.getElementById('vin-warning-for-oem');
-        const precisionMatchWrapper = document.querySelector('.product-page-precision-match-wrapper');
-
-        // Remove I, O, Q characters
-        const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
-
-        if (vinInput !== filteredValue) {
-          alert('Please enter valid characters. I,O, & Q and other special characters are not included in VINs');
-        } else {
-          warning.style.display = 'none';
-        }
-
-        event.target.value = filteredValue;
-
-        //For failed vin decode and match by vin is selected, disable the variant
-        //select because the vin textbox for oem is not displayed
-        if (failedVinDecode && matchingByVin) {
-          disableCombinedVariantSelect();
-          clearCombinedVariantSelect();
-          disablehowToFindPaintCodeBtn();
-          disableGetPaintCodeUsingVin();
-          disableAddToCartButton();
-          await populateVariantDropdown("oem", disabledFirstOptionTranslation);
-          if (matchingByVin) {
-            changingPaintOptions(true);
-          }
-          updateProgressHeaderColors();
-          // Ensure VIN input is 17 characters before enabling Add to Cart
-        } else if (vinInput.length === 17) {
-          await populateVariantDropdown("oem", disabledFirstOptionTranslation);
-          if (!combinedVariantSelect) enableAddToCartButton();
-          updateProgressHeaderColors();
-        } else {
-          if (precisionMatchWrapper && precisionMatchWrapper.classList.contains('show')) {
-            precisionMatchWrapper.classList.remove('show');
-          }
-          disableCombinedVariantSelect();
-          clearCombinedVariantSelect();
-          disablePrecisionMatchBtns();
-          clearPrecisionMatchRadioButtons();
-          disableVinVerificationBtns();
-          clearVinVerificationRadioButtons();
-          disablehowToFindPaintCodeBtn();
-          disableGetPaintCodeUsingVin();
-          disableAddToCartButton();
-          updateProgressHeaderColors();
-        }
-      });
     }
   });
 </script>

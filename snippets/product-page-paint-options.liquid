@@ -828,7 +828,7 @@
                   if(precisionMatchContainerLibrary) {
                     enablePrecisionMatchBtns();
                   } else if(vinVerificationCheckboxGroupLibrary) {
-                    enableAddToCartButton();
+                    enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                     enableVinVerificationBtns();
                   } else {
                     enableAddToCartButton();
@@ -902,6 +902,11 @@
                           if (precisionMatchContainerLibrary) {
                             enablePrecisionMatchBtns();
                           } else if (vinVerificationCheckboxGroupLibrary) {
+                            if(autoSelectedBanned) {
+                              enableOrDisableAddToCartForOEM("ISBANNED");
+                            } else {
+                              enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
+                            }
                             enableVinVerificationBtns();
                           } else {
                             enableAddToCartButton();
@@ -965,6 +970,7 @@
                       if(precisionMatchContainerLibrary) {
                         enablePrecisionMatchBtns();
                       } else if(vinVerificationCheckboxGroupLibrary) {
+                        enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                         enableVinVerificationBtns();
                       } else {
                         enableAddToCartButton();
