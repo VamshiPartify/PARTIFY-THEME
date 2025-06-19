@@ -176,8 +176,8 @@ async function fetchVehicalDataByVin(vin, functionLocation, noResults, failed3ti
           document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
         } else {
           document.querySelector('.vin-verification-submission-failed-message').innerHTML = failed3times;
-          document.getElementById('vin-textbox-for-verification').value = '';
-          document.getElementById('vin-textbox-for-verification').disabled = true;
+          // document.getElementById('vin-textbox-for-verification').value = '';
+          // document.getElementById('vin-textbox-for-verification').disabled = true;
           document.querySelector('.vin-verification-remaining-attempts').style.display = "block";
           document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
           finalVinVerificationSubmissionVin = vin;
