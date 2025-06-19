@@ -90,10 +90,8 @@
         noteInput.value = 'Acknowledged';
         if (hasFitmentVerification) {
           enableVinVerificationBtns();
-          enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
-        } else {
-          enableAddToCartButton();
         }
+        enableAddToCartButton();
       } else {
         // Checkbox unchecked
         noteInput.value = '';

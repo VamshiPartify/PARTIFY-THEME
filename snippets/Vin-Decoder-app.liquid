@@ -206,11 +206,6 @@
                     } else {
                         console.warn('Variant selector dropdown not found.');
                     }
-                    if(autoSelectedBanned) {
-                      hideFitmentVerificationComponent("ISBANNED");
-                    } else {
-                      hideFitmentVerificationComponent(finalVinVerificationSubmissionVin);
-                    }
                     paintCodeWrapper.classList.add('show');
                     paintCodeAppContainer.classList.remove('show');
                     {% comment %} paintOptionsCheckboxGroup.classList.add('hide'); {% endcomment %}
@@ -218,11 +213,6 @@
 
                 if (event.data.type === "getPaintByVIN") {
                     vinDecoderJustUsed = true;
-                    if(autoSelectedBanned) {
-                      hideFitmentVerificationComponent("ISBANNED");
-                    } else {
-                      hideFitmentVerificationComponent(finalVinVerificationSubmissionVin);
-                    }
                     const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
 
                     resortToGetPaintCodeByVin(event.data.vin, event.data.matchByVIN);
@@ -249,6 +239,20 @@
         function formulateMessage(vin) {
             if (combinedVariantSelectLibrary) {
                 const options = Array.from(combinedVariantSelectLibrary.options);
+                
+                if (oemVinContainerLibrary && oemVinContainerLibrary.style.display === "block") {
+                    vinTextBoxOEMLibrary.value = '';
+                    oemVinContainerLibrary.style.display = "none";
+
+                    const productTypeDropdown = oemVinContainerLibrary.closest('.product-type-dropdown');
+                    if (productTypeDropdown) {
+                        const nextDivider = productTypeDropdown.nextElementSibling;
+                        if (nextDivider && nextDivider.classList.contains('divider')) {
+                            nextDivider.style.display = 'none';
+                        }
+                    }
+                }
+        
         
                 if (vinInputLibrary) {
                     vinInputLibrary.value = vin;

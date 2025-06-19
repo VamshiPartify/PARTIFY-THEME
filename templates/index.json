@@ -15,8 +15,8 @@
         "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/Hero_1.svg",
-            "mobile_background_image": "shopify://shop_images/Mobile_1.svg",
+            "background_image": "shopify://shop_images/VIN_Decoder_Hero_Header.png",
+            "mobile_background_image": "shopify://shop_images/3.png",
             "title": "",
             "text": "",
             "color": "#ffffff",
@@ -36,8 +36,8 @@
         "slide_XE3R7b": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/Partify_Hero_Headers_6.svg",
-            "mobile_background_image": "shopify://shop_images/Hero_Headers_Mobile.svg",
+            "background_image": "shopify://shop_images/B2B_Focus_Hero_Header.png",
+            "mobile_background_image": "shopify://shop_images/1.png",
             "title": "",
             "text": "",
             "color": "#ffffff",
@@ -57,8 +57,8 @@
         "slide_Uex3FM": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/Hero_2.svg",
-            "mobile_background_image": "shopify://shop_images/Mobile_3.svg",
+            "background_image": "shopify://shop_images/Delivery_Speed_Hero_Header.png",
+            "mobile_background_image": "shopify://shop_images/2.png",
             "title": "",
             "text": "",
             "color": "#ffffff",
