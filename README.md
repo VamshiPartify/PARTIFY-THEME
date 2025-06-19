@@ -39,6 +39,29 @@
 20. merge branch with main in github
 21. Shopify theme push (to desired theme)
 
+# Rebase branch onto Main
+
+## Rebasing your branch onto main
+
+| Step | Command(s)                                | Purpose                                   |
+|------|-------------------------------------------|-------------------------------------------|
+| 1    | —                                         | Make sure all work is committed           |
+| 2    | `git checkout main`<br>`git pull origin main`      | Update `main` branch locally              |
+| 3    | `git checkout your-feature-branch`         | Move to your feature branch               |
+| 4    | `git rebase main`                         | Rebase your branch onto latest `main`     |
+|      | _(resolve conflicts if prompted)_<br>`git add <file>`<br>`git rebase --continue` | Fix any conflicts and continue rebase     |
+| 5    | `git push --force-with-lease`             | Update remote branch after rebase         |
+
+1. git checkout main
+2. git pull origin main
+3. git checkout your-feature-branch
+4. git rebase main
+   - If there are conflicts:
+       - Fix
+       - Stage
+       - git rebase --continue
+5. git push --force-with-lease (only run this if previously pushed to a remote branch)
+
 # If i pushed a branch and want to merge it into the latest shopify theme code
 1. Push my latest changes to a branch "feature/<new branch>"
 2. git checkout feature/latest-updates
