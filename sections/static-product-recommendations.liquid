@@ -423,7 +423,7 @@ async function loadShopifyRecommendations() {
       const productHTML = `
         <li class="product-grid-item">
           <a href="{{ shop.url }}/products/${product.handle}" class="product-link">
-            <img src="${product.images.edges[0]?.node?.src || 'placeholder-image.jpg'}" 
+            <img src="${product.images.edges[0]?.node?.src || 'https://cdn.shopify.com/s/files/1/0248/6291/6693/files/Partify_Photo_Coming_Soon.png?v=1747228850'}" 
                   alt="${product.title}" loading="lazy">
             <p class="recommended-price">
                 ${formatted}
