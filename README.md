@@ -50,7 +50,7 @@
 | 3    | `git checkout your-feature-branch`         | Move to your feature branch               |
 | 4    | `git rebase main`                         | Rebase your branch onto latest `main`     |
 |      | _(resolve conflicts if prompted)_<br>`git add <file>`<br>`git rebase --continue` | Fix any conflicts and continue rebase     |
-| 5    | `git push --force-with-lease`             | Update remote branch after rebase         |
+| 5    | _(only run if remote branch already exists)_<br>`git push --force-with-lease`             | Update remote branch after rebase         |
 
 1. git checkout main
 2. git pull origin main
