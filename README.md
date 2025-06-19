@@ -10,11 +10,11 @@
 
 1. git checkout main
 2. git pull origin main
-3. git checkout -b <branch-name>
+3. git checkout -b branch-name
 4. make changes
 5. stage changes (git add . or individual files)
 6. git commit -m "random message"
-7. git push -u origin <branch-name>
+7. git push -u origin branch-name
 8. git checkout main
 9. git pull origin main (to make sure that we are still up to date)
 10. git checkout -b shopifypull/01-01-25 (or today's date)
@@ -30,7 +30,7 @@
 **The following is only if there were differences between main and shopify code**
 13. In github, merge the shopifypull/01-01-25 branch with main
 - Main branch is now up to date with shopify code
-14. git checkout <original-branch-name>
+14. git checkout original-branch-name
 15. git rebase main
 16. if there are any conflicts, fix and then stage the fixes
 17. git rebase --continue (only run this if conflicts had to be fixed)
