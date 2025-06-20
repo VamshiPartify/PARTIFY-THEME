@@ -84,6 +84,42 @@
     padding-left: 12px;
   }
 
+  .vehicle-vin {
+    font-size: 13px;
+    color: #888a92;
+    margin-top: 4px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    background: none;
+    padding: 0 0 0 0;
+    {% comment %} border-left: 3px solid #e0e0e0; {% endcomment %}
+    padding-left: 6px;
+    margin-bottom: 4px;
+    border-radius: 2px;
+    display: block;
+  }
+  .vehicle-vin strong {
+    color: #666a73;
+    font-weight: 600;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    letter-spacing: 0.03em;
+    font-size: 13px;
+  }
+  .vehicle-paint-code {
+    font-size: 12px;
+    color: #2a7cff;
+    {% comment %} background: #eaf3ff; {% endcomment %}
+    border-radius: 3px;
+    padding: 2px 8px;
+    display: inline-block;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    box-shadow: 0 1px 2px rgba(42, 124, 255, 0.07);
+  }
+
   .browse-catalog-btn {
     padding: 8px 10px;
     border: 2px solid #334fb4;
@@ -320,15 +356,21 @@
         vehicleListHTML += `
             <li class="vehicle-item">
               <div class="vehicle-item-container ${isFirstVehicle}">
-                <div class="vehicle-browse-catalog-container">
-                  <strong data-vehicle="${vehicle.ymm}">${vehicle.ymm}</strong>
-                  <div style="font-size:12px;color:#888;">
-                    ${vehicle.vin ? 'VIN: ' + vehicle.vin + '<br>' : ''}
-                    ${vehicle.paintCode ? 'Paint: ' + vehicle.paintCode : ''}
-                  </div>
-                  <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
-                </div>
-                <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+          <div class="vehicle-browse-catalog-container">
+            <strong data-vehicle="${vehicle.ymm}">${vehicle.ymm}</strong>
+            ${
+              vehicle.vin && vehicle.vin !== ''
+                ? `<div class="vehicle-vin">VIN: <strong>${vehicle.vin}</strong></div>`
+                : ''
+            }
+            ${
+              vehicle.paintCode && vehicle.paintCode !== ''
+                ? `<div class="vehicle-paint-code">Paint: ${vehicle.paintCode}</div>`
+                : ''
+            }
+            <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
+          </div>
+          <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
               </div>
             </li>
           `;
