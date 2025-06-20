@@ -27,11 +27,15 @@
                       oldSearchTerms = oldSearchTerms.map(ymm => ({ ymm, vin: null, paintCode: null }));
                   }
                   if (!oldSearchTerms.some(obj => obj.ymm === newSearchTerm)) {
-                      oldSearchTerms.unshift({ ymm: newSearchTerm, vin: null, paintCode: null });
-                      if (oldSearchTerms.length > 5) {
+                    // Get VIN from URL if present
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const vinFromUrl = urlParams.get('vin') || null;
+
+                    oldSearchTerms.unshift({ ymm: newSearchTerm, vin: vinFromUrl, paintCode: null });
+                    if (oldSearchTerms.length > 5) {
                           oldSearchTerms.pop();
-                      }
-                      localStorage.setItem("searchTerms", JSON.stringify(oldSearchTerms));
+                    }
+                    localStorage.setItem("searchTerms", JSON.stringify(oldSearchTerms));
                   }
                 }
             }

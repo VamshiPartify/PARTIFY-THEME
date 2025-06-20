@@ -15,7 +15,7 @@
         "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/VIN_Decoder_Hero_Header.png",
+            "background_image": "shopify://shop_images/car_banner_2_copy.png",
             "mobile_background_image": "shopify://shop_images/3.png",
             "title": "",
             "text": "",
@@ -36,7 +36,7 @@
         "slide_XE3R7b": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/B2B_Focus_Hero_Header.png",
+            "background_image": "shopify://shop_images/CAR_BANNER_3_copy.png",
             "mobile_background_image": "shopify://shop_images/1.png",
             "title": "",
             "text": "",
@@ -57,7 +57,7 @@
         "slide_Uex3FM": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/Delivery_Speed_Hero_Header.png",
+            "background_image": "shopify://shop_images/car_banner_copy.png",
             "mobile_background_image": "shopify://shop_images/2.png",
             "title": "",
             "text": "",
