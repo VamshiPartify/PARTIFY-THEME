@@ -24,8 +24,24 @@
                     let oldSearchTerms = JSON.parse(localStorage.getItem("searchTerms")) || [];
                   // Migrate if old format
                   if (oldSearchTerms.length && typeof oldSearchTerms[0] === "string") {
-                      oldSearchTerms = oldSearchTerms.map(ymm => ({ ymm, vin: null, paintCode: null }));
+                    oldSearchTerms = oldSearchTerms.map(ymm =>
+                    typeof ymm === "string"
+                        ? { ymm, vin: null, paintCode: null }
+                        : ymm
+                    );
                   }
+                  terms = terms.map(entry => {
+                      // If entry.ymm is an object, flatten it
+                      if (entry && typeof entry.ymm === 'object' && entry.ymm !== null) {
+                      return {
+                          ymm: entry.ymm.ymm,
+                          vin: entry.ymm.vin,
+                          paintCode: entry.ymm.paintCode
+                      };
+                      }
+                      return entry;
+                  });
+                  localStorage.setItem('searchTerms', JSON.stringify(terms));
                   if (!oldSearchTerms.some(obj => obj.ymm === newSearchTerm)) {
                     // Get VIN from URL if present
                     const urlParams = new URLSearchParams(window.location.search);
