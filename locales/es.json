@@ -1043,6 +1043,11 @@
         "terms_of_service": "Términos de servicio",
         "privacy_policy": "Política de privacidad",
         "refund_policy": "Política de reembolso",
+      },
+      "easysearch_custom_section": {
+        "button_text": "Seleccione su vehículo",
+        "shopping_for": "Comprando para:",
+        "find_parts_that_fit": "Seleccione un vehículo para encontrar piezas compatibles.",
       }
     }
 
