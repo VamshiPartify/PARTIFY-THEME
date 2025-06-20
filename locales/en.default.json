@@ -953,5 +953,10 @@
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy Policy",
     "refund_policy": "Refund Policy",
+  },
+  "easysearch_custom_section": {
+    "button_text": "Select Your Vehicle",
+    "shopping_for": "Shopping for:",
+    "find_parts_that_fit": "Select a vehicle to find parts that fit."
   }
 }

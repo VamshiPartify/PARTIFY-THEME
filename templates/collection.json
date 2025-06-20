@@ -14,6 +14,7 @@
       "blocks": {
         "easysearch_year_make_model_easysearch_widget_pxkw7C": {
           "type": "shopify://apps/easysearch-ymm/blocks/easysearch-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
+          "disabled": true,
           "settings": {
             "placement_selector": "",
             "insert_method": "prepend"
@@ -35,6 +36,11 @@
       "settings": {
         "include_padding": false
       }
+    },
+    "easysearch_ymm_section_LKTanx": {
+      "type": "easysearch-ymm-section",
+      "name": "YMM Vehicle Selector",
+      "settings": {}
     },
     "dynamic_custom_liquid_izV9Jp": {
       "type": "dynamic-custom-liquid",
@@ -105,18 +111,9 @@
       ],
       "settings": {}
     },
-
-    // "dynamic_custom_liquid_MmJekE": {
-    //   "type": "dynamic-custom-liquid",
-    //   "custom_css": [
-
-    //   ],
-    //   "settings": {
-    //     "custom_liquid": "{% if collection.all_products_count <= 1000 %}\n{% render 'collection-type-buttons' %}\n{% endif %}"
-    //   }
-    // },
     "dynamic_custom_liquid_WgDwT6": {
       "type": "dynamic-custom-liquid",
+      "disabled": true,
       "settings": {
         "custom_liquid": "{% if collection.all_products_count <= 1000 %}\n{% render 'collection-aspiration-buttons' %}\n{% endif %}"
       }
@@ -189,9 +186,9 @@
   },
   "order": [
     "1716221076fc128fdb",
+    "easysearch_ymm_section_LKTanx",
     "dynamic_custom_liquid_izV9Jp",
     "collection_type_buttons",
-    // "dynamic_custom_liquid_MmJekE",
     "dynamic_custom_liquid_WgDwT6",
     "15a95124-fa2c-4f51-ac0c-105f5675693d",
     "main",

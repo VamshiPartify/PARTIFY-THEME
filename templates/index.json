@@ -95,6 +95,7 @@
     },
     "17144074275bb62685": {
       "type": "apps",
+      "disabled": true,
       "blocks": {
         "easysearch_year_make_model_easysearch_widget_3WQi3y": {
           "type": "shopify://apps/easysearch-ymm/blocks/easysearch-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
@@ -116,6 +117,12 @@
         "#easysearch_field_4975 {min-width: 200px; font-size: 16pt !important;}",
         ".easysearch-vertical-mode .easysearch-btn-holder {width: 100% !important;}"
       ],
+      "settings": {
+        "include_padding": false
+      }
+    },
+    "easysearch_ymm": {
+      "type": "easysearch-ymm-section",
       "settings": {
         "include_padding": false
       }
@@ -368,6 +375,7 @@
   "order": [
     "bb8bbd89-2fb0-44fa-b240-4c8162c0dc28",
     "17144074275bb62685",
+    "easysearch_ymm",
     "dynamic_custom_liquid_kirR3Y",
     "356b94ad-78c0-440e-a0e8-a224ed3debf1",
     "site_review_columns_C8eJCy",
