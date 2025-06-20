@@ -217,9 +217,21 @@
       let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
       // Migrate if needed
       if (terms.length && typeof terms[0] === 'string') {
-        terms = terms.map((ymm) => ({ ymm, vin: null, paintCode: null }));
+        terms = terms.map((ymm) => (typeof ymm === 'string' ? { ymm, vin: null, paintCode: null } : ymm));
         localStorage.setItem('searchTerms', JSON.stringify(terms));
       }
+      terms = terms.map((entry) => {
+        // If entry.ymm is an object, flatten it
+        if (entry && typeof entry.ymm === 'object' && entry.ymm !== null) {
+          return {
+            ymm: entry.ymm.ymm,
+            vin: entry.ymm.vin,
+            paintCode: entry.ymm.paintCode,
+          };
+        }
+        return entry;
+      });
+      localStorage.setItem('searchTerms', JSON.stringify(terms));
       return terms;
     }
     function setSearchTerms(terms) {
