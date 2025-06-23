@@ -828,10 +828,10 @@
             {% render 'product-page-precision-match' %}
           </div>
         {% endcomment %}
-        {% unless is_make_excluded_from_vin_verification == true %}
+        {% comment %}{% unless is_make_excluded_from_vin_verification == true %}
           <div class="divider-large-screen"></div>
           {% render 'product-page-vin-guarantee' %}
-        {% endunless %}
+        {% endunless %}{% endcomment %}
       </div>
       <div class="divider-small-screen"></div>
 
@@ -914,10 +914,10 @@
           {% render 'product-page-paint-options' %}
         {% endif %}
         <!-- LEAVE THE FOLLOWING CODE!! Uncomment it whenever ready to use these -->
-        {% unless is_make_excluded_from_vin_verification == true %}
+        {% comment %}{% unless is_make_excluded_from_vin_verification == true %}
           <div class="divider-large-screen"></div>
           {% render 'product-page-vin-guarantee' %}
-        {% endunless %}
+        {% endunless %}{% endcomment %}
         <div class="divider-small-screen"></div>
         {% render 'product-page-cart-btn', unpainted: true %}
       </div>
@@ -1595,13 +1595,17 @@
             };
         
 
-            if(qualityTypeSelect) {
-              if(addToCartButtonForUnpaintedItems !== null) {
-                addToCartButtonForUnpaintedItems.addEventListener("click", function () {
-                    form.action = `/cart/add?id=${window.selectedVariantId}`;
-                });
-              }
+           if (qualityTypeSelect) {
+            if (addToCartButtonForUnpaintedItems !== null) {
+              addToCartButtonForUnpaintedItems.addEventListener("click", function () {
+                // Update the hidden input value
+                const hiddenInput = document.querySelector('.unpainted-add-to-cart-btn-container input[name="id"]');
+                if (hiddenInput) {
+                  hiddenInput.value = window.selectedVariantId;
+                }
+              });
             }
+          }
 
 
 

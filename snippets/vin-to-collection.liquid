@@ -21,6 +21,7 @@
     width: 100%;
     border-radius: 4px;
     margin-right: 10px;
+    font-size: 16px;
   }
 
   .errorMessage {
@@ -77,7 +78,6 @@
     font-style: italic;
     text-align: start;
   }
-  
   @keyframes button-loading-spinner {
     from {
         transform: rotate(0turn);
@@ -88,7 +88,6 @@
     }
   }
 </style>
-
 
 <div>
   <form id="vin-to-collection" class="vin-to-collection-form">
@@ -101,7 +100,7 @@
         placeholder="{{ 'garage.placeholder' | t }}"
         onChange="handleVinChange(event)"
         required
-      />
+      >
       <button id="vin-to-collection-btn" type="button" disabled>{{ 'garage.search_btn' | t }}</button>
     </div>
     <div class="errorMessage" style="visibility: hidden;">{{ 'garage.failed_vin' | t }}</div>
@@ -110,9 +109,6 @@
 </div>
 
 <script>
-
-
-
   // Get reference to the form
   document.addEventListener("DOMContentLoaded", function () {
     const vinForm = document.getElementById("vin-to-collection");
@@ -134,7 +130,6 @@
 
       vinSearchBtn.innerHTML = "";
       vinSearchBtn.classList.add("vin-to-collection-btn--loading");
-      {% comment %} const vinInputField = document.getElementById("vin-to-collection-input"); {% endcomment %}
       const vin = vinInputField.value.trim(); // Get VIN input value
 
       if (vin.length !== 17) {

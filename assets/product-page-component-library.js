@@ -226,7 +226,6 @@ function disableGetPaintCodeUsingVin() {
 }
 
 function hideColorPreviewContainer() {
-    console.log("wool Hiding color preview container");
     if (colorPreviewContainerLibrary && colorPreviewContainerLibrary.classList.contains('show')) colorPreviewContainerLibrary.classList.remove("show");
 }
 
@@ -420,6 +419,10 @@ function enableVinVerificationBtns() {
 function showOOSPaintVariantsMsg() {
     const oosPaintVariantsLibrary = document.querySelector('.oos-paint-variants');
     if (oosPaintVariantsLibrary && !oosPaintVariantsLibrary.classList.contains('show')) oosPaintVariantsLibrary.classList.add("show");
+    // if the add to cart btn is enabled, disable it
+    if (currentAddToCartBtnLibrary && !currentAddToCartBtnLibrary.disabled) {
+        currentAddToCartBtnLibrary.disabled = true;
+    }
 }
 
 function showVinVerificationTextbox() {

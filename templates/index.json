@@ -15,8 +15,50 @@
         "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/Spring_Savings_Shop_Now.png",
-            "mobile_background_image": "shopify://shop_images/Spring_Savings_Mobile_bde19846-42a9-40fe-af1c-30b4a8a86ab2.png",
+            "background_image": "shopify://shop_images/car_banner_2_copy.png",
+            "mobile_background_image": "shopify://shop_images/3.png",
+            "title": "",
+            "text": "",
+            "color": "#ffffff",
+            "link": "shopify://pages/catalog",
+            "text_alignment": "center",
+            "button_one_label": "",
+            "button_one_link": "",
+            "button_one_style": "primary",
+            "button_two_label": "",
+            "button_two_link": "",
+            "button_two_style": "primary",
+            "show_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 50
+          }
+        },
+        "slide_XE3R7b": {
+          "type": "slide",
+          "settings": {
+            "background_image": "shopify://shop_images/CAR_BANNER_3_copy.png",
+            "mobile_background_image": "shopify://shop_images/1.png",
+            "title": "",
+            "text": "",
+            "color": "#ffffff",
+            "link": "shopify://pages/catalog",
+            "text_alignment": "center",
+            "button_one_label": "",
+            "button_one_link": "",
+            "button_one_style": "primary",
+            "button_two_label": "",
+            "button_two_link": "",
+            "button_two_style": "primary",
+            "show_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 50
+          }
+        },
+        "slide_Uex3FM": {
+          "type": "slide",
+          "settings": {
+            "background_image": "shopify://shop_images/car_banner_copy.png",
+            "mobile_background_image": "shopify://shop_images/2.png",
             "title": "",
             "text": "",
             "color": "#ffffff",
@@ -35,14 +77,16 @@
         }
       },
       "block_order": [
-        "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1"
+        "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1",
+        "slide_XE3R7b",
+        "slide_Uex3FM"
       ],
       "custom_css": [
         "{margin-bottom: 0px;}"
       ],
       "settings": {
-        "enable_autoplay": false,
-        "autoplay_duration": 8,
+        "enable_autoplay": true,
+        "autoplay_duration": 5,
         "slideshow_width": "full",
         "slideshow_height": "adapt",
         "slideshow_height_mobile": "adapt",
@@ -51,6 +95,7 @@
     },
     "17144074275bb62685": {
       "type": "apps",
+      "disabled": true,
       "blocks": {
         "easysearch_year_make_model_easysearch_widget_3WQi3y": {
           "type": "shopify://apps/easysearch-ymm/blocks/easysearch-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
@@ -72,6 +117,12 @@
         "#easysearch_field_4975 {min-width: 200px; font-size: 16pt !important;}",
         ".easysearch-vertical-mode .easysearch-btn-holder {width: 100% !important;}"
       ],
+      "settings": {
+        "include_padding": false
+      }
+    },
+    "easysearch_ymm": {
+      "type": "easysearch-ymm-section",
       "settings": {
         "include_padding": false
       }
@@ -324,6 +375,7 @@
   "order": [
     "bb8bbd89-2fb0-44fa-b240-4c8162c0dc28",
     "17144074275bb62685",
+    "easysearch_ymm",
     "dynamic_custom_liquid_kirR3Y",
     "356b94ad-78c0-440e-a0e8-a224ed3debf1",
     "site_review_columns_C8eJCy",

@@ -134,80 +134,82 @@
             {% when 'complementary_products' %}
               {% render 'complementary-products', product: product, block: block %}
 
-           {% when 'title' %}
-  {% if is_product_modal %}
-    <h2 class="product-title">
-      <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
-    </h2>
-  {% else %}
-    <h2 class="product-title" id="product-title">
-      {{ product.title }}
-    </h2>
+            {% when 'title' %}
+              {% if is_product_modal %}
+                <h2 class="product-title">
+                  <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+                </h2>
+              {% else %}
+                <h2 class="product-title" id="product-title">
+                  {{ product.title }}
+                </h2>
 
-    {% assign translated_appending = product.metafields.custom.title_collection_appending | t %}
-    {% if translated_appending == product.metafields.custom.title_collection_appending %}
-      {% assign metafield_appending = translatedAppending %}
-    {% else %}
-      {% assign metafield_appending = product.metafields.custom.title_collection_appending %}
-    {% endif %}
+                {% assign translated_appending = product.metafields.custom.title_collection_appending | t %}
+                {% if translated_appending == product.metafields.custom.title_collection_appending %}
+                  {% assign metafield_appending = translatedAppending %}
+                {% else %}
+                  {% assign metafield_appending = product.metafields.custom.title_collection_appending %}
+                {% endif %}
 
+                <script>
+                  document.addEventListener("DOMContentLoaded", function() {
+                    var searchTermRaw = localStorage.getItem("searchTerms") || "[]";
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        var searchTermRaw = localStorage.getItem("searchTerms") || "[]";
+                    try {
+                      var searchTermsArray = JSON.parse(searchTermRaw); // Parse as JSON
 
-        try {
-          var searchTermsArray = JSON.parse(searchTermRaw); // Parse as JSON
+                      // If array of objects, get ymm from first object
+                      var searchTerm = Array.isArray(searchTermsArray) && searchTermsArray.length > 0
+                        ? (typeof searchTermsArray[0] === 'object' && searchTermsArray[0] !== null && 'ymm' in searchTermsArray[0]
+                            ? searchTermsArray[0].ymm
+                            : searchTermsArray[0])
+                        : "";
+                    } catch (e) {
+                      console.error("Error parsing searchTerms:", e);
+                      var searchTerm = "";
+                    }
 
-          var searchTerm = Array.isArray(searchTermsArray) && searchTermsArray.length > 0 
-            ? searchTermsArray[0] // Get first value
-            : "";
-        } catch (e) {
-          console.error("Error parsing searchTerms:", e);
-          var searchTerm = "";
-        }
+                    // Clean and format the search term
+                    searchTerm = searchTerm.replace(/[\[\]"]/g, "").trim();
 
-        // Clean and format the search term
-        searchTerm = searchTerm.replace(/[\[\]"]/g, "").trim();
+                    var matchedCollectionTitle = "";
+                    var productCollections = [
+                      {% for collection in product.collections %}
+                        "{{ collection.title | escape }}",
+                      {% endfor %}
+                    ];
 
-        var matchedCollectionTitle = "";
-        var productCollections = [
-          {% for collection in product.collections %}
-            "{{ collection.title | escape }}",
-          {% endfor %}
-        ];
+                    // Find a matching collection
+                    productCollections.forEach(function(collectionTitle) {
+                      if (collectionTitle === searchTerm) {
+                        matchedCollectionTitle = collectionTitle;
+                      }
+                    });
 
-        // Find a matching collection
-        productCollections.forEach(function(collectionTitle) {
-          if (collectionTitle === searchTerm) {
-            matchedCollectionTitle = collectionTitle;
-          }
-        });
+                    // Get metafield value (ensure it's properly passed)
+                    var metafieldAppending = "{{ metafield_appending | escape }}".trim();
+                    if (!metafieldAppending || metafieldAppending === "undefined") {
+                      metafieldAppending = ""; // Default to empty string
+                    }
 
-        // Get metafield value (ensure it's properly passed)
-        var metafieldAppending = "{{ metafield_appending | escape }}".trim();
-        if (!metafieldAppending || metafieldAppending === "undefined") {
-          metafieldAppending = ""; // Default to empty string
-        }
-
-        // Ensure the title element exists before modifying it
-        var titleElement = document.getElementById("product-title");
-        if (titleElement) {
-          // If a match is found and metafield is not empty, update the title
-          if (matchedCollectionTitle !== "" && metafieldAppending !== "" && metafieldAppending !== "undefined") {
-            titleElement.innerHTML = matchedCollectionTitle + " " + metafieldAppending;
-          } else if (matchedCollectionTitle !== "" && (metafieldAppending === "" || metafieldAppending === "undefined")) {
-            var shortCollectionTitle = matchedCollectionTitle.substring(0, 4); // Get first 4 characters
-            titleElement.innerHTML = shortCollectionTitle + " " + titleElement.innerHTML;
-          } else {
-            console.log("Title not updated - Conditions not met");
-          }
-        } else {
-          console.error("Element with ID 'product-title' not found.");
-        }
-      });
-    </script>
-  {% endif %}
+                    // Ensure the title element exists before modifying it
+                    var titleElement = document.getElementById("product-title");
+                    if (titleElement) {
+                      // If a match is found and metafield is not empty, update the title
+                      if (matchedCollectionTitle !== "" && metafieldAppending !== "" && metafieldAppending !== "undefined") {
+                        titleElement.innerHTML = matchedCollectionTitle + " " + metafieldAppending;
+                      } else if (matchedCollectionTitle !== "" && (metafieldAppending === "" || metafieldAppending === "undefined")) {
+                        var shortCollectionTitle = matchedCollectionTitle.substring(0, 4); // Get first 4 characters
+                        titleElement.innerHTML = shortCollectionTitle + " " + titleElement.innerHTML;
+                      } else {
+                        console.log("Title not updated - Conditions not met");
+                      }
+                    } else {
+                      console.error("Element with ID 'product-title' not found.");
+                    }
+                  });
+                </script>
+              {% endif %}
 
             {% when 'vendor' %}
               {% if product.vendor != blank or onboarding %}

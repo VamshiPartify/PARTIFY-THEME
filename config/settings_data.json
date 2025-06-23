@@ -86,7 +86,7 @@
     "continue_url_404": true,
     "makes_list": "nissan, infiniti, mazda, kia, chrysler, jeep, fiat, dodge, ram, hyundai, genesis, subaru, gmc, cadillac, buick, chevrolet",
     "excluded_makes_list": "",
-    "bumperdotcom_makes_list": "",
+    "bumperdotcom_makes_list": "toyota, lexus, scion, lincoln, ford",
     "troublesome_chromedata_makes_list": "subaru, gmc, cadillac, buick, chevrolet",
     "vin_verification_exclusions": "bmw",
     "product_show_sku": false,

@@ -386,7 +386,7 @@
   display: none;
 }
 .easyContainer #easyBtn {
-  background: url(//partifyusa.com/cdn/shop/t/144/assets/easy-icon-car.png?v=9670071801671137271720705691) no-repeat;
+  /* background: url(//partifyusa.com/cdn/shop/t/144/assets/easy-icon-car.png?v=9670071801671137271720705691) no-repeat; */
   /* background: url(//partifyusa.com/cdn/shop/t/144/assets/easy-icon-car.png?v=9670071801671137271720705691) no-repeat,url(//partifyusa.com/cdn/shop/t/144/assets/easy-arrow.svg?v=157688906596922855671720705691) no-repeat; */
   background-size: 20px 16px,13px 8px;
   background-position: 7px center,calc(100% - 12px) center;
