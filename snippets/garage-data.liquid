@@ -30,7 +30,7 @@
                         : ymm
                     );
                   }
-                  terms = terms.map(entry => {
+                  oldSearchTerms = oldSearchTerms.map(entry => {
                       // If entry.ymm is an object, flatten it
                       if (entry && typeof entry.ymm === 'object' && entry.ymm !== null) {
                       return {
@@ -41,7 +41,7 @@
                       }
                       return entry;
                   });
-                  localStorage.setItem('searchTerms', JSON.stringify(terms));
+                  localStorage.setItem('searchTerms', JSON.stringify(oldSearchTerms));
                   if (!oldSearchTerms.some(obj => obj.ymm === newSearchTerm)) {
                     // Get VIN from URL if present
                     const urlParams = new URLSearchParams(window.location.search);

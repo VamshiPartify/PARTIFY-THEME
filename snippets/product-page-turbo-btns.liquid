@@ -1,0 +1,217 @@
+<style>
+    .option-title-turbo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #333;
+    }
+
+    .turbo-disabled {
+      color: #ccc;
+      pointer-events: none;
+    }
+    #option-title-turbo.disabled {
+      color: #ccc;
+      pointer-events: none;
+    }
+
+    #turbo-type-select:hover {
+      cursor: pointer;
+    }
+    #turbo-option:hover {
+      cursor: pointer;
+    }
+
+    .turbo-type-select {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin: 10px 0;
+      flex-direction: column;
+      min-height: 45px;
+    }
+
+    .available-options {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      color: #fff;
+      font-weight: 600;
+      background: #0d1ca2;
+      padding: 2px 5px;
+      border-radius: 999px;
+      font-size: 11px;
+      z-index: 1;
+    }
+
+    .available-options.ready-paint {
+    }
+
+  .turbo-options-checkbox input[type="radio"]:hover {
+      cursor: pointer;
+  }
+
+
+  .turbo-option:hover {
+      cursor: pointer;
+  }
+
+  label.turbo-options-checkbox:has(input:disabled) {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+  .turboText:hover{
+    cursor: pointer;
+  }
+
+.turboRedirectButton {
+  border-radius: 14px;
+  width: 100%;
+  margin-top: 15px;
+  background-color: #01A601;
+  color: #fff;
+  padding: 7px 7px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
+  <div class="turbo-type-select turbo-disabled">
+
+  <label class="option-title-turbo">Is Your Veloster A Turbo Model?</label>
+<div class="turbo-option">
+  <input
+    type="radio"
+    name="turboOption"
+    value="Turbo"
+    id="turbo-radio"
+    disabled
+  >
+  <label class="turboText turbo-disabled" for="turbo-radio">It Is A Turbo</label>
+  <br>
+</div>
+<div class="turbo-option">
+  <input
+    type="radio"
+    name="turboOption"
+    value="Not Turbo"
+    id="not-turbo"
+    disabled
+  >
+  <label class="turboText turbo-disabled" for="not-turbo">It Is Not A Turbo</label><br>
+  <button class="turboRedirectButton" style="display: none;" type="button" onclick="turboButtonClick()">Parts That Fit Your Vehicle</button>
+</div>
+        </div>
+
+{% assign product_Title = product.title%}
+
+<script>
+//FUNCTIONS
+      function getYearMakeModel(url) {
+      const urlObj = new URL(url);
+      const parts = urlObj.pathname.split('/');
+      const lastPart = parts[parts.length - 1] || parts[parts.length - 2];
+      const [year, make, ...modelParts] = lastPart.split('-');
+      const model = modelParts.join('+');
+      const combined = [year, make, model].filter(Boolean).join('+');
+      return { combined};
+  }
+  function filterForProductType(productTitle) {
+    if (productTitle.includes('Front Bumper')) {
+      return 'Front+Bumper';
+    } else if (productTitle.includes('Rear Bumper')) {
+      return 'Rear+Bumper';
+    } else if (productTitle.includes('Hood')){
+      return 'Hood';
+}
+      else if (productTitle.includes('Passenger Side Fender')) {
+        return 'Passenger+Side+Fender';
+}
+        else if (productTitle.includes('Driver Side Fender')) {
+          return 'Driver+Side+Fender';
+}
+          else if (productTitle.includes('Driver Side Fender')){
+            return 'Driver+Side+Fender';
+
+          }
+          else if (productTitle.includes('Rear Lower Bumper')){
+            return 'Rear+Lower+Bumper';
+          }
+}
+    turboButton = document.querySelector('.turboRedirectButton');
+    var product_Title = "{{ product_Title }}";
+    var partType = filterForProductType(product_Title);
+    function turboButtonClick(){
+       const fitmentLink = document.querySelector('.easysearch-fitment-link');
+       if (fitmentLink) {
+        console.log(fitmentLink.href);
+          const vehicle = getYearMakeModel(fitmentLink);
+          console.log(vehicle.combined);
+          const selected = document.querySelector('input[name="turboOption"]:checked');
+          if (selected.value === "Turbo") {
+            window.location.href = fitmentLink.href + "?filter.p.m.custom.aspiration=Turbo&filter.p.product_type=" + partType;
+      }
+            else if (selected.value === "Not Turbo") {
+              window.location.href = fitmentLink.href + "?filter.p.m.custom.aspiration=Non+Turbo&filter.p.product_type=" + partType;
+            }
+        } else {
+          alert('No link available for parts that fit your vehicle.');
+        }
+    }
+
+    //EVENTS
+document.querySelectorAll('input[name="turboOption"]').forEach(function(radio) {
+  radio.addEventListener('change', function(event) {
+    event.preventDefault();
+    console.log(product_Title);
+    if (this.value === "Turbo" && (!product_Title.includes('Turbo'))) {
+      document.querySelector('.turboRedirectButton').style.display = 'block';
+                resetAllHeaderColors(false, true);
+                if(qualityTypeSelect) {
+                  disableQualityTypeSelect();
+                  disableQualityDescriptionBtn();
+                }
+                clearCombinedVariantSelect();
+                disableCombinedVariantSelect();
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
+                disableVinVerificationBtns();
+                clearVinVerificationRadioButtons();
+                disableAddToCartButton();
+                disablehowToFindPaintCodeBtn();
+                disableGetPaintCodeUsingVin();
+                disableSelectVinVariantBtn();
+                disableVINTextboxForOEM();
+    } else if (this.value === "Not Turbo" && (product_Title.includes('Turbo'))) {
+      document.querySelector('.turboRedirectButton').style.display = 'block';
+                resetAllHeaderColors(false, true);
+                if(qualityTypeSelect) {
+                  disableQualityTypeSelect();
+                  disableQualityDescriptionBtn();
+                }
+                clearCombinedVariantSelect();
+                disableCombinedVariantSelect();
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
+                disableVinVerificationBtns();
+                clearVinVerificationRadioButtons();
+                disableAddToCartButton();
+                disablehowToFindPaintCodeBtn();
+                disableGetPaintCodeUsingVin();
+                disableSelectVinVariantBtn();
+                disableVINTextboxForOEM();
+    }
+    else if (this.value === "Turbo" && product_Title.includes('Turbo')) {
+      document.querySelector('.turboRedirectButton').style.display = 'none';
+      enableProductTypeSelect();
+      enableQualityDescriptionBtn();
+      updateProgressHeaderColors();
+    } else if (this.value === "Not Turbo" && !product_Title.includes('Turbo')) {
+      document.querySelector('.turboRedirectButton').style.display = 'none';
+      enableProductTypeSelect();
+      enableQualityDescriptionBtn();
+      updateProgressHeaderColors();
+    }
+  });
+});
+</script>
