@@ -17,8 +17,9 @@ const paintOptionSelectPaintCodeLabel = document.getElementById('checkbox-select
 const precisionMatchLabel = document.querySelector('.precision-match-guarantee');
 const precisionMatchCheckboxYesLibrary = document.getElementById('precision-match');
 const precisionMatchWrapperLibrary = document.querySelector('.product-page-precision-match-wrapper');
-
-
+var productTitle = "{{product.title | escape}}";
+const turboHeader = document.querySelector('.option-title-turbo');
+const turboTypeSelect = document.querySelector('.turbo-type-select');
 
 let currentAddToCartBtn;
 if (addToCartButton) {
@@ -47,12 +48,15 @@ const COLORS = {
 
 
 // Progressive header colors -- STEPS
-function resetAllHeaderColors(fail) {
+function resetAllHeaderColors(fail, turbo) {
     // fail is a bool that determines color of fitment header based on whether or not the fitment is in focus
     if (fail) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
     } else {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.black;
+    }
+    if(!turbo){
+        if(turboHeader)turboHeader.style.color = COLORS.gray;
     }
     if (qualityHeader) qualityHeader.style.color = COLORS.gray;
     if (vinHeader) vinHeader.style.color = COLORS.gray;
@@ -95,7 +99,12 @@ function getQualityHeaderColor() {
     }
     return COLORS.gray; // gray
 }
-
+//returns red for now
+function getTurboHeaderColor() {
+    if(qualityTypeSelect.disabled === true && !turboTypeSelect.classList.contains('turbo-disabled')){return COLORS.red}
+    else if(qualityTypeSelect.disabled === false){return COLORS.black;}
+    else return COLORS.gray;
+}
 
 function isValidVin() {
     const hasCombinedVariant = !!combinedVariantSelect;
@@ -261,7 +270,7 @@ function isPrecisionMatchSelected() {
 
 // Progressive header colors main function
 function updateProgressHeaderColors() {
-    resetAllHeaderColors(false);
+    resetAllHeaderColors(false, false);
     let precisionMatchHeaderColor;
     let vinVerificationHeaderColor;
 
@@ -272,6 +281,13 @@ function updateProgressHeaderColors() {
 
     const qualityHeaderColor = getQualityHeaderColor();
     if (qualityHeader) qualityHeader.style.color = qualityHeaderColor;
+
+    //gets header color function line 100
+    if (turboHeader){
+    const turboHeaderColor = getTurboHeaderColor();
+    turboHeader.style.color = turboHeaderColor;
+    }
+
 
     const needsVin = oemVinContainer && oemVinContainer.classList.contains("show");
     const vinHeaderColor = isValidVin();
