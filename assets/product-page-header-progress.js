@@ -17,8 +17,9 @@ const paintOptionSelectPaintCodeLabel = document.getElementById('checkbox-select
 const precisionMatchLabel = document.querySelector('.precision-match-guarantee');
 const precisionMatchCheckboxYesLibrary = document.getElementById('precision-match');
 const precisionMatchWrapperLibrary = document.querySelector('.product-page-precision-match-wrapper');
-
-
+var productTitle = "{{product.title | escape}}";
+const turboHeader = document.querySelectorAll('.option-title-turbo');
+const turboTypeSelect = document.querySelector('.turbo-type-select');
 
 let currentAddToCartBtn;
 if (addToCartButton) {
@@ -53,6 +54,12 @@ function resetAllHeaderColors(fail) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
     } else {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.black;
+    }
+    if (!turbo) {
+        //if(turboHeader)turboHeader.style.color = COLORS.gray;
+        turboHeader.forEach(function (header) {
+            header.style.color = COLORS.gray; // or any color you want
+        });
     }
     if (qualityHeader) qualityHeader.style.color = COLORS.gray;
     if (vinHeader) vinHeader.style.color = COLORS.gray;
@@ -95,7 +102,11 @@ function getQualityHeaderColor() {
     }
     return COLORS.gray; // gray
 }
-
+//returns red for now
+function getTurboHeaderColor() {
+    if (!turboTypeSelect.classList.contains('turbo-disabled')) { return COLORS.black }
+    else return COLORS.gray;
+}
 
 function isValidVin() {
     const hasCombinedVariant = !!combinedVariantSelect;
@@ -272,6 +283,15 @@ function updateProgressHeaderColors() {
 
     const qualityHeaderColor = getQualityHeaderColor();
     if (qualityHeader) qualityHeader.style.color = qualityHeaderColor;
+
+    //gets header color function line 100
+    if (turboHeader) {
+        const turboHeaderColor = getTurboHeaderColor();
+        turboHeader.forEach(function (header) {
+            header.style.color = turboHeaderColor; // or any color you want
+        });
+    }
+
 
     const needsVin = oemVinContainer && oemVinContainer.classList.contains("show");
     const vinHeaderColor = isValidVin();
