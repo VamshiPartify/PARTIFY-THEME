@@ -367,6 +367,14 @@
     opacity: 1;
   }
 
+.required-questions-container {
+  border: 3px solid #334FB4;
+  border-radius: 16px;
+  background: transparent;
+  padding: 14px 24px 4px 24px;
+  width:100%;
+}
+
   #model-fitmentfail-button-container {
     padding: 15px 15px 0 15px;
     width: inherit;
@@ -751,9 +759,14 @@
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
         {% endif %}
-        {% if product.title contains 'Veloster' and product.metafields.custom.aspiration != blank%}
-          {%render 'product-page-turbo-options'%}
-        {%endif%}
+        {% if product.metafields.custom.aspiration_keys != blank %}
+          <div class="required-questions-container">
+          {% assign keys = product.metafields.custom.aspirations_keys | split: ',' %}
+          {% for key in keys %}
+            {% render 'product-page-turbo-options', key_index: forloop.index0 %}
+          {% endfor %}
+          </div>
+        {% endif %}
         <!-- The following if/elseif/else determines how the quality and paint options themselves are displayed -->
         {% if meta_fields > 1 %}
           <!-- Quality options and not OEM -->

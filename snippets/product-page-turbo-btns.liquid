@@ -1,6 +1,18 @@
 <style>
+      .additional-options-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #e61b24;
+      margin-bottom: 10px;
+    }
+    .additional-options-title-disabled {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
     .option-title-turbo {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: #333;
     }
@@ -10,6 +22,11 @@
       pointer-events: none;
     }
     #option-title-turbo.disabled {
+      color: #ccc;
+      pointer-events: none;
+    }
+    .verifyCompatibilityButton.disabled {
+
       color: #ccc;
       pointer-events: none;
     }
@@ -75,38 +92,163 @@
   cursor: pointer;
   font-weight: bold;
 }
-</style>
-  <div class="turbo-type-select turbo-disabled">
+.verifyCompatibilityButton {
+  border-radius: 14px;
+  width: 100%;
+  margin-top: 24px;
+  background-color: #01A601;
+  color: #fff;
+  padding: 7px 7px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-  <label class="option-title-turbo">Is Your Veloster A Turbo Model?</label>
+.not-compatible-button {
+  border-radius: 14px;
+  width: 100%;
+  background-color: #e61b24;
+  color: #fff;
+  padding: 7px 7px;
+    margin-top: 8px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  font-weight: bold;
+}
+.compatible-message{
+  display: inline-flex;
+  align-items: center;
+  background: #01A601;
+  border-radius: 10px;
+  padding: 10px 16px;
+
+}
+      .not-compatible-label {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-top: 8px;
+      color: #e61b24;
+      text-align: center;
+      display: block;
+    }
+
+  .aspiration-divider {
+    height: 1px;
+    width: 104%;
+    background-color: #000000;
+    margin: 5px 0 8px 0;
+    opacity: 0.8;
+    position: relative;
+  }
+</style>
+  <div class="turbo-type-select turbo-disabled" data-group-index="{{key_index}}">
+  <!-- <div class="aspiration-divider"></div> -->
+   <label class="additional-options-title" style="none" data-group-index="{{key_index}}">Additional Compatibility Questions</label>
+  <label class="option-title-turbo" data-group-index="{{key_index}}"></label>
 <div class="turbo-option">
   <input
     type="radio"
-    name="turboOption"
+    name="turboOption-{{key_index}}"
     value="Turbo"
-    id="turbo-radio"
+    id="turbo-radio-{{key_index}}"
+    class="turbo-radio"
     disabled
   >
-  <label class="turboText turbo-disabled" for="turbo-radio">It Is A Turbo</label>
+  <label class="turboText turbo-disabled" for="turbo-radio-{{key_index}}" data-group-index="{{key_index}}"></label>
   <br>
 </div>
 <div class="turbo-option">
   <input
     type="radio"
-    name="turboOption"
+    name="turboOption-{{key_index}}"
     value="Not Turbo"
-    id="not-turbo"
+    id="not-turbo-{{key_index}}"
+    class="turbo-radio"
     disabled
   >
-  <label class="turboText turbo-disabled" for="not-turbo">It Is Not A Turbo</label><br>
-  <button class="turboRedirectButton" style="display: none;" type="button" onclick="turboButtonClick()">Parts That Fit Your Vehicle</button>
+  <label class="turboText turbo-disabled" for="not-turbo-{{key_index}}" data-group-index="{{key_index}}"></label><br>
+  <button class="turboRedirectButton" data-group-index="{{key_index}}" style="display: none;" type="button" onclick="turboButtonClick({{key_index}})">Parts That Fit Your Vehicle</button>
+  <button class="verifyCompatibilityButton disabled" data-group-index="{{key_index}}" style="display: none;" type="button" onclick="verifyCompatibilityButtonClick()">Verify Part Compatibility</button>
+  
 </div>
         </div>
+<div class="compatible-message"style="display: none;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" fill="white" style="flex-shrink: 0;">
+    <path d="M14.686 8.615A1.071 1.071 0 0 0 13.171 7.1l-4.242 4.242L7.186 9.6a1.071 1.071 0 1 0-1.515 1.515l2.5 2.5a1.071 1.071 0 0 0 1.515 0l5-5Z"></path>
+    <path fill-rule="evenodd" d="M20 10c0 5.523-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0s10 4.477 10 10Zm-2.143 0a7.857 7.857 0 1 1-15.714 0 7.857 7.857 0 0 1 15.714 0Z"></path>
+  </svg>
+  <span style="color: #fff; font-weight: 800; margin-left: 12px;">
+    This Part Is Compatible With Your Vehicle
+  </span>
+</div>
+<div class="not-compatible" style="display: none;">
+  <label class="not-compatible-label">This Part Is Not Compatible With Your Vehicle</label>
+  <button class="not-compatible-button" type="button">Parts That Fit Your Vehicle</button>
+</div>
 
 {% assign product_Title = product.title%}
 
 <script>
 //FUNCTIONS
+var myMeta = {{ product.metafields.custom.aspirations_keys | json }};
+var myReference = {{ product.metafields.custom.aspiration_questions_reference.value | json}};
+ var keysArray = myMeta.split(',');
+     var passedIndex = "{{key_index}}";
+     /*if (Number(passedIndex) === (keysArray.length - 1)){
+        document.querySelector('.additional-options-title').style.display = 'block';
+     }*/
+    if (Number(passedIndex) === keysArray.length - 1) {
+  // Select the button for this group (using data-group-index or a unique id)
+  var verifyButton = document.querySelector('.verifyCompatibilityButton[data-group-index="' + passedIndex + '"]');
+  if (verifyButton) {
+    verifyButton.style.display = 'block';
+  }
+}
+     document.querySelectorAll('.additional-options-title').forEach(function(label) {
+  if (label.getAttribute('data-group-index') !== "0") {
+    label.style.display = 'none';
+  }
+});
+    var currentKey = keysArray[passedIndex];
+    var splitKey = currentKey.split('-');
+    var yesNo = splitKey[0];
+    var keyValue = splitKey[1].toLowerCase();
+    //console.log("look hereeeeeeeeeeeeeeeeeeeeeee" + JSON.stringify(myReference));
+    var renderObject= myReference.aspiration_question_json_list.find(function(item) {
+  return item.key === keyValue;
+});
+
+
+
+if (renderObject) {
+  var aspirationValue = renderObject.value;
+  console.log(aspirationValue);
+}
+var questionArray = aspirationValue.split(',');
+var groupIndex = passedIndex;
+var title = document.querySelector(`.option-title-turbo[data-group-index="${groupIndex}"]`);
+title.textContent = questionArray[0];
+console.log("groupIndex: " + groupIndex);
+var radios = document.querySelectorAll(`input[name="turboOption-${groupIndex}"]`);
+if (radios.length >= 1) {
+  if(yesNo.includes('no')) {
+      radios[0].value = `${keyValue}-false`;
+  radios[1].value = `No-${keyValue}-true`;
+  }
+  else{
+  radios[0].value = `${keyValue}-true`;
+  radios[1].value = `No-${keyValue}-false`;
+}
+}
+var labels = document.querySelectorAll(`.turboText[data-group-index="${groupIndex}"]`);
+if (labels.length > 1) {
+  labels[0].textContent = questionArray[1];
+  labels[1].textContent = questionArray[2];
+
+}
+
+
+
       function getYearMakeModel(url) {
       const urlObj = new URL(url);
       const parts = urlObj.pathname.split('/');
@@ -141,17 +283,22 @@
     turboButton = document.querySelector('.turboRedirectButton');
     var product_Title = "{{ product_Title }}";
     var partType = filterForProductType(product_Title);
-    function turboButtonClick(){
+
+    function turboButtonClick(groupIndex){
        const fitmentLink = document.querySelector('.easysearch-fitment-link');
+         const groupContainer = document.querySelector(`.turbo-type-select[data-group-index="${groupIndex}"]`);
        if (fitmentLink) {
         console.log(fitmentLink.href);
           const vehicle = getYearMakeModel(fitmentLink);
-          console.log(vehicle.combined);
-          const selected = document.querySelector('input[name="turboOption"]:checked');
-          if (selected.value === "Turbo") {
+          //console.log(vehicle.combined);
+          const selected = groupContainer.querySelector('.turbo-radio:checked');
+          //console.log(selected.value);
+          if (selected.value.includes('turbo')) {
+            //console.log(selected.value);
             window.location.href = fitmentLink.href + "?filter.p.m.custom.aspiration=Turbo&filter.p.product_type=" + partType;
       }
-            else if (selected.value === "Not Turbo") {
+            else if (selected.value.includes('No-turbo')) {
+                          //console.log(selected.value);
               window.location.href = fitmentLink.href + "?filter.p.m.custom.aspiration=Non+Turbo&filter.p.product_type=" + partType;
             }
         } else {
@@ -159,31 +306,68 @@
         }
     }
 
-    //EVENTS
-document.querySelectorAll('input[name="turboOption"]').forEach(function(radio) {
+    function verifyCompatibilityButtonClick(){
+        const selectedValues = Array.from(document.querySelectorAll('.turbo-radio:checked')).map(radio => radio.value);
+        console.log(selectedValues);
+        const hasFalse = selectedValues.some(val => val.includes('false'));
+                  document.querySelectorAll('.turbo-type-select').forEach(function(el) {
+          el.style.display = 'none';
+                    
+});
+        if (hasFalse) {
+                  var notCompatibleMessage = document.querySelector('.not-compatible');
+                            notCompatibleMessage.style.display = 'block';
+                                      var additionalQuestionContainer = document.querySelector('.required-questions-container');
+          if (additionalQuestionContainer) {
+            additionalQuestionContainer.style.padding = '4px';
+                        additionalQuestionContainer.style.border = '1.5px solid #e61b24';
+        }
+}
+        else{
+
+
+          var compatibleMessage = document.querySelector('.compatible-message');
+          compatibleMessage.style.display = 'inline-flex';
+          var additionalQuestionContainer = document.querySelector('.required-questions-container');
+          if (additionalQuestionContainer) {
+            additionalQuestionContainer.style.padding = '4px';
+            additionalQuestionContainer.style.border = '1.5px solid #01A601';
+          }
+                enableProductTypeSelect();
+      enableQualityDescriptionBtn();
+      updateProgressHeaderColors();
+        }
+
+
+    }
+document.querySelectorAll('.turbo-radio').forEach(function(radio) {
   radio.addEventListener('change', function(event) {
     event.preventDefault();
-    console.log(product_Title);
-    if (this.value === "Turbo" && (!product_Title.includes('Turbo'))) {
-      document.querySelector('.turboRedirectButton').style.display = 'block';
-                resetAllHeaderColors(false, true);
-                if(qualityTypeSelect) {
-                  disableQualityTypeSelect();
-                  disableQualityDescriptionBtn();
-                }
-                clearCombinedVariantSelect();
-                disableCombinedVariantSelect();
-                disablePrecisionMatchBtns();
-                clearPrecisionMatchRadioButtons();
-                disableVinVerificationBtns();
-                clearVinVerificationRadioButtons();
-                disableAddToCartButton();
-                disablehowToFindPaintCodeBtn();
-                disableGetPaintCodeUsingVin();
-                disableSelectVinVariantBtn();
-                disableVINTextboxForOEM();
-    } else if (this.value === "Not Turbo" && (product_Title.includes('Turbo'))) {
-      document.querySelector('.turboRedirectButton').style.display = 'block';
+    const groupIndices = Array.from(document.querySelectorAll('.turbo-type-select')).map(div => div.getAttribute('data-group-index'));
+    let allChecked = true;
+
+    groupIndices.forEach(function(groupIndex) {
+      const checked = document.querySelector(`.turbo-type-select[data-group-index="${groupIndex}"] .turbo-radio:checked`);
+      if (!checked) {
+        allChecked = false;
+      }
+    });
+
+    if (allChecked) {
+      document.querySelectorAll('.verifyCompatibilityButton').forEach(btn => btn.classList.remove('disabled'));
+    }
+  });
+});
+    //EVENTS
+/*document.querySelectorAll('.turbo-radio').forEach(function(radio) {
+  radio.addEventListener('change', function(event) {
+    event.preventDefault();
+
+    var groupContainer = radio.closest('.turbo-type-select');
+    var turboRedirectButton = groupContainer.querySelector('.turboRedirectButton');
+    if (this.value.includes('false')) {//Not turbo product, select is turbo OR turbo product, select is not turbo
+      //console.log(this.value);
+      turboRedirectButton.style.display = 'block';
                 resetAllHeaderColors(false, true);
                 if(qualityTypeSelect) {
                   disableQualityTypeSelect();
@@ -201,17 +385,13 @@ document.querySelectorAll('input[name="turboOption"]').forEach(function(radio) {
                 disableSelectVinVariantBtn();
                 disableVINTextboxForOEM();
     }
-    else if (this.value === "Turbo" && product_Title.includes('Turbo')) {
-      document.querySelector('.turboRedirectButton').style.display = 'none';
-      enableProductTypeSelect();
-      enableQualityDescriptionBtn();
-      updateProgressHeaderColors();
-    } else if (this.value === "Not Turbo" && !product_Title.includes('Turbo')) {
-      document.querySelector('.turboRedirectButton').style.display = 'none';
+    else{//Not turbo product, select is not turbo OR turbo product, select is turbo
+          //console.log(this.value);
+      turboRedirectButton.style.display = 'none';
       enableProductTypeSelect();
       enableQualityDescriptionBtn();
       updateProgressHeaderColors();
     }
   });
-});
+});*/
 </script>

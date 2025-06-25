@@ -18,7 +18,7 @@ const precisionMatchLabel = document.querySelector('.precision-match-guarantee')
 const precisionMatchCheckboxYesLibrary = document.getElementById('precision-match');
 const precisionMatchWrapperLibrary = document.querySelector('.product-page-precision-match-wrapper');
 var productTitle = "{{product.title | escape}}";
-const turboHeader = document.querySelector('.option-title-turbo');
+const turboHeader = document.querySelectorAll('.option-title-turbo');
 const turboTypeSelect = document.querySelector('.turbo-type-select');
 
 let currentAddToCartBtn;
@@ -56,7 +56,10 @@ function resetAllHeaderColors(fail, turbo) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.black;
     }
     if(!turbo){
-        if(turboHeader)turboHeader.style.color = COLORS.gray;
+        //if(turboHeader)turboHeader.style.color = COLORS.gray;
+        turboHeader.forEach(function(header) {
+            header.style.color = COLORS.gray; // or any color you want
+        });
     }
     if (qualityHeader) qualityHeader.style.color = COLORS.gray;
     if (vinHeader) vinHeader.style.color = COLORS.gray;
@@ -101,9 +104,8 @@ function getQualityHeaderColor() {
 }
 //returns red for now
 function getTurboHeaderColor() {
-    if(qualityTypeSelect.disabled === true && !turboTypeSelect.classList.contains('turbo-disabled')){return COLORS.red}
-    else if(qualityTypeSelect.disabled === false){return COLORS.black;}
-    else return COLORS.gray;
+    if(!turboTypeSelect.classList.contains('turbo-disabled')){return COLORS.black}
+     else return COLORS.gray;
 }
 
 function isValidVin() {
@@ -285,7 +287,9 @@ function updateProgressHeaderColors() {
     //gets header color function line 100
     if (turboHeader){
     const turboHeaderColor = getTurboHeaderColor();
-    turboHeader.style.color = turboHeaderColor;
+turboHeader.forEach(function(header) {
+  header.style.color = turboHeaderColor; // or any color you want
+});
     }
 
 
