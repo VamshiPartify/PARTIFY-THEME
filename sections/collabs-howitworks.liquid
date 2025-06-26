@@ -1,0 +1,178 @@
+{% schema %}
+{
+  "name": "Collabs How It Works",
+  "settings": [
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Section Headline",
+      "default": "How the Partify Collabs Program Works"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro Paragraph",
+      "default": "Join one of the fastest-growing auto affiliate programs. Our Collabs program helps content creators, car enthusiasts, and influencers earn real rewards by sharing what they love. Signing up is easy—and earning is even easier!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Step Number",
+          "default": "1"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Step Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step Title",
+          "default": "Sign Up"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Step Description",
+          "default": "Apply in minutes and join a growing network of passionate auto creators."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Collabs How It Works",
+      "blocks": [
+        { "type": "step", "settings": { "step_number": "1", "title": "Sign Up", "description": "Apply in minutes and join a growing network of passionate auto creators." } },
+        { "type": "step", "settings": { "step_number": "2", "title": "Share", "description": "Recommend auto parts and custom builds with your unique links." } },
+        { "type": "step", "settings": { "step_number": "3", "title": "Earn", "description": "Get paid for every successful referral—no limits!" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.partify-howitworks-wrap {
+  background: #fff;
+  padding: 60px 0 50px 0;
+  text-align: center;
+}
+.partify-howitworks-headline {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #181e2c;
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+.partify-howitworks-intro {
+  color: #343a4c;
+  font-size: 1.08rem;
+  max-width: 680px;
+  margin: 0 auto 44px auto;
+  line-height: 1.5;
+}
+.partify-howitworks-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 46px;
+  margin: 0 auto;
+  max-width: 1100px;
+}
+.partify-howitworks-step {
+  background: none;
+  border-radius: 14px;
+  padding: 0 16px 0 16px;
+  flex: 1 1 270px;
+  max-width: 320px;
+  min-width: 210px;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.partify-howitworks-stepicon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 16px;
+  background: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.partify-howitworks-stepicon img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  filter: none;
+}
+.partify-howitworks-stepnum {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffb900;
+  color: #181e2c;
+  font-size: 1.18rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+  box-shadow: 0 2px 8px #0001;
+  letter-spacing: -1px;
+}
+.partify-howitworks-steptitle {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #181e2c;
+  margin-bottom: 10px;
+}
+.partify-howitworks-stepdesc {
+  color: #474a5a;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+@media (max-width: 900px) {
+  .partify-howitworks-steps {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .partify-howitworks-step {
+    max-width: 98vw;
+    min-width: 0;
+    padding: 0 10px;
+  }
+}
+
+
+</style>
+
+<section class="partify-howitworks-wrap">
+  <div class="partify-howitworks-headline">{{ section.settings.headline }}</div>
+  <div class="partify-howitworks-intro">{{ section.settings.intro }}</div>
+  <div class="partify-howitworks-steps">
+    {% for block in section.blocks %}
+      <div class="partify-howitworks-step">
+        {% if block.settings.icon != blank %}
+          <span class="partify-howitworks-stepicon">
+            <img src="{{ block.settings.icon | img_url: '64x' }}" alt="{{ block.settings.title | escape }}">
+          </span>
+        {% endif %}
+        <span class="partify-howitworks-stepnum">{{ block.settings.step_number }}</span>
+        <div class="partify-howitworks-steptitle">{{ block.settings.title }}</div>
+        <div class="partify-howitworks-stepdesc">{{ block.settings.description }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</section>

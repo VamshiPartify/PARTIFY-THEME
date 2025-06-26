@@ -47,9 +47,6 @@ const vinVerifyCheckboxNoLibrary = document.getElementById('fitment-no');
 const vinVerificationButtonLibrary = document.getElementById('vin-verification-button');
 const vinVerificationWrapper = document.getElementById('vin-textbox-for-verification-wrapper show');
 const vinVerificationInput = document.getElementById('vin-textbox-for-verification');
-const redirectDisclaimer = document.getElementById('redirect-disclaimer');
-const turboBox = document.getElementById('turbo-options-checkbox');
-
 
 let emptyVinVerificationRadioButtons = true;
 let emptyPrecisionMatchRadioButtons = true;
@@ -115,22 +112,6 @@ function disablePrePaintedMessagingQualityLevel() {
     if (paintedStockKeyQualityLevelLibrary) {
         paintedStockKeyQualityLevelLibrary.classList.add("disabled")
     }
-}
-
-function disableTurboSelect() {
-    const turboRadioButtons = document.querySelectorAll('input[name="turboOption"]');
-    turboRadioButtons.forEach(radio => {
-        radio.disabled = true;
-        radio.checked = false;
-    });
-    document.querySelectorAll('.turboText').forEach(function(el) {
-        el.classList.add('turbo-disabled');
-    });
-        document.querySelectorAll('.turbo-type-select').forEach(function(el) {
-        el.classList.add('turbo-disabled');
-    });
-      document.querySelector('.turboRedirectButton').style.display = 'none';
-
 }
 
 function disableQualityTypeSelect() {
@@ -310,7 +291,7 @@ function enablePrePaintedMessagingQualityLevel() {
 function enableProductTypeSelect() {
     if (qualityOptionsCheckboxLibrary) {
         const qualityRadioButtons = document.querySelectorAll('input[name="quality_type"]');
-        if (redirectDisclaimer) redirectDisclaimer.classList.remove("disabled");
+
         // If quality options checkboxes
         qualityRadioButtons.forEach(radio => {
             if (radio.dataset.available === "true") {
@@ -319,20 +300,6 @@ function enableProductTypeSelect() {
         });
     }
     if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.disabled = false;
-}
-
-function enableTurboSelect() {
-    console.log("Enabling turbo select");
-    const turboRadioButtons = document.querySelectorAll('input[name="turboOption"]');
-    turboRadioButtons.forEach(radio => {
-        radio.disabled = false;
-    });
-    document.querySelectorAll('.turboText').forEach(function(el) {
-        el.classList.remove('turbo-disabled');
-    });
-        document.querySelectorAll('.turbo-type-select').forEach(function(el) {
-        el.classList.remove('turbo-disabled');
-    });
 }
 
 function enableQualityDescriptionBtn() {

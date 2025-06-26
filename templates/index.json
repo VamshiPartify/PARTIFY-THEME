@@ -15,8 +15,8 @@
         "template--14842501464149__bb8bbd89-2fb0-44fa-b240-4c8162c0dc28-slide-1": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/car_banner_2_copy.png",
-            "mobile_background_image": "shopify://shop_images/3.png",
+            "background_image": "shopify://shop_images/banner_2_skinny.jpg",
+            "mobile_background_image": "shopify://shop_images/mobile_2_resized.jpg",
             "title": "",
             "text": "",
             "color": "#ffffff",
@@ -36,8 +36,8 @@
         "slide_XE3R7b": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/CAR_BANNER_3_copy.png",
-            "mobile_background_image": "shopify://shop_images/1.png",
+            "background_image": "shopify://shop_images/banner_3_updated_skinny.jpg",
+            "mobile_background_image": "shopify://shop_images/MOBILE_3_resized.jpg",
             "title": "",
             "text": "",
             "color": "#ffffff",
@@ -57,8 +57,8 @@
         "slide_Uex3FM": {
           "type": "slide",
           "settings": {
-            "background_image": "shopify://shop_images/car_banner_copy.png",
-            "mobile_background_image": "shopify://shop_images/2.png",
+            "background_image": "shopify://shop_images/banner_1_skinny.jpg",
+            "mobile_background_image": "shopify://shop_images/mobile_1_resized.jpg",
             "title": "",
             "text": "",
             "color": "#ffffff",
@@ -95,7 +95,6 @@
     },
     "17144074275bb62685": {
       "type": "apps",
-      "disabled": true,
       "blocks": {
         "easysearch_year_make_model_easysearch_widget_3WQi3y": {
           "type": "shopify://apps/easysearch-ymm/blocks/easysearch-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
@@ -108,6 +107,7 @@
       "block_order": [
         "easysearch_year_make_model_easysearch_widget_3WQi3y"
       ],
+      "disabled": true,
       "custom_css": [
         "div {margin-top: 0; margin-bottom: 0; background-color: #0c1a94;}",
         "#easysearch-search {background: #fdac3a !important; min-width: 200px; text-align: center; font-size: 16pt !important;}",
@@ -123,9 +123,7 @@
     },
     "easysearch_ymm": {
       "type": "easysearch-ymm-section",
-      "settings": {
-        "include_padding": false
-      }
+      "settings": {}
     },
     "dynamic_custom_liquid_kirR3Y": {
       "type": "dynamic-custom-liquid",

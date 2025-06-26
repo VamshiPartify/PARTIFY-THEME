@@ -48,7 +48,6 @@
         "custom_liquid": "{% assign custom_title = collection.title %}\n\n{% if request.query_string contains 'aspiration' %}\n  {% assign aspiration_value = request.query_string | split: 'aspiration=' | last | split: '&' | first %}\n  {% assign aspiration_value_decoded = aspiration_value | url_decode %}\n  {% assign custom_title = custom_title | append: ' - ' | append: aspiration_value_decoded %}\n{% endif %}\n\n<h1 class=\"collection-title\">{{ custom_title }}</h1>"
       }
     },
-    // Add the collection-type-buttons section
     "collection_type_buttons": {
       "type": "collection-type-buttons",
       "blocks": {

@@ -1,0 +1,159 @@
+{% schema %}
+{
+  "name": "Collabs FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Section Headline",
+      "default": "Frequently Asked Questions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How do I join the Collabs program?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Click 'Apply Now' at the top of this page and fill out the quick form to get started."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Collabs FAQ",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Who can join?",
+            "answer": "If you create content, have an audience, or love helping others with car projects, you’re welcome to apply!"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How do I get paid?",
+            "answer": "You can earn cash commissions, free parts, or exclusive bonuses—just share your unique link and get rewarded for every sale or referral."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Is there a minimum follower count?",
+            "answer": "We look for real engagement, not just big numbers. If you have an active audience—even small—you have a shot."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.partify-faq-wrap {
+  background: #fff;
+  padding: 52px 0 48px 0;
+  text-align: left;
+  max-width: 750px;
+  margin: 0 auto;
+}
+.partify-faq-headline {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #181e2c;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+.partify-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.partify-faq-item {
+  background: #f9f9fb;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px #0001;
+  overflow: hidden;
+}
+.partify-faq-question {
+  padding: 20px 26px 18px 26px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.13rem;
+  color: #181e2c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.17s;
+}
+.partify-faq-question:hover {
+  background: #f0f2fa;
+}
+.partify-faq-icon {
+  font-size: 1.35em;
+  color: #b8bac7;
+  transition: transform 0.22s;
+  margin-left: 6px;
+}
+input[type="checkbox"].faq-toggle {
+  display: none;
+}
+.partify-faq-answer {
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(-10px);
+  transition:
+    opacity 0.28s cubic-bezier(.45,0,.55,1),
+    max-height 0.33s cubic-bezier(.45,0,.55,1),
+    transform 0.33s cubic-bezier(.45,0,.55,1);
+  background: #f9f9fb;
+  color: #3e4357;
+  font-size: 1.06rem;
+  padding: 0 26px;
+  pointer-events: none;
+}
+input[type="checkbox"].faq-toggle:checked ~ .partify-faq-answer {
+  opacity: 1;
+  max-height: 350px;
+  transform: translateY(0);
+  padding: 14px 26px 22px 26px;
+  pointer-events: auto;
+  position: relative;
+}
+input[type="checkbox"].faq-toggle:checked ~ .partify-faq-question .partify-faq-icon {
+  transform: rotate(90deg);
+  color: #6e7390;
+}
+
+</style>
+
+<section class="partify-faq-wrap">
+  <div class="partify-faq-headline">{{ section.settings.headline }}</div>
+  <div class="partify-faq-list">
+    {% for block in section.blocks %}
+      <div class="partify-faq-item">
+        <input type="checkbox" class="faq-toggle" id="faq-{{ section.id }}-{{ forloop.index }}">
+        <label class="partify-faq-question" for="faq-{{ section.id }}-{{ forloop.index }}">
+          {{ block.settings.question }}
+          <span class="partify-faq-icon">&#8250;</span>
+        </label>
+        <div class="partify-faq-answer">
+          {{ block.settings.answer }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>

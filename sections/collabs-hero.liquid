@@ -1,0 +1,322 @@
+{% schema %}
+{
+  "name": "Collabs Hero Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image_desktop",
+      "label": "Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_desktop",
+      "label": "Overlay opacity (Desktop) %",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_mobile",
+      "label": "Overlay opacity (Mobile) %",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 95
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Recommend Parts. Earn Commissions."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Join Partify Collabs and turn your love for cars into real rewards—get paid to share, inspire, and build with us."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Apply Button Text",
+      "default": "Apply Now"
+    },
+    {
+      "type": "text",
+      "id": "login_text",
+      "label": "Login Link Text",
+      "default": "Log in"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collabs Hero Banner"
+    }
+  ]
+}
+{% endschema %}
+
+{% assign overlay_opacity_desktop = section.settings.overlay_opacity_desktop | default: 85 %}
+{% assign overlay_opacity_mobile = section.settings.overlay_opacity_mobile | default: 95 %}
+{% assign overlay_opacity_dec_desktop = overlay_opacity_desktop | divided_by: 100.0 %}
+{% assign overlay_opacity_dec_mobile = overlay_opacity_mobile | divided_by: 100.0 %}
+
+<style>
+/* Merge Collabs block visually with your hero */
+.partify-collabs-hero-content .shopify-block.shopify-app-block,
+.partify-collabs-hero-content .collabs-page__cta-login-section,
+.partify-collabs-hero-content .collabs-page__cta {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.partify-collabs-hero-content .collabs-page__cta-btn {
+  background: #ffb900 !important;
+  color: #232323 !important;
+  font-size: 1.12rem !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  padding: 18px 44px !important;
+  box-shadow: 0 4px 16px #0003 !important;
+  border: none !important;
+  margin: 0 0 20px 0 !important;
+}
+.partify-collabs-hero-content .collabs-page__cta-btn:hover {
+  background: #ffd655 !important;
+}
+
+  
+.partify-collabs-hero-wrap {
+  position: relative;
+  min-height: 380px;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+  border-radius: 0;
+  margin: 0;
+}
+.partify-collabs-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: opacity .2s;
+}
+.partify-collabs-hero-img--mobile { display: none; }
+.partify-collabs-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(24,30,44,{{ overlay_opacity_dec_desktop }});
+  z-index: 1;
+  pointer-events: none;
+  transition: background 0.2s;
+}
+.partify-collabs-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 41vw;
+  min-width: 340px;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  padding: 56px 32px 56px 4vw;
+}
+.partify-collabs-hero-content h1 {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin: 0 0 18px 0;
+  text-shadow: 0 2px 12px #0015, 0 1px 0 #181e2c;
+}
+.partify-collabs-hero-desc {
+  color: #f8f8fa;
+  font-size: 1.25rem;
+  margin-bottom: 28px;
+  max-width: 400px;
+  line-height: 1.38;
+  text-shadow: 0 1px 6px #181e2c88;
+}
+.partify-collabs-hero-btn {
+  background: #ffb900;
+  color: #232323;
+  padding: 18px 44px;
+  font-size: 1.12rem;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 16px #0003;
+  margin-bottom: 20px;
+  display: inline-block;
+  transition: background 0.15s;
+}
+.partify-collabs-hero-btn:hover {
+  background: #ffd655;
+}
+.partify-collabs-hero-login {
+  color: #fff;
+  font-size: 1.08rem;
+  margin-top: 2px;
+}
+.partify-collabs-hero-login a { color: #fff; text-decoration: underline; font-weight: 500; }
+@media (max-width: 1000px) {
+  .partify-collabs-hero-content {
+    width: 56vw;
+    min-width: 0;
+    padding-left: 2vw;
+    padding-right: 16px;
+  }
+  .partify-collabs-hero-content h1 { font-size: 1.52rem; }
+}
+@media (max-width: 800px) {
+  .partify-collabs-hero-img--desktop { display: none !important; }
+  .partify-collabs-hero-img--mobile { display: block !important; }
+  .partify-collabs-hero-wrap {
+    min-height: 200px;
+    border-radius: 0;
+  }
+  .partify-collabs-hero-overlay {
+    background: rgba(24,30,44,{{ overlay_opacity_dec_mobile }});
+  }
+  .partify-collabs-hero-content {
+    width: 99vw;
+    max-width: 99vw;
+    padding: 26px 7vw 18px 7vw;
+  }
+  .partify-collabs-hero-content h1 { font-size: 1.14rem; }
+}
+  .partify-collabs-hero-content .collabs-page__cta-login-section {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 7px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #f8f8fa !important;
+  font-size: 1.03rem !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+}
+
+.partify-collabs-hero-content .collabs-page__cta-login-section p {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #f8f8fa !important;
+  font-size: 1.03rem !important;
+  font-weight: 400 !important;
+  display: inline !important;
+}
+
+.partify-collabs-hero-content .collabs-page__cta-login-link {
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 1.04rem !important;
+  text-decoration: underline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline !important;
+  transition: color 0.13s;
+}
+.partify-collabs-hero-content .collabs-page__cta-login-link:hover {
+  color: #ffb900 !important;
+  text-decoration: underline !important;
+}
+.partify-collabs-hero-content .collabs-page__intro {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+.partify-collabs-hero-content .collabs-page__cta-main,
+.partify-collabs-hero-content .collabs-page__cta-btn {
+  background: #ffb900 !important;
+  color: #232323 !important;
+  font-size: 1.06rem !important; /* Normal button size */
+  font-weight: 700 !important;
+  border-radius: 6px !important; /* Compact padding */
+  box-shadow: 0 2px 8px #0002 !important;
+  border: none !important;
+  margin: 0 0 16px 0 !important;
+  text-align: left !important;
+  align-self: flex-start !important;
+  display: inline-block !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.14 !important;
+  transition: background 0.13s, box-shadow 0.13s;
+}
+.partify-collabs-hero-content .collabs-page__cta-main:hover,
+.partify-collabs-hero-content .collabs-page__cta-btn:hover {
+  background: #ffd655 !important;
+  color: #232323 !important;
+  box-shadow: 0 3px 16px #0002 !important;
+}
+.collabs-page__main {
+  padding: 0px !important;
+}
+.collabs-page__cta-login-section p {
+  color: #ffffff;
+}
+</style>
+
+<section class="partify-collabs-hero-wrap">
+  {% assign collabs_app_block_present = false %}
+{% for block in section.blocks %}
+  {% if block.type == '@app' %}
+    {% assign collabs_app_block_present = true %}
+  {% endif %}
+{% endfor %}
+
+  {% if section.settings.banner_image_desktop != blank %}
+    <img src="{{ section.settings.banner_image_desktop | img_url: '1440x' }}" 
+         alt="Collabs Banner Desktop"
+         class="partify-collabs-hero-img partify-collabs-hero-img--desktop">
+  {% endif %}
+  {% if section.settings.banner_image_mobile != blank %}
+    <img src="{{ section.settings.banner_image_mobile | img_url: '800x' }}"
+         alt="Collabs Banner Mobile"
+         class="partify-collabs-hero-img partify-collabs-hero-img--mobile">
+  {% endif %}
+  <div class="partify-collabs-hero-overlay"></div>
+  <div class="partify-collabs-hero-content">
+    <h1>{{ section.settings.headline }}</h1>
+    <div class="partify-collabs-hero-desc">{{ section.settings.description }}</div>
+        {% unless collabs_app_block_present %}
+      <a href="https://api.collabs.shopify.com/creator/signup/community_application/165bd16f6cb191?forigin=THEME_EXTENSION" class="partify-collabs-hero-btn">
+        {{ section.settings.cta_text }}
+      </a>
+    {% endunless %}
+
+    <!-- Collabs App Block Slot -->
+    {% for block in section.blocks %}
+      {% if block.type == '@app' %}
+        {% render block %}
+      {% endif %}
+    {% endfor %}
+
+
+  </div>
+</section>
