@@ -490,6 +490,9 @@
     // Polling fallback for any other changes
     setInterval(function () {
       const currentValue = localStorage.getItem(FITMENT_KEY);
+      const storedVinMsg = document.querySelector('.stored-vin-message');
+      const vinInputBox = document.getElementById('vin-decoder-textbox-for-verification');
+      const vinSubmitBtn = document.querySelector('.vin-decoder-submit-btn');
       if (currentValue !== lastValue) {
         lastValue = currentValue;
         // Parse and extract productPageYMM
@@ -505,6 +508,7 @@
             let searchTerms = moveVehicleToFront(productPageYMM);
             GarageUI.updateVehicleSelectionElement(productPageYMM);
             GarageLogic.updateGaragePopup(searchTerms);
+            setVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn);
           }
         } catch (e) {
           // Ignore parse errors
@@ -516,8 +520,13 @@
 
   // Initialization
   document.addEventListener('DOMContentLoaded', function () {
+    const storedVinMsg = document.querySelector('.stored-vin-message');
+    const vinInputBox = document.getElementById('vin-decoder-textbox-for-verification');
+    const vinSubmitBtn = document.querySelector('.vin-decoder-submit-btn');
     let searchTerms = GarageUtils.getSearchTerms();
     let ymmse = searchTerms.length ? searchTerms[0].ymm : null;
+
+    setVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn);
 
     // Fitment logic
     let year = searchTerms.length ? searchTerms[0]?.year?.trim() : null;
@@ -549,4 +558,9 @@
 
     GarageEvents.attachEventListeners();
   });
+
+  window.GarageUtils = GarageUtils;
+  window.GarageLogic = GarageLogic;
+  window.GarageUI = GarageUI;
+  window.GarageEvents = GarageEvents;
 </script>

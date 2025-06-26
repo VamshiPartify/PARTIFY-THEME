@@ -56,7 +56,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       height: 45px;
-      margin-top: 10px;
+      margin-top: 2px;
   }
 
   #vin-decoder-textbox-for-verification:disabled {
@@ -78,6 +78,52 @@
       opacity: 1;
       margin-top: 10px;
       max-height: fit-content;
+  }
+
+  .stored-vin-message {
+    color:#444444;
+    font-size: 14px;
+  }
+
+  .vin-decoder-submit-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 90px;
+    min-height: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  .vin-decoder-submit-btn:disabled {
+    background-color: #334FB4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: no-drop;
+    min-height: 40px;
+    opacity: 0.7;
+  }
+  .vin-decoder-submit-btn--loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+  }
+  @keyframes button-loading-spinner {
+    from { transform: rotate(0turn); }
+    to { transform: rotate(1turn); }
   }
 </style>
 
@@ -117,6 +163,7 @@
 {% endunless %}
 
 <div id="vin-decoder-textbox-for-verification-wrapper show">
+  <div class="stored-vin-message" style="display: none;"></div>
   <input
     type="text"
     id="vin-decoder-textbox-for-verification"
@@ -138,85 +185,91 @@
   <div class="vin-decoder-submission-success-message" style="display: none;">
     {{ 'fitment_verification.success' | t }}
   </div>
+  <button type="button" class="vin-decoder-submit-btn" disabled>Submit</button>
 </div>
 
 <script>
-  document.getElementById('vin-decoder-textbox-for-verification').addEventListener('input', async function (event) {
-    const originalValue = event.target.value;
-    const troublesomeMakesColors = {};
+  document.addEventListener('DOMContentLoaded', async function() {
+    const garageSearchTerms = getGarageSearchTerms();
 
-    let isExcludedValue = '{{ is_excluded_make_found }}';
-    let isBumperdotcom = '{{ is_bumperdotcom_make_found }}';
+    document.getElementById('vin-decoder-textbox-for-verification').addEventListener('input', async function (event) {
+      const originalValue = event.target.value;
+      const troublesomeMakesColors = {};
 
-    {% if is_troublesome_make == true %}
-      {% assign product_variants = product.variants %}
-        {% assign variant_count = product_variants | size %}
-            
-        {% if variant_count > 0 %}
-            {% for variant in product_variants %}
-            {% if variant.metafields.custom.chromedata_reference %}
-                    troublesomeMakesColors[{{ variant.metafields.custom.chromedata_reference }}] = '{{ variant.title }}';
-            {% endif %}
-            {% endfor %}
+      let isExcludedValue = '{{ is_excluded_make_found }}';
+      let isBumperdotcom = '{{ is_bumperdotcom_make_found }}' === 'true';
+      let isTroublesomeMake = '{{ is_troublesome_make }}' === 'true';
+
+      {% if is_troublesome_make == true or is_troublesome_make == 'true'%}
+        {% assign product_variants = product.variants %}
+          {% assign variant_count = product_variants | size %}
+              
+          {% if variant_count > 0 %}
+              {% for variant in product_variants %}
+              {% if variant.metafields.custom.chromedata_reference %}
+                      troublesomeMakesColors[{{ variant.metafields.custom.chromedata_reference }}] = '{{ variant.title }}';
+              {% endif %}
+              {% endfor %}
+        {% endif %}
       {% endif %}
-    {% endif %}
-    
+      
 
-    let vinInput = originalValue.toUpperCase();
-    const isRetryed = handleVinChange(event, 2);
-    if (isRetryed) {
-      return;
-    }
-    const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
-    // Set sanitized value to input box
-    event.target.value = filteredValue;
-    vinInput = filteredValue;
-    if (vinInput !== filteredValue) {
-      alert('Please enter valid characters. I, O, Q and special characters are not allowed in VINs');
-    } else if (typeof warning !== 'undefined') {
-      warning.style.display = 'none';
-    }
-    // Check for VIN length
-    if (vinInput.length === 17) {
-      attemptedVinsVinVerification.push(vinInput);
-      vinInput.value = vinInput;
-      await handleVinDecode(vinInput, 3, troublesomeMakesColors);
-      // No matter what, enable the button if three vins have been attempted
-      if (attemptedVinsVinVerification.length === 3) {
-        if (successfulVinVerificationVin === false) {
-          document.getElementById('vin-decoder-textbox-for-verification').value = '';
-          document.getElementById('vin-decoder-textbox-for-verification').disabled = true;
-        }
-        enableAddToCartButton();
+      let vinInput = originalValue.toUpperCase();
+      const isRetryed = handleVinChange(event, 3, '{{ 'garage.enter_valid_characters' | t }}');
+      if (isRetryed) {
+        return;
       }
-    } else if (vinInput.length === 0) {
-      enableAddToCartButton();
-    } else {
-      currentAddToCartBtn.disabled = true;
-    }
-    updateProgressHeaderColors();
+      const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
+      // Set sanitized value to input box
+      event.target.value = filteredValue;
+      vinInput = filteredValue;
+      if (vinInput !== filteredValue) {
+        alert('Please enter valid characters. I, O, Q and special characters are not allowed in VINs');
+      } else if (typeof warning !== 'undefined') {
+        warning.style.display = 'none';
+      }
+      // Enable/disable submit button based on VIN length
+      if (vinSubmitBtn) {
+        vinSubmitBtn.disabled = vinInput.length !== 17;
+      }
+      // Only handle UI feedback here, not submission
+      if (vinInput.length === 0) {
+        enableAddToCartButton();
+      } else if (vinInput.length < 17) {
+        currentAddToCartBtn.disabled = true;
+      }
+      updateProgressHeaderColors();
+    });
   });
 
-    async function handleVinDecode(vinInput, location, troublesomeMakesColors) {
+    async function handleVinDecode(vinInput, location, troublesomeMakesColors, bumperdotcommake, failed3timesmsg) {
+        let searchTerms = getGarageSearchTerms();  
         const noResults = '{{ 'garage.no_results' | t }}';
-        const useYMM = '{{ 'fitment_verification.failed_3_times_message' | t }}';
         const searchBtn = '{{ 'garage.search_btn' | t }}';
         const tailoredSuccessMessage = '{{ 'fitment_verification.tailored_success_message' | t }}';
         const remainingAttempts = '{{ 'fitment_verification.remaining_attempts' | t }}';
         let exteriorColor = '';
 
         // Returns isVinValid and Paint code (if no paint code, returns empty string)
-        const { validVin, paintCode } = await fetchVehicalDataByVin(vinInput, location, noResults, useYMM, searchBtn, tailoredSuccessMessage, remainingAttempts, troublesomeMakesColors);
+        const { validVin, ymm, paintCode } = await fetchVehicalDataByVin(vinInput, location, noResults, failed3timesmsg, searchBtn, tailoredSuccessMessage, remainingAttempts, troublesomeMakesColors, bumperdotcommake);
         console.log('validVin', validVin);
         console.log('paintCode', paintCode);
+        console.log('ymm here', ymm);
 
-        if(validVin && paintCode !== '') {
+        if(validVin) {
             // Vin is valid and paint code is found
             handleAutoSelectColor(paintCode, vinInput);
-        } else if (validVin && paintCode === '') {
-            // Vin is valid but paint code is not found (too many paint codes)
-            handleMatchByVin(vinInput, true);
-            handleFormulateVinMessage(vinInput);
+            searchTerms[0].vin = vinInput;
+            if(paintCode !== '') {
+              if (Array.isArray(searchTerms) && searchTerms.length > 0) {
+                const firstYMM = searchTerms[0].ymm || '';
+                if(firstYMM === ymm) {
+                  searchTerms[0].paintCode = paintCode;
+                }
+              }
+            }
+            localStorage.setItem('searchTerms', JSON.stringify(searchTerms));
+            window.GarageLogic.updateGaragePopup(window.GarageUtils.getSearchTerms());
         } else {
             // Vin is not valid
         }
@@ -412,5 +465,53 @@
         } else {
             console.warn('Variant selector dropdown not found.');
         }
+    }
+
+    // Add loading spinner logic and VIN submission to vin-decoder-submit-btn
+    const vinSubmitBtn = document.querySelector('.vin-decoder-submit-btn');
+    if (vinSubmitBtn) {
+      vinSubmitBtn.addEventListener('click', async function() {
+        if (vinSubmitBtn.disabled || vinSubmitBtn.classList.contains('vin-decoder-submit-btn--loading')) return;
+        const vinInputElem = document.getElementById('vin-decoder-textbox-for-verification');
+        const vinInput = vinInputElem.value.trim().toUpperCase();
+        if (vinInput.length !== 17) {
+          alert('VIN must be exactly 17 characters.');
+          return;
+        }
+        vinSubmitBtn._originalText = vinSubmitBtn.textContent;
+        vinSubmitBtn.textContent = '';
+        vinSubmitBtn.classList.add('vin-decoder-submit-btn--loading');
+        const troublesomeMakesColors = {};
+        let isBumperdotcom = '{{ is_bumperdotcom_make_found }}' === 'true';
+        let isTroublesomeMake = '{{ is_troublesome_make }}' === 'true';
+        {% if is_troublesome_make == true or is_troublesome_make == 'true'%}
+          {% assign product_variants = product.variants %}
+            {% assign variant_count = product_variants | size %}
+            {% if variant_count > 0 %}
+                {% for variant in product_variants %}
+                {% if variant.metafields.custom.chromedata_reference %}
+                        troublesomeMakesColors[{{ variant.metafields.custom.chromedata_reference }}] = '{{ variant.title }}';
+                {% endif %}
+                {% endfor %}
+          {% endif %}
+        {% endif %}
+        // Submission logic moved here
+        attemptedDecodedVins.push(vinInput);
+        const failed3timesmsg = '{{ 'vin_decoder.failed_3_times_msg' | t }}';
+        await handleVinDecode(vinInput, 3, troublesomeMakesColors, isBumperdotcom, failed3timesmsg);
+        // No matter what, enable the button if three vins have been attempted
+        if (attemptedDecodedVins.length === 3) {
+          if (successfulVinDecoding === false) {
+            vinInputElem.value = '';
+            vinInputElem.disabled = true;
+            disableAddToCartButton();
+          } else {
+            enableAddToCartButton();
+          }
+        }
+        vinSubmitBtn.classList.remove('vin-decoder-submit-btn--loading');
+        vinSubmitBtn.textContent = vinSubmitBtn._originalText || 'Submit';
+        updateProgressHeaderColors();
+      });
     }
 </script>

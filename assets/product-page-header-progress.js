@@ -6,7 +6,6 @@ const optionTitle = document.querySelector('.option-title');
 const fitmentVerificationTitle = document.querySelector('.fitment-guarantee');
 const fitmentVerificationOptional = document.querySelector('.fitment-verification-optional');
 const fitmentVerificationSubtitle = document.querySelector('.fitment-verification-description');
-const oemVinContainer = document.querySelector('.oem-vin-container');
 const qualityTypeSelect = document.getElementById('quality-type-select');
 const combinedVariantSelect = document.getElementById('variant-selector');
 const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
@@ -103,29 +102,20 @@ function getQualityHeaderColor() {
     const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
-    const needsVin = oemVinContainer && oemVinContainer.classList.contains("show");
 
 
     //If it does not needsVin, then the OEM option was not selected
-    if (!needsVin) {
-        if (hasProductType && hasCombinedVariant) {
-            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
-            if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
-        }
-        if (hasProductType && !hasCombinedVariant && hasFitmentVerification) {
-            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
-            if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
-        }
-        if (hasProductType && !hasCombinedVariant && !hasFitmentVerification) {
-            if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
-            if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
-        }
+    if (hasProductType && hasCombinedVariant) {
+        if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
+        if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
     }
-    //If it needsVin, then the OEM option was selected
-    if (needsVin) {
-        if (hasProductType) {
-            if (qualityTypeSelect.disabled === false) return COLORS.black;
-        }
+    if (hasProductType && !hasCombinedVariant && hasFitmentVerification) {
+        if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+        if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+    }
+    if (hasProductType && !hasCombinedVariant && !hasFitmentVerification) {
+        if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
+        if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
     }
     return COLORS.gray; // gray
 }

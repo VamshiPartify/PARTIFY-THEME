@@ -817,7 +817,7 @@
     "no_results": "We couldn’t find a match for this VIN.",
     "use_YMM_dropdown": "Please use the year, make, model dropdowns to find your vehicle",
     "enter_valid_characters": "Please enter valid characters. I, O, Q and other special characters are not allowed in VINs.",
-    "exactly_17_characters": "VIN must be exactly 17 characters.",
+    "exactly_17_characters": "VIN must be exactly 17 characters."
   },
   "collapsing_description": {
     "description": "Description",
@@ -962,7 +962,7 @@
   "policies_footer": {
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy Policy",
-    "refund_policy": "Refund Policy",
+    "refund_policy": "Refund Policy"
   },
   "easysearch_custom_section": {
     "button_text": "SELECT OR ADD A VEHICLE",
@@ -973,5 +973,8 @@
     "header": "Additional Compatibility Questions",
     "not_compatible": "This part is not compatible with your vehicle.",
     "find_parts": "Find parts that fit your vehicle",
+  },
+  "vin_decoder": {
+    "failed_3_times_msg": "We were not able to match a paint code to your VIN. Please select a paint code from the dropdown.",
   }
 }

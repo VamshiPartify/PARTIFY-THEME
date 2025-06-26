@@ -122,6 +122,18 @@
       flex-direction: column;
       justify-content: center;
       width: 100%;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+      max-height: 1000px;
+      opacity: 1;
+      margin-top: 0;
+      overflow: hidden;
+  }
+
+  .vin-guarantee-container.hide {
+      margin-top: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
   }
 
   .fitment-guarantee {
@@ -555,12 +567,12 @@
                       if(successfulVinVerificationVin === false) {
                         document.getElementById('vin-textbox-for-verification').value = '';
                       }
-                        enableAddToCartButton();
+                        disableAddToCartButton();
                     }
                   } else if(vinInput.length === 0) {
-                    enableAddToCartButton();
+                    enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                   } else {
-                    currentAddToCartBtn.disabled = true;
+                    disableAddToCartButton();
                 }
                 updateProgressHeaderColors();
             });
@@ -597,7 +609,6 @@
                   currentAddToCartBtn.disabled = false;
                 }
                 updateProgressHeaderColors();
-
             }
               
 

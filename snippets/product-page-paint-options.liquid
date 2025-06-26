@@ -51,6 +51,7 @@
       font-size: 16px;
       font-weight: 500;
       margin-top: 5px;
+      margin-bottom: 15px;
       text-align: left;
       color: #4b4b4b;
       line-height: 1.2;
@@ -631,7 +632,9 @@
         const STOCK_POSTFIX = "{{ 'quality_level_painted_stock.postfix' | t }}";
         const AFTERMARKET_WORD = '{{ 'quality_level_painted_stock.aftermarket' | t }}';
         const AND_WORD = '{{ 'quality_level_painted_stock.and' | t }}';
-        const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}'
+        const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}';
+        const garageSearchTerms = getGarageSearchTerms();
+        const vinOptionLabel = document.getElementById('paint-code-vin-option');
         aftermarketAvailability = {{ aftermarket_any_available_options | default: false | json }};
         capaAvailability = {{ capa_any_available_options | default: false | json }};
         oemAvailability = {{ oem_any_available_options | default: false | json }};
@@ -648,7 +651,7 @@
 
         if('{{ product.variants.size }}' <= 1) {
           unpainted = true;
-        }; 
+        };
 
         {% comment %} if(!hasDotVinOptionAftermarket && !hasDotVinOptionCapa && !hasDotVinOptionOem) {
           const vinOptionLabel = document.getElementById('paint-code-vin-option');
@@ -836,7 +839,7 @@
                   if(precisionMatchContainerLibrary) {
                     enablePrecisionMatchBtns();
                   } else if(vinVerificationCheckboxGroupLibrary) {
-                    enableAddToCartButton();
+                    enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                     enableVinVerificationBtns();
                   } else {
                     enableAddToCartButton();
@@ -910,6 +913,11 @@
                           if (precisionMatchContainerLibrary) {
                             enablePrecisionMatchBtns();
                           } else if (vinVerificationCheckboxGroupLibrary) {
+                            if(autoSelectedBanned) {
+                              enableOrDisableAddToCartForOEM("ISBANNED");
+                            } else {
+                              enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
+                            }
                             enableVinVerificationBtns();
                           } else {
                             enableAddToCartButton();
@@ -918,6 +926,7 @@
                           if (precisionMatchContainerLibrary) {
                             disablePrecisionMatchBtns();
                           } else if (vinVerificationCheckboxGroupLibrary) {
+                            enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                             disableVinVerificationBtns();
                           } else {
                             disableAddToCartButton();
