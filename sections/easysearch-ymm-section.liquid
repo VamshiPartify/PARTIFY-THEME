@@ -3,7 +3,6 @@
 <style>
   .ymm-section-{{ ymm_section_id }} {
     margin: 0;
-    background-color: #0c1a94;
     width: 100%;
     height: fit-content;
     display: flex;
@@ -14,23 +13,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 90%;
     max-width: 1200px;
-    margin: 0;
+    margin: 10px 0 0 0;
     padding: 18px 28px;
-    background: transparent;
+    background-color: #eee;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-radius: 0 0 10px 10px;
+    border-radius: 5px;
+    border-left: 8px solid #d89940;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     min-height: 64px;
     position: relative;
     z-index: 2;
   }
+
   .ymm-section-{{ ymm_section_id }} .shopping-for {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 20px;
-    color: #fff;
+    color: #444;
     font-weight: 400;
     letter-spacing: 0.01em;
     text-shadow: 0 1px 4px rgba(12, 24, 148, 0.1);
@@ -44,12 +48,12 @@
     display: flex;
     align-items: center;
     margin-right: 10px;
-    color: #fdac3a;
+    color: #444;
     flex-shrink: 0;
   }
   .ymm-section-{{ ymm_section_id }} .ss_megamenu_title_hero_link {
     font-weight: 700;
-    color: #fdac3a;
+    color: #444;
     font-size: 20px;
     padding: 2px 10px;
     border-radius: 4px;
@@ -68,36 +72,96 @@
     text-decoration: underline;
   }
   .ymm-section-{{ ymm_section_id }} #select-your-vehicle-btn-{{ ymm_section_id }} {
-    background: #fdac3a;
+    background: #fff;
     color: #0c1894;
     padding: 12px 24px;
-    border: none;
+    border: 1px solid #0c1894;
     border-radius: 6px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(253, 172, 58, 0.1);
     transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
     outline: none;
     letter-spacing: 0.01em;
   }
   .ymm-section-{{ ymm_section_id }} #select-your-vehicle-btn-{{ ymm_section_id }}:hover,
   .ymm-section-{{ ymm_section_id }} #select-your-vehicle-btn-{{ ymm_section_id }}:focus {
-    background: #ffb84d;
     color: #0c1894;
   }
+  .ymm-section-{{ ymm_section_id }} .shopping-for-text-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+  }
+  .ymm-section-{{ ymm_section_id }} .garageCarIconHomePage {
+    display: inline-flex;
+  }
+
+  .ymm-section-{{ ymm_section_id }} .shopping-for-garageCarIcon {
+    display: none;
+  }
+  .ymm-section-{{ ymm_section_id }} .shopping-for-ymm-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 1024px) {
+    .ymm-section-{{ ymm_section_id }} .garageCarIconHomePage {
+      display: none !important;
+    }
+
+    .ymm-section-{{ ymm_section_id }} .shopping-for-garageCarIcon {
+      display: inline-flex;
+      margin-right: 6px;
+      height: 18px;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 1024px) and (min-width: 768px) {
+    .ymm-section-{{ ymm_section_id }} .ymm-flex-row {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .ymm-section-{{ ymm_section_id }} .shopping-for {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+    .ymm-section-{{ ymm_section_id }} #select-your-vehicle-btn-{{ ymm_section_id }} {
+      width: auto;
+      margin-top: 0;
+      max-width: 600px;
+    }
+    .ymm-section-{{ ymm_section_id }} .shopping-for-text-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
   @media (max-width: 767px) {
     .ymm-section-{{ ymm_section_id }} {
-      padding: 0 1rem;
+      padding: 0;
     }
     .ymm-section-{{ ymm_section_id }} .ymm-flex-row {
       flex-direction: column;
-      align-items: stretch;
+      align-items: center;
+      width: 100%;
       padding: 12px 6px;
       min-height: unset;
-      border-radius: 0 0 8px 8px;
+      border-radius: 0;
+      border-bottom: 6px solid #d89940;
+      border-right: 1px solid #ccc;
+      border-top: 1px solid #ccc;
+      border-left: 1px solid #ccc;
       gap: 10px;
       max-width: 100%;
+      margin-top: 15px;
     }
     .ymm-section-{{ ymm_section_id }} .shopping-for {
       font-size: 16px;
@@ -109,13 +173,20 @@
       height: 18px;
     }
     .ymm-section-{{ ymm_section_id }} .ss_megamenu_title_hero_link {
-      font-size: 16px;
-      padding: 2px 7px;
+      font-size: 17px;
+      padding: 2px;
+      font-weight: 800;
     }
     .ymm-section-{{ ymm_section_id }} #select-your-vehicle-btn-{{ ymm_section_id }} {
       width: 100%;
+      max-width: 400px;
       font-size: 16px;
       padding: 10px 0;
+    }
+    .ymm-section-{{ ymm_section_id }} .shopping-for-text-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
 </style>
@@ -135,7 +206,25 @@
           <path d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"></path>
         </svg>
       </span>
-      <span class="shopping-for-text"></span>
+      <div class="shopping-for-text-container">
+        <div class="shopping-for-label"></div>
+        <div class="shopping-for-ymm-wrapper">
+          <span class="shopping-for-garageCarIcon">
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              stroke-width="0"
+              viewBox="0 0 512 512"
+              height="20px"
+              width="20px"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"></path>
+            </svg>
+          </span>
+          <div class="shopping-for-ymm"></div>
+        </div>
+      </div>
     </div>
     <button
       id="select-your-vehicle-btn-{{ ymm_section_id }}"
@@ -147,7 +236,7 @@
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    var btn = document.getElementById('select-your-vehicle-btn-{{ ymm_section_id }}');
+    const btn = document.getElementById('select-your-vehicle-btn-{{ ymm_section_id }}');
     btn &&
       btn.addEventListener('click', function () {
         if (typeof window.toggleGaragePopup === 'function') {
@@ -158,7 +247,7 @@
     // --- Shopping for: ... logic ---
     function getFirstSearchTerm() {
       try {
-        var terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
+        const terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
         if (terms.length) {
           if (typeof terms[0] === 'string') return terms[0];
           if (typeof terms[0] === 'object' && terms[0].ymm) return terms[0].ymm;
@@ -166,20 +255,23 @@
       } catch (e) {}
       return null;
     }
-    var firstSearchTerm = getFirstSearchTerm();
-    var shoppingForText = document.querySelector('.ymm-section-{{ ymm_section_id }} .shopping-for-text');
-    if (shoppingForText) {
-      if (firstSearchTerm) {
-        const translatedTerm = '{{ 'easysearch_custom_section.shopping_for' | t }}';
-        shoppingForText.innerHTML =
-          translatedTerm +
+    const firstSearchTerm = getFirstSearchTerm();
+    const shoppingForLabel = document.querySelector('.ymm-section-{{ ymm_section_id }} .shopping-for-label');
+    const shoppingForYmm = document.querySelector('.ymm-section-{{ ymm_section_id }} .shopping-for-ymm');
+
+    if (firstSearchTerm) {
+      const translatedTerm = '{{ 'easysearch_custom_section.shopping_for' | t }}';
+      if (shoppingForLabel) shoppingForLabel.textContent = translatedTerm;
+
+      if (shoppingForYmm) {
+        shoppingForYmm.innerHTML =
           '<span class="ss_megamenu_title_hero_link" role="link" tabindex="0">' +
           firstSearchTerm +
           '</span>';
-        var linkYmm = shoppingForText.querySelector('.ss_megamenu_title_hero_link');
+        const linkYmm = shoppingForYmm.querySelector('.ss_megamenu_title_hero_link');
         function goToCollection() {
-          var vehicleData = firstSearchTerm;
-          var collectionHandle = vehicleData
+          const vehicleData = firstSearchTerm;
+          const collectionHandle = vehicleData
             .toLowerCase()
             .replace(/\s+/g, '-')
             .replace(/[^\w\-]+/g, '')
@@ -193,9 +285,10 @@
               goToCollection();
             }
           });
-      } else {
-        shoppingForText.textContent = '{{ 'easysearch_custom_section.find_parts_that_fit' | t }}';
       }
+    } else {
+      if (shoppingForLabel) shoppingForLabel.textContent = '{{ 'easysearch_custom_section.find_parts_that_fit' | t }}';
+      if (shoppingForYmm) shoppingForYmm.textContent = '';
     }
   });
 </script>

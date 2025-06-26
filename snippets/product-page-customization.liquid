@@ -751,9 +751,7 @@
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
         {% endif %}
-        {% if product.title contains 'Veloster' and product.metafields.custom.aspiration != blank%}
-          {%render 'product-page-turbo-options'%}
-        {%endif%}
+
         <!-- The following if/elseif/else determines how the quality and paint options themselves are displayed -->
         {% if meta_fields > 1 %}
           <!-- Quality options and not OEM -->
@@ -1100,7 +1098,6 @@
             const asmSettings = document.getElementById("asm-settings");
             const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === "Enabled";
             const qualityTypeSelect = document.getElementById('quality-type-select');
-            const turboTypeSelect = document.querySelector('.turbo-type-select');
             const easyFitmentFail = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-fail');
             const easyFitmentSuccess = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-icon-success');
             const fitmentLink = document.querySelector('.easysearch-fitment-link');
@@ -1200,9 +1197,8 @@
             //Enables and disables product page features
             function checkProductFitmentStatus(failEl, successEl, hiddenEl) {
               // Failed Fitment Verification
-                                console.log("check");
               if(hiddenEl) {
-                resetAllHeaderColors(true, false);
+                resetAllHeaderColors(true);
                 hideFitmentFailButton();
                 disablePrePaintedMessagingQualityLevel();
 
@@ -1213,9 +1209,6 @@
                   disableQualityDescriptionBtn();
                 }
                 {% comment %} if(failedVinDecode) showGetPaintCodeUsingVINCheckbox(); {% endcomment %}
-                if (turboTypeSelect){
-                  disableTurboSelect();
-                }
                 clearPaintOptionRadioBtns();
                 clearCombinedVariantSelect();
                 disableCombinedVariantSelect();
@@ -1234,7 +1227,7 @@
 
               // Successful fitment verification
               } else if (failEl) {
-                resetAllHeaderColors(true, false);
+                resetAllHeaderColors(true);
 
                 // Fitment failed, hide Continue button and show "Parts That Fit" button
                 showFitmentFailButton();
@@ -1246,9 +1239,6 @@
                   {% comment %} disableQualityTypeButtons(); {% endcomment %}
                   {% comment %} clearQualityTypeButtons(); {% endcomment %}
                   disableQualityDescriptionBtn();
-                }
-                if (turboTypeSelect){
-                  disableTurboSelect();
                 }
                 clearCombinedVariantSelect();
                 disableCombinedVariantSelect();
@@ -1274,13 +1264,7 @@
                 hideFitmentFailButton();
                 const event = new Event('eventFitmentSuccess');
                 successEl.dispatchEvent(event);
-                if (turboTypeSelect){
-                  console.log("turboTypeSelectENABLED");
-                  enableTurboSelect();
-                }
-
-                else if(qualityTypeSelect) {
-                  console.log("qualityTypeSelectENABLED");
+                if(qualityTypeSelect) {
                   productSelect = qualityTypeSelect.value;
                   enableProductTypeSelect();
                   {% comment %} enableQualityTypeButtons(); {% endcomment %}

@@ -1,0 +1,717 @@
+{% assign collab_form_id = section.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .partify-collab-form-{{ collab_form_id }} {
+    max-width: 700px;
+    margin: 30px auto 0 auto;
+    padding: 30px;
+    background-color: {{ section.settings.background_color }};
+    border-radius: {{ section.settings.border_radius }}px;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .partify-collab-form__heading-{{ collab_form_id }},
+  .partify-collab-form__description-{{ collab_form_id }},
+  .partify-collab-form__section-label {
+    box-sizing: border-box;
+    word-break: break-word;
+  }
+
+  .partify-collab-form__fields-{{ collab_form_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-sizing: border-box;
+  }
+
+  .partify-collab-form__row-{{ collab_form_id }} {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    flex-wrap: nowrap;
+  }
+
+  .partify-collab-form__field-{{ collab_form_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    flex: 1 1 0;
+    justify-content: space-between;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .partify-collab-form__label-{{ collab_form_id }} {
+    font-weight: 500;
+    color: {{ section.settings.text_color }};
+    word-break: break-word;
+  }
+
+  .partify-collab-form__input-{{ collab_form_id }},
+  .partify-collab-form__textarea-{{ collab_form_id }},
+  .partify-collab-form__select-{{ collab_form_id }},
+  .partify-collab-form__file-{{ collab_form_id }} {
+    padding: 12px 16px;
+    border: 1px solid {{ section.settings.input_border_color }};
+    border-radius: {{ section.settings.input_border_radius }}px;
+    background-color: {{ section.settings.input_background_color }};
+    color: {{ section.settings.text_color }};
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .partify-collab-form__textarea-{{ collab_form_id }} {
+    min-height: 70px;
+    resize: vertical;
+  }
+
+  .partify-collab-form__button-{{ collab_form_id }} {
+    margin-top: 20px;
+    padding: 14px 28px;
+    background-color: {{ section.settings.button_color }};
+    color: {{ section.settings.button_text_color }};
+    border: none;
+    border-radius: {{ section.settings.button_border_radius }}px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 180px;
+    align-self: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 17px;
+  }
+
+  .partify-collab-form__button-{{ collab_form_id }}:hover {
+    background-color: {{ section.settings.button_hover_color }};
+  }
+
+  .partify-collab-form__success-{{ collab_form_id }},
+  .partify-collab-form__error-{{ collab_form_id }} {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 4px;
+    display: none;
+    text-align: center;
+    box-sizing: border-box;
+    word-break: break-word;
+  }
+  .partify-collab-form__success-{{ collab_form_id }} {
+    background-color: {{ section.settings.success_color }};
+    color: #ffffff;
+  }
+  .partify-collab-form__error-{{ collab_form_id }} {
+    background-color: {{ section.settings.error_color }};
+    color: #ffffff;
+  }
+
+  .partify-collab-form__field-error-{{ collab_form_id }} {
+    color: {{ section.settings.error_color }};
+    font-size: 14px;
+    display: none;
+    word-break: break-word;
+  }
+
+  .partify-collab-form__section-label {
+    font-weight: 600;
+    font-size: 18px;
+    margin-top: 18px;
+    margin-bottom: 2px;
+    color: {{ section.settings.text_color }};
+    word-break: break-word;
+  }
+
+  /* Prevent overflow of input, textarea and file fields */
+  input[type="text"].partify-collab-form__input-{{ collab_form_id }},
+  input[type="email"].partify-collab-form__input-{{ collab_form_id }},
+  select.partify-collab-form__select-{{ collab_form_id }},
+  textarea.partify-collab-form__textarea-{{ collab_form_id }},
+  input[type="file"].partify-collab-form__file-{{ collab_form_id }} {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  @media screen and (max-width: 900px) {
+    .partify-collab-form__row-{{ collab_form_id }} {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+  @media screen and (max-width: 749px) {
+    .partify-collab-form-{{ collab_form_id }} {
+      padding: 12px;
+    }
+    .partify-collab-form__button-{{ collab_form_id }} {
+      width: 100%;
+      min-width: 0;
+    }
+    .partify-collab-form__heading-{{ collab_form_id }},
+    .partify-collab-form__description-{{ collab_form_id }},
+    .partify-collab-form__section-label {
+      font-size: 16px;
+      word-break: break-word;
+    }
+    .partify-collab-form__fields-{{ collab_form_id }},
+    .partify-collab-form__row-{{ collab_form_id }},
+    .partify-collab-form__field-{{ collab_form_id }} {
+      gap: 9px;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .partify-collab-form__input-{{ collab_form_id }},
+    .partify-collab-form__textarea-{{ collab_form_id }},
+    .partify-collab-form__select-{{ collab_form_id }},
+    .partify-collab-form__file-{{ collab_form_id }} {
+      font-size: 15px;
+      padding: 10px 12px;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  }
+{% endstyle %}
+
+<div class="partify-collab-form-{{ collab_form_id }}">
+  {% if section.settings.heading != blank %}
+    <h2 class="partify-collab-form__heading-{{ collab_form_id }}">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  {% if section.settings.description != blank %}
+    <div class="partify-collab-form__description-{{ collab_form_id }}">{{ section.settings.description }}</div>
+  {% endif %}
+
+  <form id="partifyCollabForm" enctype="multipart/form-data" method="POST" action="#">
+    <div class="partify-collab-form__fields-{{ collab_form_id }}">
+      <!-- Basic Info -->
+      <div class="partify-collab-form__section-label">🔧 Basic Info</div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="FullName-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Full Name<span aria-hidden="true">*</span></label
+          >
+          <input
+            type="text"
+            id="FullName-{{ collab_form_id }}"
+            name="collab[full_name]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+            required
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="Email-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Email<span aria-hidden="true">*</span></label
+          >
+          <input
+            type="email"
+            id="Email-{{ collab_form_id }}"
+            name="collab[email]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+            required
+          >
+        </div>
+      </div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="PhoneNumber-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Phone Number (Optional)</label
+          >
+          <input
+            type="text"
+            id="PhoneNumber-{{ collab_form_id }}"
+            name="collab[phone]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="Location-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Location (Full address)<span aria-hidden="true">*</span></label
+          >
+          <input
+            type="text"
+            id="Location-{{ collab_form_id }}"
+            name="collab[location]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+            required
+          >
+        </div>
+      </div>
+
+      <!-- Car Details -->
+      <div class="partify-collab-form__section-label">🚗 Car Details</div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="Car-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >What car do you drive? (Make, model, year)<span aria-hidden="true">*</span></label
+          >
+          <input
+            type="text"
+            id="Car-{{ collab_form_id }}"
+            name="collab[car]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+            required
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="Mods-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >What modifications have you made? (If any)</label
+          >
+          <textarea
+            id="Mods-{{ collab_form_id }}"
+            name="collab[modifications]"
+            class="partify-collab-form__textarea-{{ collab_form_id }}"
+          ></textarea>
+        </div>
+      </div>
+      <div class="partify-collab-form__field-{{ collab_form_id }}">
+        <label for="PartifyParts-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+          >Are you currently using or planning to use any Partify parts?</label
+        >
+        <select
+          id="PartifyParts-{{ collab_form_id }}"
+          name="collab[partify_parts]"
+          class="partify-collab-form__select-{{ collab_form_id }}"
+        >
+          <option value="">Select an option</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+          <option value="planning">Planning to use</option>
+        </select>
+      </div>
+
+      <!-- Social Media / Online Presence -->
+      <div class="partify-collab-form__section-label">📱 Social Media / Online Presence</div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="Instagram-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Instagram handle</label
+          >
+          <input
+            type="text"
+            id="Instagram-{{ collab_form_id }}"
+            name="collab[instagram]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="TikTok-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >TikTok handle</label
+          >
+          <input
+            type="text"
+            id="TikTok-{{ collab_form_id }}"
+            name="collab[tiktok]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="YouTube-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >YouTube channel (if applicable)</label
+          >
+          <input
+            type="text"
+            id="YouTube-{{ collab_form_id }}"
+            name="collab[youtube]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+          >
+        </div>
+      </div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label class="partify-collab-form__label-{{ collab_form_id }}">Follower counts for each platform</label>
+          <input
+            type="text"
+            name="collab[followers_instagram]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+            placeholder="Instagram"
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label class="partify-collab-form__label-{{ collab_form_id }}">&nbsp;</label>
+          <input
+            type="text"
+            name="collab[followers_tiktok]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+            placeholder="TikTok"
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label class="partify-collab-form__label-{{ collab_form_id }}">&nbsp;</label>
+          <input
+            type="text"
+            name="collab[followers_youtube]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+            placeholder="YouTube"
+          >
+        </div>
+      </div>
+      <div class="partify-collab-form__field-{{ collab_form_id }}">
+        <label class="partify-collab-form__label-{{ collab_form_id }}"
+          >Average views or engagement (stories, posts, etc.)</label
+        >
+        <input type="text" name="collab[average_engagement]" class="partify-collab-form__input-{{ collab_form_id }}">
+      </div>
+
+      <!-- Content Style -->
+      <div class="partify-collab-form__section-label">📸 Content Style</div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="ContentType-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >What kind of content do you create? (e.g. installs, car edits, POV drives, lifestyle, memes)</label
+          >
+          <input
+            type="text"
+            id="ContentType-{{ collab_form_id }}"
+            name="collab[content_type]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label class="partify-collab-form__label-{{ collab_form_id }}"
+            >Do you create your own content or work with a videographer/photographer?</label
+          >
+          <select name="collab[content_creator]" class="partify-collab-form__select-{{ collab_form_id }}">
+            <option value="">Select an option</option>
+            <option value="myself">I create all my content</option>
+            <option value="team">I work with a videographer/photographer</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
+      </div>
+      <div class="partify-collab-form__field-{{ collab_form_id }}">
+        <label for="BestLinks-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+          >Please drop a few links to your best-performing or most relevant content</label
+        >
+        <textarea
+          id="BestLinks-{{ collab_form_id }}"
+          name="collab[best_links]"
+          class="partify-collab-form__textarea-{{ collab_form_id }}"
+        ></textarea>
+      </div>
+
+      <!-- Collaboration Goals -->
+      <div class="partify-collab-form__section-label">💥 Collaboration Goals</div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="CollabWhy-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Why do you want to collaborate with Partify?</label
+          >
+          <textarea
+            id="CollabWhy-{{ collab_form_id }}"
+            name="collab[why_collab]"
+            class="partify-collab-form__textarea-{{ collab_form_id }}"
+          ></textarea>
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="Expectations-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >What are your expectations from this partnership?</label
+          >
+          <input
+            type="text"
+            id="Expectations-{{ collab_form_id }}"
+            name="collab[expectations]"
+            class="partify-collab-form__input-{{ collab_form_id }}"
+          >
+        </div>
+      </div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="PromoteHow-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >How can you help promote Partify to your audience?</label
+          >
+          <textarea
+            id="PromoteHow-{{ collab_form_id }}"
+            name="collab[promote]"
+            class="partify-collab-form__textarea-{{ collab_form_id }}"
+          ></textarea>
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="Brands-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Have you worked with other brands before? If yes, who and what did that look like?</label
+          >
+          <textarea
+            id="Brands-{{ collab_form_id }}"
+            name="collab[brands]"
+            class="partify-collab-form__textarea-{{ collab_form_id }}"
+          ></textarea>
+        </div>
+      </div>
+      <div class="partify-collab-form__field-{{ collab_form_id }}">
+        <label for="AnythingElse-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+          >Anything else we should know about you or your build?</label
+        >
+        <textarea
+          id="AnythingElse-{{ collab_form_id }}"
+          name="collab[anything_else]"
+          class="partify-collab-form__textarea-{{ collab_form_id }}"
+        ></textarea>
+      </div>
+
+      <!-- File Upload -->
+      <div class="partify-collab-form__section-label">📎 File Upload (Optional)</div>
+      <div class="partify-collab-form__row-{{ collab_form_id }}">
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="CarMedia-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Upload media of your car (photos or short video clips)</label
+          >
+          <input
+            type="file"
+            id="CarMedia-{{ collab_form_id }}"
+            name="collab[car_media]"
+            class="partify-collab-form__file-{{ collab_form_id }}"
+            accept="image/*,video/*"
+            multiple
+          >
+        </div>
+        <div class="partify-collab-form__field-{{ collab_form_id }}">
+          <label for="MediaKit-{{ collab_form_id }}" class="partify-collab-form__label-{{ collab_form_id }}"
+            >Upload your media kit (if you have one)</label
+          >
+          <input
+            type="file"
+            id="MediaKit-{{ collab_form_id }}"
+            name="collab[media_kit]"
+            class="partify-collab-form__file-{{ collab_form_id }}"
+            accept=".pdf,.doc,.docx,.ppt,.pptx"
+          >
+        </div>
+      </div>
+
+      <button type="submit" class="partify-collab-form__button-{{ collab_form_id }}">
+        {{ section.settings.button_text }}
+      </button>
+    </div>
+    <div class="partify-collab-form__success-{{ collab_form_id }}" style="display: none;">
+      {{ section.settings.success_message }}
+    </div>
+    <div class="partify-collab-form__error-{{ collab_form_id }}" style="display: none;">
+      {{ section.settings.error_message }}
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('partifyCollabForm');
+    const requiredFields = form.querySelectorAll('[required]');
+    const submitButton = form.querySelector('.partify-collab-form__button-{{ collab_form_id }}');
+    const successMsg = form.querySelector('.partify-collab-form__success-{{ collab_form_id }}');
+    const errorMsg = form.querySelector('.partify-collab-form__error-{{ collab_form_id }}');
+
+    // Simple validation
+    requiredFields.forEach((field) => {
+      field.addEventListener('input', validateForm);
+      field.addEventListener('change', validateForm);
+    });
+
+    function validateForm() {
+      let allValid = true;
+      requiredFields.forEach((field) => {
+        const errorEl = form.querySelector(
+          `[data-field-error="${field.name.replace('collab[', '').replace(']', '')}"]`
+        );
+        if (!field.value.trim() || (field.type === 'email' && !validateEmail(field.value))) {
+          allValid = false;
+          if (errorEl) errorEl.style.display = 'block';
+        } else {
+          if (errorEl) errorEl.style.display = 'none';
+        }
+      });
+      submitButton.disabled = !allValid;
+    }
+    // Initial validation
+    validateForm();
+
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // You can add your submission logic here (AJAX, Shopify submission, etc.)
+      // For now just show success
+      successMsg.style.display = 'block';
+      errorMsg.style.display = 'none';
+      form.reset();
+      setTimeout(() => {
+        successMsg.style.display = 'none';
+      }, 6000);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Partify Collab Form",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Form Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Apply to Collaborate with Partify"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Fill out the form below to tell us more about you and your build. We’re excited to learn more about your automotive journey and how we can work together!</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Submit Application"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you! Your application has been submitted. We will review and reach out soon."
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Error message",
+      "default": "There was a problem submitting your application. Please check the form and try again."
+    },
+    {
+      "type": "header",
+      "content": "Form Style"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Form border radius",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Input border radius",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#222222"
+    },
+    {
+      "type": "color",
+      "id": "input_background_color",
+      "label": "Input background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#000f9f"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Success color",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error color",
+      "default": "#d82c0d"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Partify Collab Form"
+    }
+  ]
+}
+{% endschema %}

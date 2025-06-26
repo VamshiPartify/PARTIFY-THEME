@@ -1,0 +1,172 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collabs_hero_3km6dX": {
+      "type": "collabs-hero",
+      "blocks": {
+        "collabs_application_page_TicPjr": {
+          "type": "shopify://apps/collabs/blocks/application-page/54758706-9f25-4fa9-a553-64720a4c998b",
+          "settings": {
+            "heading": "Affiliate programme",
+            "show_square_logo": false,
+            "show_partnership_info": false,
+            "button_text": "Apply now",
+            "number_of_images": "4",
+            "logo_position": "above",
+            "corner_style": "rounded",
+            "button_background_color": "#ffab41",
+            "button_label_color": "#ffffff",
+            "link_color": "#2c6ecb"
+          }
+        }
+      },
+      "block_order": [
+        "collabs_application_page_TicPjr"
+      ],
+      "custom_css": [],
+      "name": "Collabs Hero Banner",
+      "settings": {
+        "banner_image_desktop": "shopify://shop_images/Desktop_Collab_e28d99d4-939e-4c7a-ba2d-4fa63a7263b6.jpg",
+        "banner_image_mobile": "shopify://shop_images/Mobile_Banner_34f7b62c-26bb-4f8b-9a61-a23c6b4acb0b.jpg",
+        "overlay_opacity_desktop": 0,
+        "overlay_opacity_mobile": 55,
+        "headline": "Recommend Parts. Earn Commissions.",
+        "description": "Join Partify Collabs and turn your love for cars into real rewards—get paid to share, inspire, and build with us.",
+        "cta_text": "Apply Now",
+        "login_text": "Log in"
+      }
+    },
+    "collabs_howitworks_ycMMfa": {
+      "type": "collabs-howitworks",
+      "blocks": {
+        "step_wgVrkR": {
+          "type": "step",
+          "settings": {
+            "step_number": "1",
+            "icon": "shopify://shop_images/Click_22974c5e-91af-463f-a79c-90fe9253aee2.png",
+            "title": "Sign Up",
+            "description": "Apply in minutes to join our community of auto enthusiasts, creators, and DIYers. If you have a following and get real engagement, you’re the perfect fit!"
+          }
+        },
+        "step_dUVxGi": {
+          "type": "step",
+          "settings": {
+            "step_number": "2",
+            "icon": "shopify://shop_images/Share_Icon_a083fe5d-8938-4ec4-a7a4-debd2586d5f7.png",
+            "title": "Share",
+            "description": "Create and share content that shows how Partify helped you—install guides, reviews, or transformation stories. The more views and engagement your posts get, the bigger your rewards."
+          }
+        },
+        "step_9W3rVL": {
+          "type": "step",
+          "settings": {
+            "step_number": "3",
+            "icon": "shopify://shop_images/Untitled-3_71466a7d-71d0-4ab8-b418-36480cc9ba5d.png",
+            "title": "Earn",
+            "description": "Earn cash commissions on every sale you drive, or score free parts and special perks for top performers. The more you share, the more you earn—no limits."
+          }
+        }
+      },
+      "block_order": [
+        "step_wgVrkR",
+        "step_dUVxGi",
+        "step_9W3rVL"
+      ],
+      "custom_css": [
+        "{max-width: 95%; margin: 0 auto !important;}"
+      ],
+      "name": "Collabs How It Works",
+      "settings": {
+        "headline": "How the Partify Collabs Program Works",
+        "intro": "Join one of the fastest-growing auto affiliate programs. Our Collabs program helps content creators, car enthusiasts, and influencers earn real rewards by sharing what they love. Signing up is easy—and earning is even easier!"
+      }
+    },
+    "collabs_faq_EyQ4YE": {
+      "type": "collabs-FAQ",
+      "blocks": {
+        "faq_RBc99Q": {
+          "type": "faq",
+          "settings": {
+            "question": "Who can join?",
+            "answer": "If you create content, have an audience, or love helping others with car projects, you’re welcome to apply!"
+          }
+        },
+        "faq_tDip8T": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I get paid?",
+            "answer": "You can earn cash commissions, free parts, or exclusive bonuses—just share your unique link and get rewarded for every sale or referral."
+          }
+        },
+        "faq_h9Pidn": {
+          "type": "faq",
+          "settings": {
+            "question": "Is there a minimum follower count?",
+            "answer": "We look for real engagement, not just big numbers. If you have an active audience—even small—you have a shot."
+          }
+        },
+        "faq_iYWcAc": {
+          "type": "faq",
+          "settings": {
+            "question": "How can I sign up?",
+            "answer": "Just click the 'Apply Now' button at the top of this page and fill out the quick application form. We’ll review your details and get you started!"
+          }
+        }
+      },
+      "block_order": [
+        "faq_RBc99Q",
+        "faq_tDip8T",
+        "faq_h9Pidn",
+        "faq_iYWcAc"
+      ],
+      "name": "Collabs FAQ",
+      "settings": {
+        "headline": "Frequently Asked Questions"
+      }
+    },
+    "1750814549127ab833": {
+      "type": "apps",
+      "blocks": {
+        "collabs_application_page_6pbw4L": {
+          "type": "shopify://apps/collabs/blocks/application-page/54758706-9f25-4fa9-a553-64720a4c998b",
+          "settings": {
+            "heading": "Affiliate programme",
+            "show_square_logo": false,
+            "show_partnership_info": false,
+            "button_text": "Apply now",
+            "number_of_images": "4",
+            "logo_position": "above",
+            "corner_style": "rounded",
+            "button_background_color": "#ffb900",
+            "button_label_color": "#000000",
+            "link_color": "#2c6ecb"
+          }
+        }
+      },
+      "block_order": [
+        "collabs_application_page_6pbw4L"
+      ],
+      "custom_css": [
+        "a{font-weight: 600;}",
+        "p {color: #000000 !important; display: inline !important;}"
+      ],
+      "settings": {
+        "include_padding": true
+      }
+    }
+  },
+  "order": [
+    "collabs_hero_3km6dX",
+    "collabs_howitworks_ycMMfa",
+    "collabs_faq_EyQ4YE",
+    "1750814549127ab833"
+  ]
+}
