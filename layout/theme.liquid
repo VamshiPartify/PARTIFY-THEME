@@ -349,40 +349,54 @@
     </script>
 
     <script>
-      (function(w,d,t,r,u)
-      {
-        var f,n,i;
-        w[u]=w[u]||[],f=function()
-        {
-          var o={ti:"343052290", enableAutoSpaTracking: true};
-          o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")
-        },
-        n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function()
-        {
-          var s=this.readyState;
-          s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)
-        },
-        i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)
-      })
-      (window,document,"script","//bat.bing.com/bat.js","uetq");
+      (function (w, d, t, r, u) {
+        var f, n, i;
+        (w[u] = w[u] || []),
+          (f = function () {
+            var o = { ti: '343052290', enableAutoSpaTracking: true };
+            (o.q = w[u]), (w[u] = new UET(o)), w[u].push('pageLoad');
+          }),
+          (n = d.createElement(t)),
+          (n.src = r),
+          (n.async = 1),
+          (n.onload = n.onreadystatechange =
+            function () {
+              var s = this.readyState;
+              (s && s !== 'loaded' && s !== 'complete') || (f(), (n.onload = n.onreadystatechange = null));
+            }),
+          (i = d.getElementsByTagName(t)[0]),
+          i.parentNode.insertBefore(n, i);
+      })(window, document, 'script', '//bat.bing.com/bat.js', 'uetq');
     </script>
 
     <!-- Meta Pixel Code -->
     <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '6452622731435893');
       fbq('track', 'PageView');
-      </script>
-      <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=6452622731435893&ev=PageView&noscript=1"
-    /></noscript>
+    </script>
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display:none"
+        src="https://www.facebook.com/tr?id=6452622731435893&ev=PageView&noscript=1"
+    ></noscript>
   </head>
 
   <body
@@ -989,5 +1003,18 @@
         </script>
       {% endif %}
     {% endcomment %}
+    <script>
+      function hidePostscriptPopup() {
+        const popup = document.getElementById('ps__widget_container');
+        if (popup) {
+          popup.style.display = 'none';
+        }
+      }
+      // Hide immediately if present
+      hidePostscriptPopup();
+      // Observe DOM changes for dynamically injected popups
+      const observer = new MutationObserver(hidePostscriptPopup);
+      observer.observe(document.body, { childList: true, subtree: true });
+    </script>
   </body>
 </html>

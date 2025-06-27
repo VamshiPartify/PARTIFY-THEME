@@ -3,7 +3,7 @@
   {% unless easysearchWidget contains 'Liquid error' %}{{ easysearchWidget }}{% endunless %}
 </div>
 <style>
-    #easysearch-container{
+  #easysearch-container {
     margin-top: 0;
     margin-bottom: 0;
     background-color: #0c1a94;
@@ -14,6 +14,7 @@
   }
   .easysearch-btn {
     color: #0c1a94 !important;
+    font-size: 12px !important;
   }
   #easysearch_field_4973 {
     min-width: 200px;
@@ -32,27 +33,27 @@
   }
 </style>
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('open') === 'year') {
-    const yearDropdown = document.getElementById("easysearch_field_4973");
-    if (yearDropdown) {
-      yearDropdown.focus();
-      yearDropdown.click();
+  document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('open') === 'year') {
+      const yearDropdown = document.getElementById('easysearch_field_4973');
+      if (yearDropdown) {
+        yearDropdown.focus();
+        yearDropdown.click();
+      }
     }
-  }
-});
+  });
 </script>
 
 {% schema %}
 {
-"name": "Easysearch Widget",
-"settings": [],
-"presets": [
-{
-"name": "Easysearch Widget",
-"category": "ADVANCED LAYOUT"
-}
-]
+  "name": "Easysearch Widget",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Easysearch Widget",
+      "category": "ADVANCED LAYOUT"
+    }
+  ]
 }
 {% endschema %}

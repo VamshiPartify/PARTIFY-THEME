@@ -29,6 +29,14 @@
     font-size: x-large;
     margin: 0;
   }
+  .select-your-vehicle-header h2 {
+    text-align: left;
+    font-size: medium;
+    margin: 0;
+    color: #555;
+    margin-top: 5px;
+    font-weight: 500;
+  }
   .my-garage-header h4 {
     text-align: right;
     font-size: 14px;
@@ -86,7 +94,7 @@
 
   .vehicle-vin {
     font-size: 13px;
-    color: #888a92;
+    color: #333;
     margin-top: 4px;
     font-weight: 500;
     letter-spacing: 0.01em;
@@ -94,30 +102,37 @@
     padding: 0 0 0 0;
     {% comment %} border-left: 3px solid #e0e0e0; {% endcomment %}
     padding-left: 6px;
-    margin-bottom: 4px;
+    {% comment %} margin-bottom: 4px; {% endcomment %}
     border-radius: 2px;
     display: block;
   }
   .vehicle-vin strong {
-    color: #666a73;
+    color: #333;
     font-weight: 600;
     font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
     letter-spacing: 0.03em;
     font-size: 13px;
   }
   .vehicle-paint-code {
-    font-size: 12px;
-    color: #2a7cff;
-    {% comment %} background: #eaf3ff; {% endcomment %}
-    border-radius: 3px;
-    padding: 2px 8px;
-    display: inline-block;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    background: none;
+    padding: 0 0 0 0;
+    padding-left: 6px;
+    {% comment %} margin-bottom: 4px; {% endcomment %}
+    border-radius: 2px;
+    display: block;
     font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-    box-shadow: 0 1px 2px rgba(42, 124, 255, 0.07);
+  }
+
+  .vehicle-paint-code strong {
+    color: #333;
+    font-weight: 600;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    letter-spacing: 0.03em;
+    font-size: 13px;
   }
 
   .browse-catalog-btn {
@@ -125,7 +140,7 @@
     border: 2px solid #334fb4;
     border-radius: 5px;
     background-color: #fff;
-    margin: 0 0 5px 5px;
+    margin: 5px 0 5px 5px;
     cursor: pointer;
     font-weight: 600;
     color: #334fb4;
@@ -298,6 +313,11 @@
         const easyYMM = document.querySelector('.easyYMM');
         if (easyYMM) easyYMM.style.display = 'none';
       }
+      // --- Fix: Re-initialize EasySearch custom selects after popup update ---
+      setTimeout(() => {
+        const event = new Event('easysearch_rendered');
+        document.dispatchEvent(event);
+      }, 0);
     }
 
     return { removeVehicleFromLocalStorage, moveVehicleToFront, updateGaragePopup };
@@ -368,21 +388,21 @@
         vehicleListHTML += `
             <li class="vehicle-item">
               <div class="vehicle-item-container ${isFirstVehicle}">
-          <div class="vehicle-browse-catalog-container">
-            <strong data-vehicle="${vehicle.ymm}">${vehicle.ymm}</strong>
-            ${
-              vehicle.vin && vehicle.vin !== ''
-                ? `<div class="vehicle-vin">VIN: <strong>${vehicle.vin}</strong></div>`
-                : ''
-            }
-            ${
-              vehicle.paintCode && vehicle.paintCode !== ''
-                ? `<div class="vehicle-paint-code">Paint: ${vehicle.paintCode}</div>`
-                : ''
-            }
-            <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
-          </div>
-          <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+                <div class="vehicle-browse-catalog-container">
+                  <strong data-vehicle="${vehicle.ymm}">${vehicle.ymm}</strong>
+                  ${
+                    vehicle.vin && vehicle.vin !== ''
+                      ? `<div class="vehicle-vin">VIN: <strong>${vehicle.vin}</strong></div>`
+                      : ''
+                  }
+                  ${
+                    vehicle.paintCode && vehicle.paintCode !== ''
+                      ? `<div class="vehicle-paint-code">Paint Code: <strong>${vehicle.paintCode}</strong></div>`
+                      : ''
+                  }
+                  <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
+                </div>
+                <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
               </div>
             </li>
           `;
@@ -396,11 +416,14 @@
       if (!garagePopupContainer) return;
       const vinToCollection = document.getElementById('vin-to-collection-placeholder');
       const vinToCollectionOr = document.getElementById('vin-to-collection-or');
+      // Move the actual .easyYMM node, not its HTML
+      const easyYMMNode = document.querySelector('.easyYMM');
       if (searchTerms.length) {
         garagePopupContainer.innerHTML = `
             <div class="garage-close-button" role="button">&times;</div>
             <div class="select-your-vehicle-header" style="display: none;">
               <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
+              <h2>{{ 'garage.select_vehicle_subtitle' | t }}</h2>
             </div>
             <div class="garage-block">
               <div class="my-garage-header">
@@ -413,7 +436,7 @@
               ${GarageUI.buildVehicleListHTML(searchTerms)}
             </div>
             <button id="add-vehicle-btn">{{ 'garage.add_vehicle_btn' | t }}</button>
-            <div class="easyYMM">${easyYMMContent.innerHTML}</div>
+            <div class="easyYMM-holder"></div>
           `;
         if (vinToCollection) {
           vinToCollection.style.display = 'none';
@@ -421,7 +444,15 @@
         if (vinToCollectionOr) {
           vinToCollectionOr.style.display = 'none';
         }
-        garagePopupContainer.style.paddingBottom = '15px';
+        if (garagePopupContainer) {
+          garagePopupContainer.classList.remove('no-bottom-radius');
+          garagePopupContainer.style.paddingBottom = '15px';
+        }
+        // Move the .easyYMM node into the new holder
+        const easyYMMHolder = garagePopupContainer.querySelector('.easyYMM-holder');
+        if (easyYMMHolder && easyYMMNode) {
+          easyYMMHolder.appendChild(easyYMMNode);
+        }
       } else {
         garagePopupContainer.innerHTML = `
             <div class="garage-close-button" role="button">&times;</div>
@@ -429,14 +460,21 @@
               <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
             </div>
             <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
-            <div>
-              ${easyYMMContent.outerHTML}
-            </div>
+            <div class="easyYMM-holder"></div>
           `;
         garagePopupContainer.style.paddingBottom = '0';
-        document.querySelector('.easyYMM').style.marginBottom = '15px';
-        vinToCollection.style.display = 'block';
-        vinToCollectionOr.style.display = 'flex';
+        if (vinToCollection) vinToCollection.style.display = 'block';
+        if (vinToCollectionOr) vinToCollectionOr.style.display = 'flex';
+        if (garagePopupContainer) {
+          garagePopupContainer.classList.add('no-bottom-radius');
+        }
+        // Move the .easyYMM node into the new holder
+        const easyYMMHolder = garagePopupContainer.querySelector('.easyYMM-holder');
+        if (easyYMMHolder && easyYMMNode) {
+          easyYMMHolder.appendChild(easyYMMNode);
+        }
+        // Add margin if needed
+        if (easyYMMNode) easyYMMNode.style.marginBottom = '15px';
       }
     }
 
@@ -446,6 +484,7 @@
   // Event handlers module
   const GarageEvents = (() => {
     function attachEventListeners() {
+      // Always select fresh DOM elements after re-render
       const deleteButtons = document.querySelectorAll('.delete-trashbin');
       const vehicleCatalogButtons = document.querySelectorAll('.browse-catalog-btn');
       const addVehicleBtn = document.getElementById('add-vehicle-btn');
@@ -455,22 +494,27 @@
       const garageBlock = document.querySelector('.garage-block');
       const selectYourVehicleHeader = document.querySelector('.select-your-vehicle-header');
       const clearGarage = document.querySelector('.clear-garage');
+      const garagePopupContainer = document.querySelector('.garage-easyYMM-popup-container');
 
       if (addVehicleBtn) {
         addVehicleBtn.addEventListener('click', function () {
-          easyYMMElement.style.display = 'block';
+          // Always select fresh easyYMMElement
+          const easyYMMElement = document.querySelector('.easyYMM');
+          if (easyYMMElement) easyYMMElement.style.display = 'block';
           addVehicleBtn.style.display = 'none';
-          vinToCollection.style.display = 'block';
-          vinToCollectionOr.style.display = 'flex';
-          garageBlock.style.display = 'none';
-          selectYourVehicleHeader.style.display = 'block';
+          if (vinToCollection) vinToCollection.style.display = 'block';
+          if (vinToCollectionOr) vinToCollectionOr.style.display = 'flex';
+          if (garageBlock) garageBlock.style.display = 'none';
+          if (selectYourVehicleHeader) selectYourVehicleHeader.style.display = 'block';
+          if (garagePopupContainer) {
+            garagePopupContainer.classList.add('no-bottom-radius');
+          }
         });
       }
 
       deleteButtons.forEach((button) => {
         button.addEventListener('click', function (event) {
-          easyYMMElement.style.display = 'none';
-          addVehicleBtn.style.display = 'flex';
+          // Do not manipulate easyYMMElement/addVehicleBtn directly here; let render logic handle it
           const index = event.currentTarget.getAttribute('data-index');
           GarageLogic.removeVehicleFromLocalStorage(index);
         });

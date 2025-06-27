@@ -1,27 +1,65 @@
 <style>
+  .vin-to-collection-wrapper {
+    display: flex;
+  }
   #vin-to-collection {
     padding: 10px 20px 10px 20px;
     background-color: #fff;
-    max-width: 440px;
-    margin: 0 16px;
+    {% comment %} max-width: 440px; {% endcomment %}
+    margin: 0 16px 0 16px;
     display: flex;
     flex-direction: column;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .add-by-vin-title h1 {
+    text-align: left;
+    font-size: x-large;
+    margin: 0;
+    color: #333;
+  }
+
+  .add-by-vin-title h2 {
+    text-align: left;
+    font-size: medium;
+    margin: 0;
+    color: #555;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+
+  .add-by-vin-description p {
+    text-align: left;
+    font-size: 14px;
+    color: #666;
+    margin-top: 20px;
+    margin-bottom: 0;
   }
 
   #vin-to-collection-input-wrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 5px;
+    gap: 12px;
+  }
+
+  @media (max-width: 928px) {
+    #vin-to-collection-input-wrapper {
+      gap: 0 !important;
+    }
   }
 
   .vin-input-to-collection {
-    border: 1px solid #ccc;
+    border: 1px solid #666;
     padding: 10px;
     width: 100%;
-    border-radius: 4px;
+    {% comment %} border-radius: 4px; {% endcomment %}
     margin-right: 10px;
     font-size: 16px;
+    max-width: 200px;
+    min-height: 46px
   }
 
   .errorMessage {
@@ -34,28 +72,26 @@
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 10px 15px;
+    border-radius: 3px;
     cursor: pointer;
-    max-width: 90px;
-    min-width: 90px;
-    min-height: 40px;
+    min-width: 120px;
+    min-height: 46px;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    font-size: 14px;
+    font-size: 12px;
+    white-space: nowrap;
+    line-height: normal;
   }
 
   #vin-to-collection-btn:disabled {
     background-color: #334FB4;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
     cursor: no-drop;
-    min-height: 40px;
     opacity: 0.7;
   }
 
@@ -90,8 +126,15 @@
   }
 </style>
 
-<div>
+<div class="vin-to-collection-wrapper">
   <form id="vin-to-collection" class="vin-to-collection-form">
+    <div class="add-by-vin-title">
+      <h1>{{ 'garage.add_by_vin' | t }}</h1>
+      <h2>{{ 'garage.add_by_vin_subtitle' | t }}</h2>
+    </div>
+    <div class="add-by-vin-description">
+      <p>{{ 'garage.vehicle_identification_number' | t }}</p>
+    </div>
     <div id="vin-to-collection-input-wrapper">
       <input
         type="text"
