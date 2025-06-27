@@ -50523,14 +50523,18 @@ document.addEventListener('easysearch_loaded', function () {
   let easyBtn = document.querySelector('.easyContainer');
   let easyBtnMobile = document.querySelector('.easyContainer.mobile');
   let easyBtnSlideshow = document.querySelector('.easy-slideshow');
-  document.getElementById("easysearch-search").setAttribute('style', 'background: #334FB4 !important');
+  document.getElementById("easysearch-search").setAttribute('style', 'background: #334FB4 !important; line-height: 30px !important; font-size: 12px !important;');
   const garagePopupContainer = document.querySelector(".garage-easyYMM-popup-container");
   const easyYMMElement = garagePopupContainer.querySelector(".easyYMM");
   const vinToCollection = document.getElementById("vin-to-collection-placeholder");
   const vinToCollectionOr = document.getElementById("vin-to-collection-or");
   const addVehicleBtn = document.getElementById("add-vehicle-btn");
   const closeGarageBtn = document.querySelector('.garage-close-button');
-
+  // const searchBtn = document.getElementById('easysearch-search');
+  // const selectsHolder = document.querySelector('.easysearch-holder');
+  // if (searchBtn && selectsHolder) {
+  //   selectsHolder.appendChild(searchBtn);
+  // }
 
   function hideShopifyChat() {
     const shopifyChat = document.getElementById('shopify-chat');
@@ -50574,6 +50578,7 @@ document.addEventListener('easysearch_loaded', function () {
         document.head.appendChild(style);
       }
       document.body.classList.add('no-scroll-garage-popup');
+      hideShopifyChat();
     } else {
       const savedScrollY = parseInt(document.body.dataset.scrollY || '0', 10);
       delete document.body.dataset.scrollY;
@@ -50584,6 +50589,7 @@ document.addEventListener('easysearch_loaded', function () {
       }
 
       window.scrollTo(0, savedScrollY);
+      showShopifyChat();
     }
   }
 
@@ -50594,7 +50600,7 @@ document.addEventListener('easysearch_loaded', function () {
     if (target.classList.contains("change-option") || target.closest("#easyBtn")) {
       toggleGaragePopup();
     }
-    hideShopifyChat();
+    // hideShopifyChat();
   });
 
   easyBtnMobile.addEventListener("click", function (event) {
@@ -50603,7 +50609,7 @@ document.addEventListener('easysearch_loaded', function () {
     if (target.classList.contains("change-option") || target.closest("#easyBtn")) {
       toggleGaragePopup();
     }
-    hideShopifyChat();
+    // hideShopifyChat();
   });
 
   //close window when clicked outside of window
@@ -50613,24 +50619,30 @@ document.addEventListener('easysearch_loaded', function () {
         easyYMMElement.style.display = "none";
         vinToCollection.style.display = "none";
         vinToCollectionOr.style.display = "none";
+        if (garagePopupContainer) {
+          garagePopupContainer.classList.remove('no-bottom-radius');
+        }
         document.getElementById("add-vehicle-btn").style.display = "flex";
         document.querySelector(".garage-block").style.display = "block";
         document.querySelector(".select-your-vehicle-header").style.display = "none";
       }
       toggleGaragePopup();
-      showShopifyChat();
+      // showShopifyChat();
     };
     if (event.target === document.querySelector('.garage-close-button')) {
       if (document.getElementById("add-vehicle-btn")) {
         easyYMMElement.style.display = "none";
         vinToCollection.style.display = "none";
         vinToCollectionOr.style.display = "none";
+        if (garagePopupContainer) {
+          garagePopupContainer.classList.remove('no-bottom-radius');
+        }
         document.getElementById("add-vehicle-btn").style.display = "flex";
         document.querySelector(".garage-block").style.display = "block";
         document.querySelector(".select-your-vehicle-header").style.display = "none";
       }
       toggleGaragePopup();
-      showShopifyChat();
+      // showShopifyChat();
     }
   };
 
@@ -50638,7 +50650,7 @@ document.addEventListener('easysearch_loaded', function () {
   window.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {  // Escape key
       toggleGaragePopup();
-      showShopifyChat();
+      // showShopifyChat();
     }
   });
 

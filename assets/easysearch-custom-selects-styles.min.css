@@ -1,3 +1,11 @@
+@media only screen and (max-width: 767) {
+    .easysearch-holder {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+  }
+}
+
 @media only screen and (min-width: 929px) {
   .easysearch-container {
     min-height: 84px;
@@ -9,7 +17,6 @@
     min-height: 128px;
   }
   body .easysearch-holder {
-    display:inline-block !important;
     text-align:center; 
   }
   body .easysearch-btn-holder,
@@ -66,6 +73,9 @@
   body .easysearch-holder {
     min-width: 0;
   }
+  .easysearch-slides-block .easysearch-btn-holder .easysearch-btn {
+    margin-left: 6px;
+}
 }
 
 @media only screen and (max-width: 479px) {
@@ -87,7 +97,7 @@
     color: #333;
     width: 100%;
     height: 46px;
-    border: 1px solid #000000;
+    border: 1px solid #666;
 }
 .easysearch-holder .select-styled {
     border-radius: 3px;
@@ -100,7 +110,7 @@
     padding: 8px 32px 8px 15px;
     line-height: 30px;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    text-overflow: clip;
     overflow: hidden;
 }
 .easysearch-holder .select-styled:hover {
@@ -265,12 +275,11 @@
 }
 }@media screen and (max-width:1111px) {
     .easysearch-slides-block .easysearch-holder .easysearch-select-holder {
-    padding: 8px 0;
+    padding: 0;
     width: 20%;
     }
 .easysearch-holder {
     margin-top: 10px;
-    display: block!important;
 }
 }
 @media screen and (max-width:375px) {
@@ -282,7 +291,7 @@
 @media screen and (min-width: 375px) and (max-width: 999px) {
   .easysearch-slides-block > div > div {
     margin-top: 0!important;
-    padding: 0 20px !important;
+    padding: 0 !important;
   }
 }
 @media only screen and (max-width:999px) {
@@ -312,7 +321,7 @@
 .easysearch-slides-block .easysearch-holder .easysearch-select-holder {
     width: 100%}
 .easysearch-slides-block .easysearch-holder .easysearch-select-holder {
-    padding: 0 0 10px;
+    padding: 0;
 }
 .easysearch-slides-block .easysearch-btn-holder .easysearch-btn {
     margin-top: 0;
@@ -332,7 +341,7 @@
     padding-bottom: 10px;
 }
 .easysearch-slides-block .easysearch-holder .easysearch-select-holder:nth-child(1), .easysearch-slides-block .easysearch-holder .easysearch-select-holder:nth-child(2) {
-    margin: 0!important;
+    margin: 0 0 10px 0!important;
 }
 .easysearch-slides-block .easysearch-holder .easysearch-select-holder:nth-child(2) select {
     border-radius: 2px;
@@ -554,26 +563,39 @@
 .garage-easyYMM-popup-wrapper {
   animation: popIn 0.4s ease-in-out;
   max-height: 90vh;
-    max-width: 100%;
-    width: 440px;
-    /* overflow-y: auto; */
-    height: auto;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
+  max-width: 100%;
+  height: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-padding-bottom: 20px;
+}
+
+.garage-easyYMM-popup-wrapper::after {
+  content: "";
+  display: block;
+  height: 40px;
+  flex-shrink: 0;
 }
 
 .garage-easyYMM-popup-container {
+  position: relative;
   background-color: #fff;
   color: #333;
-  max-width: 440px;
+  /* max-width: 440px; */
   /* max-height: 90vh; */
   /* overflow-y: auto; */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
   padding: 10px 20px 20px 20px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   margin: 10px 16px 0 16px;
+  border-radius: 5px;
+}
+
+.garage-easyYMM-popup-container.no-bottom-radius {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 #vin-to-collection-or {
@@ -582,17 +604,19 @@
   text-align: center;
   font-weight: 500;
   font-size: 14px;
-  color: #555;
+  color: #333;
   background-color: #fff;
   margin: 0 16px;
+  padding: 10px 0;
 }
 
 #vin-to-collection-or::before,
 #vin-to-collection-or::after {
   content: "";
   flex: 1;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 1px solid #ccc;
   margin: 0 20px;
+  /* max-width: 200px */
 }
 
 .easyContainer.mobile #easyBtn {
@@ -606,8 +630,8 @@
 .easyYMM {
   position: relative;
   text-align: left;
-  border: 1px solid rgba(0,0,0,.1);
-  border-radius: 5px;
+  /* border: 1px solid rgba(0,0,0,.1); */
+  /* border-radius: 5px; */
   margin-top: 5px;
   z-index: 999;
 }
@@ -618,7 +642,7 @@
   display: none;
 }
 .easyYMM .easysearch-container {
-  padding: 20px;
+  padding: 20px 0;
   margin: 0;
   /* width: 315px; */
   background-color: #fff;
@@ -628,13 +652,22 @@
   position: relative;
   text-align: center;
   width: 100%;
+  display: flex;
+  /* flex-direction: row; */
 }  
 .easyYMM .easysearch-container .easysearch-select-holder {
   display: block!important;
-  margin-bottom: 12px!important;
+  margin-bottom: 0 !important;
   margin-left: 0 !important;
   clear: both!important;
   width: 100% !important;
+}
+
+@media only screen and (max-width: 704px) {
+  .easyYMM .easysearch-container .easysearch-select-holder {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+  }
 }
 .easyYMM .easysearch-container .easysearch-select-holder select{
   -webkit-appearance: auto !important;
@@ -645,7 +678,8 @@
   border-color: #b6b6b6;
 }
 .easyYMM .easysearch-container .easysearch-btn-holder {
-  width: auto !important;
+  width: fit-content !important;
+  margin-left: 0 !important;
 }
 .easysearch-custom-metafield,
 .easysearch-fitment-widget .easysearch-fitment-results.easysearch-fitment-fail .easysearch-custom-metafield {
@@ -674,7 +708,7 @@
 }
 @media only screen and (max-width: 1000px) {
   .easyYMM .easysearch-container { 
-      padding-left: 20px !important; 
+      padding-left: 0 !important; 
   }
 }
 @media only screen and (max-width: 900px) {
@@ -697,7 +731,7 @@
     right: 0;
     width: 100%;
     top: 171%;
-    padding: 0 10px;
+    padding: 0;
   }
   .easyYMM .easysearch-container {
     width: 100%;
@@ -720,7 +754,7 @@
   }
   .easysearch-fitment-widget .easysearch-widget .easysearch-vertical-mode .easysearch-select-holder {
     flex: 1;
-    margin: 0 6px 6px !important;
+    margin: 0 6px 0 !important;
   }
   .easysearch-fitment-widget .easysearch-widget .easysearch-vertical-mode .easysearch-select-holder:first-child {
     margin: 0 0 6px !important;
@@ -737,4 +771,14 @@
       text-align: center !important;
   }
 }
-/* Fixed header position */
+.easysearch-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.easysearch-main-holder {
+  width: 100% !important;
+}
+

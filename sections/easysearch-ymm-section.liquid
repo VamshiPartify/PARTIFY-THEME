@@ -40,9 +40,11 @@
     text-shadow: 0 1px 4px rgba(12, 24, 148, 0.1);
     flex: 1 1 auto;
     min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    flex-wrap: wrap;
+    text-align: center;
   }
   .ymm-section-{{ ymm_section_id }} .garageCarIconHomePage {
     display: flex;
