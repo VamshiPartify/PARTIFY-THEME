@@ -166,7 +166,7 @@ async function fetchVehicalDataByVin(vin, functionLocation, noResults, failed3ti
         // Don't add garageVinSubmissionBool here because there will be a time when the button
         // is clickable between submission and page navigation.  Don't wan't anyone spamming
         // the button.
-        // updateGarageAndNavigate(data.handle, vin);
+        updateGarageAndNavigate(data.handle, vin);
       }
     } else if (functionLocation === 2) {
       if (data.handle === '' || data.isVinValid === false) {
