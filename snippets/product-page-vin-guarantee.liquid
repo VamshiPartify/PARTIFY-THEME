@@ -591,7 +591,7 @@
                 const tailoredSuccessMessage = '{{ 'fitment_verification.tailored_success_message' | t }}'
                 const remainingAttempts = '{{ 'fitment_verification.remaining_attempts' | t }}'
 
-                const validVin = await fetchVehicalDataByVin(vinInput, location, noResults, useYMM, searchBtn, tailoredSuccessMessage, remainingAttempts);
+                const validVin = await fetchVehicleDataByVin(vinInput, location, noResults, useYMM, searchBtn, tailoredSuccessMessage, remainingAttempts);
               
                 if (validVin) {
                   currentAddToCartBtn.disabled = false;

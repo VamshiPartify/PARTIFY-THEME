@@ -978,6 +978,33 @@
     <script type="text/javascript" src="{{ 'global-library.js' | asset_url }}" defer></script>
 
     {% comment %}
+      <script>
+        function hideEasysearchWrapper() {
+          const target = document.getElementById('easysearch_field_4974');
+          if (target) {
+            const selectWrapper = target.closest('.select');
+            if (selectWrapper) {
+              selectWrapper.style.display = 'none';
+            }
+            return true;
+          }
+          return false;
+        }
+
+        // Try immediately in case it's already present
+        if (!hideEasysearchWrapper()) {
+          // If not, observe for changes
+          const observer = new MutationObserver(() => {
+            if (hideEasysearchWrapper()) {
+              observer.disconnect();
+            }
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
+        }
+      </script>
+    {% endcomment %}
+
+    {% comment %}
       This forces localization to the US market with USD currency when running in dev mode
     {% endcomment %}
     {% comment %}
