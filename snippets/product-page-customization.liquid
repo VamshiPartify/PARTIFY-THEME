@@ -826,10 +826,12 @@
             {% render 'product-page-precision-match' %}
           </div>
         {% endcomment %}
-        {% comment %}{% unless is_make_excluded_from_vin_verification == true %}
-          <div class="divider-large-screen"></div>
-          {% render 'product-page-vin-guarantee' %}
-        {% endunless %}{% endcomment %}
+        {% comment %}
+          {% unless is_make_excluded_from_vin_verification == true %}
+            <div class="divider-large-screen"></div>
+            {% render 'product-page-vin-guarantee' %}
+          {% endunless %}
+        {% endcomment %}
       </div>
       <div class="divider-small-screen"></div>
 
@@ -912,10 +914,12 @@
           {% render 'product-page-paint-options' %}
         {% endif %}
         <!-- LEAVE THE FOLLOWING CODE!! Uncomment it whenever ready to use these -->
-        {% comment %}{% unless is_make_excluded_from_vin_verification == true %}
-          <div class="divider-large-screen"></div>
-          {% render 'product-page-vin-guarantee' %}
-        {% endunless %}{% endcomment %}
+        {% comment %}
+          {% unless is_make_excluded_from_vin_verification == true %}
+            <div class="divider-large-screen"></div>
+            {% render 'product-page-vin-guarantee' %}
+          {% endunless %}
+        {% endcomment %}
         <div class="divider-small-screen"></div>
         {% render 'product-page-cart-btn', unpainted: true %}
       </div>
@@ -1238,6 +1242,7 @@
                 if(qualityTypeSelect) {
                   {% comment %} disableQualityTypeButtons(); {% endcomment %}
                   {% comment %} clearQualityTypeButtons(); {% endcomment %}
+                  disableQualityTypeSelect();
                   disableQualityDescriptionBtn();
                 }
                 clearCombinedVariantSelect();
