@@ -204,7 +204,7 @@
 }
 .mobile-menu__section .easysearch-holder .select-styled:hover {
     box-shadow: none;
-    border-color: #999;
+    /* border-color: #999; */
 }
 .site-nav__dropdown.meganav.easysearch-desktop {
     background: #009ce5;
@@ -303,7 +303,7 @@
 }
 .easysearch-slides-block.first--home {
     position: initial;
-    max-height: 300px;
+    /* max-height: 300px; */
     /* overflow-y: auto; */
 }
 .easysearch-slides-block.second--home {
