@@ -362,12 +362,6 @@
         "image_crop": "original",
         "text_size": "medium"
       }
-    },
-    "aec60597-76d1-4225-8620-46693049c8f5": {
-      "type": "apps",
-      "settings": {
-        "include_padding": true
-      }
     }
   },
   "order": [
@@ -378,7 +372,6 @@
     "356b94ad-78c0-440e-a0e8-a224ed3debf1",
     "site_review_columns_C8eJCy",
     "dynamic_blog_posts",
-    "dc25b428-6fdb-4bea-b22c-750a75858f25",
-    "aec60597-76d1-4225-8620-46693049c8f5"
+    "dc25b428-6fdb-4bea-b22c-750a75858f25"
   ]
 }

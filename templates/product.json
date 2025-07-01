@@ -73,6 +73,8 @@
             "show_countdown": true,
             "show_shipping_policy": false,
             "font_size": 16,
+            "line_height": 1.5,
+            "padding": 0.5,
             "text_align": "left",
             "icon": "",
             "date_format": "long",
@@ -83,22 +85,28 @@
             "offer_text": "<strong>FREE</strong> shipping",
             "delivery_estimate_message": "Ships by",
             "countdown_message": "Order within",
-            "deliver_to_message": "Deliver to"
+            "deliver_to_message": "Deliver to",
+            "show_explainer": false
           }
         },
         "arrivesby_delivery_time_CtCA7H": {
           "type": "shopify://apps/arrivesby/blocks/delivery-time/b4f15d36-71f0-4a8c-954f-e485b7529360",
           "disabled": true,
           "settings": {
+            "show_offer": false,
             "show_delivery_cutoff": true,
             "show_shipping_policy": false,
             "font_size": 16,
+            "line_height": 1.5,
+            "padding": 0.5,
             "text_align": "left",
             "icon": "",
             "date_format": "long",
             "cutoff_time_format": "timer",
             "text_color": "#121212",
             "background_color": "#fafafa",
+            "countdown_color": "#32741e",
+            "offer_text": "<b>FREE</b> shipping",
             "prefix": "Ships By",
             "separator": "-",
             "suffix": "From Michigan",
@@ -288,7 +296,7 @@
         ".arrivesby-dt-timer {font-family: lato; font-weight: medium; font-size: 16px;}",
         ".delivery-date-earliest-value {color: #01a601; font-family: lato; font-size: 16px;}",
         ".quantity-selector {display: none !important;}",
-        ".product-title { font-family: 'Lato', system-ui, sans-serif; font-size: 18px; font-size-adjust: 0.52; overflow-wrap: anywhere; }"
+        ".product-title {font-family: \"Lato\", system-ui, sans-serif; font-size: 18px; font-size-adjust: 0.52; overflow-wrap: anywhere;}"
       ],
       "settings": {
         "gallery_aspect_ratio": "square",
