@@ -9,34 +9,6 @@
  */
 {
   "sections": {
-    "1716221076fc128fdb": {
-      "type": "apps",
-      "blocks": {
-        "easysearch_year_make_model_easysearch_widget_pxkw7C": {
-          "type": "shopify://apps/easysearch-ymm/blocks/easysearch-widget/6d82686b-b68a-4b5e-98e3-e07b2b53d810",
-          "disabled": true,
-          "settings": {
-            "placement_selector": "",
-            "insert_method": "prepend"
-          }
-        }
-      },
-      "block_order": [
-        "easysearch_year_make_model_easysearch_widget_pxkw7C"
-      ],
-      "custom_css": [
-        "div {margin-top: 0; margin-bottom: 0; background-color: #0c1a94;}",
-        "#easysearch-search {background: #fdac3a !important; min-width: 200px; text-align: center; font-size: 16pt !important;}",
-        ".easysearch-btn {color: #0c1a94 !important; margin: 0 auto;}",
-        "#easysearch_field_4973 {min-width: 200px; font-size: 16pt !important;}",
-        "#easysearch_field_4974 {min-width: 200px; font-size: 16pt !important;}",
-        "#easysearch_field_4975 {min-width: 200px; font-size: 16pt !important;}",
-        ".easysearch-vertical-mode .easysearch-btn-holder {width: 100% !important;}"
-      ],
-      "settings": {
-        "include_padding": false
-      }
-    },
     "easysearch_ymm_section_LKTanx": {
       "type": "easysearch-ymm-section",
       "name": "YMM Vehicle Selector",
@@ -184,7 +156,6 @@
     }
   },
   "order": [
-    "1716221076fc128fdb",
     "easysearch_ymm_section_LKTanx",
     "dynamic_custom_liquid_izV9Jp",
     "collection_type_buttons",

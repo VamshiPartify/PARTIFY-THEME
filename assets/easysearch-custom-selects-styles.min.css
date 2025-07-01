@@ -190,7 +190,8 @@
     color: #333;
     background: #f8f8f8;
 }
-.easysearch-holder .select-options li[rel=hide] {
+.easysearch-holder .select-options li[rel=hide],
+.easysearch-holder .select-options li:first-child {
     display: none;
 }
 #shopify-section-slideshow .easysearch-btn {
