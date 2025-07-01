@@ -303,7 +303,7 @@
 }
 .easysearch-slides-block.first--home {
     position: initial;
-    max-height: 300px;
+    /* max-height: 300px; */
     /* overflow-y: auto; */
 }
 .easysearch-slides-block.second--home {

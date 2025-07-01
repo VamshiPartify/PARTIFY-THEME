@@ -263,7 +263,18 @@
       return terms;
     }
     function setSearchTerms(terms) {
-      localStorage.setItem('searchTerms', JSON.stringify(terms));
+      // Remove duplicates by trimmed ymm, keeping the first occurrence
+      const uniqueTerms = [];
+      const seen = new Set();
+      for (const term of terms) {
+        const trimmedYmm = term.ymm.trim();
+        if (!seen.has(trimmedYmm)) {
+          // Store the trimmed ymm in the object
+          uniqueTerms.push({ ...term, ymm: trimmedYmm });
+          seen.add(trimmedYmm);
+        }
+      }
+      localStorage.setItem('searchTerms', JSON.stringify(uniqueTerms));
     }
     function getFitmentObject() {
       return JSON.parse(localStorage.getItem('easysearch-preselect-fitment'));
@@ -291,7 +302,7 @@
   const GarageLogic = (() => {
     function removeVehicleFromLocalStorage(index) {
       let searchTerms = GarageUtils.getSearchTerms();
-      searchTerms.splice(index, 1);
+      searchTerms.splice(Number(index), 1); // Convert index to number
       GarageUtils.setSearchTerms(searchTerms);
       if (index === '0') {
         window.location.reload();
@@ -539,9 +550,12 @@
           const vehicleData = strongElement.getAttribute('data-vehicle');
           let collectionHandle = vehicleData
             .toLowerCase()
+            .replace(/\./g, '-')
             .replace(/\s+/g, '-')
             .replace(/[^\w\-]+/g, '')
-            .replace(/--+/g, '-');
+            .replace(/--+/g, '-')
+            .replace(/-+$/, '');
+
           GarageLogic.moveVehicleToFront(vehicleData);
           window.location.href = `/collections/${collectionHandle}`;
         });
@@ -604,6 +618,7 @@
               .split('easysearch-preselect-delimiter')
               .join(' ');
 
+            console.log('moving vehicle to front');
             let searchTerms = GarageLogic.moveVehicleToFront(productPageYMM);
             GarageUI.updateVehicleSelectionElement(productPageYMM);
             GarageLogic.updateGaragePopup(searchTerms);
@@ -624,9 +639,15 @@
     // Fitment logic
     if (firstSearchTerm) {
       let fitmentParts = firstSearchTerm.split(' ');
-      let firstTwoParts = fitmentParts.slice(0, 2);
-      let remainingParts = fitmentParts.slice(2).join(' ');
-      let fitmentValue = firstTwoParts.join('easysearch-preselect-delimiter');
+      let lengthChecker = 0;
+      if (fitmentParts.length > 3) {
+        lengthChecker = 3;
+      } else {
+        lengthChecker = 2;
+      }
+      let firstFewparts = fitmentParts.slice(0, lengthChecker);
+      let remainingParts = fitmentParts.slice(lengthChecker).join(' ');
+      let fitmentValue = firstFewparts.join('easysearch-preselect-delimiter');
       if (remainingParts) {
         fitmentValue += 'easysearch-preselect-delimiter' + remainingParts;
       }

@@ -146,7 +146,7 @@
     }
   }
   #license-to-vin-btn {
-    background-color: #007bff;
+    background-color: #334FB4;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -168,10 +168,10 @@
     color: white;
     border: none;
     cursor: no-drop;
-    opacity: 0.7;
+    opacity: 0.3;
   }
   #vin-to-collection-btn {
-    background-color: #007bff;
+    background-color: #334FB4;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -393,6 +393,16 @@
       padding: 8px 10px;
     }
   }
+
+  .errorMessageLicense,
+  .errorMessageVIN {
+    color: #d32f2f;
+    font-weight: 500;
+    margin-top: 8px;
+    min-height: 18px;
+    transition: color 0.2s;
+    text-align: left;
+  }
 </style>
 
 <div class="vin-to-collection-wrapper">
@@ -427,6 +437,7 @@
         >
         <button id="vin-to-collection-btn" type="button" disabled>{{ 'garage.search_btn' | t }}</button>
       </div>
+      <div class="errorMessageVIN" style="visibility: hidden;">{{ 'garage.failed_vin' | t }}</div>
     </div>
 
     <!-- License Input -->
@@ -503,6 +514,7 @@
           <button id="license-to-vin-btn" type="button" disabled>{{ 'garage.search_btn' | t }}</button>
         </div>
       </div>
+      <div class="errorMessageLicense" style="visibility: hidden;">{{ 'garage.failed_vin' | t }}</div>
     </div>
 
     <div class="license-confirmation-wrapper" style="display: none;">
@@ -518,7 +530,6 @@
       </div>
     </div>
 
-    <div class="errorMessage" style="visibility: hidden;">{{ 'garage.failed_vin' | t }}</div>
     <div class="disclaimer">{{ 'garage.disclaimer' | t }}</div>
   </form>
 </div>
@@ -586,7 +597,8 @@
     const vinForm = document.getElementById("vin-to-collection");
     const vinInputField = document.getElementById("vin-to-collection-input");
     const licenseInputField = document.getElementById("license-to-vin-input");
-    const errorMessage = document.querySelector('.errorMessage');
+    const errorMessageVIN = document.querySelector('.errorMessageVIN');
+    const errorMessageLicense = document.querySelector('.errorMessageLicense');
 
     vinInputField.addEventListener("input", (event) => {
       handleVinChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}');
@@ -659,8 +671,6 @@
         try {
           const data = await fetchBumpersLicenseToVin(state, plate);
           if (!data || !data.vin) {
-            errorMessage.style.visibility = 'visible';
-            errorMessage.textContent = "{{ 'garage.failed_vin' | t }}";
             garageVinSubmissionBool = false;
             licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
             licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
@@ -691,13 +701,15 @@
             // Clear the license input fields
             stateSelect.value = '';
             plateInput.value = '';
+
+            // Update global log tracker
+            alreadyLogged = false;
           });
 
 
-          {% comment %} fetchVehicleDataByVin(data.vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', ''); {% endcomment %}
         } catch (err) {
-          errorMessage.style.visibility = 'visible';
-          errorMessage.textContent = "{{ 'garage.failed_vin' | t }}";
+          errorMessageVIN.style.visibility = 'visible';
+          errorMessageVIN.textContent = "{{ 'garage.failed_vin' | t }}";
           garageVinSubmissionBool = false;
           licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
           licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";

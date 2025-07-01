@@ -977,6 +977,13 @@
 
     <script type="text/javascript" src="{{ 'global-library.js' | asset_url }}" defer></script>
 
+    <!-- Theme name for easy access in JS -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        themeName = '{{ theme.name | escape }}' || 'Unknown Theme';
+      });
+    </script>
+
     {% comment %}
       <script>
         function hideEasysearchWrapper() {
@@ -1030,18 +1037,20 @@
         </script>
       {% endif %}
     {% endcomment %}
-    <script>
-      function hidePostscriptPopup() {
-        const popup = document.getElementById('ps__widget_container');
-        if (popup) {
-          popup.style.display = 'none';
+    {% comment %}
+      <script>
+        function hidePostscriptPopup() {
+          const popup = document.getElementById('ps__widget_container');
+          if (popup) {
+            popup.style.display = 'none';
+          }
         }
-      }
-      // Hide immediately if present
-      hidePostscriptPopup();
-      // Observe DOM changes for dynamically injected popups
-      const observer = new MutationObserver(hidePostscriptPopup);
-      observer.observe(document.body, { childList: true, subtree: true });
-    </script>
+        // Hide immediately if present
+        hidePostscriptPopup();
+        // Observe DOM changes for dynamically injected popups
+        const observer = new MutationObserver(hidePostscriptPopup);
+        observer.observe(document.body, { childList: true, subtree: true });
+      </script>
+    {% endcomment %}
   </body>
 </html>
