@@ -50518,7 +50518,6 @@ document.addEventListener('easysearch_init_native_search_page', function () {
 
 document.addEventListener('easysearch_loaded', function () {
   let easyContainer = document.querySelector('.easyYMM.hidden');
-  let garageEasyPopup = document.querySelector('.garage-easyYMM-popup.hidden');
   let garageOverlay = document.querySelector('.garage-easyYMM-popup-overlay');
   let easyBtn = document.querySelector('.easyContainer');
   let easyBtnMobile = document.querySelector('.easyContainer.mobile');
@@ -50536,62 +50535,20 @@ document.addEventListener('easysearch_loaded', function () {
   //   selectsHolder.appendChild(searchBtn);
   // }
 
-  function hideShopifyChat() {
-    const shopifyChat = document.getElementById('shopify-chat');
-    if (shopifyChat) {
-      shopifyChat.style.display = 'none';
-    }
-  }
+  // function hideShopifyChat() {
+  //   const shopifyChat = document.getElementById('shopify-chat');
+  //   if (shopifyChat) {
+  //     shopifyChat.style.display = 'none';
+  //   }
+  // }
 
-  // Function to show Shopify chat widget
-  function showShopifyChat() {
-    const shopifyChat = document.getElementById('shopify-chat');
-    if (shopifyChat) {
-      shopifyChat.style.display = 'block';
-    }
-  }
-
-  window.toggleGaragePopup = function () {
-    const garagePopupStyleId = 'garage-popup-style';
-    const scrollY = window.scrollY;
-
-    garageEasyPopup.classList.toggle("hidden");
-
-
-    if (!garageEasyPopup.classList.contains("hidden")) {
-
-      document.body.dataset.scrollY = scrollY;
-
-      if (!document.getElementById(garagePopupStyleId)) {
-        const style = document.createElement('style');
-        style.id = garagePopupStyleId;
-        style.textContent = `
-            body.no-scroll-garage-popup {
-              position: fixed;
-              top: -${scrollY}px;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              overflow: hidden !important;
-            }
-          `;
-        document.head.appendChild(style);
-      }
-      document.body.classList.add('no-scroll-garage-popup');
-      hideShopifyChat();
-    } else {
-      const savedScrollY = parseInt(document.body.dataset.scrollY || '0', 10);
-      delete document.body.dataset.scrollY;
-
-      const style = document.getElementById(garagePopupStyleId);
-      if (style) {
-        style.remove();
-      }
-
-      window.scrollTo(0, savedScrollY);
-      showShopifyChat();
-    }
-  }
+  // // Function to show Shopify chat widget
+  // function showShopifyChat() {
+  //   const shopifyChat = document.getElementById('shopify-chat');
+  //   if (shopifyChat) {
+  //     shopifyChat.style.display = 'block';
+  //   }
+  // }
 
   // Attach event listener to the container
   easyBtn.addEventListener("click", function (event) {
@@ -50658,17 +50615,30 @@ document.addEventListener('easysearch_loaded', function () {
   let easyFitDetails = document.querySelector('.easysearch-fitment-widget .easysearch-fitment-details');
   if (easyCustomMetafield && easyCustomMetafield.textContent !== '' && easyFitDetails) {
     let easyMetafieldOld = document.querySelector('.easysearch-custom-metafield div');
-    let easyMetafieldContent = document.querySelector('.easysearch-custom-metafield div').textContent;
-    let easyMetafieldNew = easyMetafieldContent.split('•').slice(1);
-    easyMetafieldNew.forEach(function (element) {
-      element = `•${element}`
-      const newElement = document.createElement('span');
-      newElement.textContent = element;
-      newElement.style.display = 'block';
-      easyCustomMetafield.append(newElement);
-    });
-    easyMetafieldOld.remove();
-    easyFitDetails.append(easyCustomMetafield);
+    let easyMetafieldContent = document.querySelector('.easysearch-custom-metafield div');
+    if (easyMetafieldContent) {
+      let easyMetafieldNew = easyMetafieldContent.textContent.split('•').slice(1);
+      easyMetafieldNew.forEach(function (element) {
+        element = `•${element}`
+        const newElement = document.createElement('span');
+        newElement.textContent = element;
+        newElement.style.display = 'block';
+        easyCustomMetafield.append(newElement);
+      });
+      easyMetafieldOld.remove();
+      easyFitDetails.append(easyCustomMetafield);
+    }
+  }
+
+  // Easysearch Change Vehicle functionality
+  // Overrides original Easysearch change vehicle click events
+  let easysearchChangeVehicle = document.querySelector('.easysearch-fitment-change');
+  if (easysearchChangeVehicle) {
+    easysearchChangeVehicle.addEventListener('click', function (event) {
+      event.stopImmediatePropagation(); // Prevents any other click handlers from running
+
+      toggleGaragePopup();
+    }, true); // Use capture phase to ensure this runs before the original
   }
 });
 // Easysearch Custom Finish

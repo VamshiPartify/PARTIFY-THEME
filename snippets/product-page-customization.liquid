@@ -9,17 +9,6 @@
     overflow: hidden !important;
   }
 
-  .model-fitment-easysearch-container {
-    width: 100%;
-    margin-top: 3px;
-  }
-
-  .verify-fitment-title {
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: #333;
-  }
-
   .featured-image {
     display: block;
     margin: 0 auto;
@@ -367,21 +356,6 @@
     opacity: 1;
   }
 
-  #model-fitmentfail-button-container {
-    padding: 15px 15px 0 15px;
-    width: inherit;
-  }
-
-  @media screen and (min-width: 720px) {
-    #model-fitmentfail-button-container {
-      min-height: 187px;
-    }
-  }
-
-  #model-fitmentfail-button-container-oos {
-    width: inherit;
-  }
-
   #fitment-fail-button {
     width: 100%;
     padding: 6px;
@@ -686,12 +660,7 @@
       ******************************************************************************************************
     -->
     <form id="product-form-swatches" method="post" action="/cart/add">
-      <div id="model-fitmentfail-button-container">
-        <label class="verify-fitment-title">{{ 'verify_fitment' | t }}</label>
-        <div class="model-fitment-easysearch-container">
-          <div class="easysearch-embed-widget-fitment"></div>
-        </div>
-      </div>
+      {% render 'product-page-easysearch-widget-container' %}
       <!-- Variant Selector -->
       <select id="variant-selector" name="id">
         <option value="" selected disabled>{{ 'paint_options.select_paint_options' | t }}*</option>
@@ -724,12 +693,10 @@
       {% render 'delivery-countdown' %}
     </div>
 
-    <!-- Fitment Verification -->
-    <div id="model-fitmentfail-button-container">
-      <label class="verify-fitment-title" for="quality-type-select">{{ 'verify_fitment' | t }}</label>
-      <div class="model-fitment-easysearch-container">
-        <div class="easysearch-embed-widget-fitment"></div>
-      </div>
+    {% render 'product-page-easysearch-widget-container' %}
+
+    <div class="fitment-widget-toggle-btn-container" style="display: none;">
+      {% render 'product-page-easysearch-widget-toggle' %}
     </div>
 
     <form
@@ -874,12 +841,7 @@
           <div id="asm-settings" data-delivery-countdown="{{ settings.asm_delivery_countdown }}">
             {% render 'delivery-countdown' %}
           </div>
-          <div id="model-fitmentfail-button-container">
-            <label class="verify-fitment-title" for="quality-type-select">{{ 'verify_fitment' | t }}</label>
-            <div class="model-fitment-easysearch-container">
-              <div class="easysearch-embed-widget-fitment"></div>
-            </div>
-          </div>
+          {% render 'product-page-easysearch-widget-container' %}
         </div>
         {% assign meta_fields = 0 %}
         {% if product.metafields.custom.oem_product != blank %}

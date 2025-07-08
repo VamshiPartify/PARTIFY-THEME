@@ -1,4 +1,19 @@
 <script>
+  // This script is now obselete!!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   /*
       This script manages the storage of recent search terms in localStorage for a collection page.
       - Checks if the current template is 'collection'.
@@ -30,16 +45,31 @@
                         : ymm
                     );
                   }
+
                   oldSearchTerms = oldSearchTerms.map(entry => {
                       // If entry.ymm is an object, flatten it
                       if (entry && typeof entry.ymm === 'object' && entry.ymm !== null) {
-                      return {
-                          ymm: entry.ymm.ymm,
-                          vin: entry.ymm.vin,
-                          paintCode: entry.ymm.paintCode
-                      };
+                          entry = {
+                            ymm: entry.ymm.ymm,
+                            vin: entry.ymm.vin,
+                            paintCode: entry.ymm.paintCode,
+                            year: entry.ymm.year,
+                            make: entry.ymm.make,
+                            model: entry.ymm.model,
+                            submodel: entry.ymm.submodel,
+                            engine: entry.ymm.engine
+                        };
                       }
-                      return entry;
+                    return {
+                        ymm: entry.ymm,
+                        vin: entry.vin || null,
+                        paintCode: entry.paintCode || null,
+                        year: entry.year || null,
+                        make: entry.make || null,
+                        model: entry.model || null,
+                        submodel: entry.submodel || null,
+                        engine: entry.engine || null
+                    };
                   });
                   localStorage.setItem('searchTerms', JSON.stringify(oldSearchTerms));
                   if (!oldSearchTerms.some(obj => obj.ymm === newSearchTerm)) {
@@ -47,7 +77,16 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     const vinFromUrl = urlParams.get('vin') || null;
 
-                    oldSearchTerms.unshift({ ymm: newSearchTerm, vin: vinFromUrl, paintCode: null });
+                    oldSearchTerms.unshift({
+                        ymm: newSearchTerm,
+                        vin: vinFromUrl,
+                        paintCode: null,
+                        year: null,
+                        make: null,
+                        model: null,
+                        submodel: null,
+                        engine: null
+                    });
                     if (oldSearchTerms.length > 5) {
                           oldSearchTerms.pop();
                     }

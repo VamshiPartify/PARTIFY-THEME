@@ -1,0 +1,53 @@
+<style>
+  #model-fitmentfail-button-container {
+    padding: 15px 15px 0 15px;
+    width: inherit;
+  }
+
+  @media screen and (min-width: 720px) {
+    #model-fitmentfail-button-container {
+      min-height: 187px;
+    }
+  }
+
+  #model-fitmentfail-button-container-oos {
+    width: inherit;
+  }
+  .verify-fitment-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #333;
+  }
+
+  .model-fitment-easysearch-container {
+    width: 100%;
+    margin-top: 3px;
+  }
+
+  .change-vehicle-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .change-vehicle-btn,
+  .view-correct-part-btn {
+    color: #2e325b;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 2px 0;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+  }
+</style>
+
+<!-- Fitment Verification -->
+<div id="model-fitmentfail-button-container">
+  <label class="verify-fitment-title" for="quality-type-select">{{ 'verify_fitment' | t }}</label>
+  <div class="model-fitment-easysearch-container">
+    <div class="easysearch-embed-widget-fitment"></div>
+  </div>
+</div>

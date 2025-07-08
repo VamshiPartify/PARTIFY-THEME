@@ -1,0 +1,116 @@
+<style>
+  .easysearch-widget-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    border: 1px solid #ffcd05;
+    background-color: #fffae6;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  .widget-car-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    padding: 1px 20px 0 10px;
+    color: #333;
+  }
+  .widget-toggle-group {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+  }
+  .widget-toggle-header h3 {
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .widget-add-vehicle-btn {
+    color: #333;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 2px 0;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+</style>
+
+<div class="easysearch-widget-toggle-wrapper">
+  <div class="widget-car-icon">
+    <svg
+      stroke="currentColor"
+      fill="currentColor"
+      stroke-width="0"
+      viewBox="0 0 512 512"
+      height="20px"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"></path>
+    </svg>
+  </div>
+  <div class="widget-toggle-group">
+    <div class="widget-toggle-header">
+      <h3>Add Vehicle to Guarantee Fit!</h3>
+    </div>
+    <button type="button" class="widget-add-vehicle-btn">Add Vehicle</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const widgetToggleSelector = '.fitment-widget-toggle-btn-container';
+    const easySearchSelector = '#model-fitmentfail-button-container';
+
+    function updateToggleBtnDisplay() {
+      const widgetToggleContainer = document.querySelector(widgetToggleSelector);
+      const easySearchContainer = document.querySelector(easySearchSelector);
+
+      if (!widgetToggleContainer) return;
+      let searchTerms = [];
+      try {
+        searchTerms = JSON.parse(localStorage.getItem('searchTerms')) || [];
+      } catch (e) {}
+      // Must check if first searh term model is valid.. if not, display the widget toggle
+      const isFirstSearchTermValid = searchTerms[0] && searchTerms[0].model;
+      if (!searchTerms.length || !isFirstSearchTermValid) {
+        widgetToggleContainer.style.display = 'block';
+        easySearchContainer.style.display = 'none';
+      } else {
+        widgetToggleContainer.style.display = 'none';
+        easySearchContainer.style.display = 'block';
+      }
+    }
+
+    // Observe localStorage changes (cross-tab and in-tab)
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key, value) {
+      originalSetItem.apply(this, arguments);
+      if (key === 'searchTerms') updateToggleBtnDisplay();
+    };
+    window.addEventListener('storage', function (event) {
+      if (event.key === 'searchTerms') updateToggleBtnDisplay();
+    });
+
+    // Poll as a fallback (for direct array mutation)
+    const pollingInterval = setInterval(updateToggleBtnDisplay, 500);
+
+    // Stop polling after 10 seconds (10000 ms)
+    {% comment %} setTimeout(() => {
+      clearInterval(pollingInterval);
+    }, 10000); {% endcomment %}
+
+    // Initial check
+    document.addEventListener('DOMContentLoaded', updateToggleBtnDisplay);
+  })();
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const addVehicleBtn = document.querySelector('.widget-add-vehicle-btn');
+    addVehicleBtn.addEventListener('click', function () {
+      toggleGaragePopup();
+    });
+  });
+</script>
