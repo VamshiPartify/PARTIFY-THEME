@@ -47,6 +47,13 @@
     transition: color 0.2s, font-size 0.2s, text-decoration 0.2s;
   }
 
+  @media (min-width: 380px) {
+    .add-by-vin-title h1,
+    .add-by-license-title h1 {
+      font-size: 18px;
+    }
+  }
+
   @media (min-width: 460px) {
     .add-by-vin-title h1,
     .add-by-license-title h1 {
@@ -658,7 +665,9 @@
         const stateSelect = document.querySelector('.select-styled-vin-to-collection select');
         const plateInput = document.getElementById('license-to-vin-input');
         const state = stateSelect ? stateSelect.value : '';
-        const plate = plateInput ? plateInput.value.trim() : '';
+
+        // Remove spaces and trim the plate input
+        const plate = plateInput ? plateInput.value.replace(/\s+/g, '').trim() : '';
         if (!state || !plate) {
           alert('Please enter both state and license plate.');
           garageVinSubmissionBool = false;
@@ -683,27 +692,8 @@
           const confirmationYMM = document.querySelector('.license-confirmation-year-make-model');
 
           confirmationYMM.textContent = `${data.year} ${data.make} ${data.model}`;
-          // Add event listeners for confirmation buttons
-          const confirmLicenseBtn = document.getElementById('confirm-license-btn');
-          const cancelLicenseBtn = document.getElementById('cancel-license-btn');
-          confirmLicenseBtn.addEventListener('click', function() {
-            licenseConfirmationWrapper.style.display = 'none';
-            vinInputWrapper.style.display = '';
-            vinInputField.value = data.vin;
-            fetchVehicleDataByVin(data.vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '');
-          });
-          cancelLicenseBtn.addEventListener('click', function() {
-            licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
-            licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
-            licenseConfirmationWrapper.style.display = 'none';
-            licenseInputWrapper.style.display = '';
-            // Clear the license input fields
-            stateSelect.value = '';
-            plateInput.value = '';
-
-            // Update global log tracker
-            alreadyLogged = false;
-          });
+          // Store the VIN for confirmation use
+          licenseConfirmationWrapper.dataset.vin = data.vin;
 
 
         } catch (err) {
@@ -717,9 +707,67 @@
       }
     });
 
+    // Attach confirmation/cancel listeners ONCE, using named handlers and always removing before adding
+    const confirmLicenseBtn = document.getElementById('confirm-license-btn');
+    const cancelLicenseBtn = document.getElementById('cancel-license-btn');
+
+    async function handleConfirmLicenseClick() {
+      const licenseConfirmationWrapper = document.querySelector('.license-confirmation-wrapper');
+      const vinInputWrapper = document.getElementById('vin-input-wrapper');
+      const vinInputField = document.getElementById('vin-to-collection-input');
+      const licenseInputWrapper = document.getElementById('license-input-wrapper');
+      const licenseSearchBtn = document.getElementById('license-to-vin-btn');
+      const stateSelect = document.querySelector('.select-styled-vin-to-collection select');
+      const plateInput = document.getElementById('license-to-vin-input');
+      const vin = licenseConfirmationWrapper.dataset.vin;
+      licenseConfirmationWrapper.style.display = 'none';
+      vinInputWrapper.style.display = '';
+      if (vin) {
+        vinInputField.value = vin;
+        await fetchVehicleDataByVin(vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '');
+      }
+      licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
+      garageVinSubmissionBool = false;
+      alreadyLogged = false;
+      licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
+      licenseInputWrapper.style.display = '';
+      vinInputWrapper.style.display = 'none';
+      // Clear the license input fields
+      if (stateSelect) stateSelect.value = '';
+      if (plateInput) plateInput.value = '';
+    }
+
+    function handleCancelLicenseClick() {
+      const licenseConfirmationWrapper = document.querySelector('.license-confirmation-wrapper');
+      const licenseInputWrapper = document.getElementById('license-input-wrapper');
+      const licenseSearchBtn = document.getElementById('license-to-vin-btn');
+      const stateSelect = document.querySelector('.select-styled-vin-to-collection select');
+      const plateInput = document.getElementById('license-to-vin-input');
+      licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
+      licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
+      licenseConfirmationWrapper.style.display = 'none';
+      licenseInputWrapper.style.display = '';
+      // Clear the license input fields
+      if (stateSelect) stateSelect.value = '';
+      if (plateInput) plateInput.value = '';
+      // Update global log tracker
+      garageVinSubmissionBool = false;
+      alreadyLogged = false;
+    }
+
+    // Attach listeners only once, even if script runs multiple times
+    if (!confirmLicenseBtn._listenerAttached) {
+      confirmLicenseBtn.addEventListener('click', handleConfirmLicenseClick);
+      confirmLicenseBtn._listenerAttached = true;
+    }
+    if (!cancelLicenseBtn._listenerAttached) {
+      cancelLicenseBtn.addEventListener('click', handleCancelLicenseClick);
+      cancelLicenseBtn._listenerAttached = true;
+    }
+
     // Animate select arrow on focus/blur
-    var selectStyled = document.querySelector('.select-styled-vin-to-collection');
-    var selectEl = selectStyled ? selectStyled.querySelector('select') : null;
+    const selectStyled = document.querySelector('.select-styled-vin-to-collection');
+    const selectEl = selectStyled ? selectStyled.querySelector('select') : null;
     if (selectStyled && selectEl) {
       selectEl.addEventListener('focus', function() {
         selectStyled.classList.add('open');

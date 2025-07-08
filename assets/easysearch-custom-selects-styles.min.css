@@ -360,7 +360,7 @@
 }
 @media only screen and (max-width:750px) {
     div.easysearch-slides-block>div>div {
-    padding-bottom: 24px!important;
+    /* padding-bottom: 24px!important; */
 }
 }#main .easysearch-slides-block>div>div {
     max-height: 600px!important;
@@ -469,7 +469,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    margin-right: 2px;
+    margin: 0 10px;
     min-width: 0;
     flex: 1 1 0%
   }
@@ -482,7 +482,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    margin-right: 2px;
+    margin: 0 10px;
   }
 }
 @media screen and (min-width: 1240px) {
@@ -645,7 +645,7 @@
   display: none;
 }
 .easyYMM .easysearch-container {
-  padding: 20px 0;
+  padding: 5px 0 0 0;
   margin: 0;
   /* width: 315px; */
   background-color: #fff;
