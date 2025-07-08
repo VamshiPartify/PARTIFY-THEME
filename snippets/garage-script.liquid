@@ -18,25 +18,30 @@
     justify-content: space-between;
     align-items: center;
   }
-  .my-garage-header h1 {
-    text-align: left;
-    font-size: 24px;
-    margin: 0;
-  }
 
+  .my-garage-header h1,
   .select-your-vehicle-header h1 {
     text-align: left;
     font-size: 16px;
     margin: 0;
   }
 
+  @media (min-width: 380px) {
+    .my-garage-header h1,
+    .select-your-vehicle-header h1 {
+      font-size: 18px;
+    }
+  }
+
   @media (min-width: 460px) {
+    .my-garage-header h1,
     .select-your-vehicle-header h1 {
       font-size: 20px;
     }
   }
 
   @media (min-width: 720px) {
+    .my-garage-header h1,
     .select-your-vehicle-header h1 {
       font-size: 24px;
     }

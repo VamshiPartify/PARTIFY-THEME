@@ -11,6 +11,7 @@ let finalVinVerificationSubmissionVin = '';
 let successfulVinVerificationVin = false;
 let themeName = '';
 let alreadyLogged = false;
+let garageToCollections = false;
 
 
 
@@ -168,7 +169,8 @@ function updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, eng
 
 
   // If on the product page, set fitment values and do not redirect
-  if (window.location.pathname.includes('/products/')) {
+  // If on product page and the Easysearch Change Vehicle was clicked (not the garage btn)
+  if (window.location.pathname.includes('/products/') && !garageToCollections) {
     let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
     fitmentValue = fields
       .filter(f => f && f.value)
@@ -341,7 +343,7 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin)
 **                                                                                                    **
 *******************************************************************************************************/
 
-const getIpAddress = async () => {
+async function getIpAddress() {
   try {
     const response = await fetch('https://api.ipify.org?format=json');
     const data = await response.json();
@@ -357,7 +359,7 @@ const getIpAddress = async () => {
     functionLocation - 2 = Vin Verification
 */
 // Function to handle VIN change
-const handleVinChange = (event, functionLocation, errorMsg) => {
+function handleVinChange(event, functionLocation, errorMsg) {
   let vinInput = event.target.value.toUpperCase();
   const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
   const truncatedValue = filteredValue.slice(0, 17);
@@ -413,7 +415,7 @@ const handleVinChange = (event, functionLocation, errorMsg) => {
   }
 };
 
-const handleLicenseChange = (event, functionLocation, errorMsg) => {
+function handleLicenseChange(event, functionLocation, errorMsg) {
   let licenseInput = event.target.value.toUpperCase();
   event.target.value = licenseInput;
   const licenseBtn = document.getElementById('license-to-vin-btn');

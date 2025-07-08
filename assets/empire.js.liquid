@@ -50555,6 +50555,10 @@ document.addEventListener('easysearch_loaded', function () {
     // Check if "Change" or the container was clicked
     const target = event.target;
     if (target.classList.contains("change-option") || target.closest("#easyBtn")) {
+
+      // Setting this to true because the garage was opened from the nav bar--if on product
+      // page then must navigate to the collections page in this case
+      garageToCollections = true;
       toggleGaragePopup();
     }
     // hideShopifyChat();
@@ -50564,6 +50568,10 @@ document.addEventListener('easysearch_loaded', function () {
     // Check if "Change" or the container was clicked
     const target = event.target;
     if (target.classList.contains("change-option") || target.closest("#easyBtn")) {
+
+      // Setting this to true because the garage was opened from the nav bar--if on product
+      // page then must navigate to the collections page in this case
+      garageToCollections = true;
       toggleGaragePopup();
     }
     // hideShopifyChat();
@@ -50637,6 +50645,9 @@ document.addEventListener('easysearch_loaded', function () {
     easysearchChangeVehicle.addEventListener('click', function (event) {
       event.stopImmediatePropagation(); // Prevents any other click handlers from running
 
+      // If on product page, in this case must stay on this page and not navigate
+      // to the collections page
+      garageToCollections = false;
       toggleGaragePopup();
     }, true); // Use capture phase to ensure this runs before the original
   }
