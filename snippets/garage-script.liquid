@@ -162,6 +162,7 @@
 
   .delete-trashbin {
     width: 28px;
+    min-width: 28px;
     height: 28px;
     padding: 5px 5px 0 0;
     margin-left: 16px;
@@ -245,36 +246,49 @@
       let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
       // Migrate if needed
       if (terms.length && typeof terms[0] === 'string') {
-        terms = terms.map((ymm) => (typeof ymm === 'string' ? { ymm, vin: null, paintCode: null } : ymm));
+        terms = terms.map((ymm) =>
+          typeof ymm === 'string'
+            ? {
+                ymm,
+                vin: null,
+                paintCode: null,
+                year: null,
+                make: null,
+                model: null,
+                submodel: null,
+                engine: null,
+              }
+            : ymm
+        );
         localStorage.setItem('searchTerms', JSON.stringify(terms));
       }
       terms = terms.map((entry) => {
         // If entry.ymm is an object, flatten it
         if (entry && typeof entry.ymm === 'object' && entry.ymm !== null) {
-          return {
+          entry = {
             ymm: entry.ymm.ymm,
             vin: entry.ymm.vin,
             paintCode: entry.ymm.paintCode,
+            year: entry.ymm.year,
+            make: entry.ymm.make,
+            model: entry.ymm.model,
+            submodel: entry.ymm.submodel,
+            engine: entry.ymm.engine,
           };
         }
-        return entry;
+        return {
+          ymm: entry.ymm,
+          vin: entry.vin || null,
+          paintCode: entry.paintCode || null,
+          year: entry.year || null,
+          make: entry.make || null,
+          model: entry.model || null,
+          submodel: entry.submodel || null,
+          engine: entry.engine || null,
+        };
       });
       localStorage.setItem('searchTerms', JSON.stringify(terms));
       return terms;
-    }
-    function setSearchTerms(terms) {
-      // Remove duplicates by trimmed ymm, keeping the first occurrence
-      const uniqueTerms = [];
-      const seen = new Set();
-      for (const term of terms) {
-        const trimmedYmm = term.ymm.trim();
-        if (!seen.has(trimmedYmm)) {
-          // Store the trimmed ymm in the object
-          uniqueTerms.push({ ...term, ymm: trimmedYmm });
-          seen.add(trimmedYmm);
-        }
-      }
-      localStorage.setItem('searchTerms', JSON.stringify(uniqueTerms));
     }
     function getFitmentObject() {
       return JSON.parse(localStorage.getItem('easysearch-preselect-fitment'));
@@ -283,19 +297,29 @@
       localStorage.setItem('easysearch-preselect-fitment', JSON.stringify(obj));
     }
     // New: add or update a vehicle object
-    function addOrUpdateVehicle({ ymm, vin = null, paintCode = null }) {
+    function addOrUpdateVehicle({
+      ymm,
+      vin = null,
+      paintCode = null,
+      year = null,
+      make = null,
+      model = null,
+      submodel = null,
+      engine = null,
+    }) {
       let terms = getSearchTerms();
       const idx = terms.findIndex((obj) => obj.ymm === ymm);
+      const newObj = { ymm, vin, paintCode, year, make, model, submodel, engine };
       if (idx > -1) {
-        terms[idx] = { ymm, vin, paintCode };
+        terms[idx] = newObj;
       } else {
-        terms.unshift({ ymm, vin, paintCode });
+        terms.unshift(newObj);
         if (terms.length > 5) terms.pop();
       }
       setSearchTerms(terms);
       return terms;
     }
-    return { getSearchTerms, setSearchTerms, getFitmentObject, setFitmentObject, addOrUpdateVehicle };
+    return { getSearchTerms, getFitmentObject, setFitmentObject, addOrUpdateVehicle };
   })();
 
   // Main logic module
@@ -303,30 +327,45 @@
     function removeVehicleFromLocalStorage(index) {
       let searchTerms = GarageUtils.getSearchTerms();
       searchTerms.splice(Number(index), 1); // Convert index to number
-      GarageUtils.setSearchTerms(searchTerms);
+      setSearchTerms(searchTerms);
       if (index === '0') {
+        localStorage.setItem('easysearch-preselect-fitment', JSON.stringify({ value: '' }));
         window.location.reload();
       } else {
         updateGaragePopup(searchTerms);
       }
     }
 
-    function moveVehicleToFront(vehicleData) {
+    {% comment %} function moveVehicleToFront(vehicleData) {
       let currentSearchTerms = GarageUtils.getSearchTerms();
+      console.log('wool moveVehicleToFront currentSearchTerms', currentSearchTerms);
+      console.log('wool moveVehicleToFront accomplished', vehicleData);
       // vehicleData can be a string (ymm) or an object
       let ymm = typeof vehicleData === 'string' ? vehicleData : vehicleData.ymm;
-      const vehicleIndex = currentSearchTerms.findIndex((obj) => obj.ymm === ymm);
-      let vehicleObj =
-        vehicleIndex > -1
-          ? currentSearchTerms.splice(vehicleIndex, 1)[0]
-          : typeof vehicleData === 'object'
-          ? vehicleData
-          : { ymm, vin: null, paintCode: null };
+      // Find index where ymm matches exactly, or is contained in obj.ymm, or obj.ymm is contained in ymm
+      let vehicleIndex = currentSearchTerms.findIndex(
+        (obj) => obj.ymm === ymm || obj.ymm.includes(ymm) || ymm.includes(obj.ymm)
+      );
+      let vehicleObj;
+      if (vehicleIndex > -1) {
+        vehicleObj = currentSearchTerms.splice(vehicleIndex, 1)[0];
+        // If either ymm contains the other, set ymm to the longer one
+        if (vehicleObj.ymm !== ymm) {
+          if (vehicleObj.ymm.length < ymm.length) {
+            vehicleObj.ymm = ymm;
+          } // else keep as is (already longer)
+        }
+      } else {
+        vehicleObj =
+          typeof vehicleData === 'object'
+            ? vehicleData
+            : { ymm, vin: null, paintCode: null, year: null, make: null, model: null, submodel: null, engine: null };
+      }
       currentSearchTerms.unshift(vehicleObj);
       if (currentSearchTerms.length > 5) currentSearchTerms.pop();
-      GarageUtils.setSearchTerms(currentSearchTerms);
+      setSearchTerms(currentSearchTerms);
       return currentSearchTerms;
-    }
+    } {% endcomment %}
 
     function updateGaragePopup(searchTerms) {
       const easyYMMElement = document.querySelector('.easyYMM');
@@ -344,7 +383,7 @@
       }, 0);
     }
 
-    return { removeVehicleFromLocalStorage, moveVehicleToFront, updateGaragePopup };
+    return { removeVehicleFromLocalStorage, updateGaragePopup };
   })();
 
   // UI update module
@@ -364,13 +403,35 @@
           // On mobile, replace the whole container's innerHTML if parent is .vehicleSelection-mobile-select-your-vehicle
           const mobileContainer = menuTitleEl.closest('.vehicleSelection-mobile-select-your-vehicle');
           if (isMobile && vehicleSelectionElement) {
-            vehicleSelectionElement.outerHTML = `
-              <span class="ss_megamenu_title">${firstSearchTerm}</span>
-              <span class="change-divider">|</span>
-              <span class="change-option">{{ 'garage_changer' | t }}</span>
-            `;
-            const changeOption = document.querySelector('.change-option');
-            if (changeOption) changeOption.style.color = '#0c1a94';
+              // Find the parent container for mobile
+            const mobileContainer = vehicleSelectionElement.closest('.vehicleSelection-mobile-select-your-vehicle');
+            if (mobileContainer) {
+              // Find or create the title span
+              let titleSpan = mobileContainer.querySelector('.ss_megamenu_title');
+              if (!titleSpan) {
+                titleSpan = document.createElement('span');
+                titleSpan.id = 'vehicleSelection-mobile';
+                titleSpan.className = 'ss_megamenu_title';
+                mobileContainer.insertBefore(titleSpan, mobileContainer.firstChild);
+              }
+              titleSpan.textContent = firstSearchTerm;
+              titleSpan.style.color = '#334FB4';
+
+              // Remove all existing .change-divider and .change-option siblings
+              Array.from(mobileContainer.querySelectorAll('.change-divider, .change-option')).forEach(el => el.remove());
+
+              // Add divider and change-option after the title
+              const divider = document.createElement('span');
+              divider.className = 'change-divider';
+              divider.textContent = '|';
+              titleSpan.after(divider);
+
+              const changeOption = document.createElement('span');
+              changeOption.className = 'change-option';
+              changeOption.textContent = "{{ 'garage_changer' | t }}";
+              changeOption.style.color = '#0c1a94';
+              divider.after(changeOption);
+            }
           } else {
             // Desktop logic as before
             menuTitleEl.textContent = firstSearchTerm;
@@ -407,7 +468,6 @@
     function buildVehicleListHTML(searchTerms) {
       let vehicleListHTML = `<ul class="vehicle-list">`;
       searchTerms.slice(0, 5).forEach((vehicle, index) => {
-        console.log('Building vehicle item for:', vehicle);
         const isFirstVehicle = index === 0 ? 'first-vehicle-item-container' : '';
         vehicleListHTML += `
             <li class="vehicle-item">
@@ -556,14 +616,14 @@
             .replace(/--+/g, '-')
             .replace(/-+$/, '');
 
-          GarageLogic.moveVehicleToFront(vehicleData);
+          moveVehicleToFront(vehicleData);
           window.location.href = `/collections/${collectionHandle}`;
         });
       });
 
       if (clearGarage) {
         clearGarage.addEventListener('click', function () {
-          GarageUtils.setSearchTerms([]);
+          setSearchTerms([]);
           let fitmentObject = GarageUtils.getFitmentObject();
           if (fitmentObject) {
             fitmentObject.value = '';
@@ -588,7 +648,6 @@
       if (key === FITMENT_KEY) {
         if (lastValue !== value) {
           lastValue = value;
-          console.log('easysearch-preselect-fitment changed:', value);
         }
       }
     };
@@ -598,7 +657,6 @@
       if (event.key === FITMENT_KEY) {
         if (lastValue !== event.newValue) {
           lastValue = event.newValue;
-          console.log('easysearch-preselect-fitment changed (other tab):', event.newValue);
         }
       }
     });
@@ -618,8 +676,7 @@
               .split('easysearch-preselect-delimiter')
               .join(' ');
 
-            console.log('moving vehicle to front');
-            let searchTerms = GarageLogic.moveVehicleToFront(productPageYMM);
+            let searchTerms = moveVehicleToFront(productPageYMM);
             GarageUI.updateVehicleSelectionElement(productPageYMM);
             GarageLogic.updateGaragePopup(searchTerms);
           }
@@ -634,33 +691,28 @@
   // Initialization
   document.addEventListener('DOMContentLoaded', function () {
     let searchTerms = GarageUtils.getSearchTerms();
-    let firstSearchTerm = searchTerms.length ? searchTerms[0].ymm : null;
+    let ymmse = searchTerms.length ? searchTerms[0].ymm : null;
 
     // Fitment logic
-    if (firstSearchTerm) {
-      let fitmentParts = firstSearchTerm.split(' ');
-      let lengthChecker = 0;
-      if (fitmentParts.length > 3) {
-        lengthChecker = 3;
-      } else {
-        lengthChecker = 2;
-      }
-      let firstFewparts = fitmentParts.slice(0, lengthChecker);
-      let remainingParts = fitmentParts.slice(lengthChecker).join(' ');
-      let fitmentValue = firstFewparts.join('easysearch-preselect-delimiter');
-      if (remainingParts) {
-        fitmentValue += 'easysearch-preselect-delimiter' + remainingParts;
-      }
-      fitmentValue += 'easysearch-preselect-delimiter';
-      let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
-      let fitmentObject = {
-        value: fitmentValue,
-        expires: expires.toString(),
-      };
-      GarageUtils.setFitmentObject(fitmentObject);
-    }
+    let year = searchTerms.length ? searchTerms[0]?.year?.trim() : null;
+    let make = searchTerms.length ? searchTerms[0]?.make?.trim() : null;
+    let model = searchTerms.length ? searchTerms[0]?.model?.trim() : null;
+    let submodel = searchTerms.length ? searchTerms[0]?.submodel?.trim() : null;
+    let engine = searchTerms.length ? searchTerms[0]?.engine?.trim() : null;
 
-    GarageUI.updateVehicleSelectionElement(firstSearchTerm);
+    const fields = [year, make, model, submodel, engine];
+    let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
+    fitmentValue = fields
+      .filter((f) => f && f)
+      .map((f) => f + 'easysearch-preselect-delimiter')
+      .join('');
+    const fitmentObject = {
+      value: fitmentValue,
+      expires: expires.toString(),
+    };
+    GarageUtils.setFitmentObject(fitmentObject);
+
+    GarageUI.updateVehicleSelectionElement(ymmse);
 
     const easyYMMContent = document.querySelector('.easyYMM');
     GarageUI.renderGaragePopup(searchTerms, easyYMMContent);

@@ -19,6 +19,324 @@ let alreadyLogged = false;
 
 /*******************************************************************************************************
 **                                                                                                    **
+**                                           GARAGE LOGIC                                             **
+**                                                                                                    **
+*******************************************************************************************************/
+
+// --- GarageUtils: getSearchTerms and setSearchTerms helpers (migrated from garage-script.liquid) ---
+function getSearchTerms() {
+  let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
+  // Migrate if needed
+  if (terms.length && typeof terms[0] === 'string') {
+    terms = terms.map((ymm) =>
+      typeof ymm === 'string'
+        ? {
+          ymm,
+          vin: null,
+          paintCode: null,
+          year: null,
+          make: null,
+          model: null,
+          submodel: null,
+          engine: null,
+        }
+        : ymm
+    );
+    localStorage.setItem('searchTerms', JSON.stringify(terms));
+  }
+  terms = terms.map((entry) => {
+    // If entry.ymm is an object, flatten it
+    if (entry && typeof entry.ymm === 'object' && entry.ymm !== null) {
+      entry = {
+        ymm: entry.ymm.ymm,
+        vin: entry.ymm.vin,
+        paintCode: entry.ymm.paintCode,
+        year: entry.ymm.year,
+        make: entry.ymm.make,
+        model: entry.ymm.model,
+        submodel: entry.ymm.submodel,
+        engine: entry.ymm.engine,
+      };
+    }
+    return {
+      ymm: entry.ymm,
+      vin: entry.vin || null,
+      paintCode: entry.paintCode || null,
+      year: entry.year || null,
+      make: entry.make || null,
+      model: entry.model || null,
+      submodel: entry.submodel || null,
+      engine: entry.engine || null,
+    };
+  });
+  localStorage.setItem('searchTerms', JSON.stringify(terms));
+  return terms;
+}
+
+// --- moveVehicleToFront migrated from garage-script.liquid ---
+function moveVehicleToFront(vehicleData) {
+  let currentSearchTerms = getSearchTerms();
+  // vehicleData can be a string (ymm) or an object
+  let ymm = typeof vehicleData === 'string' ? vehicleData : vehicleData.ymm;
+  // Find index where ymm matches exactly, or is contained in obj.ymm, or obj.ymm is contained in ymm
+  let vehicleIndex = currentSearchTerms.findIndex(
+    (obj) => obj.ymm === ymm || obj.ymm.includes(ymm) || ymm.includes(obj.ymm)
+  );
+  let vehicleObj;
+  if (vehicleIndex > -1) {
+    vehicleObj = currentSearchTerms.splice(vehicleIndex, 1)[0];
+    // If either ymm contains the other, set ymm to the longer one
+    if (vehicleObj.ymm !== ymm) {
+      if (vehicleObj.ymm.length < ymm.length) {
+        vehicleObj.ymm = ymm;
+      } // else keep as is (already longer)
+    }
+  } else {
+    vehicleObj =
+      typeof vehicleData === 'object'
+        ? vehicleData
+        : { ymm, vin: null, paintCode: null, year: null, make: null, model: null, submodel: null, engine: null };
+  }
+  currentSearchTerms.unshift(vehicleObj);
+  if (currentSearchTerms.length > 5) currentSearchTerms.pop();
+  setSearchTerms(currentSearchTerms);
+  return currentSearchTerms;
+}
+
+function setSearchTerms(terms) {
+  // Remove duplicates by trimmed ymm, keeping the first occurrence
+  const uniqueTerms = [];
+  const seen = new Set();
+  for (const term of terms) {
+    const trimmedYmm = term.ymm.trim();
+    if (!seen.has(trimmedYmm)) {
+      // Store the trimmed ymm in the object
+      uniqueTerms.push({ ...term, ymm: trimmedYmm });
+      seen.add(trimmedYmm);
+    }
+  }
+  localStorage.setItem('searchTerms', JSON.stringify(uniqueTerms));
+}
+
+async function setSelectValueWhenReady(selectId, value, timeout = 3000) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  const start = Date.now();
+  return new Promise((resolve) => {
+    function trySet() {
+      // Option is present and value is not already set
+      if (Array.from(select.options).some(opt => opt.value == value)) {
+        select.value = value;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+        resolve();
+      } else if (Date.now() - start > timeout) {
+        resolve(); // Give up after timeout
+      } else {
+        setTimeout(trySet, 50);
+      }
+    }
+    trySet();
+  });
+}
+
+function setFitmentObjectGlobal(obj) {
+  localStorage.setItem('easysearch-preselect-fitment', JSON.stringify(obj));
+  localStorage.setItem('easysearch-preselect', JSON.stringify(obj));
+}
+
+function updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, engine) {
+  let fitmentValue = '';
+  let anchor = null;
+  const holder = document.querySelector('.easysearch-holder');
+  const easySearchBtnSearch = document.querySelector('.easysearch-btn-search');
+  const actionsHolder = holder.querySelector('.easysearch-actions-holder');
+  if (actionsHolder) {
+    const btnHolder = actionsHolder.querySelector('.easysearch-btn-holder');
+    if (btnHolder) {
+      anchor = btnHolder.querySelector('a');
+    }
+  }
+
+  const fields = [year, make, model, submodel, engine];
+  // Build ymm string and searchTerm object
+  const yearVal = year && year.value ? year.value.trim() : '';
+  const makeVal = make && make.value ? make.value.trim() : '';
+  const modelVal = model && model.value ? model.value.trim() : '';
+  const submodelVal = submodel && submodel.value ? submodel.value.trim() : '';
+  const engineVal = engine && engine.value ? engine.value.trim() : '';
+  const ymm = [yearVal, makeVal, modelVal, submodelVal, engineVal].filter(Boolean).join(' ');
+
+
+  // If on the product page, set fitment values and do not redirect
+  if (window.location.pathname.includes('/products/')) {
+    let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
+    fitmentValue = fields
+      .filter(f => f && f.value)
+      .map(f => f.value + 'easysearch-preselect-delimiter')
+      .join('');
+    const fitmentObject = {
+      value: fitmentValue,
+      expires: expires.toString(),
+    }
+    setFitmentObjectGlobal(fitmentObject);
+
+    updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal);
+
+    // Save current search parameters to localStorage or backend
+    easysearch.saveSearchParams(easySearchBtnSearch);
+    easysearch.addPropertyToProductForm();
+    // Get the fitment widget element and the URL to load fitment results
+    const fitWidget = document.querySelector('.easysearch-fitment-widget');
+    const fitmentUrl = anchor.href;
+
+    // Function to trigger the fitment widget toggle after EasySearch is ready
+    function triggerFitmentWidget() {
+      // Only proceed if easysearch and fitmentToggleWidget are available, and required elements exist
+      if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function' && fitWidget && fitmentUrl) {
+        // Show or update the fitment widget with the selected fitment URL
+        easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
+        // Remove the event listener after firing to avoid duplicate calls
+        document.removeEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
+      }
+    }
+
+    // Listen for the EasySearch ready event, then trigger the fitment widget
+    document.addEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
+
+    // If EasySearch is already loaded, call the fitment widget toggle immediately
+    if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function') {
+      easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
+    }
+
+    // Open the garage popup (likely a UI overlay for saved vehicles)
+    // toggleGaragePopup();
+    // Hidden El
+    const hiddenEasysearchEl = document.querySelector('.easysearch-fitment-search-widget');
+    const failOrSuccessEasysearchEl = document.querySelector('.easysearch-fitment-holder');
+    // need to check if the hiddenEasysearchEl class contains the 'easysearch-hidden' class
+    if (hiddenEasysearchEl && !hiddenEasysearchEl.classList.contains('easysearch-hidden')) {
+      hiddenEasysearchEl.classList.add('easysearch-hidden');
+    }
+    if (failOrSuccessEasysearchEl && failOrSuccessEasysearchEl.classList.contains('easysearch-hidden')) {
+      failOrSuccessEasysearchEl.classList.remove('easysearch-hidden');
+    }
+  } else {
+    updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal);
+    window.location.href = anchor.href;
+  }
+}
+
+function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal) {
+  // Custom deduplication and update logic
+  let searchTerms = getSearchTerms();
+  let foundIdx = searchTerms.findIndex(term =>
+    term.year === yearVal &&
+    term.make === makeVal &&
+    term.model === modelVal
+  );
+  if (ymm && foundIdx > -1) {
+    // Found a match on year, make, model
+    let updated = false;
+    // Update submodel if incoming is more specific
+    if (submodelVal && (searchTerms[foundIdx].submodel === null || searchTerms[foundIdx].submodel === '' || searchTerms[foundIdx].submodel === undefined)) {
+      searchTerms[foundIdx].submodel = submodelVal;
+      updated = true;
+    }
+    // Update engine if incoming is more specific
+    if (engineVal && (searchTerms[foundIdx].engine === null || searchTerms[foundIdx].engine === '' || searchTerms[foundIdx].engine === undefined)) {
+      searchTerms[foundIdx].engine = engineVal;
+      updated = true;
+    }
+    // If both submodel and engine already match, do nothing
+    if (!updated && (
+      (searchTerms[foundIdx].submodel === submodelVal || (!submodelVal && (searchTerms[foundIdx].submodel === null || searchTerms[foundIdx].submodel === '' || searchTerms[foundIdx].submodel === undefined))) &&
+      (searchTerms[foundIdx].engine === engineVal || (!engineVal && (searchTerms[foundIdx].engine === null || searchTerms[foundIdx].engine === '' || searchTerms[foundIdx].engine === undefined)))
+    )) {
+      // Do nothing
+    } else if (updated) {
+      setSearchTerms(searchTerms);
+    } else {
+      // If submodel/engine are different, add as new entry
+      const newTerm = {
+        ymm: ymm,
+        vin: null,
+        paintCode: null,
+        year: yearVal || null,
+        make: makeVal || null,
+        model: modelVal || null,
+        submodel: submodelVal || null,
+        engine: engineVal || null
+      };
+      searchTerms.unshift(newTerm);
+      if (searchTerms.length > 5) searchTerms.splice(5);
+      setSearchTerms(searchTerms);
+    }
+  } else if (ymm) {
+    // No match on year, make, model, so add new
+    const newTerm = {
+      ymm: ymm,
+      vin: null,
+      paintCode: null,
+      year: yearVal || null,
+      make: makeVal || null,
+      model: modelVal || null,
+      submodel: submodelVal || null,
+      engine: engineVal || null
+    };
+    searchTerms.unshift(newTerm);
+    if (searchTerms.length > 5) searchTerms.pop();
+    setSearchTerms(searchTerms);
+  }
+};
+
+async function updateGarageAndNavigate(year, make, model, submodel, engine, vin) {
+  await setSelectValueWhenReady('easysearch_field_4973', year || '');
+  await setSelectValueWhenReady('easysearch_field_4974', make || '');
+  await setSelectValueWhenReady('easysearch_field_4975', model || '');
+  await setSelectValueWhenReady('easysearch_field_28136', submodel || '');
+  await setSelectValueWhenReady('easysearch_field_28137', engine || '');
+
+
+  let formattedYmm = '';
+  if (submodel && engine) {
+    formattedYmm = `${year} ${make} ${model} ${submodel || ''} ${engine || ''}`;
+  } else if (submodel && !engine) {
+    formattedYmm = `${year} ${make} ${model} ${submodel || ''}`;
+  } else {
+    formattedYmm = `${year} ${make} ${model}`;
+  }
+
+  moveVehicleToFront({
+    ymm: formattedYmm,
+    vin: vin || null,
+    paintCode: null,
+    year: year || null,
+    make: make || null,
+    model: model || null,
+    submodel: submodel || null,
+    engine: engine || null,
+  });
+  if (!window.location.pathname.includes('/products/')) {
+    const btnHolder = document.querySelector('.easysearch-btn-holder');
+    if (btnHolder) {
+      const anchor = btnHolder.querySelector('a');
+      if (anchor) {
+        const url = new URL(anchor.href);
+        if (anchor.href && !anchor.href.includes('javascript:void(0)')) {
+          window.location.href = url.pathname + url.search + url.hash;
+        }
+      }
+    }
+  } else {
+    toggleGaragePopup();
+    updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, engine);
+  }
+}
+
+
+
+/*******************************************************************************************************
+**                                                                                                    **
 **                                             UTILITIES                                              **
 **                                                                                                    **
 *******************************************************************************************************/
@@ -33,12 +351,6 @@ const getIpAddress = async () => {
     return null;
   }
 };
-
-// Function to update garage and navigate
-async function updateGarageAndNavigate(handle, vin) {
-  const redirectUrl = `/collections/${handle}${vin ? `?vin=${encodeURIComponent(vin)}` : ''}`;
-  window.location.href = redirectUrl;
-}
 
 /*
     functionLocation - 1 = Garage
@@ -205,7 +517,7 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
           // If already logged, reset the flag so it can be logged again if needed.
           alreadyLogged = false;
         }
-        updateGarageAndNavigate(data.handle, vin);
+        updateGarageAndNavigate(data.year, data.make, data.model, data.submodel, data.engine, vin);
       }
     } else if (functionLocation === 2) {
       if (data.handle === '' || data.isVinValid === false) {
@@ -286,7 +598,6 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
 async function fetchBumpersLicenseToVin(state, plate) {
   try {
     alreadyLogged = false;
-    console.log('Fetching vehicle data by license plate...');
     const response = await fetch(`https://license-to-vin-273472976974.us-east5.run.app/license-to-vin?state=${state}&plate=${plate}`, {
       method: 'Get',
       headers: { 'Content-Type': 'application/json' },
@@ -360,5 +671,68 @@ async function logGarageUsageToSheets(vin, plate, state, year, make, model, erro
     }
   } catch (error) {
     console.error("Error submitting logs:", error);
+  }
+}
+
+function toggleGaragePopup() {
+  // Always select the popup regardless of hidden state
+  let garageEasyPopup = document.querySelector('.garage-easyYMM-popup');
+
+  if (!garageEasyPopup) {
+    console.error('No .garage-easyYMM-popup element found!');
+    return;
+  }
+
+  const garagePopupStyleId = 'garage-popup-style';
+  const scrollY = window.scrollY;
+
+  garageEasyPopup.classList.toggle("hidden");
+
+  if (!garageEasyPopup.classList.contains("hidden")) {
+    document.body.dataset.scrollY = scrollY;
+
+    if (!document.getElementById(garagePopupStyleId)) {
+      const style = document.createElement('style');
+      style.id = garagePopupStyleId;
+      style.textContent = `
+            body.no-scroll-garage-popup {
+              position: fixed;
+              top: -${scrollY}px;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              overflow: hidden !important;
+            }
+          `;
+      document.head.appendChild(style);
+    }
+    document.body.classList.add('no-scroll-garage-popup');
+    hideShopifyChat();
+  } else {
+    const savedScrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+    delete document.body.dataset.scrollY;
+
+    const style = document.getElementById(garagePopupStyleId);
+    if (style) {
+      style.remove();
+    }
+
+    window.scrollTo(0, savedScrollY);
+    showShopifyChat();
+  }
+}
+
+function hideShopifyChat() {
+  const shopifyChat = document.getElementById('shopify-chat');
+  if (shopifyChat) {
+    shopifyChat.style.display = 'none';
+  }
+}
+
+// Function to show Shopify chat widget
+function showShopifyChat() {
+  const shopifyChat = document.getElementById('shopify-chat');
+  if (shopifyChat) {
+    shopifyChat.style.display = 'block';
   }
 }

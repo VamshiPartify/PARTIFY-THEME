@@ -216,29 +216,32 @@
           </div>
         </a>
       </div>
-      <div class="garage-easyYMM-popup hidden">
-        <div class="garage-easyYMM-popup-overlay">
-          <div class="garage-easyYMM-popup-wrapper">
-            <div class="garage-easyYMM-popup-container">
-              <div class="easyYMM">
-                <div class="easysearch-slides-block first--home">
-                  <div class="container">
-                    <div>
-                      {% capture easysearchWidget %}{% render "easysearch" %}{% endcapture %}
-                      {% unless easysearchWidget contains 'Liquid error' %}{{ easysearchWidget }}{% endunless %}
+      {% render 'easysearch-garage' %}
+      {% comment %}
+        <div class="garage-easyYMM-popup hidden">
+          <div class="garage-easyYMM-popup-overlay">
+            <div class="garage-easyYMM-popup-wrapper">
+              <div class="garage-easyYMM-popup-container">
+                <div class="easyYMM">
+                  <div class="easysearch-slides-block first--home">
+                    <div class="container">
+                      <div>
+                        {% capture easysearchWidget %}{% render "easysearch" %}{% endcapture %}
+                        {% unless easysearchWidget contains 'Liquid error' %}{{ easysearchWidget }}{% endunless %}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div id="vin-to-collection-or" style="display:none;">{{ 'garage.or' | t }}</div>
-            <!-- Preload the VIN-to-Collection form in a hidden div -->
-            <div id="vin-to-collection-placeholder" style="display:none;">
-              {% render 'vin-to-collection' %}
+              <div id="vin-to-collection-or" style="display:none;">{{ 'garage.or' | t }}</div>
+              <!-- Preload the VIN-to-Collection form in a hidden div -->
+              <div id="vin-to-collection-placeholder" style="display:none;">
+                {% render 'vin-to-collection' %}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      {% endcomment %}
     </div>
 
     <div class="site-header-right">
@@ -274,23 +277,26 @@
         </div>
       </div>
     </a>
-    <div class="garage-easyYMM-popup hidden">
-      <div class="garage-easyYMM-popup-overlay">
-        <div class="garage-easyYMM-popup-container">
-          <div class="easyYMM">
-            <div class="easysearch-slides-block first--home">
-              <div class="container">
-                <div>
-                  {% capture easysearchWidget %}{% render "easysearch" %}{% endcapture %}
-                  {% unless easysearchWidget contains 'Liquid error' %}{{ easysearchWidget }}{% endunless %}
+    {% comment %}
+      <div class="garage-easyYMM-popup hidden">
+        <div class="garage-easyYMM-popup-overlay">
+          <div class="garage-easyYMM-popup-container">
+            <div class="easyYMM">
+              <div class="easysearch-slides-block first--home">
+                <div class="container">
+                  <div>
+                    {% capture easysearchWidget %}{% render "easysearch" %}{% endcapture %}
+                    {% unless easysearchWidget contains 'Liquid error' %}{{ easysearchWidget }}{% endunless %}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    {% endcomment %}
   </div>
+  {% render 'easysearch-garage' %}
 
   <div
     class="
