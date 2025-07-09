@@ -399,12 +399,19 @@
     ></noscript>
 
     <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "gyppnejxfa");
-</script>
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = 'https://www.clarity.ms/tag/' + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, 'clarity', 'script', 'gyppnejxfa');
+    </script>
   </head>
 
   <body
@@ -1063,12 +1070,18 @@
     {% endcomment %}
 
     <!-- Viewport height fix for mobile browsers -->
-    <script>
-      function setVh() {
-        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-      }
-      window.addEventListener('resize', setVh);
-      setVh();
-    </script>
+    {% comment %}
+      <script>
+        function setFullHeight() {
+          console.log('Setting full height to', window.innerHeight);
+          // Set the CSS variable for full height
+          document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+        }
+
+        window.addEventListener('resize', setFullHeight);
+        window.addEventListener('orientationchange', setFullHeight);
+        setFullHeight();
+      </script>
+    {% endcomment %}
   </body>
 </html>
