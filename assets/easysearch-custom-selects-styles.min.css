@@ -166,7 +166,7 @@
     left: 0;
     z-index: 999;
     max-height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
     margin: 0;
     padding: 0;
     background-color: #fff;
@@ -176,10 +176,9 @@
 }
 .easysearch-holder .select-options li {
     height: 40px;
-    line-height: 40px;
+    line-height: 39px;
     margin: 0;
     padding: 0;
-    text-indent: 10px;
     border-top: 1px solid #ececec;
     -moz-transition: all .15s ease-in;
     -o-transition: all .15s ease-in;
