@@ -1,0 +1,492 @@
+<style>
+  .additional-options-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ccc;
+    margin-bottom: 10px;
+  }
+  .additional-options-title-disabled {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ccc;
+    margin-bottom: 10px;
+  }
+  .option-title-turbo {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #333;
+  }
+
+  .turbo-disabled {
+    color: #ccc;
+    pointer-events: none;
+  }
+  #option-title-turbo.disabled {
+    color: #ccc;
+    pointer-events: none;
+  }
+  {% comment %} .verifyCompatibilityButton.disabled {
+    color: #ccc;
+    pointer-events: none;
+  } {% endcomment %}
+
+  #turbo-type-select:hover {
+    cursor: pointer;
+  }
+  #turbo-option:hover {
+    cursor: pointer;
+  }
+
+  .turbo-type-select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    flex-direction: column;
+    min-height: 45px;
+  }
+
+  .turbo-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .available-options {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: #fff;
+    font-weight: 600;
+    background: #0d1ca2;
+    padding: 2px 5px;
+    border-radius: 999px;
+    font-size: 11px;
+    z-index: 1;
+  }
+
+  .available-options.ready-paint {
+  }
+
+  .turbo-options-checkbox input[type='radio']:hover {
+    cursor: pointer;
+  }
+
+  .turbo-option:hover {
+    cursor: pointer;
+  }
+
+  label.turbo-options-checkbox:has(input:disabled) {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+  .turboText:hover {
+    cursor: pointer;
+  }
+
+  .turboRedirectButton {
+    border-radius: 14px;
+    width: 100%;
+    margin-top: 15px;
+    background-color: #01a601;
+    color: #fff;
+    padding: 7px 7px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  {% comment %} .verifyCompatibilityButton {
+    border-radius: 14px;
+    width: 100%;
+    margin-top: 24px;
+    background-color: #01a601;
+    color: #fff;
+    padding: 7px 7px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    font-weight: bold;
+  } {% endcomment %}
+
+  .not-compatible-button {
+    border-radius: 14px;
+    width: 100%;
+    background-color: #e61b24;
+    color: #fff;
+    padding: 7px 7px;
+    margin-top: 8px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .compatible-message {
+    display: inline-flex;
+    align-items: center;
+    background: #01a601;
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .not-compatible-label {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-top: 8px;
+    color: #e61b24;
+    text-align: center;
+    display: block;
+  }
+
+  .not-compatible-msg-label {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 0;
+    color: #e61b24;
+    text-align: start;
+    display: block;
+  }
+
+  .aspiration-divider {
+    height: 1px;
+    width: 104%;
+    background-color: #000000;
+    margin: 5px 0 8px 0;
+    opacity: 0.8;
+    position: relative;
+  }
+</style>
+<div class="turbo-type-select turbo-disabled" data-group-index="{{key_index}}">
+  <label class="additional-options-title" style="none" data-group-index="{{key_index}}">
+    Additional Compatibility Questions
+  </label>
+  <label class="option-title-turbo" data-group-index="{{key_index}}"></label>
+  <div class="turbo-options-container" data-group-index="{{key_index}}"></div>
+  <button
+    class="turboRedirectButton"
+    data-group-index="{{key_index}}"
+    style="display: none;"
+    type="button"
+    onclick="turboButtonClick({{key_index}})"
+  >
+    Parts That Fit Your Vehicle
+  </button>
+</div>
+<div class="compatible-message" style="display: none;">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20px"
+    height="20px"
+    viewBox="0 0 20 20"
+    fill="white"
+    style="flex-shrink: 0;"
+  >
+    <path d="M14.686 8.615A1.071 1.071 0 0 0 13.171 7.1l-4.242 4.242L7.186 9.6a1.071 1.071 0 1 0-1.515 1.515l2.5 2.5a1.071 1.071 0 0 0 1.515 0l5-5Z"></path>
+    <path fill-rule="evenodd" d="M20 10c0 5.523-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0s10 4.477 10 10Zm-2.143 0a7.857 7.857 0 1 1-15.714 0 7.857 7.857 0 0 1 15.714 0Z"></path>
+  </svg>
+  <span style="color: #fff; font-weight: 800; margin-left: 12px;"> This Part Is Compatible With Your Vehicle </span>
+</div>
+<div class="not-compatible" style="display: none;">
+  <label class="not-compatible-label">This Part Is Not Compatible With Your Vehicle</label>
+  <button class="not-compatible-button" type="button">Parts That Fit Your Vehicle</button>
+</div>
+<div class="not-compatible-msg" style="display: none;">
+  <label class="not-compatible-msg-label">This Part Is Not Compatible With Your Vehicle</label>
+</div>
+
+{% assign product_title = product.title %}
+
+<script>
+//FUNCTIONS
+  const aspirationQuestionReference = {{ product.metafields.custom.aspiration_questions_reference.value | json }};
+  const aspirationQuestionList = aspirationQuestionReference.aspiration_question_json_list;
+  const countryCodes = {{ product.metafields.custom.country_codes.value | json }};
+  const countryCodesJSON = countryCodes.codes
+  console.log('wool countryCodesJSON: ', countryCodesJSON);
+  const currentKey = "{{key_index}}";
+  const inclusions_key = "{{ inclusions_key }}";
+  const inclusions_key_parts = inclusions_key.split("-");
+  const exclusions_key = "{{ exclusions_key }}";
+  const exclusions_key_parts = exclusions_key.split("-");
+  const notCompatibleMessage = document.querySelector('.not-compatible');
+  let renderObject = null;
+  let noYes = false;
+
+  console.log('wool inclusions_key: ', inclusions_key);
+  console.log('wool exclusions_key: ', exclusions_key);
+  console.log('wool aspirationQuestionReference: ', aspirationQuestionReference);
+
+
+  // Country Question Check
+  if(inclusions_key_parts[0] === 'country') {
+    const match = countryCodesJSON.find(obj => {
+      console.log('wool obj.key: ', obj.key);
+      console.log('wool currentKey: ', inclusions_key_parts[1]);
+      return obj.key === inclusions_key_parts[1];
+    });
+
+    if (match) {
+      console.log('Wool Found match:', match);
+      renderObject = aspirationQuestionReference.aspiration_question_json_list.find(function(item) {
+        return item.key === 'country';
+      });
+      // You can access match.value here
+    } else {
+      console.log('Wool No match found for', inclusions_key_parts[1]);
+    }
+  }
+
+  if (renderObject) {
+    const aspirationValue = renderObject.value;
+    console.log('wool aspirationValue', aspirationValue);
+
+    let questionObj = null;
+    try {
+      questionObj = typeof aspirationValue === 'string' ? JSON.parse(aspirationValue) : aspirationValue;
+    } catch (e) {
+      console.error('Failed to parse question JSON:', e, aspirationValue);
+    }
+    const groupIndex = currentKey;
+    const title = document.querySelector(`.option-title-turbo[data-group-index="${groupIndex}"]`);
+    console.log('wool title: ', title);
+    // Set the title text content based on the questionObj
+    if (questionObj && questionObj.question) {
+      console.log('wool questionObj.question: ', questionObj.question);
+      console.log('wool questionObj.options: ', questionObj.options);
+      let questionText = questionObj.question;
+      // Only replace if '<>' is present
+      if (questionText.includes('<>')) {
+        if (inclusions_key_parts[1] === "United States") {
+          questionText = questionText.replace('<>', "the " + " " + inclusions_key_parts[1]);
+        } else {
+          questionText = questionText.replace('<>', inclusions_key_parts[1]);
+        }
+      }
+      title.textContent = questionText;
+    } else {
+      title.textContent = 'Compatibility Question';
+    }
+
+    // Dynamically create radio buttons for options
+    const optionsContainer = document.querySelector(`.turbo-options-container[data-group-index="${groupIndex}"]`);
+    optionsContainer.innerHTML = '';
+    if (questionObj && Array.isArray(questionObj.options)) {
+      // Check if options are exactly ['Yes', 'No'] or ['No', 'Yes'] (case-insensitive, order-insensitive)
+      const lowerOpts = questionObj.options.map(opt => opt.trim().toUpperCase());
+      console.log('wool lowerOpts: ', lowerOpts);
+      if (
+        lowerOpts.length === 2 &&
+        lowerOpts.includes('K') &&
+        lowerOpts.includes('5')
+      ) {
+        noYes = true;
+      } else {
+        noYes = false;
+      }
+
+      console.log('wool noYes: ', noYes);
+      // Create radio buttons for each option
+      questionObj.options.forEach((opt, idx) => {
+        const optionId = `turbo-radio-${groupIndex}-${idx}`;
+        const div = document.createElement('div');
+        div.className = 'turbo-option';
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = `turboOption-${groupIndex}`;
+        input.value = opt;
+        input.id = optionId;
+        input.className = 'turbo-radio';
+        input.disabled = true;
+        const label = document.createElement('label');
+        label.className = 'turboText turbo-disabled';
+        label.setAttribute('for', optionId);
+        label.setAttribute('data-group-index', groupIndex);
+        label.textContent = opt;
+        div.appendChild(input);
+        div.appendChild(label);
+        div.appendChild(document.createElement('br'));
+        optionsContainer.appendChild(div);
+      });
+    }
+  }
+
+  document.querySelectorAll('.additional-options-title').forEach(function(label) {
+    if (label.getAttribute('data-group-index') !== "0") {
+      label.style.display = 'none';
+    }
+  });
+
+
+
+  function getYearMakeModel(url) {
+    const urlObj = new URL(url);
+    const parts = urlObj.pathname.split('/');
+    const lastPart = parts[parts.length - 1] || parts[parts.length - 2];
+    const [year, make, ...modelParts] = lastPart.split('-');
+    const model = modelParts.join('+');
+    const combined = [year, make, model].filter(Boolean).join('+');
+    return { combined};
+  }
+  function filterForProductType(productTitle) {
+    if (productTitle.includes('Front Bumper')) {
+      return 'Front+Bumper';
+    } else if (productTitle.includes('Rear Bumper')) {
+      return 'Rear+Bumper';
+    } else if (productTitle.includes('Hood')){
+      return 'Hood';
+    } else if (productTitle.includes('Passenger Side Fender')) {
+      return 'Passenger+Side+Fender';
+    } else if (productTitle.includes('Driver Side Fender')) {
+      return 'Driver+Side+Fender';
+    } else if (productTitle.includes('Driver Side Fender')) {
+      return 'Driver+Side+Fender';
+    } else if (productTitle.includes('Rear Lower Bumper')) {
+      return 'Rear+Lower+Bumper';
+    }
+  }
+    turboButton = document.querySelector('.turboRedirectButton');
+    const product_title = "{{ product_title }}";
+    const partType = filterForProductType(product_title);
+
+    function turboButtonClick(groupIndex){
+       const fitmentLink = document.querySelector('.easysearch-fitment-link');
+         const groupContainer = document.querySelector(`.turbo-type-select[data-group-index="${groupIndex}"]`);
+       if (fitmentLink) {
+        console.log(fitmentLink.href);
+          const vehicle = getYearMakeModel(fitmentLink);
+          //console.log(vehicle.combined);
+          const selected = groupContainer.querySelector('.turbo-radio:checked');
+          //console.log(selected.value);
+          if (selected.value.includes('turbo')) {
+            //console.log(selected.value);
+            window.location.href = fitmentLink.href + "?filter.p.m.custom.aspiration=Turbo&filter.p.product_type=" + partType;
+      }
+            else if (selected.value.includes('No-turbo')) {
+                          //console.log(selected.value);
+              window.location.href = fitmentLink.href + "?filter.p.m.custom.aspiration=Non+Turbo&filter.p.product_type=" + partType;
+            }
+        } else {
+          alert('No link available for parts that fit your vehicle.');
+        }
+    }
+
+    function verifyCompatibilityButtonClick(){
+        const selectedValues = Array.from(document.querySelectorAll('.turbo-radio:checked')).map(radio => radio.value);
+        console.log(selectedValues);
+        const hasFalse = selectedValues.some(val => val.includes('false'));
+        document.querySelectorAll('.turbo-type-select').forEach(function(el) {
+          el.style.display = 'none';               
+        });
+        if (hasFalse) {
+          const notCompatibleMessage = document.querySelector('.not-compatible');
+          notCompatibleMessage.style.display = 'block';
+          const additionalQuestionContainer = document.querySelector('.required-questions-container');
+          if (additionalQuestionContainer) {
+            additionalQuestionContainer.style.padding = '4px';
+            additionalQuestionContainer.style.border = '1.5px solid #e61b24';
+          }
+        } else {
+          const compatibleMessage = document.querySelector('.compatible-message');
+          compatibleMessage.style.display = 'inline-flex';
+          const additionalQuestionContainer = document.querySelector('.required-questions-container');
+          if (additionalQuestionContainer) {
+            additionalQuestionContainer.style.padding = '4px';
+            additionalQuestionContainer.style.border = '1.5px solid #01A601';
+          }
+          enableProductTypeSelect();
+          enableQualityDescriptionBtn();
+          updateProgressHeaderColors();
+        }
+
+
+    }
+document.querySelectorAll('.turbo-radio').forEach(function(radio) {
+  radio.addEventListener('change', function(event) {
+    event.preventDefault();
+
+    console.log('wool radio changed: ', this.value);
+    console.log('wool noYes: ', noYes);
+    // If the options are Yes/No or No/Yes and the value is included
+    if (noYes && inclusions_key.length) {
+      if(this.value === "5") {
+        enableProductTypeSelect();
+        enableQualityDescriptionBtn();
+        updateProgressHeaderColors();
+        hideNotCompatibleMsg();
+      } else {
+        disableQualityTypeSelect();
+        disableQualityDescriptionBtn();
+        updateProgressHeaderColors();
+        clearCombinedVariantSelect();
+        disableCombinedVariantSelect();
+        disablePrecisionMatchBtns();
+        clearPrecisionMatchRadioButtons();
+        disableVinVerificationBtns();
+        clearVinVerificationRadioButtons();
+        disableAddToCartButton();
+        disablehowToFindPaintCodeBtn();
+        disableGetPaintCodeUsingVin();
+        disableSelectVinVariantBtn();
+        disableVINTextboxForOEM();
+        showNotCompatibleMsg();
+      }
+    } else if (noYes && exclusions_key.length) {
+      if(this.value === "K") {
+        enableProductTypeSelect();
+        enableQualityDescriptionBtn();
+        updateProgressHeaderColors();
+        hideNotCompatibleMsg();
+      } else {
+        disableQualityTypeSelect();
+        disableQualityDescriptionBtn();
+        updateProgressHeaderColors();
+        clearCombinedVariantSelect();
+        disableCombinedVariantSelect();
+        disablePrecisionMatchBtns();
+        clearPrecisionMatchRadioButtons();
+        disableVinVerificationBtns();
+        clearVinVerificationRadioButtons();
+        disableAddToCartButton();
+        disablehowToFindPaintCodeBtn();
+        disableGetPaintCodeUsingVin();
+        disableSelectVinVariantBtn();
+        disableVINTextboxForOEM();
+        showNotCompatibleMsg();
+      }
+    } 
+  });
+});
+    //EVENTS
+/*document.querySelectorAll('.turbo-radio').forEach(function(radio) {
+  radio.addEventListener('change', function(event) {
+    event.preventDefault();
+
+    const groupContainer = radio.closest('.turbo-type-select');
+    const turboRedirectButton = groupContainer.querySelector('.turboRedirectButton');
+    if (this.value.includes('false')) {//Not turbo product, select is turbo OR turbo product, select is not turbo
+      //console.log(this.value);
+      turboRedirectButton.style.display = 'block';
+                resetAllHeaderColors(false, true);
+                if(qualityTypeSelect) {
+                  disableQualityTypeSelect();
+                  disableQualityDescriptionBtn();
+                }
+                clearCombinedVariantSelect();
+                disableCombinedVariantSelect();
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
+                disableVinVerificationBtns();
+                clearVinVerificationRadioButtons();
+                disableAddToCartButton();
+                disablehowToFindPaintCodeBtn();
+                disableGetPaintCodeUsingVin();
+                disableSelectVinVariantBtn();
+                disableVINTextboxForOEM();
+    }
+    else{//Not turbo product, select is not turbo OR turbo product, select is turbo
+          //console.log(this.value);
+      turboRedirectButton.style.display = 'none';
+      enableProductTypeSelect();
+      enableQualityDescriptionBtn();
+      updateProgressHeaderColors();
+    }
+  });
+});*/
+</script>

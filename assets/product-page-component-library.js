@@ -14,6 +14,7 @@ const combinedVariantSelectLibrary = document.getElementById('variant-selector')
 const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
 const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
+const notCompatibleMsgLibrary = document.querySelector('.not-compatible-msg');
 const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
 const paintedStockKeyPaintLevelLibrary = document.querySelector('.painted-stock-key-paint-level');
 const paintedStockKeyQualityLevelLibrary = document.querySelector('.painted-stock-key-quality-level');
@@ -88,7 +89,7 @@ if (addToCartForUnpaintedLibrary) {
 **                                             ENABLE/DISABLE                                         **
 **                                                                                                    **
 *******************************************************************************************************/
-
+// Toggling
 
 // DISABLING AND CLEARING
 function hideFitmentFailButton() {
@@ -112,6 +113,26 @@ function disablePrePaintedMessagingQualityLevel() {
     if (paintedStockKeyQualityLevelLibrary) {
         paintedStockKeyQualityLevelLibrary.classList.add("disabled")
     }
+}
+
+function disableTurboSelect() {
+    const turboRadioButtons = document.querySelectorAll('.turbo-radio');
+    turboRadioButtons.forEach(radio => {
+        radio.disabled = true;
+        radio.checked = false;
+    });
+    document.querySelectorAll('.turboText').forEach(function (el) {
+        el.classList.add('turbo-disabled');
+    });
+    document.querySelectorAll('.turbo-type-select').forEach(function (el) {
+        el.classList.add('turbo-disabled');
+    });
+    document.querySelector('.turboRedirectButton').style.display = 'none';
+    document.querySelector('.additional-options-title').classList.add('additional-options-title-disabled');
+}
+
+function hideNotCompatibleMsg() {
+    if (notCompatibleMsgLibrary) notCompatibleMsgLibrary.style.display = "none";
 }
 
 function disableQualityTypeSelect() {
@@ -300,6 +321,25 @@ function enableProductTypeSelect() {
         });
     }
     if (qualityTypeSelectLibrary) qualityTypeSelectLibrary.disabled = false;
+}
+
+function enableTurboSelect() {
+    console.log("Enabling turbo select");
+    const turboRadioButtons = document.querySelectorAll('.turbo-radio');
+    turboRadioButtons.forEach(radio => {
+        radio.disabled = false;
+    });
+    document.querySelectorAll('.turboText').forEach(function (el) {
+        el.classList.remove('turbo-disabled');
+    });
+    document.querySelectorAll('.turbo-type-select').forEach(function (el) {
+        el.classList.remove('turbo-disabled');
+    });
+    document.querySelector('.additional-options-title').classList.remove('additional-options-title-disabled');
+}
+
+function showNotCompatibleMsg() {
+    if (notCompatibleMsgLibrary) notCompatibleMsgLibrary.style.display = "block";
 }
 
 function enableQualityDescriptionBtn() {
