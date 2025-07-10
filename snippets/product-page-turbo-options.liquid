@@ -1,5 +1,5 @@
 <style>
-  .product-type-dropdown select {
+  .product-aspiration-questions select {
     color: #000;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -13,12 +13,12 @@
     height: 45px;
     margin-bottom: 10px;
   }
-  .product-type-dropdown {
+  .product-aspiration-questions {
     display: flex;
     flex-direction: column;
     width: 100%;
   }
-  .product-type-dropdown select[disabled] {
+  .product-aspiration-questions select[disabled] {
     background-color: #f0f0f0;
     color: #ccc;
     pointer-events: none;
@@ -26,6 +26,6 @@
   }
 </style>
 
-<div class="product-type-dropdown">
-  {% render 'product-page-turbo-btns', key_index: key_index%}
+<div class="product-aspiration-questions">
+  {% render 'product-page-turbo-btns', key_index: key_index %}
 </div>

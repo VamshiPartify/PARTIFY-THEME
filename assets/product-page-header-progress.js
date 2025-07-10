@@ -104,8 +104,11 @@ function getQualityHeaderColor() {
 }
 //returns red for now
 function getTurboHeaderColor() {
-    if (!turboTypeSelect.classList.contains('turbo-disabled')) { return COLORS.black }
-    else return COLORS.gray;
+    if (turboTypeSelect && !turboTypeSelect.classList.contains('turbo-disabled')) {
+        return COLORS.black;
+    } else {
+        return COLORS.gray;
+    }
 }
 
 function isValidVin() {
@@ -284,11 +287,10 @@ function updateProgressHeaderColors() {
     const qualityHeaderColor = getQualityHeaderColor();
     if (qualityHeader) qualityHeader.style.color = qualityHeaderColor;
 
-    //gets header color function line 100
     if (turboHeader) {
         const turboHeaderColor = getTurboHeaderColor();
         turboHeader.forEach(function (header) {
-            header.style.color = turboHeaderColor; // or any color you want
+            header.style.color = turboHeaderColor;
         });
     }
 
