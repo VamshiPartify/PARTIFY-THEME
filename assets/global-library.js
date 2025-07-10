@@ -23,6 +23,65 @@ let garageToCollections = false;
 **                                           GARAGE LOGIC                                             **
 **                                                                                                    **
 *******************************************************************************************************/
+document.addEventListener("easysearch_rendered", function (e) {
+  document.querySelectorAll('.easysearch-holder').forEach(function (holder) {
+    // Prevent duplicate buttons
+    if (!holder.querySelector('.custom-easysearch-ymm-btn')) {
+      const refBtn = document.getElementById('license-to-vin-btn');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.id = 'custom-easysearch-ymm-btn-id';
+      btn.className = 'custom-easysearch-ymm-btn';
+      btn.innerHTML = refBtn ? refBtn.innerHTML : 'Search';
+      btn.disabled = true;
+      holder.appendChild(btn);
+
+      const actionsHolder = holder.querySelector('.easysearch-actions-holder');
+      if (actionsHolder) {
+        const btnHolder = actionsHolder.querySelector('.easysearch-btn-holder');
+        if (btnHolder) {
+          const anchor = btnHolder.querySelector('a');
+          if (anchor) {
+            // Define updateBtnState outside to avoid redefining for each button
+            function updateBtnState(anchor, btn) {
+              if (anchor.href && !anchor.href.includes('javascript:void(0)')) {
+                btn.disabled = false;
+              } else {
+                btn.disabled = true;
+              }
+            }
+            // Initial state
+            updateBtnState(anchor, btn);
+            const observer = new MutationObserver(function (mutationsList) {
+              for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'href') {
+                  updateBtnState(anchor, btn);
+                }
+              }
+            });
+            observer.observe(anchor, { attributes: true });
+            btn.addEventListener('click', function () {
+              const year = document.getElementById('easysearch_field_4973');
+              const make = document.getElementById('easysearch_field_4974');
+              const model = document.getElementById('easysearch_field_4975');
+              const submodel = document.getElementById('easysearch_field_28136');
+              const engine = document.getElementById('easysearch_field_28137');
+              if (!btn.disabled && anchor.href && !anchor.href.includes('javascript:void(0)')) {
+                updateEasysearchLocalStorageOrNavigate(
+                  year ? year : null,
+                  make ? make : null,
+                  model ? model : null,
+                  submodel ? submodel : null,
+                  engine ? engine : null
+                );
+              }
+            });
+          }
+        }
+      }
+    }
+  });
+});
 
 // --- GarageUtils: getSearchTerms and setSearchTerms helpers (migrated from garage-script.liquid) ---
 function getSearchTerms() {
@@ -146,10 +205,8 @@ function setFitmentObjectGlobal(obj) {
 }
 
 function updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, engine) {
-  let fitmentValue = '';
   let anchor = null;
   const holder = document.querySelector('.easysearch-holder');
-  const easySearchBtnSearch = document.querySelector('.easysearch-btn-search');
   const actionsHolder = holder.querySelector('.easysearch-actions-holder');
   if (actionsHolder) {
     const btnHolder = actionsHolder.querySelector('.easysearch-btn-holder');
@@ -170,61 +227,67 @@ function updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, eng
 
   // If on the product page, set fitment values and do not redirect
   // If on product page and the Easysearch Change Vehicle was clicked (not the garage btn)
-  if (window.location.pathname.includes('/products/') && !garageToCollections) {
-    let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
-    fitmentValue = fields
-      .filter(f => f && f.value)
-      .map(f => f.value + 'easysearch-preselect-delimiter')
-      .join('');
-    const fitmentObject = {
-      value: fitmentValue,
-      expires: expires.toString(),
-    }
-    setFitmentObjectGlobal(fitmentObject);
-
-    updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal);
-
-    // Save current search parameters to localStorage or backend
-    easysearch.saveSearchParams(easySearchBtnSearch);
-    easysearch.addPropertyToProductForm();
-    // Get the fitment widget element and the URL to load fitment results
-    const fitWidget = document.querySelector('.easysearch-fitment-widget');
-    const fitmentUrl = anchor.href;
-
-    // Function to trigger the fitment widget toggle after EasySearch is ready
-    function triggerFitmentWidget() {
-      // Only proceed if easysearch and fitmentToggleWidget are available, and required elements exist
-      if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function' && fitWidget && fitmentUrl) {
-        // Show or update the fitment widget with the selected fitment URL
-        easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
-        // Remove the event listener after firing to avoid duplicate calls
-        document.removeEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
-      }
-    }
-
-    // Listen for the EasySearch ready event, then trigger the fitment widget
-    document.addEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
-
-    // If EasySearch is already loaded, call the fitment widget toggle immediately
-    if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function') {
-      easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
-    }
-
-    // Open the garage popup (likely a UI overlay for saved vehicles)
-    // toggleGaragePopup();
-    // Hidden El
-    const hiddenEasysearchEl = document.querySelector('.easysearch-fitment-search-widget');
-    const failOrSuccessEasysearchEl = document.querySelector('.easysearch-fitment-holder');
-    // need to check if the hiddenEasysearchEl class contains the 'easysearch-hidden' class
-    if (hiddenEasysearchEl && !hiddenEasysearchEl.classList.contains('easysearch-hidden')) {
-      hiddenEasysearchEl.classList.add('easysearch-hidden');
-    }
-    if (failOrSuccessEasysearchEl && failOrSuccessEasysearchEl.classList.contains('easysearch-hidden')) {
-      failOrSuccessEasysearchEl.classList.remove('easysearch-hidden');
-    }
+  if (window.location.pathname.includes('/products/')) {
+    updateLocalStorageValues(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal, fields, anchor);
   } else {
     updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal);
     window.location.href = anchor.href;
+  }
+}
+
+function updateLocalStorageValues(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal, fields, anchor) {
+  let fitmentValue = '';
+  const easySearchBtnSearch = document.querySelector('.easysearch-btn-search');
+  let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
+  fitmentValue = fields
+    .filter(f => f && f.value)
+    .map(f => f.value + 'easysearch-preselect-delimiter')
+    .join('');
+  const fitmentObject = {
+    value: fitmentValue,
+    expires: expires.toString(),
+  }
+  setFitmentObjectGlobal(fitmentObject);
+
+  updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal);
+
+  // Save current search parameters to localStorage or backend
+  easysearch.saveSearchParams(easySearchBtnSearch);
+  easysearch.addPropertyToProductForm();
+  // Get the fitment widget element and the URL to load fitment results
+  const fitWidget = document.querySelector('.easysearch-fitment-widget');
+  const fitmentUrl = anchor.href;
+
+  // Function to trigger the fitment widget toggle after EasySearch is ready
+  function triggerFitmentWidget() {
+    // Only proceed if easysearch and fitmentToggleWidget are available, and required elements exist
+    if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function' && fitWidget && fitmentUrl) {
+      // Show or update the fitment widget with the selected fitment URL
+      easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
+      // Remove the event listener after firing to avoid duplicate calls
+      document.removeEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
+    }
+  }
+
+  // Listen for the EasySearch ready event, then trigger the fitment widget
+  document.addEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
+
+  // If EasySearch is already loaded, call the fitment widget toggle immediately
+  if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function') {
+    easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
+  }
+
+  // Open the garage popup (likely a UI overlay for saved vehicles)
+  toggleGaragePopup();
+  // Hidden El
+  const hiddenEasysearchEl = document.querySelector('.easysearch-fitment-search-widget');
+  const failOrSuccessEasysearchEl = document.querySelector('.easysearch-fitment-holder');
+  // need to check if the hiddenEasysearchEl class contains the 'easysearch-hidden' class
+  if (hiddenEasysearchEl && !hiddenEasysearchEl.classList.contains('easysearch-hidden')) {
+    hiddenEasysearchEl.classList.add('easysearch-hidden');
+  }
+  if (failOrSuccessEasysearchEl && failOrSuccessEasysearchEl.classList.contains('easysearch-hidden')) {
+    failOrSuccessEasysearchEl.classList.remove('easysearch-hidden');
   }
 }
 
@@ -330,7 +393,7 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin)
       }
     }
   } else {
-    toggleGaragePopup();
+    // toggleGaragePopup();
     updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, engine);
   }
 }
@@ -676,10 +739,27 @@ async function logGarageUsageToSheets(vin, plate, state, year, make, model, erro
   }
 }
 
+function toggleProductDoesNotFitMsg(doesNotFit) {
+  let vehicleList = document.querySelector('.vehicle-list');
+  if (vehicleList) {
+    let failToFitMsg = document.querySelector('.product-does-not-fit-garage-msg');
+    if (!failToFitMsg) {
+      failToFitMsg = document.createElement('div');
+      failToFitMsg.className = 'product-does-not-fit-garage-msg';
+      failToFitMsg.textContent = '';
+      vehicleList.parentNode.insertBefore(failToFitMsg, vehicleList);
+    }
+    if (!doesNotFit) {
+      failToFitMsg.style.display = 'none';
+    } else {
+      failToFitMsg.style.display = 'block';
+    }
+  }
+}
+
 function toggleGaragePopup() {
   // Always select the popup regardless of hidden state
   let garageEasyPopup = document.querySelector('.garage-easyYMM-popup');
-
   if (!garageEasyPopup) {
     console.error('No .garage-easyYMM-popup element found!');
     return;
@@ -714,6 +794,19 @@ function toggleGaragePopup() {
     const savedScrollY = parseInt(document.body.dataset.scrollY || '0', 10);
     delete document.body.dataset.scrollY;
 
+    let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
+    if (document.getElementById("add-vehicle-btn").style.display === "none" && terms.length > 0) {
+      const garagePopupContainer = document.querySelector(".garage-easyYMM-popup-container");
+      garagePopupContainer.querySelector(".easyYMM").style.display = "none";
+      document.getElementById("vin-to-collection-placeholder").style.display = "none";
+      document.getElementById("vin-to-collection-or").style.display = "none";
+      if (garagePopupContainer) {
+        garagePopupContainer.classList.remove('no-bottom-radius');
+      }
+      document.getElementById("add-vehicle-btn").style.display = "flex";
+      document.querySelector(".garage-block").style.display = "block";
+      document.querySelector(".select-your-vehicle-header").style.display = "none";
+    }
     const style = document.getElementById(garagePopupStyleId);
     if (style) {
       style.remove();

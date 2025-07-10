@@ -1,84 +1,4 @@
 <style>
-  .garage-close-button {
-    font-size: 32px;
-    height: 32px;
-    background: none;
-    border: none;
-    color: #000;
-    cursor: pointer;
-    z-index: 1001;
-    display: flex;
-    align-items: start;
-    justify-content: end;
-  }
-
-  .my-garage-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .my-garage-header h1,
-  .select-your-vehicle-header h1 {
-    text-align: left;
-    font-size: 16px;
-    margin: 0;
-  }
-
-  @media (min-width: 380px) {
-    .my-garage-header h1,
-    .select-your-vehicle-header h1 {
-      font-size: 18px;
-    }
-  }
-
-  @media (min-width: 460px) {
-    .my-garage-header h1,
-    .select-your-vehicle-header h1 {
-      font-size: 20px;
-    }
-  }
-
-  @media (min-width: 720px) {
-    .my-garage-header h1,
-    .select-your-vehicle-header h1 {
-      font-size: 24px;
-    }
-  }
-
-  .select-your-vehicle-header h2 {
-    text-align: left;
-    font-size: medium;
-    margin: 0;
-    color: #555;
-    margin-top: 5px;
-    font-weight: 500;
-  }
-  .my-garage-header h4 {
-    text-align: right;
-    font-size: 14px;
-    margin: 5px 0;
-    color: #ff0000;
-    font-weight: 500;
-  }
-  .vehicle-selection-blurb {
-    font-size: 14px;
-    margin: 5px 0 10px 0;
-    color: #313131;
-    text-align: left;
-  }
-  .clear-garage {
-    border: none;
-    background-color: #fff;
-    cursor: pointer;
-  }
-  .vehicle-list {
-    color: #000;
-    padding: 0;
-    margin-top: 0;
-  }
-
   .vehicle-item {
     display: flex;
     justify-content: start;
@@ -184,66 +104,8 @@
     background-color: #c0d6fa;
     border-left: 5px solid #548ff0;
   }
-
-  #add-vehicle-btn {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    min-width: fit-content;
-    padding: 8px 10px;
-    border: 2px solid #000;
-    border-radius: 5px;
-    background-color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    color: #000;
-  }
 </style>
 
-{% comment %} GARAGE SCRIPT {% endcomment %}
-<!--
-  >
-  * Garage Script
-  *
-  * This script manages the "My Garage" feature for a vehicle selection UI, handling vehicle storage, UI updates, and user interactions.
-  *
-  * Modules:
-  *
-  * 1. GarageUtils
-  *    - Provides utility functions for interacting with localStorage to get/set search terms (vehicles) and fitment objects.
-  *      - getSearchTerms(): Retrieves the list of saved vehicles from localStorage.
-  *      - setSearchTerms(terms): Saves the list of vehicles to localStorage.
-  *      - getFitmentObject(): Retrieves the fitment object from localStorage.
-  *      - setFitmentObject(obj): Saves the fitment object to localStorage.
-  *
-  * 2. GarageUI
-  *    - Handles UI updates for vehicle selection and the garage popup.
-  *      - updateVehicleSelectionElement(firstSearchTerm): Updates the vehicle selection element in the header based on the selected vehicle.
-  *      - buildVehicleListHTML(searchTerms): Builds the HTML for the list of saved vehicles.
-  *      - renderGaragePopup(searchTerms, easyYMMContent): Renders the garage popup with the list of vehicles and the EasyYMM component.
-  *
-  * 3. GarageEvents
-  *    - Attaches event listeners for user interactions in the garage popup.
-  *      - attachEventListeners(): Handles add vehicle, delete vehicle, browse catalog, and clear garage actions.
-  *
-  * 4. GarageLogic
-  *    - Contains main logic for manipulating the garage data and updating the UI.
-  *      - removeVehicleFromLocalStorage(index): Removes a vehicle from localStorage and updates the UI.
-  *      - moveVehicleToFront(vehicleData): Moves a selected vehicle to the front of the list and updates localStorage.
-  *      - updateGaragePopup(searchTerms): Updates the garage popup UI and reattaches event listeners.
-  *
-  * Initialization:
-  * - On DOMContentLoaded, initializes the garage UI, sets fitment data if a vehicle is selected, renders the popup, and attaches event listeners.
-  *
-  * Usage:
-  * - Vehicles are stored in localStorage as search terms.
-  * - The fitment object is updated based on the selected vehicle.
-  * - Users can add, remove, or browse vehicles, and clear the entire garage.
-  *
-  * Dependencies:
-  * - Assumes presence of certain HTML elements (e.g., .easyYMM, .garage-easyYMM-popup-container).
-  * - Uses Liquid templating for translations and dynamic content.
--->
 <script>
   // Utility functions module
   const GarageUtils = (() => {
@@ -341,37 +203,6 @@
       }
     }
 
-    {% comment %} function moveVehicleToFront(vehicleData) {
-      let currentSearchTerms = GarageUtils.getSearchTerms();
-      console.log('wool moveVehicleToFront currentSearchTerms', currentSearchTerms);
-      console.log('wool moveVehicleToFront accomplished', vehicleData);
-      // vehicleData can be a string (ymm) or an object
-      let ymm = typeof vehicleData === 'string' ? vehicleData : vehicleData.ymm;
-      // Find index where ymm matches exactly, or is contained in obj.ymm, or obj.ymm is contained in ymm
-      let vehicleIndex = currentSearchTerms.findIndex(
-        (obj) => obj.ymm === ymm || obj.ymm.includes(ymm) || ymm.includes(obj.ymm)
-      );
-      let vehicleObj;
-      if (vehicleIndex > -1) {
-        vehicleObj = currentSearchTerms.splice(vehicleIndex, 1)[0];
-        // If either ymm contains the other, set ymm to the longer one
-        if (vehicleObj.ymm !== ymm) {
-          if (vehicleObj.ymm.length < ymm.length) {
-            vehicleObj.ymm = ymm;
-          } // else keep as is (already longer)
-        }
-      } else {
-        vehicleObj =
-          typeof vehicleData === 'object'
-            ? vehicleData
-            : { ymm, vin: null, paintCode: null, year: null, make: null, model: null, submodel: null, engine: null };
-      }
-      currentSearchTerms.unshift(vehicleObj);
-      if (currentSearchTerms.length > 5) currentSearchTerms.pop();
-      setSearchTerms(currentSearchTerms);
-      return currentSearchTerms;
-    } {% endcomment %}
-
     function updateGaragePopup(searchTerms) {
       const easyYMMElement = document.querySelector('.easyYMM');
       GarageUI.renderGaragePopup(searchTerms, easyYMMElement);
@@ -408,7 +239,7 @@
           // On mobile, replace the whole container's innerHTML if parent is .vehicleSelection-mobile-select-your-vehicle
           const mobileContainer = menuTitleEl.closest('.vehicleSelection-mobile-select-your-vehicle');
           if (isMobile && vehicleSelectionElement) {
-              // Find the parent container for mobile
+            // Find the parent container for mobile
             const mobileContainer = vehicleSelectionElement.closest('.vehicleSelection-mobile-select-your-vehicle');
             if (mobileContainer) {
               // Find or create the title span
@@ -423,7 +254,9 @@
               titleSpan.style.color = '#334FB4';
 
               // Remove all existing .change-divider and .change-option siblings
-              Array.from(mobileContainer.querySelectorAll('.change-divider, .change-option')).forEach(el => el.remove());
+              Array.from(mobileContainer.querySelectorAll('.change-divider, .change-option')).forEach((el) =>
+                el.remove()
+              );
 
               // Add divider and change-option after the title
               const divider = document.createElement('span');
@@ -471,33 +304,34 @@
     }
 
     function buildVehicleListHTML(searchTerms) {
-      let vehicleListHTML = `<ul class="vehicle-list">`;
-      searchTerms.slice(0, 5).forEach((vehicle, index) => {
-        const isFirstVehicle = index === 0 ? 'first-vehicle-item-container' : '';
-        vehicleListHTML += `
-            <li class="vehicle-item">
-              <div class="vehicle-item-container ${isFirstVehicle}">
-                <div class="vehicle-browse-catalog-container">
-                  <strong data-vehicle="${vehicle.ymm}">${vehicle.ymm}</strong>
-                  ${
-                    vehicle.vin && vehicle.vin !== ''
-                      ? `<div class="vehicle-vin">VIN: <strong>${vehicle.vin}</strong></div>`
-                      : ''
-                  }
-                  ${
-                    vehicle.paintCode && vehicle.paintCode !== ''
-                      ? `<div class="vehicle-paint-code">Paint Code: <strong>${vehicle.paintCode}</strong></div>`
-                      : ''
-                  }
-                  <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
-                </div>
-                <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+      // Returns only the <li> elements for the vehicle list
+      return searchTerms
+        .slice(0, 5)
+        .map((vehicle, index) => {
+          const isFirstVehicle = index === 0 ? 'first-vehicle-item-container' : '';
+          return `
+          <li class="vehicle-item">
+            <div class="vehicle-item-container ${isFirstVehicle}">
+              <div class="vehicle-browse-catalog-container">
+                <strong data-vehicle="${vehicle.ymm}">${vehicle.ymm}</strong>
+                ${
+                  vehicle.vin && vehicle.vin !== ''
+                    ? `<div class="vehicle-vin">VIN: <strong>${vehicle.vin}</strong></div>`
+                    : ''
+                }
+                ${
+                  vehicle.paintCode && vehicle.paintCode !== ''
+                    ? `<div class="vehicle-paint-code">Paint Code: <strong>${vehicle.paintCode}</strong></div>`
+                    : ''
+                }
+                <button class="browse-catalog-btn">{{ 'garage.browse_btn' | t }}</button>
               </div>
-            </li>
-          `;
-      });
-      vehicleListHTML += `</ul>`;
-      return vehicleListHTML;
+              <svg class="delete-trashbin" data-index="${index}" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+            </div>
+          </li>
+        `;
+        })
+        .join('');
     }
 
     function renderGaragePopup(searchTerms, easyYMMContent) {
@@ -505,66 +339,58 @@
       if (!garagePopupContainer) return;
       const vinToCollection = document.getElementById('vin-to-collection-placeholder');
       const vinToCollectionOr = document.getElementById('vin-to-collection-or');
-      // Move the actual .easyYMM node, not its HTML
       const easyYMMNode = document.querySelector('.easyYMM');
+      // Always present elements
+      const garageBlock = garagePopupContainer.querySelector('.garage-block');
+      const vehicleList = garageBlock ? garageBlock.querySelector('.vehicle-list') : null;
+      const easyYMMHolder = garagePopupContainer.querySelector('.easyYMM-holder');
+      const addVehicleBtn = garagePopupContainer.querySelector('#add-vehicle-btn');
+      const selectYourVehicleHeader = garagePopupContainer.querySelector('.select-your-vehicle-header');
+
       if (searchTerms.length) {
-        garagePopupContainer.innerHTML = `
-            <div class="garage-close-button" role="button">&times;</div>
-            <div class="select-your-vehicle-header" style="display: none;">
-              <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
-              <h2>{{ 'garage.select_vehicle_subtitle' | t }}</h2>
-            </div>
-            <div class="garage-block">
-              <div class="my-garage-header">
-                <h1>{{ 'garage.title' | t }}</h1>
-                {% comment %} <button class="clear-garage">
-                  <h4>Clear All</h4>
-                </button> {% endcomment %}
-              </div>
-              <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
-              ${GarageUI.buildVehicleListHTML(searchTerms)}
-            </div>
-            <button id="add-vehicle-btn">{{ 'garage.add_vehicle_btn' | t }}</button>
-            <div class="easyYMM-holder"></div>
-          `;
-        if (vinToCollection) {
-          vinToCollection.style.display = 'none';
-        }
-        if (vinToCollectionOr) {
-          vinToCollectionOr.style.display = 'none';
-        }
-        if (garagePopupContainer) {
+        addVehicleBtn.style.display = 'block';
+        selectYourVehicleHeader.style.display = 'none';
+      } else {
+        addVehicleBtn.style.display = 'none';
+        selectYourVehicleHeader.style.display = 'block';
+      }
+
+      // Update vehicle list
+      if (vehicleList) {
+        vehicleList.innerHTML = GarageUI.buildVehicleListHTML(searchTerms);
+      }
+
+      // Toggle garage-block display
+      if (garageBlock) {
+        garageBlock.style.display = searchTerms.length ? 'block' : 'none';
+      }
+
+      // Move .easyYMM node if needed
+      if (easyYMMHolder && easyYMMNode && !easyYMMHolder.contains(easyYMMNode)) {
+        easyYMMHolder.appendChild(easyYMMNode);
+      }
+
+      // Show/hide VIN to collection elements
+      if (vinToCollection) {
+        vinToCollection.style.display = searchTerms.length ? 'none' : 'block';
+      }
+      if (vinToCollectionOr) {
+        vinToCollectionOr.style.display = searchTerms.length ? 'none' : 'flex';
+      }
+
+      // Padding and radius
+      if (garagePopupContainer) {
+        if (searchTerms.length) {
           garagePopupContainer.classList.remove('no-bottom-radius');
           garagePopupContainer.style.paddingBottom = '15px';
-        }
-        // Move the .easyYMM node into the new holder
-        const easyYMMHolder = garagePopupContainer.querySelector('.easyYMM-holder');
-        if (easyYMMHolder && easyYMMNode) {
-          easyYMMHolder.appendChild(easyYMMNode);
-        }
-      } else {
-        garagePopupContainer.innerHTML = `
-            <div class="garage-close-button" role="button">&times;</div>
-            <div class="my-garage-header">
-              <h1>{{ 'garage.select_vehicle_title' | t }}</h1>
-            </div>
-            <p class="vehicle-selection-blurb">{{ 'garage.subtitle' | t }}</p>
-            <div class="easyYMM-holder"></div>
-          `;
-        garagePopupContainer.style.paddingBottom = '0';
-        if (vinToCollection) vinToCollection.style.display = 'block';
-        if (vinToCollectionOr) vinToCollectionOr.style.display = 'flex';
-        if (garagePopupContainer) {
+        } else {
           garagePopupContainer.classList.add('no-bottom-radius');
+          garagePopupContainer.style.paddingBottom = '0';
         }
-        // Move the .easyYMM node into the new holder
-        const easyYMMHolder = garagePopupContainer.querySelector('.easyYMM-holder');
-        if (easyYMMHolder && easyYMMNode) {
-          easyYMMHolder.appendChild(easyYMMNode);
-        }
-        // Add margin if needed
-        if (easyYMMNode) easyYMMNode.style.marginBottom = '15px';
       }
+
+      // Add margin if needed
+      if (easyYMMNode && !searchTerms.length) easyYMMNode.style.marginBottom = '15px';
     }
 
     return { updateVehicleSelectionElement, buildVehicleListHTML, renderGaragePopup };
