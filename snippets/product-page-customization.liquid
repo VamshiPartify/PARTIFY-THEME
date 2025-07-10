@@ -1190,6 +1190,7 @@
                 disableSelectVinVariantBtn();
                 disableVINTextboxForOEM();
                 fitmentSuccess = false;
+                {% comment %} toggleProductDoesNotFitMsg(false); {% endcomment %}
 
               // Successful fitment verification
               } else if (failEl) {
@@ -1221,6 +1222,14 @@
                 disableSelectVinVariantBtn();
                 disableVINTextboxForOEM();
                 fitmentSuccess = false;
+
+                // If on product page and garageToCollections is true, we must determine
+                // whether or not the part fits the vehicle. If so, continue. If not
+                // toggle the garage back open so they can navigate to another page
+                if(garageToCollections) {
+                  toggleGaragePopup();
+                }
+                {% comment %} toggleProductDoesNotFitMsg(true); {% endcomment %}
 
               // Currently filling out fitment verification
               } else if (successEl) {
@@ -1258,6 +1267,7 @@
                 }
                 enableVINTextboxForOEM();
                 fitmentSuccess = true;
+                {% comment %} toggleProductDoesNotFitMsg(false); {% endcomment %}
 
               // Anything else (never should enter this)
               } else {
@@ -1282,6 +1292,7 @@
                 disableGetPaintCodeUsingVin();
                 disableSelectVinVariantBtn();
                 fitmentSuccess = false;
+                {% comment %} toggleProductDoesNotFitMsg(true); {% endcomment %}
                 disableVINTextboxForOEM();
               }
               handleFitmentSuccessChange(productSelect);
@@ -1502,7 +1513,6 @@
                   } else {
                     hiddenEl = false;
                   }
-          
                   if (failEl || successEl || hiddenEl) {
                     checkFitmentStatusWrapper(failEl, successEl, hiddenEl);
                     return;
@@ -1518,9 +1528,9 @@
                 childList: true,
                 subtree: true
               });
-              console.log('👁️ MutationObserver now watching <targetNode> for fitment changes');
+              console.log('👁️ MutationObserver now watching easysearch container for fitment changes');
             } else {
-              console.warn('⚠️ <targetNode> not found. MutationObserver not attached.');
+              console.warn('⚠️ easysearch container not found. MutationObserver not attached.');
             }
 
 

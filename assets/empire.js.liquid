@@ -50555,7 +50555,7 @@ document.addEventListener('easysearch_loaded', function () {
     // Check if "Change" or the container was clicked
     const target = event.target;
     if (target.classList.contains("change-option") || target.closest("#easyBtn")) {
-      
+
       // Setting this to true because the garage was opened from the nav bar--if on product
       // page then must navigate to the collections page in this case
       garageToCollections = true;
@@ -50568,7 +50568,7 @@ document.addEventListener('easysearch_loaded', function () {
     // Check if "Change" or the container was clicked
     const target = event.target;
     if (target.classList.contains("change-option") || target.closest("#easyBtn")) {
-      
+
       // Setting this to true because the garage was opened from the nav bar--if on product
       // page then must navigate to the collections page in this case
       garageToCollections = true;
@@ -50580,7 +50580,8 @@ document.addEventListener('easysearch_loaded', function () {
   //close window when clicked outside of window
   window.onclick = function (event) {
     if (event.target === garageOverlay) {
-      if (document.getElementById("add-vehicle-btn")) {
+      let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
+      if (document.getElementById("add-vehicle-btn").style.display === "none" && terms.length > 0) {
         easyYMMElement.style.display = "none";
         vinToCollection.style.display = "none";
         vinToCollectionOr.style.display = "none";
@@ -50595,7 +50596,8 @@ document.addEventListener('easysearch_loaded', function () {
       // showShopifyChat();
     };
     if (event.target === document.querySelector('.garage-close-button')) {
-      if (document.getElementById("add-vehicle-btn")) {
+      let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
+      if (document.getElementById("add-vehicle-btn").style.display === "none" && terms.length > 0) {
         easyYMMElement.style.display = "none";
         vinToCollection.style.display = "none";
         vinToCollectionOr.style.display = "none";
