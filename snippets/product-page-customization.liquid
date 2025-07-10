@@ -738,14 +738,19 @@
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
         {% endif %}
-        {% if product.metafields.custom.aspirations_keys != blank %}
+        {% if product.metafields.custom.aspirations_inclusions != blank %}
           <div class="required-questions-container">
-            {% assign keys = product.metafields.custom.aspirations_keys | split: ',' %}
-            <script>
-              console.log('wool keys: ', '{{ keys }}');
-            </script>
+            {% assign keys = product.metafields.custom.aspirations_inclusions | split: ',' %}
             {% for key in keys %}
-              {% render 'product-page-turbo-options', key_index: forloop.index0 %}
+              {% render 'product-page-turbo-options', key_index: forloop.index0, inclusions_key: key %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if product.metafields.custom.aspirations_exclusions != blank %}
+          <div class="required-questions-container">
+            {% assign keys = product.metafields.custom.aspirations_exclusions | split: ',' %}
+            {% for key in keys %}
+              {% render 'product-page-turbo-options', key_index: forloop.index0, inclusions_key: key %}
             {% endfor %}
           </div>
         {% endif %}
@@ -1118,6 +1123,7 @@
             const variantTitle = '{{ product.variants.first.title }}';
             const variantId = '{{ product.variants[0].id }}';
             const paintOptionsCheckBoxGroup = document.querySelector(".paint-options-checkbox-group");
+            const aspirationQuestionsContainer = document.querySelector('.required-questions-container');
 
             let fitmentObject = JSON.parse(localStorage.getItem("easysearch-preselect-fitment"));
             let variantSelectedOption = null;
@@ -1270,10 +1276,12 @@
                 hideFitmentFailButton();
                 const event = new Event('eventFitmentSuccess');
                 successEl.dispatchEvent(event);
-                if(qualityTypeSelect) {
+                if(aspirationQuestionsContainer) {
+                  enableTurboSelect();
+                }
+                if(!aspirationQuestionsContainer && qualityTypeSelect) {
                   productSelect = qualityTypeSelect.value;
                   enableProductTypeSelect();
-                  {% comment %} enableQualityTypeButtons(); {% endcomment %}
                   enableQualityDescriptionBtn();
                 }
                 
@@ -1283,7 +1291,7 @@
                 // - Check if the combinedVariantSelect is present
 
                 // This means if there is not a quality selection present AND the product is not an OEM
-                if(!qualityTypeSelect && !oemVinContainer) {
+                if(!aspirationQuestionsContainer && !qualityTypeSelect && !oemVinContainer) {
                   enableCombinedVariantSelect();
 
                   //The following two are for the vin decoder button and how to find paint code button

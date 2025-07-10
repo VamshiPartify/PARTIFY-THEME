@@ -17,9 +17,10 @@ const paintOptionSelectPaintCodeLabel = document.getElementById('checkbox-select
 const precisionMatchLabel = document.querySelector('.precision-match-guarantee');
 const precisionMatchCheckboxYesLibrary = document.getElementById('precision-match');
 const precisionMatchWrapperLibrary = document.querySelector('.product-page-precision-match-wrapper');
-var productTitle = "{{product.title | escape}}";
+const additionalOptionsTitle = document.querySelector('.additional-options-title');
 const turboHeader = document.querySelectorAll('.option-title-turbo');
 const turboTypeSelect = document.querySelector('.turbo-type-select');
+const requiredAspirationsContainer = document.querySelector('.required-questions-container');
 
 let currentAddToCartBtn;
 if (addToCartButton) {
@@ -48,7 +49,7 @@ const COLORS = {
 
 
 // Progressive header colors -- STEPS
-function resetAllHeaderColors(fail) {
+function resetAllHeaderColors(fail, turbo) {
     // fail is a bool that determines color of fitment header based on whether or not the fitment is in focus
     if (fail) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
@@ -72,6 +73,32 @@ function isFitmentVerified() {
     const successEl = document.querySelector('.easysearch-fitment-icon-success');
     return !!successEl && !failEl;
 }
+
+function isCompatibilityQuestions() {
+    const hasCompatibilityQuestions = !!requiredAspirationsContainer;
+    const hasProductType = !!qualityTypeSelect;
+    const hasCombinedVariant = !!combinedVariantSelect;
+    const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+    let turboSectionDisabled = false;
+
+    if (turboTypeSelect && turboTypeSelect.classList.contains('turbo-disabled')) {
+        turboSectionDisabled = true;
+    }
+
+    if (hasCompatibilityQuestions && hasProductType) {
+        if (turboSectionDisabled === false && qualityTypeSelect.disabled === true) return COLORS.red;
+        if (turboSectionDisabled === false && qualityTypeSelect.disabled === false) return COLORS.black;
+    }
+    if (hasCompatibilityQuestions && !hasProductType && hasCombinedVariant) {
+        if (turboSectionDisabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
+        if (turboSectionDisabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
+    }
+    if (hasCompatibilityQuestions && !hasProductType && !hasCombinedVariant) {
+        if (turboSectionDisabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
+        if (turboSectionDisabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
+    }
+}
+
 function getQualityHeaderColor() {
     const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
@@ -102,7 +129,7 @@ function getQualityHeaderColor() {
     }
     return COLORS.gray; // gray
 }
-//returns red for now
+
 function getTurboHeaderColor() {
     if (turboTypeSelect && !turboTypeSelect.classList.contains('turbo-disabled')) {
         return COLORS.black;
@@ -284,6 +311,8 @@ function updateProgressHeaderColors() {
         return;
     }
 
+
+    // Quality Options
     const qualityHeaderColor = getQualityHeaderColor();
     if (qualityHeader) qualityHeader.style.color = qualityHeaderColor;
 
@@ -294,6 +323,11 @@ function updateProgressHeaderColors() {
         });
     }
 
+    if (requiredAspirationsContainer) {
+        const requiredAspirationsHeaderColor = isCompatibilityQuestions();
+        if (additionalOptionsTitle) additionalOptionsTitle.style.color = requiredAspirationsHeaderColor;
+    }
+
 
     const needsVin = oemVinContainer && oemVinContainer.classList.contains("show");
     const vinHeaderColor = isValidVin();
@@ -301,9 +335,12 @@ function updateProgressHeaderColors() {
         if (vinHeader) vinHeader.style.color = vinHeaderColor;
     }
 
+    // Paint Options
     const paintOptionHeaderColor = isPaintOptionSelected();
     if (optionTitle) optionTitle.style.color = paintOptionHeaderColor;
 
+
+    // Vin Verification
     if (vinVerifyCheckbboxYes) {
         vinVerificationHeaderColor = isVinVerified();
     }
@@ -318,6 +355,8 @@ function updateProgressHeaderColors() {
         }
     }
 
+
+    // Precision Paint Match
     if (precisionMatchCheckboxYesLibrary) {
         precisionMatchHeaderColor = isPrecisionMatchSelected();
     }
