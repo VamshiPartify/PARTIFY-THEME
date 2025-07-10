@@ -691,6 +691,9 @@ async function fetchBumpersLicenseToVin(state, plate) {
     return { vin, year, make, model };
   } catch (error) {
     logGarageUsageToSheets('', plate, state, '', '', '', error.message, 'License To VIN');
+    document.getElementById('license-to-vin-btn').disabled = true;
+    document.querySelector('.errorMessageLicense').style.visibility = 'visible';
+    document.querySelector('.errorMessageLicense').innerHTML = "Error fetching vehicle data. Please try again later.";
     console.error("Error fetching vehicle data:", error);
   }
 }
