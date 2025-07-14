@@ -273,11 +273,7 @@
         const linkYmm = shoppingForYmm.querySelector('.ss_megamenu_title_hero_link');
         function goToCollection() {
           const vehicleData = firstSearchTerm;
-          const collectionHandle = vehicleData
-            .toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w\-]+/g, '')
-            .replace(/--+/g, '-');
+          const collectionHandle = generateCollectionHandle(vehicleData);
           window.location.href = '/collections/' + collectionHandle;
         }
         linkYmm && linkYmm.addEventListener('click', goToCollection);
