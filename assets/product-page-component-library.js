@@ -812,6 +812,12 @@ function resortToGetPaintCodeByVin(eventVin, eventMatchByVIN) {
     amountOfVINPostMessages++;
 }
 
+function resortToForceSelectCode() {
+    paintCodeWrapperLibrary.classList.add('show');
+    paintOptionCheckboxByPaintCode.checked = true;
+    hideGetPaintCodeUsingVINCheckbox();
+}
+
 /*******************************************************************************************************
 **                                                                                                    **
 **                                             UTILITIES                                              **
