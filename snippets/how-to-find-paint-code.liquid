@@ -490,16 +490,23 @@
 
         {% elsif is_excluded_make_found %}
           <div id="paint-code-instructions">
-            <h4>{{ 'paintcode_popup.instructions_heading_is_excluded_make_found' | t }}</h4>
-            <ol>
-              <li>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_1' | t }}</li>
-              <li>
-                {{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_beginning' | t }}
-                <a href="#" id="instructions-link">
-                  <b>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_link' | t }}</b>
-                </a>
-              </li>
-            </ol>
+            <h4>
+              {{ 'paintcode_popup.instructions_heading_is_excluded_make_found' | t }}
+              <a href="#" id="instructions-link">
+                <b>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_link' | t }}</b>
+              </a>
+            </h4>
+            {% comment %}
+              <ol>
+                <li>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_1' | t }}</li>
+                <li>
+                  {{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_beginning' | t }}
+                  <a href="#" id="instructions-link">
+                    <b>{{ 'paintcode_popup.instructions_is_excluded_make_found_listitem_2_link' | t }}</b>
+                  </a>
+                </li>
+              </ol>
+            {% endcomment %}
           </div>
 
         {% elsif is_bumperdotcom_make_found %}

@@ -248,16 +248,18 @@
           >
           {{ 'paint_options_radio_labels.selection' | t }}
         </label>
-        <label class="paint-options-checkbox-option" id="paint-code-vin-option">
-          <input
-            type="radio"
-            name="select_paint_option"
-            value="select"
-            id="checkbox-get-paint-code-with-vin"
-            disabled
-          >
-          {{ 'paint_options_radio_labels.VIN' | t }}
-        </label>
+        {% unless is_excluded_make_found %}
+          <label class="paint-options-checkbox-option" id="paint-code-vin-option">
+            <input
+              type="radio"
+              name="select_paint_option"
+              value="select"
+              id="checkbox-get-paint-code-with-vin"
+              disabled
+            >
+            {{ 'paint_options_radio_labels.VIN' | t }}
+          </label>
+        {% endunless %}
       </div>
       <div class="painted-stock-key-paint-level" style="display: none;">
         {{ 'variant_instock_message' | t }}

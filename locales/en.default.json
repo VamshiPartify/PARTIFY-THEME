@@ -729,7 +729,7 @@
     "instructions_is_make_found_listitem_2_beginning": "You can find your paint code on your vehicle using ",
     "instructions_is_make_found_listitem_2_link": "these instructions here.",
 
-    "instructions_heading_is_excluded_make_found": "There are two main ways to get a paint code.",
+    "instructions_heading_is_excluded_make_found": "You can find your paint code on your vehicle using",
     "instructions_is_excluded_make_found_listitem_1": "Simply enter your VIN, and we’ll respond to you with your code as soon as we can.",
     "instructions_is_excluded_make_found_listitem_2_beginning": "You can find your paint code on your vehicle using ",
     "instructions_is_excluded_make_found_listitem_2_link": "these instructions here.",
@@ -886,7 +886,9 @@
     "auto_attach_msg_strong": "The VIN",
     "will_be_attached": "will be attached to this order and",
     "bold": "matched with the correct paint code",
-    "for_this_item": "for this item."
+    "for_this_item": "for this item.",
+    "force_select_first": "We couldn’t identify the paint code from the provided VIN:",
+    "force_select_second": "Please select a paint code from the dropdown menu. If you need help finding your paint code, refer to the button below."
   },
   "freight_shipping_popup": {
     "congratulations": "Congratulations!",
@@ -966,5 +968,10 @@
     "button_text": "SELECT OR ADD A VEHICLE",
     "shopping_for": "Shopping for:",
     "find_parts_that_fit": "Select a vehicle to find parts that fit."
+  },
+  "aspiration_questions": {
+    "header": "Additional Compatibility Questions",
+    "not_compatible": "This part is not compatible with your vehicle.",
+    "find_parts": "Find parts that fit your vehicle",
   }
 }

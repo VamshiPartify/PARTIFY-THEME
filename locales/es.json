@@ -821,7 +821,7 @@
       "instructions_is_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
       "instructions_is_make_found_listitem_2_link": "estas instrucciones aquí.",
     
-      "instructions_heading_is_excluded_make_found": "Hay dos formas principales de obtener un código de pintura.",
+      "instructions_heading_is_excluded_make_found": "Puede encontrar el código de pintura de su vehículo usando",
       "instructions_is_excluded_make_found_listitem_1": "Simplemente ingrese su VIN y le responderemos con su código lo antes posible.",
       "instructions_is_excluded_make_found_listitem_2_beginning": "Puede encontrar el código de pintura de su vehículo usando",
       "instructions_is_excluded_make_found_listitem_2_link": "estas instrucciones aquí.",
@@ -973,7 +973,9 @@
       "auto_attach_msg_strong": "El VIN",
       "will_be_attached": "se adjuntará a esta orden y",
       "bold": "coincide con el código de pintura correcto",
-      "for_this_item": "para este articulo."
+      "for_this_item": "para este articulo.",
+      "force_select_first": "No pudimos identificar el código de pintura del VIN proporcionado:",
+      "force_select_second": "Seleccione un código de pintura del menú desplegable. Si necesita ayuda para encontrar su código de pintura, consulte el botón a continuación."
     },
     "freight_shipping_popup": {
       "congratulations": "¡Felicidades!",
@@ -1052,6 +1054,11 @@
         "button_text": "Seleccione su vehículo",
         "shopping_for": "Comprando para:",
         "find_parts_that_fit": "Seleccione un vehículo para encontrar piezas compatibles.",
+      },
+      "aspiration_questions": {
+        "header": "Preguntas adicionales sobre compatibilidad",
+        "not_compatible": "Esta pieza no es compatible con su vehículo.",
+        "find_parts": "Encuentre piezas que se ajusten a su vehículo",
       }
     }
 
