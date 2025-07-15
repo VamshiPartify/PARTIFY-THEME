@@ -189,6 +189,7 @@
 {% assign is_make_found = false %}
 {% assign is_excluded_make_found = false %}
 {% assign is_bumperdotcom_make_found = false %}
+{% assign is_no_decode_make_found = false %}
 {% assign downcase_handle = product.handle | downcase %}
 
 {% for make in makes %}
@@ -214,6 +215,10 @@
     {% break %}
   {% endif %}
 {% endfor %}
+
+{% if is_make_found == false and is_bumperdotcom_make_found == false %}
+  {% assign is_no_decode_make_found = true %}
+{% endif %}
 
 <div class="option-dropdowns">
   {% if product.variants.size > 1 %}
@@ -248,7 +253,7 @@
           >
           {{ 'paint_options_radio_labels.selection' | t }}
         </label>
-        {% unless is_excluded_make_found %}
+        {% unless is_excluded_make_found or is_no_decode_make_found %}
           <label class="paint-options-checkbox-option" id="paint-code-vin-option">
             <input
               type="radio"
