@@ -211,7 +211,11 @@
     {% endcomment %}
 
     <script defer src="{{ 'easysearch-custom-selects.min.js' | asset_url }}"></script>
-
+    <script>
+      // Immediately after the app script
+      window.easysearchWasRendered = true;
+      document.dispatchEvent(new Event('easysearch_rendered'));
+    </script>
     {% comment %}Inject theme-object begin{% endcomment %}
     <script>
       window.Theme = window.Theme || {};
