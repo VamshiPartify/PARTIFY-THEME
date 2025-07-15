@@ -25,78 +25,85 @@ let garageFirstVehicleData = '';
 **                                                                                                    **
 *******************************************************************************************************/
 document.addEventListener("easysearch_rendered", function () {
-  function addCustomEasysearchBtn() {
-    const holders = document.querySelectorAll('.easysearch-holder');
-    if (holders.length === 0) {
-      console.log('[Global Library] No easysearch holders found, retrying...');
+  console.log("easysearch_rendered event fired!");
+  addCustomEasysearchBtn();
+});
+
+// Fallback: if event already fired before listener registered
+if (window.easysearchWasRendered) {
+  console.log("easysearch_rendered event had already fired, running button logic immediately.");
+  addCustomEasysearchBtn();
+}
+
+function addCustomEasysearchBtn() {
+  const holders = document.querySelectorAll('.easysearch-holder');
+  if (holders.length === 0) {
+    console.log('[Global Library] No easysearch holders found, retrying...');
+    setTimeout(addCustomEasysearchBtn, 500);
+    return;
+  }
+
+  holders.forEach(function (holder) {
+    // Prevent duplicate buttons
+    if (holder.querySelector('.custom-easysearch-ymm-btn')) {
+      return;
+    }
+
+    const actionsHolder = holder.querySelector('.easysearch-actions-holder');
+    if (!actionsHolder) {
+      console.log('[Global Library] No .easysearch-actions-holder found, retrying...');
       setTimeout(addCustomEasysearchBtn, 500);
       return;
     }
 
-    holders.forEach(function (holder) {
-      // Prevent duplicate buttons
-      if (holder.querySelector('.custom-easysearch-ymm-btn')) {
-        return;
+    const btnHolder = actionsHolder.querySelector('.easysearch-btn-holder');
+    if (!btnHolder) {
+      console.log('[Global Library] No .easysearch-btn-holder found, retrying...');
+      setTimeout(addCustomEasysearchBtn, 500);
+      return;
+    }
+
+    // Reference button for innerHTML
+    const refBtn = document.getElementById('license-to-vin-btn');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'custom-easysearch-ymm-btn-id';
+    btn.className = 'custom-easysearch-ymm-btn';
+    btn.innerHTML = refBtn ? refBtn.innerHTML : 'Search';
+    btn.disabled = true;
+    holder.appendChild(btn);
+
+    const anchor = btnHolder.querySelector('a');
+    if (anchor) {
+      function updateBtnState() {
+        btn.disabled = !(anchor.href && !anchor.href.includes('javascript:void(0)'));
       }
 
-      const actionsHolder = holder.querySelector('.easysearch-actions-holder');
-      if (!actionsHolder) {
-        console.log('[Global Library] No .easysearch-actions-holder found, retrying...');
-        setTimeout(addCustomEasysearchBtn, 500);
-        return;
-      }
+      updateBtnState();
 
-      const btnHolder = actionsHolder.querySelector('.easysearch-btn-holder');
-      if (!btnHolder) {
-        console.log('[Global Library] No .easysearch-btn-holder found, retrying...');
-        setTimeout(addCustomEasysearchBtn, 500);
-        return;
-      }
+      const observer = new MutationObserver(() => updateBtnState());
+      observer.observe(anchor, { attributes: true });
 
-      // Reference button for innerHTML
-      const refBtn = document.getElementById('license-to-vin-btn');
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.id = 'custom-easysearch-ymm-btn-id';
-      btn.className = 'custom-easysearch-ymm-btn';
-      btn.innerHTML = refBtn ? refBtn.innerHTML : 'Search';
-      btn.disabled = true;
-      holder.appendChild(btn);
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
 
-      const anchor = btnHolder.querySelector('a');
-      if (anchor) {
-        function updateBtnState() {
-          btn.disabled = !(anchor.href && !anchor.href.includes('javascript:void(0)'));
-        }
+        const year = document.getElementById('easysearch_field_4973');
+        const make = document.getElementById('easysearch_field_4974');
+        const model = document.getElementById('easysearch_field_4975');
+        const submodel = document.getElementById('easysearch_field_28136');
+        const engine = document.getElementById('easysearch_field_28137');
 
-        updateBtnState();
-
-        const observer = new MutationObserver(() => updateBtnState());
-        observer.observe(anchor, { attributes: true });
-
-        btn.addEventListener('click', function () {
-          if (btn.disabled) return;
-
-          const year = document.getElementById('easysearch_field_4973');
-          const make = document.getElementById('easysearch_field_4974');
-          const model = document.getElementById('easysearch_field_4975');
-          const submodel = document.getElementById('easysearch_field_28136');
-          const engine = document.getElementById('easysearch_field_28137');
-
-          updateEasysearchLocalStorageOrNavigate(
-            year ?? null,
-            make ?? null,
-            model ?? null,
-            submodel ?? null,
-            engine ?? null
-          );
-        });
-      }
-    });
-  }
-
-  addCustomEasysearchBtn();
-});
+        updateEasysearchLocalStorageOrNavigate(
+          year ?? null,
+          make ?? null,
+          model ?? null,
+          submodel ?? null,
+          engine ?? null
+        );
+      });
+    }
+  });
+}
 
 
 // --- GarageUtils: getSearchTerms and setSearchTerms helpers (migrated from garage-script.liquid) ---

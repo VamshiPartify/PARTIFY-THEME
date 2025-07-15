@@ -207,6 +207,12 @@
                         } else {
                             boolMatchByVIN = true;
                             console.warn(`No matching option found for paint code: ${paintCode}`);
+                            const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
+                            resortToForceSelectCode();                            
+                            formulateMessageForceSelectCode(event.data.vin);
+
+                            paintCodeWrapper.classList.add('show');
+                            paintCodeAppContainer.classList.remove('show');
                         }
                     } else {
                         console.warn('Variant selector dropdown not found.');
