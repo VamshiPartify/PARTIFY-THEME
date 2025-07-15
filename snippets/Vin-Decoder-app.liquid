@@ -145,7 +145,7 @@
                     forceSelectMsg.style.display = 'none';
                   }
                   vinDecoderJustUsed = true;
-                  const paintCode = event.data.paintCode;
+                  const paintCode = event.data.paintCode ? event.data.paintCode.replace(/-/g, '') : '';
                   const vinSelected = event.data.vin;
                   const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
                   const variantSelector = document.getElementById('variant-selector');
