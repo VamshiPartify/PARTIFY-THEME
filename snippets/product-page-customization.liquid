@@ -746,14 +746,6 @@
             {% endfor %}
           </div>
         {% endif %}
-        {% if product.metafields.custom.aspirations_exclusions != blank %}
-          <div class="required-questions-container">
-            {% assign keys = product.metafields.custom.aspirations_exclusions | split: ',' %}
-            {% for key in keys %}
-              {% render 'product-page-turbo-options', key_index: forloop.index0, inclusions_key: key %}
-            {% endfor %}
-          </div>
-        {% endif %}
         <!-- The following if/elseif/else determines how the quality and paint options themselves are displayed -->
         {% if meta_fields > 1 %}
           <!-- Quality options and not OEM -->

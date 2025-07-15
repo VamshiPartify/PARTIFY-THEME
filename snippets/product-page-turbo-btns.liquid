@@ -164,39 +164,7 @@
   </label>
   <label class="option-title-turbo" data-group-index="{{key_index}}"></label>
   <div class="turbo-options-container" data-group-index="{{key_index}}"></div>
-  {% comment %}
-    <button
-      class="turboRedirectButton"
-      data-group-index="{{key_index}}"
-      style="display: none;"
-      type="button"
-      onclick="turboButtonClick({{key_index}})"
-    >
-      Parts That Fit Your Vehicle
-    </button>
-  {% endcomment %}
 </div>
-{% comment %}
-  <div class="compatible-message" style="display: none;">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20px"
-      height="20px"
-      viewBox="0 0 20 20"
-      fill="white"
-      style="flex-shrink: 0;"
-    >
-      <path d="M14.686 8.615A1.071 1.071 0 0 0 13.171 7.1l-4.242 4.242L7.186 9.6a1.071 1.071 0 1 0-1.515 1.515l2.5 2.5a1.071 1.071 0 0 0 1.515 0l5-5Z"></path>
-      <path fill-rule="evenodd" d="M20 10c0 5.523-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0s10 4.477 10 10Zm-2.143 0a7.857 7.857 0 1 1-15.714 0 7.857 7.857 0 0 1 15.714 0Z"></path>
-    </svg>
-    <span style="color: #fff; font-weight: 800; margin-left: 12px;"> This Part Is Compatible With Your Vehicle </span>
-  </div>
-{% endcomment %}
-{% comment %}
-  <div class="not-compatible" style="display: none;">
-    {% comment %} <label class="not-compatible-label">This Part Is Not Compatible With Your Vehicle</label> {% endcomment %}
-  </div>
-{% endcomment %}
 <div class="not-compatible-msg" style="display: none;">
   <label class="not-compatible-msg-label">{{ 'aspiration_questions.not_compatible' | t }}</label>
   <button class="not-compatible-button" type="button">{{ 'aspiration_questions.find_parts' | t }}</button>
