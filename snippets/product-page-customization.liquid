@@ -792,23 +792,23 @@
         {% endif %}
 
         <!-- Select VIN Option -->
-        {%- if product.variants[1].sku contains '.VIN' -%}
-          <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-          <div class="vin-options-container" style="display: none;">
-            <!-- Hidden Text box for VIN input -->
-            <div id="vin-textbox-container">
-              <input
-                type="hidden"
-                id="vin-textbox"
-                name="properties[VIN]"
-                placeholder="Enter your VIN"
-                maxlength="17"
-                value="{{ vinValue | default: "" }}"
-              >
-              <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-            </div>
+        {% comment %} {%- if product.variants[1].sku contains '.VIN' -%} {% endcomment %}
+        <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
+        <div class="vin-options-container" style="display: none;">
+          <!-- Hidden Text box for VIN input -->
+          <div id="vin-textbox-container">
+            <input
+              type="hidden"
+              id="vin-textbox"
+              name="properties[VIN]"
+              placeholder="Enter your VIN"
+              maxlength="17"
+              value="{{ vinValue | default: "" }}"
+            >
+            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
           </div>
-        {% endif %}
+        </div>
+        {% comment %} {% endif %} {% endcomment %}
 
         <!--
           only render the vin-decoder(Not sure what you paint code is?) button here if it hasn't been rendered already for the below scenarios
@@ -978,23 +978,23 @@
         {% render 'product-page-paint-options' %}
       {% endif %}
 
-      {%- if product.variants[1].sku contains '.VIN' -%}
-        <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-        <div class="vin-options-container" style="display: none;">
-          <!-- Hidden Text box for VIN input -->
-          <div id="vin-textbox-container">
-            <input
-              type="hidden"
-              id="vin-textbox"
-              name="properties[VIN]"
-              placeholder="Enter your VIN"
-              maxlength="17"
-              value="{{ vinValue | default: "" }}"
-            >
-            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
-          </div>
+      {% comment %} {%- if product.variants[1].sku contains '.VIN' -%} {% endcomment %}
+      <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
+      <div class="vin-options-container" style="display: none;">
+        <!-- Hidden Text box for VIN input -->
+        <div id="vin-textbox-container">
+          <input
+            type="hidden"
+            id="vin-textbox"
+            name="properties[VIN]"
+            placeholder="Enter your VIN"
+            maxlength="17"
+            value="{{ vinValue | default: "" }}"
+          >
+          <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
         </div>
-      {% endif %}
+      </div>
+      {% comment %} {% endif %} {% endcomment %}
 
       {% unless is_make_found or is_bumperdotcom_make_found or rendered_vindecoder == true %}
         {% assign rendered_vindecoder = true %}

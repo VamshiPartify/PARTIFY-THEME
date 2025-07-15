@@ -644,12 +644,12 @@
           unpainted = true;
         }; 
 
-        if(!hasDotVinOptionAftermarket && !hasDotVinOptionCapa && !hasDotVinOptionOem) {
+        {% comment %} if(!hasDotVinOptionAftermarket && !hasDotVinOptionCapa && !hasDotVinOptionOem) {
           const vinOptionLabel = document.getElementById('paint-code-vin-option');
           if (vinOptionLabel) {
             vinOptionLabel.style.display = 'none';
           }
-        }
+        } {% endcomment %}
 
         if(addToCartButton) {
           currentAddToCartBtn = addToCartButton;
@@ -848,7 +848,7 @@
                 //Match Paint by VIN option
                 } else {
                   // If vin decoder was used and successful
-                  if(hasDotVinOptionAftermarket || hasDotVinOptionCapa || hasDotVinOptionOem) {
+                  {% comment %} if(hasDotVinOptionAftermarket || hasDotVinOptionCapa || hasDotVinOptionOem) { {% endcomment %}
                     hideColorPreviewContainer();
                     if (boolMatchByVIN === false) {
 
@@ -972,7 +972,7 @@
                         enableAddToCartButton();
                       }
                     }
-                  }
+                  {% comment %} } {% endcomment %}
                 }
                 clearOOSPaintCheckbox();
                 updateProgressHeaderColors();
