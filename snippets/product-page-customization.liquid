@@ -815,7 +815,7 @@
         </div>
         <!-- LEAVE THE FOLLOWING CODE!! Uncomment it whenever ready to use these -->
         {% comment %}
-          <div class="product-page-precision-match-wrapper">
+          <div class="product-page-precision-match-wrapper>
             <div class="divider-large-screen" style="transform: translateX(-10px);"></div>
             {% render 'product-page-precision-match' %}
           </div>
@@ -1706,7 +1706,7 @@
       
                   event.target.value = filteredValue;
       
-                  // Ensure VIN input is 17 characters before enab1ling Add to Cart
+                  // Ensure VIN input is 17 characters before enab1iling Add to Cart
                   if (vinInput.length === 17 && fitmentSuccess && !hasFitmentVerification) {
                       enableAddToCartButton();
                       updateProgressHeaderColors();
@@ -1883,8 +1883,14 @@
     let scrollPosition = 0;
     let productSku = '';
 
+    let isAddingToCart = false;
     productForm.addEventListener('submit', async function (event) {
       event.preventDefault();
+
+      if (isAddingToCart) {
+        return; // Prevent double submission
+      }
+      isAddingToCart = true;
 
       if (selectedProductSku) {
         productSku = selectedProductSku;
@@ -1939,8 +1945,7 @@
         if (weightInUnit < 10) {
           productForm.submit();
         } else {
-          // For items over 10 lbs, don't immediately submit the form.. rather just manually add the main product to the cart\
-          // direct customers to the cart if click 'go to cart' or to easysearch fitment link if clicked 'continue shopping'
+          // For items over 10 lbs, don't immediately submit the form.. rather just manually add the main product to the cart
           const formData = new FormData(productForm);
           fetch('/cart/add.js', {
             method: 'POST',
@@ -1971,6 +1976,9 @@
             .catch((error) => {
               console.error('Error adding item to cart:', error);
               alert('There was an error adding the item to your cart. Please try again.');
+            })
+            .finally(() => {
+              isAddingToCart = false;
             });
 
           if (continueShoppingBtn) {
@@ -1996,6 +2004,7 @@
         }
       } catch (err) {
         console.error('Error adding to cart:', err);
+        isAddingToCart = false;
       }
     });
   });
