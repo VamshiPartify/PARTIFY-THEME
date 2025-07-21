@@ -204,6 +204,9 @@
         
                             // Trigger the change event programmatically
                             variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
+                          if (vinInputLibrary) {
+                            vinInputLibrary.value = vinSelected;
+                          }
                         } else {
                             boolMatchByVIN = true;
                             console.warn(`No matching option found for paint code: ${paintCode}`);
@@ -268,10 +271,6 @@
                     }
                 }
         
-        
-                if (vinInputLibrary) {
-                    vinInputLibrary.value = vin;
-                }
         
                 {% comment %} options.find(option => {
                     if(option.label.startsWith("Match Paint by VIN") || option.label.startsWith("Pintura de combinación por VIN")) {         {% endcomment %}
