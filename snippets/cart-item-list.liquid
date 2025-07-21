@@ -10,46 +10,44 @@
     document.addEventListener('click', async (event) => {
       const link = event.target.closest('[data-cartitem-remove]');
       if (!link) return; // click wasn't on a remove link
-    
+
       event.preventDefault();
 
       if (removing) {
         return; // Skip if already removing
-      
       }
       removing = true; // Lock the flag
-    
+
       const itemKey = link.closest('[data-cartitem]')?.getAttribute('data-cartitem-key');
       if (!itemKey) {
         console.error('Cart item key not found.');
         return;
       }
-    
-    
+
       try {
         const response = await fetch('/cart/change.js', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            Accept: 'application/json',
           },
           body: JSON.stringify({
             id: itemKey,
-            quantity: 0
-          })
+            quantity: 0,
+          }),
         });
 
-
-      
         if (response.ok) {
           const updatedCart = await response.json();
-      
+
           const cartItem = link.closest('.cart-item');
           if (cartItem) cartItem.remove();
-      
+
           updateCartSummary(updatedCart);
         } else {
           const errorBody = await response.json(); // only parse body in error path
+          const cartItem = link.closest('.cart-item');
+          if (cartItem) cartItem.remove();
           console.error('Error removing cart item:', response.status, response.statusText);
           console.error('Error response body:', errorBody);
         }
@@ -59,7 +57,6 @@
         removing = false; // Unlock the flag
       }
     });
-    
 
     function updateCartSummary(cart) {
       // Example: update cart count in header
@@ -71,25 +68,26 @@
       // Example: update total price if you show it outside this list
       const cartTotalEls = document.querySelectorAll('[data-cart-total]');
       if (cartTotalEls) {
-        cartTotalEls.forEach(el => {
+        cartTotalEls.forEach((el) => {
           el.textContent = formatMoney(cart.total_price);
         });
       }
       // Dispatch the cartcount:update event for other components to react
-      window.dispatchEvent(new CustomEvent('cartcount:update', {
-        detail: {
-          item_count: cart.item_count
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('cartcount:update', {
+          detail: {
+            item_count: cart.item_count,
+          },
+        })
+      );
     }
 
     function formatMoney(cents, currency = 'USD') {
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency,
-        minimumFractionDigits: 2
+        minimumFractionDigits: 2,
       }).format(cents / 100);
     }
-    
   });
 </script>
