@@ -46,8 +46,6 @@
           updateCartSummary(updatedCart);
         } else {
           const errorBody = await response.json(); // only parse body in error path
-          const cartItem = link.closest('.cart-item');
-          if (cartItem) cartItem.remove();
           console.error('Error removing cart item:', response.status, response.statusText);
           console.error('Error response body:', errorBody);
         }
