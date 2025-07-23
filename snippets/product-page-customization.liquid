@@ -124,6 +124,19 @@
       background-color: #0056b3;
     }
 
+    .additional-options-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+    .additional-options-title-disabled {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -738,11 +751,15 @@
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
         {% endif %}
-        {% if product.metafields.custom.aspirations_inclusions != blank %}
+        {% if product.metafields.custom.aspiration_question_keys != blank %}
           <div class="required-questions-container">
-            {% assign keys = product.metafields.custom.aspirations_inclusions | split: ',' %}
+            <label class="additional-options-title" style="none">
+              {{ 'aspiration_questions.header' | t }}
+            </label>
+            {% assign keys = product.metafields.custom.aspiration_question_keys.value %}
+            {% assign fullKeys = product.metafields.custom.aspiration_question_keys %}
             {% for key in keys %}
-              {% render 'product-page-turbo-options', key_index: forloop.index0, inclusions_key: key %}
+              {% render 'product-page-turbo-options', key_index: forloop.index0, aspiration_key: key, keys: fullKeys %}
             {% endfor %}
           </div>
         {% endif %}
@@ -815,7 +832,7 @@
         </div>
         <!-- LEAVE THE FOLLOWING CODE!! Uncomment it whenever ready to use these -->
         {% comment %}
-          <div class="product-page-precision-match-wrapper>
+          <div class="product-page-precision-match-wrapper">
             <div class="divider-large-screen" style="transform: translateX(-10px);"></div>
             {% render 'product-page-precision-match' %}
           </div>
@@ -1217,6 +1234,8 @@
                 disableGetPaintCodeUsingVin();
                 disableSelectVinVariantBtn();
                 disableVINTextboxForOEM();
+                hideNotCompatibleMsg();
+                disableTurboSelect();
                 fitmentSuccess = false;
                 {% comment %} toggleProductDoesNotFitMsg(false); {% endcomment %}
 
@@ -1243,6 +1262,8 @@
                 disableVinVerificationBtns();
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
+                hideNotCompatibleMsg();
+                disableTurboSelect();
 
                 //The following two are for the vin decoder button and how to find paint code button
                 disablehowToFindPaintCodeBtn();
@@ -1297,14 +1318,15 @@
                 }
                 enableVINTextboxForOEM();
                 fitmentSuccess = true;
-                {% comment %} toggleProductDoesNotFitMsg(false); {% endcomment %}
+                // --- Initialization: disable all but the first group ---
+                document.querySelectorAll('.turbo-type-select').forEach(function(group, idx) {
+                  setTurboGroupState(group, idx === 0);
+                });
 
               // Anything else (never should enter this)
               } else {
                 hideFitmentFailButton();
                 if(qualityTypeSelect) {
-                  {% comment %} clearQualityTypeButtons(); {% endcomment %}
-                  {% comment %} disableQualityTypeButtons(); {% endcomment %}
                   disableQualityDescriptionBtn();
                 }
                 if(combinedVariantSelect) {
@@ -1316,6 +1338,8 @@
                 disableVinVerificationBtns();
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
+                hideNotCompatibleMsg();
+                disableTurboSelect();
 
                 //The following two are for the vin decoder button and how to find paint code button
                 disablehowToFindPaintCodeBtn();
@@ -1706,7 +1730,7 @@
       
                   event.target.value = filteredValue;
       
-                  // Ensure VIN input is 17 characters before enab1iling Add to Cart
+                  // Ensure VIN input is 17 characters before enab1ling Add to Cart
                   if (vinInput.length === 17 && fitmentSuccess && !hasFitmentVerification) {
                       enableAddToCartButton();
                       updateProgressHeaderColors();

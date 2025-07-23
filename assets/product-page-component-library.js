@@ -14,7 +14,7 @@ const combinedVariantSelectLibrary = document.getElementById('variant-selector')
 const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
 const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
-const notCompatibleMsgLibrary = document.querySelector('.not-compatible-msg');
+// const notCompatibleMsgLibrary = document.querySelector('.not-compatible-msg');
 const oemVinContainerLibrary = document.querySelector('.oem-vin-container');
 const paintedStockKeyPaintLevelLibrary = document.querySelector('.painted-stock-key-paint-level');
 const paintedStockKeyQualityLevelLibrary = document.querySelector('.painted-stock-key-quality-level');
@@ -116,22 +116,41 @@ function disablePrePaintedMessagingQualityLevel() {
 }
 
 function disableTurboSelect() {
+    const additionalOptionsTitle = document.querySelector('.additional-options-title');
     const turboRadioButtons = document.querySelectorAll('.turbo-radio');
-    turboRadioButtons.forEach(radio => {
-        radio.disabled = true;
-        radio.checked = false;
-    });
-    document.querySelectorAll('.turboText').forEach(function (el) {
-        el.classList.add('turbo-disabled');
-    });
-    document.querySelectorAll('.turbo-type-select').forEach(function (el) {
-        el.classList.add('turbo-disabled');
-    });
-    document.querySelector('.turboRedirectButton').style.display = 'none';
-    document.querySelector('.additional-options-title').classList.add('additional-options-title-disabled');
+    if (turboRadioButtons.length > 0) {
+        turboRadioButtons.forEach(radio => {
+            if (radio) {
+                radio.disabled = true;
+                radio.checked = false;
+            }
+        });
+    }
+    const turboTexts = document.querySelectorAll('.turboText');
+    if (turboTexts.length > 0) {
+        turboTexts.forEach(function (el) {
+            if (el) {
+                el.classList.add('turbo-disabled');
+                el.style.color = "#ccc";
+            }
+        });
+    }
+    const turboTypeSelects = document.querySelectorAll('.turbo-type-select');
+    if (turboTypeSelects.length > 0) {
+        turboTypeSelects.forEach(function (el) {
+            if (el) {
+                el.classList.add('turbo-disabled');
+            }
+        });
+    }
+    if (additionalOptionsTitle) {
+        additionalOptionsTitle.classList.add('additional-options-title-disabled');
+        additionalOptionsTitle.style.color = "#ccc";
+    }
 }
 
 function hideNotCompatibleMsg() {
+    const notCompatibleMsgLibrary = document.querySelector('.not-compatible-msg');
     if (notCompatibleMsgLibrary) notCompatibleMsgLibrary.style.display = "none";
 }
 
@@ -326,20 +345,48 @@ function enableProductTypeSelect() {
 function enableTurboSelect() {
     console.log("Enabling turbo select");
     const turboRadioButtons = document.querySelectorAll('.turbo-radio');
-    turboRadioButtons.forEach(radio => {
-        radio.disabled = false;
-    });
-    document.querySelectorAll('.turboText').forEach(function (el) {
-        el.classList.remove('turbo-disabled');
-    });
-    document.querySelectorAll('.turbo-type-select').forEach(function (el) {
-        el.classList.remove('turbo-disabled');
-    });
-    document.querySelector('.additional-options-title').classList.remove('additional-options-title-disabled');
+    if (turboRadioButtons.length > 0) {
+        turboRadioButtons.forEach(radio => {
+            if (radio) {
+                radio.disabled = false;
+            }
+        });
+    }
+    const turboTexts = document.querySelectorAll('.turboText');
+    if (turboTexts.length > 0) {
+        turboTexts.forEach(function (el) {
+            if (el) {
+                el.classList.remove('turbo-disabled');
+                el.style.color = "#000";
+            }
+        });
+    }
+    const turboTypeSelects = document.querySelectorAll('.turbo-type-select');
+    if (turboTypeSelects.length > 0) {
+        turboTypeSelects.forEach(function (el) {
+            if (el) {
+                el.classList.remove('turbo-disabled');
+            }
+        });
+    }
+    const additionalOptionsTitle = document.querySelector('.additional-options-title');
+    if (additionalOptionsTitle) {
+        additionalOptionsTitle.classList.remove('additional-options-title-disabled');
+        additionalOptionsTitle.style.color = "#e61b24";
+    }
 }
 
-function showNotCompatibleMsg() {
-    if (notCompatibleMsgLibrary) notCompatibleMsgLibrary.style.display = "block";
+function showNotCompatibleMsg(groupIndex) {
+    const allMsgs = document.querySelectorAll('.not-compatible-msg');
+    allMsgs.forEach((el, idx) => {
+        // Find the parent group index for each message
+        const parent = el.closest('.turbo-type-select');
+        if (parent && parent.getAttribute('data-group-index') == groupIndex) {
+            el.style.display = "block";
+        } else {
+            el.style.display = "none";
+        }
+    });
 }
 
 function enableQualityDescriptionBtn() {
@@ -443,6 +490,49 @@ function showAddToCartButton() {
 function enableAddToCartButton() {
     if (currentAddToCartBtnLibrary) currentAddToCartBtnLibrary.disabled = false;
     if (addToCartStickyLibrary) addToCartStickyLibrary.disabled = false;
+}
+
+
+
+
+/*******************************************************************************************************
+**                                                                                                    **
+**                                      Aspiration Questions                                          **
+**                                                                                                    **
+*******************************************************************************************************/
+
+// Utility function to enable or disable a turbo group and update all related classes/styles
+function setTurboGroupState(group, enabled) {
+    if (!group) return;
+    const optionsContainer = group.querySelector('.turbo-options-container');
+    const title = group.querySelector('.option-title-turbo');
+    if (enabled) {
+        group.classList.remove('turbo-disabled');
+        if (optionsContainer) optionsContainer.classList.remove('turbo-disabled');
+        if (title) title.classList.remove('individual-turbo-title-disabled');
+        group.querySelectorAll('.turbo-option').forEach(function (option) {
+            const label = option.querySelector('label');
+            if (label) label.classList.remove('individual-turbo-label-disabled');
+            const input = option.querySelector('input[type="radio"]');
+            if (input) {
+                input.classList.remove('individual-turbo-select-disabled');
+                input.disabled = false;
+            }
+        });
+    } else {
+        group.classList.add('turbo-disabled');
+        if (optionsContainer) optionsContainer.classList.add('turbo-disabled');
+        if (title) title.classList.add('individual-turbo-title-disabled');
+        group.querySelectorAll('.turbo-option').forEach(function (option) {
+            const label = option.querySelector('label');
+            if (label) label.classList.add('individual-turbo-label-disabled');
+            const input = option.querySelector('input[type="radio"]');
+            if (input) {
+                input.classList.add('individual-turbo-select-disabled');
+                input.disabled = true;
+            }
+        });
+    }
 }
 
 
