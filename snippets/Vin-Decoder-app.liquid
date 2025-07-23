@@ -272,6 +272,10 @@
                 }
         
         
+                if (vinInputLibrary) {
+                    vinInputLibrary.value = vin;
+                }
+        
                 {% comment %} options.find(option => {
                     if(option.label.startsWith("Match Paint by VIN") || option.label.startsWith("Pintura de combinación por VIN")) {         {% endcomment %}
                         if (vinTextboxContainer) {
