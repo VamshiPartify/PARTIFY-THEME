@@ -1,16 +1,4 @@
 <style>
-  .additional-options-title {
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: #ccc;
-    margin-bottom: 10px;
-  }
-  .additional-options-title-disabled {
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: #ccc;
-    margin-bottom: 10px;
-  }
   .option-title-turbo {
     font-size: 1.1rem;
     font-weight: 800;
@@ -23,6 +11,17 @@
   }
   #option-title-turbo.disabled {
     color: #ccc;
+    pointer-events: none;
+  }
+  .individual-turbo-title-disabled {
+    color: #ccc !important;
+  }
+  .individual-turbo-select-disabled {
+    color: #ccc !important;
+    pointer-events: none;
+  }
+  .individual-turbo-label-disabled {
+    color: #ccc !important;
     pointer-events: none;
   }
   {% comment %} .verifyCompatibilityButton.disabled {
@@ -44,7 +43,7 @@
     flex-wrap: wrap;
     margin: 10px 0;
     flex-direction: column;
-    min-height: 45px;
+    {% comment %} min-height: 45px; {% endcomment %}
   }
 
   .turbo-options-container {
@@ -85,33 +84,10 @@
     cursor: pointer;
   }
 
-  .turboRedirectButton {
-    border-radius: 14px;
-    width: 100%;
-    margin-top: 15px;
-    background-color: #01a601;
-    color: #fff;
-    padding: 7px 7px;
-    border: 1px solid #000000;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
   .turbo-radio {
     margin-right: 3px;
     cursor: pointer;
   }
-  {% comment %} .verifyCompatibilityButton {
-    border-radius: 14px;
-    width: 100%;
-    margin-top: 24px;
-    background-color: #01a601;
-    color: #fff;
-    padding: 7px 7px;
-    border: 1px solid #000000;
-    cursor: pointer;
-    font-weight: bold;
-  } {% endcomment %}
 
   .not-compatible-button {
     border-radius: 14px;
@@ -159,160 +135,346 @@
   }
 </style>
 <div class="turbo-type-select turbo-disabled" data-group-index="{{key_index}}">
-  <label class="additional-options-title" style="none" data-group-index="{{key_index}}">
-    {{ 'aspiration_questions.header' | t }}
-  </label>
   <label class="option-title-turbo" data-group-index="{{key_index}}"></label>
   <div class="turbo-options-container" data-group-index="{{key_index}}"></div>
 </div>
-<div class="not-compatible-msg" style="display: none;">
-  <label class="not-compatible-msg-label">{{ 'aspiration_questions.not_compatible' | t }}</label>
-  <button class="not-compatible-button" type="button">{{ 'aspiration_questions.find_parts' | t }}</button>
-</div>
 
 {% assign product_title = product.title %}
+{% assign aspiration_key_value = aspiration_key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+{% assign inclusions_key = aspiration_key_value | append: '_inclusions' %}
+{% assign inclusions = product.metafields.custom[inclusions_key].value %}
+{% assign exclusions_key = aspiration_key_value | append: '_exclusions' %}
+{% assign exclusions = product.metafields.custom[exclusions_key].value %}
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const currentKey = "{{key_index}}";
-    {% comment %} const notCompatibleMessage = document.querySelector('.not-compatible'); {% endcomment %}
-    const notCompatibleBtnContainer = document.querySelector('.not-compatible-button');
-    const countryOriginsInclusions = {{ product.metafields.custom.country_origin.value | json }};
-    const countryOriginsExclusions = {{ product.metafields.custom.country_of_origin_exclusions.value | json }};
-    const countryPrefixQuestion = {{ product.metafields.custom.country_prefix_question.value | json }};
-    const groupIndex = currentKey;
-    const title = document.querySelector(`.option-title-turbo[data-group-index="${groupIndex}"]`);
-    const optionsContainer = document.querySelector(`.turbo-options-container[data-group-index="${groupIndex}"]`);
-    const product_title = "{{ product_title }}";
-    const vehicleDataContainer = document.querySelector('.vehicle-item-container.first-vehicle-item-container .vehicle-browse-catalog-container strong[data-vehicle]');
-    if (vehicleDataContainer) {
-      garageFirstVehicleData = vehicleDataContainer.getAttribute('data-vehicle');
-    }
-    const productType = '{{ product.type }}';
-    const partType = productType.replace(' ', '+');
-    let includedCountriesPrefix = [];
-    let excludedCountriesPrefix = [];
+    const aspirationKey = '{{ aspiration_key.keys.value }}';
+    const questionKeys = JSON.parse('{{ keys }}');
+    const amountOfKeys = questionKeys.length;
     let currentLocale = '{{ request.locale.iso_code }}';
-    let noncompatible_filter_url = '';
-    
-    if (currentLocale === 'en') {
-      title.textContent = countryPrefixQuestion[0].question;
-    } else {
-      title.textContent = countryPrefixQuestion[0].spanish_question;
+
+    const inclusions = [
+      {% for inclusion in inclusions %}
+        {
+          option_2: {{ inclusion.option_2.value | json }} || '',
+          option_1: {{ inclusion.option_1.value | json }},
+          filter_url: {{ inclusion.filter_url.value | json }},
+          question: {{ inclusion.question.value | json }},
+          spanish_question: {{ inclusion.spanish_question.value | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
+    const exclusions = [
+      {% for exclusion in exclusions %}
+        {
+          option_2: {{ exclusion.option_2.value | json }} || '',
+          option_1: {{ exclusion.option_1.value | json }},
+          filter_url: {{ exclusion.filter_url.value | json }},
+          question: {{ exclusion.question.value | json }},
+          spanish_question: {{ exclusion.spanish_question.value | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
+    // Track answers for each group
+    const answers = {};
+    const totalQuestions = amountOfKeys;
+
+    // Show not compatible message, disable all controls except radios
+    function showExclusionState(groupIndex) {
+      disableQualityTypeSelect();
+      disableQualityDescriptionBtn();
+      updateProgressHeaderColors();
+      clearCombinedVariantSelect();
+      disableCombinedVariantSelect();
+      disablePrecisionMatchBtns();
+      clearPrecisionMatchRadioButtons();
+      disableVinVerificationBtns();
+      clearVinVerificationRadioButtons();
+      disableAddToCartButton();
+      disablehowToFindPaintCodeBtn();
+      disableGetPaintCodeUsingVin();
+      disableSelectVinVariantBtn();
+      disableVINTextboxForOEM();
+      hideVINTextboxForOEM();
+      showNotCompatibleMsg(groupIndex);
     }
 
-    if (!garageFirstVehicleData) {
-      notCompatibleBtnContainer.style.display = 'none';
-    }
-
-    // Create radio buttons for inclusions
-    optionsContainer.innerHTML = '';
-    if (countryOriginsInclusions && countryOriginsInclusions.length > 0) {
-      countryOriginsInclusions.forEach((origin, idx) => {
-        const vinPrefixes = Array.isArray(origin.vin_prefix) ? origin.vin_prefix.join(', ') : '';
-        const countries = Array.isArray(origin.country) ? origin.country.join(', ') : '';
-        const value = `${vinPrefixes} - ${countries}`;
-        const optionId = `country-inclusion-radio-${groupIndex}-${idx}`;
-        const div = document.createElement('div');
-        div.className = 'turbo-option';
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = `countryOriginOption-${groupIndex}`;
-        input.value = value;
-        input.id = optionId;
-        input.className = 'turbo-radio';
-        input.disabled = true;
-        input.setAttribute('data-origin-type', 'inclusion');
-        const label = document.createElement('label');
-        label.className = 'turboText';
-        label.setAttribute('for', optionId);
-        label.setAttribute('data-group-index', groupIndex);
-        label.textContent = value;
-        div.appendChild(input);
-        div.appendChild(label);
-        div.appendChild(document.createElement('br'));
-        optionsContainer.appendChild(div);
-      });
-    }
-
-    // Create radio buttons for exclusions
-    if (countryOriginsExclusions && countryOriginsExclusions.length > 0) {
-      countryOriginsExclusions.forEach((origin, idx) => {
-        noncompatible_filter_url = origin.filter_url;
-        const vinPrefixes = Array.isArray(origin.vin_prefix) ? origin.vin_prefix.join(', ') : '';
-        const countries = Array.isArray(origin.country) ? origin.country.join(', ') : '';
-        const value = `${vinPrefixes} - ${countries}`;
-        const optionId = `country-exclusion-radio-${groupIndex}-${idx}`;
-        const div = document.createElement('div');
-        div.className = 'turbo-option';
-        const input = document.createElement('input');
-        input.type = 'radio';
-        input.name = `countryOriginOption-${groupIndex}`;
-        input.value = value;
-        input.id = optionId;
-        input.className = 'turbo-radio';
-        input.disabled = true;
-        input.setAttribute('data-origin-type', 'exclusion');
-        const label = document.createElement('label');
-        label.className = 'turboText';
-        label.setAttribute('for', optionId);
-        label.setAttribute('data-group-index', groupIndex);
-        label.textContent = value;
-        div.appendChild(input);
-        div.appendChild(label);
-        div.appendChild(document.createElement('br'));
-        optionsContainer.appendChild(div);
-      });
-    }
-
-    document.querySelectorAll('.additional-options-title').forEach(function(label) {
-      if (label.getAttribute('data-group-index') !== "0") {
-        label.style.display = 'none';
+    // Helper to enable inclusions if all are answered and no exclusions
+    function enableTurboControlsIfReady(groupIndex) {
+      const answeredInclusions = Object.values(answers).filter(a => a && a.originType === 'inclusion').length;
+      const hasExclusion = Object.values(answers).some(a => a && a.originType === 'exclusion');
+      if (hasExclusion) {
+        showExclusionState(groupIndex);
+      } else {
+        document.querySelectorAll('.turbo-radio').forEach(radio => {
+          radio.disabled = false;
+        });
+        hideNotCompatibleMsg();
+        if (answeredInclusions === totalQuestions) {
+          enableProductTypeSelect();
+          enableQualityDescriptionBtn();
+          enableVINTextboxForOEM();
+          updateProgressHeaderColors();
+          hideNotCompatibleMsg();
+        }
       }
-    });
+    }
 
-    notCompatibleBtnContainer.addEventListener('click', function() {
-      // Now garageFirstVehicleData contains the value of the data-vehicle attribute
-      console.log('wool garageFirstVehicleData: ', garageFirstVehicleData);
-      if (garageFirstVehicleData) {
-        const vehicle = generateCollectionHandle(garageFirstVehicleData);
-        console.log('wool vehicle: ', vehicle);
-        if (vehicle) {
-          window.location.href = `/collections/${vehicle}?filter.p.m.custom.country_origin=${noncompatible_filter_url}&filter.p.product_type=${partType}`;
+    if(inclusions.length) {
+      const currentKey = "{{key_index}}";
+      // Remove static not-compatible button logic
+      const aspirationInclusions = inclusions[0];
+      const aspirationExclusions = exclusions[0];
+      let aspirationQuestion = '';
+      if (
+        inclusions &&
+        inclusions[0] &&
+        inclusions[0].question &&
+        Array.isArray(inclusions[0].question) &&
+        inclusions[0].question.length > 0
+      ) {
+        if (currentLocale === 'en') {
+          aspirationQuestion = inclusions[0].question[0];
+        } else {
+          aspirationQuestion = inclusions[0].question[1];
+        }
+      }
+      const groupIndex = currentKey;
+      const title = document.querySelector(`.option-title-turbo[data-group-index="${groupIndex}"]`);
+      const optionsContainer = document.querySelector(`.turbo-options-container[data-group-index="${groupIndex}"]`);
+      const product_title = "{{ product_title }}";
+      const vehicleDataContainer = document.querySelector('.vehicle-item-container.first-vehicle-item-container .vehicle-browse-catalog-container strong[data-vehicle]');
+      if (vehicleDataContainer) {
+        garageFirstVehicleData = vehicleDataContainer.getAttribute('data-vehicle');
+      }
+      const productType = '{{ product.type }}';
+      const partType = productType.replace(' ', '+');
+
+      // Set the title text -- English or Spanish based on locale
+      title.textContent = aspirationQuestion;
+
+      // Create radio buttons for inclusions
+      optionsContainer.innerHTML = '';
+      if (aspirationInclusions && Array.isArray(aspirationInclusions.option_1) && aspirationInclusions.option_1.length > 0) {
+        for (let idx = 0; idx < aspirationInclusions.option_1.length; idx++) {
+          const option2Arr = Array.isArray(aspirationInclusions.option_2) ? aspirationInclusions.option_2 : [];
+          const option2 = option2Arr.length > 1 ? option2Arr.join(', ') : option2Arr.join('');
+          const option1 = Array.isArray(aspirationInclusions.option_1) ? aspirationInclusions.option_1[idx] : '';
+          let value = '';
+          if (option2 && option1) {
+            value = `${option2} - ${option1}`;
+          } else {
+            value = `${option1}`;
+          }
+          
+          const optionId = `aspiration-inclusion-radio-${groupIndex}-${idx}`;
+          const div = document.createElement('div');
+          div.className = 'turbo-option';
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = `aspirationOption-${groupIndex}`;
+          input.value = value;
+          input.id = optionId;
+          input.className = 'turbo-radio';
+          input.disabled = true;
+          input.setAttribute('data-origin-type', 'inclusion');
+          let filterUrlValue = '';
+          if (
+            aspirationInclusions &&
+            Array.isArray(aspirationInclusions.filter_url) &&
+            aspirationInclusions.filter_url[idx] !== null &&
+            aspirationInclusions.filter_url[idx] !== undefined &&
+            aspirationInclusions.filter_url[idx] !== 'null'
+          ) {
+            filterUrlValue = aspirationInclusions.filter_url[idx];
+          }
+          if (filterUrlValue === null || filterUrlValue === undefined || filterUrlValue === 'null') {
+            filterUrlValue = '';
+          }
+          input.setAttribute('data-filter-url', filterUrlValue);
+          const label = document.createElement('label');  
+          label.className = 'turboText';
+          label.setAttribute('for', optionId);
+          label.setAttribute('data-group-index', groupIndex);
+          label.textContent = value;
+          div.appendChild(input);
+          div.appendChild(label);
+          div.appendChild(document.createElement('br'));
+          optionsContainer.appendChild(div);
+        }
+      }
+
+      // Create radio buttons for exclusions
+      if (aspirationExclusions && Array.isArray(aspirationExclusions.option_1) && aspirationExclusions.option_1.length > 0) {
+        for (let idx = 0; idx < aspirationExclusions.option_1.length; idx++) {
+          const option2 = Array.isArray(aspirationExclusions.option_2) ? aspirationExclusions.option_2[idx] : '';
+          const option1 = Array.isArray(aspirationExclusions.option_1) ? aspirationExclusions.option_1[idx] : '';
+          let value = '';
+          if (option2 && option1) {
+            value = `${option2} - ${option1}`;
+          } else {
+            value = `${option1}`;
+          }
+          const optionId = `aspiration-exclusion-radio-${groupIndex}-${idx}`;
+          const div = document.createElement('div');
+          div.className = 'turbo-option';
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = `aspirationOption-${groupIndex}`;
+          input.value = value;
+          input.id = optionId;
+          input.className = 'turbo-radio';
+          input.disabled = true;
+          input.setAttribute('data-origin-type', 'exclusion');
+          let filterUrlValue = '';
+          if (
+            aspirationExclusions &&
+            Array.isArray(aspirationExclusions.filter_url) &&
+            aspirationExclusions.filter_url[idx] !== null &&
+            aspirationExclusions.filter_url[idx] !== undefined &&
+            aspirationExclusions.filter_url[idx] !== 'null'
+          ) {
+            filterUrlValue = aspirationExclusions.filter_url[idx];
+          }
+          if (filterUrlValue === null || filterUrlValue === undefined || filterUrlValue === 'null') {
+            filterUrlValue = '';
+          }
+          input.setAttribute('data-filter-url', filterUrlValue);
+          const label = document.createElement('label');
+          label.className = 'turboText';
+          label.setAttribute('for', optionId);
+          label.setAttribute('data-group-index', groupIndex);
+          label.textContent = value;
+          div.appendChild(input);
+          div.appendChild(label);
+          div.appendChild(document.createElement('br'));
+          optionsContainer.appendChild(div);
+        }
+      }
+
+      // Dynamically add not-compatible button for this group
+      const notCompatibleMsgDiv = document.createElement('div');
+      notCompatibleMsgDiv.className = 'not-compatible-msg';
+      notCompatibleMsgDiv.style.display = 'none';
+      const notCompatibleLabel = document.createElement('label');
+      notCompatibleLabel.className = 'not-compatible-msg-label';
+      notCompatibleLabel.textContent = '{{ 'aspiration_questions.not_compatible' | t }}';
+      const notCompatibleBtn = document.createElement('button');
+      notCompatibleBtn.className = 'not-compatible-button';
+      notCompatibleBtn.type = 'button';
+      notCompatibleBtn.textContent = '{{ 'aspiration_questions.find_parts' | t }}';
+      notCompatibleMsgDiv.appendChild(notCompatibleLabel);
+      notCompatibleMsgDiv.appendChild(notCompatibleBtn);
+      optionsContainer.appendChild(notCompatibleMsgDiv);
+
+
+      // Attach event listener for this group's not-compatible button
+      notCompatibleBtn.addEventListener('click', function() {
+        if (garageFirstVehicleData) {
+          const vehicle = generateCollectionHandle(garageFirstVehicleData);
+          if (vehicle) {
+            // Collect all filter URLs from answered questions
+            let filterUrls = [];
+            for (let i = 0; i < amountOfKeys; i++) {
+              if (answers[i] && answers[i].filter_url && answers[i].filter_url !== 'null') {
+                filterUrls.push(answers[i].filter_url);
+              }
+            }
+            // Join with '&' and remove empty strings
+            const filterQuery = filterUrls.filter(Boolean).join('&');
+            if (currentLocale === 'en') {
+              window.location.href = `/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`;
+            } else {
+              window.location.href = `/es/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`;
+            }
+          } else {
+            alert('No link available for parts that fit your vehicle.');
+          }
         } else {
           alert('No link available for parts that fit your vehicle.');
         }
-      } else {
-        alert('No link available for parts that fit your vehicle.');
-      }
-    });
-    document.querySelectorAll('.turbo-radio').forEach(function(radio) {
-      radio.addEventListener('change', function(event) {
-        event.preventDefault();
-        const originType = this.getAttribute('data-origin-type');
-        if (originType === 'inclusion') {
-          enableProductTypeSelect();
-          enableQualityDescriptionBtn();
-          updateProgressHeaderColors();
-          hideNotCompatibleMsg();
-        } else if (originType === 'exclusion') {
-          disableQualityTypeSelect();
-          disableQualityDescriptionBtn();
-          updateProgressHeaderColors();
-          clearCombinedVariantSelect();
-          disableCombinedVariantSelect();
-          disablePrecisionMatchBtns();
-          clearPrecisionMatchRadioButtons();
-          disableVinVerificationBtns();
-          clearVinVerificationRadioButtons();
-          disableAddToCartButton();
-          disablehowToFindPaintCodeBtn();
-          disableGetPaintCodeUsingVin();
-          disableSelectVinVariantBtn();
-          disableVINTextboxForOEM();
-          showNotCompatibleMsg();
-        }
       });
-    });
+
+      // Store reference for later show/hide logic
+      optionsContainer.notCompatibleMsgDiv = notCompatibleMsgDiv;
+
+      // --- Initialization: disable all but the first group ---
+      document.querySelectorAll('.turbo-type-select').forEach(function(group, idx) {
+        setTurboGroupState(group, idx === 0);
+      });
+
+      /*
+        --- Sequential Question Logic Handler ---
+        This event handler manages the logic for enabling/disabling each question group (turbo-type-select) in a sequential order:
+        1. At initialization, only the first group is enabled; all others are disabled (turbo-disabled class).
+        2. When a user answers a question (selects a radio):
+           - If the answer is an 'exclusion', all subsequent groups are disabled and cleared, and their titles are visually dimmed.
+           - If the answer is not an 'exclusion', only the next group is enabled (if all previous answers are not exclusions), and all others remain disabled.
+        3. The handler also manages the display of the not-compatible message for the current group, and ensures all subsequent groups hide their not-compatible messages.
+        4. The answers object is updated for each group, and all subsequent answers are cleared when a new answer is selected.
+        5. This logic enforces that the user must answer questions in order, and cannot skip ahead or change later answers without re-answering previous ones.
+        6. Visual feedback is provided by toggling the 'turbo-disabled' and 'individual-turbo-title-disabled' classes, and by disabling/enabling radio inputs and updating label colors.
+      */
+      document.querySelectorAll('.turbo-radio').forEach(function(radio) {
+        radio.addEventListener('change', function(event) {
+          const groupIndex = parseInt(this.name.split('-')[1]);
+          const originType = this.getAttribute('data-origin-type');
+          answers[groupIndex] = {
+            originType: originType,
+            filter_url: this.getAttribute('data-filter-url')
+          };
+
+          // Show/hide not-compatible button for this group
+          const container = document.querySelector(`.turbo-options-container[data-group-index="${groupIndex}"]`);
+          if (container && container.notCompatibleMsgDiv) {
+            container.notCompatibleMsgDiv.style.display = originType === 'exclusion' ? 'block' : 'none';
+          }
+
+          // Sequential logic: unlock only the next group if not exclusion
+          for (let j = groupIndex + 1; j < amountOfKeys; j++) {
+            const group = document.querySelector(`.turbo-type-select[data-group-index="${j}"]`);
+            if (!group) continue;
+            const radios = group.querySelectorAll('input[type="radio"]');
+            const title = group.querySelector('.option-title-turbo');
+            const optionsContainer = group.querySelector('.turbo-options-container');
+            if (originType === 'exclusion') {
+              setTurboGroupState(group, false);
+              radios.forEach(function(radioNext) {
+                radioNext.checked = false;
+                radioNext.disabled = true;
+                const label = radioNext.parentNode.querySelector('label[for="' + radioNext.id + '"]');
+                if (label) label.style.color = '#ccc';
+              });
+              // All subsequent groups remain disabled
+            } else {
+              // Only unlock the next group if all previous are not exclusion
+              if (j === groupIndex + 1 && !Object.values(answers).slice(0, j).some(a => a && a.originType === 'exclusion')) {
+                setTurboGroupState(group, true);
+                radios.forEach(function(radioNext) {
+                  radioNext.disabled = false;
+                  const label = radioNext.parentNode.querySelector('label[for="' + radioNext.id + '"]');
+                  if (label) label.style.color = '#1D1D1D';
+                });
+              } else {
+                setTurboGroupState(group, false);
+                radios.forEach(function(radioNext) {
+                  radioNext.checked = false;
+                  radioNext.disabled = true;
+                  const label = radioNext.parentNode.querySelector('label[for="' + radioNext.id + '"]');
+                  if (label) label.style.color = '#ccc';
+                });
+              }
+            }
+            // Hide not compatible message for all subsequent
+            const nextContainer = document.querySelector(`.turbo-options-container[data-group-index="${j}"]`);
+            if (nextContainer && nextContainer.notCompatibleMsgDiv) {
+              nextContainer.notCompatibleMsgDiv.style.display = 'none';
+            }
+            answers[j.toString()] = undefined;
+          }
+          enableTurboControlsIfReady(groupIndex);
+        });
+      });
+    }
   });
 </script>
