@@ -214,8 +214,9 @@
     <script>
       // Immediately after the app script
       window.easysearchWasRendered = true;
-      document.dispatchEvent(new Event('easysearch_rendered'));
+      document.dispatchEvent(new Event("easysearch_rendered"));
     </script>
+
     {% comment %}Inject theme-object begin{% endcomment %}
     <script>
       window.Theme = window.Theme || {};
@@ -1057,19 +1058,21 @@
         </script>
       {% endif %}
     {% endcomment %}
-    <script>
-      function hidePostscriptPopup() {
-        const popup = document.getElementById('ps__widget_container');
-        if (popup) {
-          popup.style.display = 'none';
+    {% comment %}
+      <script>
+        function hidePostscriptPopup() {
+          const popup = document.getElementById('ps__widget_container');
+          if (popup) {
+            popup.style.display = 'none';
+          }
         }
-      }
-      // Hide immediately if present
-      hidePostscriptPopup();
-      // Observe DOM changes for dynamically injected popups
-      const observer = new MutationObserver(hidePostscriptPopup);
-      observer.observe(document.body, { childList: true, subtree: true });
-    </script>
+        // Hide immediately if present
+        hidePostscriptPopup();
+        // Observe DOM changes for dynamically injected popups
+        const observer = new MutationObserver(hidePostscriptPopup);
+        observer.observe(document.body, { childList: true, subtree: true });
+      </script>
+    {% endcomment %}
 
     <!-- Viewport height fix for mobile browsers -->
     {% comment %}

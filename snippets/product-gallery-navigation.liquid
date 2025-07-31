@@ -51,7 +51,7 @@
 {% assign reordered_media = reordered_media | append: primary_image | append: ',' %}
 
 <!-- Ensure lifestyle_reference is next -->
-{% if lifestyle_reference != blank %}
+{% if lifestyle_reference != blank and false %}
   {% assign reordered_media = reordered_media | append: lifestyle_reference | append: ',' %}
 {% endif %}
 
@@ -203,7 +203,7 @@
         {% assign first_image_skipped = true %}
       {% endif %}
 
-      {% if lifestyle_reference != blank and product.variants.size > 1 %}
+      {% if lifestyle_reference != blank and product.variants.size > 1 and false %}
         <button
           class="
             product-gallery--media-thumbnail
