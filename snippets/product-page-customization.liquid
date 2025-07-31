@@ -751,24 +751,24 @@
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
         {% endif %}
-        {% if product.metafields.custom.aspiration_question_keys != blank %}
+        {% if product.metafields.custom.fitment_question_keys != blank %}
           <div class="required-questions-container">
             <label class="additional-options-title" style="none">
               {{ 'aspiration_questions.header' | t }}
             </label>
-            {% assign keys = product.metafields.custom.aspiration_question_keys.value %}
-            {% assign fullKeys = product.metafields.custom.aspiration_question_keys %}
+            {% assign keys = product.metafields.custom.fitment_question_keys.value %}
+            {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
             {% for key in keys %}
               {% render 'product-page-turbo-options', key_index: forloop.index0, aspiration_key: key, keys: fullKeys %}
             {% endfor %}
           </div>
+          <div class="divider"></div>
         {% endif %}
         <!-- The following if/elseif/else determines how the quality and paint options themselves are displayed -->
         {% if meta_fields > 1 %}
           <!-- Quality options and not OEM -->
           {% assign is_only_oem = false %}
           {% assign is_no_quality_options = false %}
-          <div class="divider"></div>
           {% render 'product-page-quality-options',
             is_only_oem: is_only_oem,
             is_no_quality_options: is_no_quality_options
@@ -779,7 +779,6 @@
           <!-- Quality options and OEM -->
           {% assign is_only_oem = true %}
           {% assign is_no_quality_options = false %}
-          <div class="divider"></div>
           {% render 'product-page-quality-options',
             is_only_oem: is_only_oem,
             is_no_quality_options: is_no_quality_options
@@ -803,20 +802,22 @@
         <!-- Select VIN Option -->
         {% comment %} {%- if product.variants[1].sku contains '.VIN' -%} {% endcomment %}
         <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-        <div class="vin-options-container" style="display: none;">
-          <!-- Hidden Text box for VIN input -->
-          <div id="vin-textbox-container">
-            <input
-              type="hidden"
-              id="vin-textbox"
-              name="properties[VIN]"
-              placeholder="Enter your VIN"
-              maxlength="17"
-              value="{{ vinValue | default: "" }}"
-            >
-            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+        {% comment %}
+          <div class="vin-options-container" style="display: none;">
+            <!-- Hidden Text box for VIN input -->
+            <div id="vin-textbox-container">
+              <input
+                type="hidden"
+                id="vin-textbox"
+                name="properties[VIN]"
+                placeholder="Enter your VIN"
+                maxlength="17"
+                value="{{ vinValue | default: "" }}"
+              >
+              <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+            </div>
           </div>
-        </div>
+        {% endcomment %}
         {% comment %} {% endif %} {% endcomment %}
 
         <!--
@@ -837,9 +838,10 @@
             {% render 'product-page-precision-match' %}
           </div>
         {% endcomment %}
+
         {% comment %}
           {% unless is_make_excluded_from_vin_verification == true %}
-            <div class="divider-large-screen"></div>
+            {% comment %} <div class="divider-large-screen"></div> {% endcomment %}
             {% render 'product-page-vin-guarantee' %}
           {% endunless %}
         {% endcomment %}
@@ -920,12 +922,13 @@
           {% render 'product-page-paint-options' %}
         {% endif %}
         <!-- LEAVE THE FOLLOWING CODE!! Uncomment it whenever ready to use these -->
+
         {% comment %}
           {% unless is_make_excluded_from_vin_verification == true %}
-            <div class="divider-large-screen"></div>
             {% render 'product-page-vin-guarantee' %}
           {% endunless %}
         {% endcomment %}
+
         <div class="divider-small-screen"></div>
         {% render 'product-page-cart-btn', unpainted: true %}
       </div>
@@ -989,20 +992,22 @@
 
       {% comment %} {%- if product.variants[1].sku contains '.VIN' -%} {% endcomment %}
       <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-      <div class="vin-options-container" style="display: none;">
-        <!-- Hidden Text box for VIN input -->
-        <div id="vin-textbox-container">
-          <input
-            type="hidden"
-            id="vin-textbox"
-            name="properties[VIN]"
-            placeholder="Enter your VIN"
-            maxlength="17"
-            value="{{ vinValue | default: "" }}"
-          >
-          <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+      {% comment %}
+        <div class="vin-options-container" style="display: none;">
+          <!-- Hidden Text box for VIN input -->
+          <div id="vin-textbox-container">
+            <input
+              type="hidden"
+              id="vin-textbox"
+              name="properties[VIN]"
+              placeholder="Enter your VIN"
+              maxlength="17"
+              value="{{ vinValue | default: "" }}"
+            >
+            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+          </div>
         </div>
-      </div>
+      {% endcomment %}
       {% comment %} {% endif %} {% endcomment %}
 
       {% unless is_make_found or is_bumperdotcom_make_found or rendered_vindecoder == true %}
@@ -1101,7 +1106,6 @@
             const combinedVariantSelect = document.getElementById('variant-selector');
             const addToCartButton = document.querySelector('.add-to-cart');
             const addToCartButtonForUnpaintedItems = document.querySelector(".add-to-cart-for-unpainted");
-            const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
             const vinTextBox = document.getElementById('vin-textbox');
             const howToFindPaintCodeBtn = document.getElementById('how-to-find-your-paint-code-vindecoder');
             const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
@@ -1133,6 +1137,11 @@
             const variantId = '{{ product.variants[0].id }}';
             const paintOptionsCheckBoxGroup = document.querySelector(".paint-options-checkbox-group");
             const aspirationQuestionsContainer = document.querySelector('.required-questions-container');
+            const vinVerificationOptional = document.querySelector('.fitment-verification-optional');
+            const storedVinMsg = document.querySelector('.stored-vin-message');
+            const vinInputBox = document.getElementById('vin-decoder-textbox-for-verification');
+            const vinSubmitBtn = document.querySelector('.vin-decoder-submit-btn'); 
+
 
             let fitmentObject = JSON.parse(localStorage.getItem("easysearch-preselect-fitment"));
             let variantSelectedOption = null;
@@ -1140,6 +1149,7 @@
             let fitmentSuccessfromStorage;
             let currentAddToCartBtn;
             let checkerForVinMessageParagraph = 0;
+            isOnlyOEM = '{{ is_only_oem }}' === "true";
             redirectBtn = '{{ 'parts_that_fit_your_vehicle' | t }}';
             fitmentFailButton.id = 'fitment-fail-button';
             fitmentFailButton.textContent = redirectBtn;
@@ -1152,6 +1162,13 @@
               currentAddToCartBtn = addToCartButtonForUnpaintedItems;
             }
 
+            if(isOnlyOEM) {
+              vinVerificationOptional.style.display = 'none';
+              enableOrDisableAddToCartForOEM("");
+            }
+
+            // Hide the fitment verification initially--unless there are no quality options and the product itself is OEM
+            hideFitmentVerificationComponent('');
 
 
 
@@ -1225,7 +1242,7 @@
                 disableCombinedVariantSelect();
                 disablePrecisionMatchBtns();
                 clearPrecisionMatchRadioButtons();
-                disableVinVerificationBtns()
+                disableVinVerificationBtns();
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
 
@@ -1242,6 +1259,7 @@
               // Successful fitment verification
               } else if (failEl) {
                 resetAllHeaderColors(true);
+                removeVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn);
 
                 // Fitment failed, hide Continue button and show "Parts That Fit" button
                 showFitmentFailButton();
@@ -1269,7 +1287,6 @@
                 disablehowToFindPaintCodeBtn();
                 disableGetPaintCodeUsingVin();
                 disableSelectVinVariantBtn();
-                disableVINTextboxForOEM();
                 fitmentSuccess = false;
 
                 // If on product page and garageToCollections is true, we must determine
@@ -1412,19 +1429,20 @@
                         showAddToCartButton();
                         enableAddToCartButton();
                         updateProgressHeaderColors();
-                    } else if(selectedOptionCheckingForVin && fitmentSuccess && !hasFitmentVerification) {
-                        const vinMessageParagraph = document.querySelector('.vin-decoder-message');
-                        if (vinMessageParagraph) {
-                          form.action = `/cart/add?id=${combinedVariantSelect.value}`;
-                          showAddToCartButton();
-                          enableAddToCartButton();
-                          updateProgressHeaderColors();
-                        }
                     } else if(selectedOptionCheckingForVin && fitmentSuccess && oemVinContainer.classList.contains("show") && !hasfitmentVerification) {
                       form.action = `/cart/add?id=${combinedVariantSelect.value}`;
                           showAddToCartButton();
                           enableAddToCartButton();
                           updateProgressHeaderColors();
+                    } else if(selectedOptionCheckingForVin && fitmentSuccess && !hasFitmentVerification) {
+                        const vinMessageParagraph = document.querySelector('.vin-decoder-message');
+                        const licenseMessageParagraph = document.querySelector('.license-decoder-message');
+                        if (vinMessageParagraph || licenseMessageParagraph) {
+                          form.action = `/cart/add?id=${combinedVariantSelect.value}`;
+                          showAddToCartButton();
+                          enableAddToCartButton();
+                          updateProgressHeaderColors();
+                        }
                     } else {
                       form.action = '/cart/add';
                       showAddToCartButton();
@@ -1441,7 +1459,7 @@
                       updateProgressHeaderColors();
                   } else if(variantSelectedOption && fitmentSuccess && hasFitmentVerification) {
                     form.action = `/cart/add?id=${variantSelectedOption}`;
-                      enableAddToCartButton();
+                      enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                       updateProgressHeaderColors();
                   } else {
                       form.action = '/cart/add';
@@ -1478,8 +1496,13 @@
                         if(hasPrecisionMatch) enablePrecisionMatchBtns();
                         enableAddToCartButton();
                       }
+                      if(productSelect === "oem" && hasFitmentVerification) {
+                        if(!hasPrecisionMatch) enableVinVerificationBtns();
+                        if(hasPrecisionMatch) enablePrecisionMatchBtns();
+                        enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
+                      }
                       if(previousQualitySelectUnpainted !== '' && productSelect === "oem" && previousQualitySelectUnpainted !== productSelect) {
-                        disableAddToCartButton();
+                        enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                       }
                   } else if(noQualityOptions && fitmentSuccess && !hasFitmentVerification) { 
                     let oemProduct = false;
@@ -1524,7 +1547,6 @@
             // Function to check if the selected variant is the VIN variant -- Displays VIN Input box if so
             function checkVariantForVinInputBox() {
                 const selectedOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex].text;
-                const vinMessageParagraph = document.querySelector('.vin-decoder-message');
                 if(vinTextBoxContainer) {
                   if (selectedOption.includes('Match Paint by VIN') || selectedOption.includes('Pintura de combinación por VIN')) {
                     //This check is if the vin decoder results in 'match paint by vin', then customer toggles off of it then back onto it
@@ -1535,7 +1557,10 @@
                       if(vinTextBoxContainer) vinTextBoxContainer.style.display = 'block';
                       updateProgressHeaderColors();
                   } else { 
+                    const vinMessageParagraph = document.querySelector('.vin-decoder-message');
+                    const licenseMessageParagraph = document.querySelector('.license-decoder-message');
                     if(vinMessageParagraph && failedVinDecode) hideVinMessageParagraph();
+                    if(licenseMessageParagraph && failedVinDecode) hideLicenseMessageParagraph();
                     if(paintOrVin) paintOrVin.style.visibility = "visible";
                     if(useVinButton) useVinButton.style.display = 'block';
                     if(failedVinDecode && !failedVinDecode) vinSuccess = false;
@@ -1736,6 +1761,7 @@
                       updateProgressHeaderColors();
                       vinSuccess = true;    
                   } else if(vinInput.length === 17 && fitmentSuccess && hasFitmentVerification) {
+                    //@NOTE: Should the following line be dependent on whether or not it is OEM?
                       enableAddToCartButton();
                       if(!hasPrecisionMatch) enableVinVerificationBtns();
                       if(hasPrecisionMatch) enablePrecisionMatchBtns();
@@ -1744,47 +1770,6 @@
                       disableAddToCartButton();
                       updateProgressHeaderColors();
                       vinSuccess = false;
-                  }
-              });
-            };
-
-            //For unpainted items
-            if(!vinTextBox && vinTextBoxOEM) {
-              document.getElementById('vin-textbox-for-oem').addEventListener('input', function(event) {
-                  storedVin = event.target.value;
-
-                  const vinInput = event.target.value.toUpperCase();
-                  const warning = document.getElementById('vin-warning-for-oem');
-
-      
-                  // Remove I, O, Q characters
-                  const filteredValue = vinInput.replace(/[IOQ\s:;()!@#$%^?'"&*\-_=+.`~<>{}\[\]|,\/\\]/gi, '');
-
-
-                  if (vinInput !== filteredValue) {
-                      alert("Please enter valid characters. I,O, & Q and other special characters are not included in VINs");
-                  } else {
-                      warning.style.display = 'none';
-                  }
-
-                  event.target.value = filteredValue;
-
-
-                  // Ensure VIN input is 17 characters before enabling Add to Cart
-                  if (vinInput.length === 17 && fitmentSuccess && !hasFitmentVerification) {
-                    enableAddToCartButton();
-                    vinSuccess = true;    
-                    updateProgressHeaderColors();
-                  } else if(vinInput.length === 17 && fitmentSuccess && hasFitmentVerification) {
-                    enableAddToCartButton();
-                    if(!hasPrecisionMatch) enableVinVerificationBtns();
-                    if(hasPrecisionMatch) enablePrecisionMatchBtns();
-                    vinSuccess = false;
-                    updateProgressHeaderColors();
-                  } else {
-                    disableAddToCartButton();
-                    vinSuccess = false;
-                    updateProgressHeaderColors();
                   }
               });
             };

@@ -33,14 +33,16 @@
       margin-top: 3px;
     }
 
-    #paintcode-app-container {
+    #paintcode-app-container,
+    #paintcode-app-container-license {
       max-height: 0;
       overflow: hidden;
       opacity: 0;
       transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
     }
 
-    #paintcode-app-container.show {
+    #paintcode-app-container.show,
+    #paintcode-app-container-license.show {
       max-height: 1000px;
       opacity: 1;
       margin-top: 3px;
@@ -51,6 +53,7 @@
       font-size: 16px;
       font-weight: 500;
       margin-top: 5px;
+      margin-bottom: 15px;
       text-align: left;
       color: #4b4b4b;
       line-height: 1.2;
@@ -264,6 +267,16 @@
             >
             {{ 'paint_options_radio_labels.VIN' | t }}
           </label>
+          <label class="paint-options-checkbox-option" id="paint-code-license-option">
+            <input
+              type="radio"
+              name="select_paint_option"
+              value="select"
+              id="checkbox-get-paint-code-with-license"
+              disabled
+            >
+            {{ 'paint_options_radio_labels.license' | t }}
+          </label>
         {% endunless %}
       </div>
       <div class="painted-stock-key-paint-level" style="display: none;">
@@ -282,7 +295,17 @@
           {{- 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span
           >&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}
         </div>
-        {% render 'Vin-Decoder-app' %}
+        {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
+        {% render 'vin-decoder-input-box' %}
+      </div>
+      <div id="paintcode-app-container-license">
+        <div class="two-tone-message">
+          {{ 'paintcode_popup.two_tone_message_beg' | t }}&nbsp;<b>{{ 'paintcode_popup.two_tone_two_tone' | t }}</b>
+          {{- 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span
+          >&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}
+        </div>
+        {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
+        {% render 'vin-decoder-license-option' %}
       </div>
       {% comment %} {% endif %} {% endcomment %}
       {% render 'how-to-find-paint-code' %}
@@ -624,13 +647,17 @@
         const paintCodeWrapper = document.querySelector(".paint-code-wrapper");
         const checkboxUnpainted = document.getElementById('checkbox-select-unpainted');
         const checkboxPaintOptions = document.getElementById('checkbox-select-paint-option');
+        const checkboxGetPaintCodeWithVin = document.getElementById('checkbox-get-paint-code-with-vin');
         const paintCodeAppContainer = document.getElementById('paintcode-app-container');
+        const paintCodeAppContainerLicense = document.getElementById('paintcode-app-container-license');
         const paintOptionPriceDisplay = document.querySelector('#paint-option-price-display');
         const vinOptionPriceDisplay = document.querySelector('#vin-option-price-display');
         const STOCK_POSTFIX = "{{ 'quality_level_painted_stock.postfix' | t }}";
         const AFTERMARKET_WORD = '{{ 'quality_level_painted_stock.aftermarket' | t }}';
         const AND_WORD = '{{ 'quality_level_painted_stock.and' | t }}';
-        const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}'
+        const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}';
+        const garageSearchTerms = getGarageSearchTerms();
+        const vinOptionLabel = document.getElementById('paint-code-vin-option');
         aftermarketAvailability = {{ aftermarket_any_available_options | default: false | json }};
         capaAvailability = {{ capa_any_available_options | default: false | json }};
         oemAvailability = {{ oem_any_available_options | default: false | json }};
@@ -647,7 +674,7 @@
 
         if('{{ product.variants.size }}' <= 1) {
           unpainted = true;
-        }; 
+        };
 
         {% comment %} if(!hasDotVinOptionAftermarket && !hasDotVinOptionCapa && !hasDotVinOptionOem) {
           const vinOptionLabel = document.getElementById('paint-code-vin-option');
@@ -776,6 +803,171 @@
               }
             }
           }
+
+          function toggleVinDecoderContainer(vinOrLicense) {
+            if (vinOrLicense === 'vin') {
+              // Hide the license option if it is shown
+              hidePaintCodeAppContainerLicense(true, true);
+              // Show the vin decoder message if it exists
+              showVinMessageParagraph();
+              hideLicenseMessageParagraph();
+            } else {
+              // Hide the VIN option if it is shown
+              hidePaintCodeAppContainer(true);
+              hideVinMessageParagraph();
+              showLicenseMessageParagraph();
+            }
+            // If vin decoder was used and successful
+            hideColorPreviewContainer();
+            if (boolMatchByVIN === false) {
+
+              // If autoSelectedColor.length, then vin decoder has been used and successful
+              if (autoSelectedColor.length) {
+                combinedVariantSelect.value = autoSelectedColor;
+
+                const options = Array.from(combinedVariantSelect.options);
+                options.find(option => {
+                  const unavailableSelection = option.dataset.unavailable;
+                  const optionVariantTitle = option.dataset.variantTitle;
+                  const autoSelectedOptionTitle = autoSelectedOption.dataset.variantTitle;
+                  
+                  // If a user has a successful vin decode, but then changes quality and then
+                  // comes back to select Use VIN, this will be blank due to the autoSelectedColor
+                  // value being associated with an entirely different product
+                  if(combinedVariantSelect.value === '') {
+                      if(optionVariantTitle === autoSelectedOptionTitle) {
+                          combinedVariantSelect.value = option.value;
+                          if(unavailableSelection === "true") {
+                            showOOSPaintVariantsMsg();
+                            selectedVariantUnavailable = true;
+                            bannedPaintCode = true;
+                          } else {
+                            form.action = `/cart/add?id=${option.value}`;
+                          }
+                          return;
+                      }
+                  
+                  // If a user has a successful vin decode, but then changes paint option and comes
+                  // back to selec Use VIN, then banned paint codes message will have disappeared.
+                  // The following brings the message back
+                  } else {
+                    if(optionVariantTitle === autoSelectedOptionTitle) {
+                      if(unavailableSelection === "true") {
+                        showOOSPaintVariantsMsg();
+                        selectedVariantUnavailable = true;
+                        bannedPaintCode = true;
+                      } else {
+                        form.action = `/cart/add?id=${option.value}`;
+                      }
+                    }
+                  }
+                });
+
+                changingPaintOptions(true);
+
+                if (paintCodeWrapper) paintCodeWrapper.classList.add('show');
+
+                // Enable or disable the following components based off of whether or the VIN Decoder
+                // resulted in a banned paint code
+                if(bannedPaintCode === false) {
+                  if (precisionMatchContainerLibrary) {
+                    enablePrecisionMatchBtns();
+                  } else if (vinVerificationCheckboxGroupLibrary) {
+                    if(autoSelectedBanned) {
+                      enableOrDisableAddToCartForOEM("ISBANNED");
+                    } else {
+                      enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
+                    }
+                    enableVinVerificationBtns();
+                  } else {
+                    enableAddToCartButton();
+                  }
+                } else {
+                  if (precisionMatchContainerLibrary) {
+                    disablePrecisionMatchBtns();
+                  } else if (vinVerificationCheckboxGroupLibrary) {
+                    enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
+                    disableVinVerificationBtns();
+                  } else {
+                    disableAddToCartButton();
+                  }
+                }
+
+              // ELSE: Vin Decoder has not been used
+              } else {
+                if (paintCodeWrapper) paintCodeWrapper.classList.remove('show');
+                if (vinOrLicense === 'vin') {
+
+                  // If selected checkbox is Use VIN && !isVinDecoderExhausted
+                  if (!isVinDecoderExhausted) {
+                    showPaintCodeAppContainer();
+                  }
+                } else {
+
+                  // If selected checkbox is Use License Plate
+                  showPaintCodeAppContainerLicense();
+                }
+                disablePrecisionMatchBtns();
+                clearPrecisionMatchRadioButtons();
+                disableVinVerificationBtns();
+                clearVinVerificationRadioButtons();
+                disableAddToCartButton();
+              }
+
+              if(window.enablePrepaintedMessaging) {
+                if(decodedVINHasAvailableStock) {
+                  showPaintedStockKeyPaintDisclaimer();
+                } else {
+                  hidePaintedStockKeyPaintDisclaimer();
+                }
+
+
+              }
+
+            // If vin decoder failed
+            } else {
+              let variantSelectorArray = Array.from(combinedVariantSelect.options);
+
+              variantSelectorArray.forEach(option => {
+                if(option.textContent.includes('Match Paint by VIN')) {
+                  changingPaintOptions(true);
+                  combinedVariantSelect.value = option.value;
+                  form.action = `/cart/add?id=${option.value}`;
+                  {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
+                }
+              });
+
+              showVinMessageParagraph();
+
+              //Show combined variant select dropdown for now
+              if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
+
+              if (vinOrLicense === 'vin') {
+                // If selected checkbox is Use VIN && !isVinDecoderExhausted
+                if (!isVinDecoderExhausted) {
+                  showPaintCodeAppContainer();
+                }
+              } else {
+
+                // If selected checkbox is Use License Plate
+                showPaintCodeAppContainerLicense();
+              }
+
+              //If precision match exists, enable it
+              //If vin verification exists, but precision match does not, enable it
+              //If neither exist, enable add to cart
+              if(window.enablePrepaintedMessaging) {
+                hidePaintedStockKeyPaintDisclaimer();
+              }
+              if(precisionMatchContainerLibrary) {
+                enablePrecisionMatchBtns();
+              } else if(vinVerificationCheckboxGroupLibrary) {
+                enableVinVerificationBtns();
+              } else {
+                enableAddToCartButton();
+              }
+            }
+          }
         
 
         /*******************************************************************************************************
@@ -789,15 +981,15 @@
           const radios = document.querySelectorAll('input[name="select_paint_option"]');
           radios.forEach(radio => {
             radio.addEventListener('change', function () {
-              const vinMessageParagraph = document.querySelector('.vin-decoder-message');
-
-                //Select Paint Code
                 if (checkboxPaintOptions.checked) {
+                //Select Paint Code
                   if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
-                  if(paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
+                  hidePaintCodeAppContainer(false);
+                  hidePaintCodeAppContainerLicense(false, true);
                   combinedVariantSelect.value = combinedVariantSelect.options[0].value;
       
                   hideVinMessageParagraph();
+                  hideLicenseMessageParagraph();
 
                   if(window.enablePrepaintedMessaging) {
                     if (selectedOptionHasAvailableStock === true) showPaintedStockKeyPaintDisclaimer();
@@ -809,9 +1001,11 @@
                   clearVinVerificationRadioButtons();
                   disableAddToCartButton();
 
-                //Unpainted
                 } else if (checkboxUnpainted.checked) {
+                //Unpainted
                   hideColorPreviewContainer();
+                  hideVinMessageParagraph();
+                  hideLicenseMessageParagraph();
 
                   const dataSetPrice = combinedVariantSelect.options[1].dataset.price;
                   const formattedPrice = formatPriceToUSD(dataSetPrice);
@@ -825,7 +1019,8 @@
                   {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
                   //Show combined variant select dropdown for now
                   if(paintCodeWrapper) paintCodeWrapper.classList.remove('show');
-                  if(paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
+                  hidePaintCodeAppContainer(false);
+                  hidePaintCodeAppContainerLicense(false, true);
                   if(window.enablePrepaintedMessaging) {
                     hidePaintedStockKeyPaintDisclaimer();
                   }
@@ -835,7 +1030,7 @@
                   if(precisionMatchContainerLibrary) {
                     enablePrecisionMatchBtns();
                   } else if(vinVerificationCheckboxGroupLibrary) {
-                    enableAddToCartButton();
+                    enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
                     enableVinVerificationBtns();
                   } else {
                     enableAddToCartButton();
@@ -850,134 +1045,13 @@
                     getCountdownAndGeoValues();
                   }
 
-                //Match Paint by VIN option
+                } else if (checkboxGetPaintCodeWithVin.checked) {
+                // Vin Decoder option
+                  toggleVinDecoderContainer('vin');
+
                 } else {
-                  // If vin decoder was used and successful
-                  {% comment %} if(hasDotVinOptionAftermarket || hasDotVinOptionCapa || hasDotVinOptionOem) { {% endcomment %}
-                    hideColorPreviewContainer();
-                    if (boolMatchByVIN === false) {
-
-                      // If autoSelectedColor.length, then vin decoder has been used and successful
-                      if (autoSelectedColor.length) {
-                        combinedVariantSelect.value = autoSelectedColor;
-
-                        const options = Array.from(combinedVariantSelect.options);
-                        options.find(option => {
-                          const unavailableSelection = option.dataset.unavailable;
-                          const optionVariantTitle = option.dataset.variantTitle;
-                          const autoSelectedOptionTitle = autoSelectedOption.dataset.variantTitle;
-                          
-                          // If a user has a successful vin decode, but then changes quality and then
-                          // comes back to select Use VIN, this will be blank due to the autoSelectedColor
-                          // value being associated with an entirely different product
-                          if(combinedVariantSelect.value === '') {
-                              if(optionVariantTitle === autoSelectedOptionTitle) {
-                                  combinedVariantSelect.value = option.value;
-                                  if(unavailableSelection === "true") {
-                                    showOOSPaintVariantsMsg();
-                                    selectedVariantUnavailable = true;
-                                    bannedPaintCode = true;
-                                  } else {
-                                    form.action = `/cart/add?id=${option.value}`;
-                                  }
-                                  return;
-                              }
-                          
-                          // If a user has a successful vin decode, but then changes paint option and comes
-                          // back to selec Use VIN, then banned paint codes message will have disappeared.
-                          // The following brings the message back
-                          } else {
-                            if(optionVariantTitle === autoSelectedOptionTitle) {
-                              if(unavailableSelection === "true") {
-                                showOOSPaintVariantsMsg();
-                                selectedVariantUnavailable = true;
-                                bannedPaintCode = true;
-                              } else {
-                                form.action = `/cart/add?id=${option.value}`;
-                              }
-                            }
-                          }
-                        });
-
-                        changingPaintOptions(true);
-
-                        if (paintCodeWrapper) paintCodeWrapper.classList.add('show');
-
-                        // Enable or disable the following components based off of whether or the VIN Decoder
-                        // resulted in a banned paint code
-                        if(bannedPaintCode === false) {
-                          if (precisionMatchContainerLibrary) {
-                            enablePrecisionMatchBtns();
-                          } else if (vinVerificationCheckboxGroupLibrary) {
-                            enableVinVerificationBtns();
-                          } else {
-                            enableAddToCartButton();
-                          }
-                        } else {
-                          if (precisionMatchContainerLibrary) {
-                            disablePrecisionMatchBtns();
-                          } else if (vinVerificationCheckboxGroupLibrary) {
-                            disableVinVerificationBtns();
-                          } else {
-                            disableAddToCartButton();
-                          }
-                        }
-
-                      // ELSE: Vin Decoder has not been used
-                      } else {
-                        if (paintCodeWrapper) paintCodeWrapper.classList.remove('show');
-                        if (paintCodeAppContainer) paintCodeAppContainer.classList.add('show');
-                        disablePrecisionMatchBtns();
-                        clearPrecisionMatchRadioButtons();
-                        disableVinVerificationBtns();
-                        clearVinVerificationRadioButtons();
-                        disableAddToCartButton();
-                      }
-
-                      if(window.enablePrepaintedMessaging) {
-                        if(decodedVINHasAvailableStock) {
-                          showPaintedStockKeyPaintDisclaimer();
-                        } else {
-                          hidePaintedStockKeyPaintDisclaimer();
-                        }
-
-
-                      }
-
-                    // If vin decoder failed
-                    } else {
-                      let variantSelectorArray = Array.from(combinedVariantSelect.options);
-
-                      variantSelectorArray.forEach(option => {
-                        if(option.textContent.includes('Match Paint by VIN')) {
-                          changingPaintOptions(true);
-                          combinedVariantSelect.value = option.value;
-                          form.action = `/cart/add?id=${option.value}`;
-                          {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
-                        }
-                      });
-
-                      showVinMessageParagraph();
-
-                      //Show combined variant select dropdown for now
-                      if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
-                      if(paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
-
-                      //If precision match exists, enable it
-                      //If vin verification exists, but precision match does not, enable it
-                      //If neither exist, enable add to cart
-                      if(window.enablePrepaintedMessaging) {
-                        hidePaintedStockKeyPaintDisclaimer();
-                      }
-                      if(precisionMatchContainerLibrary) {
-                        enablePrecisionMatchBtns();
-                      } else if(vinVerificationCheckboxGroupLibrary) {
-                        enableVinVerificationBtns();
-                      } else {
-                        enableAddToCartButton();
-                      }
-                    }
-                  {% comment %} } {% endcomment %}
+                // License Plate Vin Decoder option
+                  toggleVinDecoderContainer('license');
                 }
                 clearOOSPaintCheckbox();
                 updateProgressHeaderColors();

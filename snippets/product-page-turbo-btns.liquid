@@ -141,6 +141,12 @@
 
 {% assign product_title = product.title %}
 {% assign aspiration_key_value = aspiration_key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+{% assign english_fitment_key_question = aspiration_key.question.value | remove: '[' | remove: ']' | remove: '"' %}
+{% assign spanish_fitment_key_question = aspiration_key.spanish_question.value
+  | remove: '['
+  | remove: ']'
+  | remove: '"'
+%}
 {% assign inclusions_key = aspiration_key_value | append: '_inclusions' %}
 {% assign inclusions = product.metafields.custom[inclusions_key].value %}
 {% assign exclusions_key = aspiration_key_value | append: '_exclusions' %}
@@ -149,18 +155,24 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const aspirationKey = '{{ aspiration_key.keys.value }}';
+    const fitmentQuestion = '{{ english_fitment_key_question }}';
+    console.log('Wool fitmentQuestion:', fitmentQuestion);
     const questionKeys = JSON.parse('{{ keys }}');
     const amountOfKeys = questionKeys.length;
     let currentLocale = '{{ request.locale.iso_code }}';
+    let aspirationQuestion = '';
+    if (currentLocale === 'en') {
+      aspirationQuestion = '{{ english_fitment_key_question }}';
+    } else {
+      aspirationQuestion = '{{ spanish_fitment_key_question }}';
+    }
 
     const inclusions = [
       {% for inclusion in inclusions %}
         {
           option_2: {{ inclusion.option_2.value | json }} || '',
           option_1: {{ inclusion.option_1.value | json }},
-          filter_url: {{ inclusion.filter_url.value | json }},
-          question: {{ inclusion.question.value | json }},
-          spanish_question: {{ inclusion.spanish_question.value | json }}
+          filter_url: {{ inclusion.filter_url.value | json }}
         }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     ];
@@ -169,15 +181,15 @@
         {
           option_2: {{ exclusion.option_2.value | json }} || '',
           option_1: {{ exclusion.option_1.value | json }},
-          filter_url: {{ exclusion.filter_url.value | json }},
-          question: {{ exclusion.question.value | json }},
-          spanish_question: {{ exclusion.spanish_question.value | json }}
+          filter_url: {{ exclusion.filter_url.value | json }}
         }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     ];
     // Track answers for each group
     const answers = {};
     const totalQuestions = amountOfKeys;
+
+
 
     // Show not compatible message, disable all controls except radios
     function showExclusionState(groupIndex) {
@@ -225,20 +237,6 @@
       // Remove static not-compatible button logic
       const aspirationInclusions = inclusions[0];
       const aspirationExclusions = exclusions[0];
-      let aspirationQuestion = '';
-      if (
-        inclusions &&
-        inclusions[0] &&
-        inclusions[0].question &&
-        Array.isArray(inclusions[0].question) &&
-        inclusions[0].question.length > 0
-      ) {
-        if (currentLocale === 'en') {
-          aspirationQuestion = inclusions[0].question[0];
-        } else {
-          aspirationQuestion = inclusions[0].question[1];
-        }
-      }
       const groupIndex = currentKey;
       const title = document.querySelector(`.option-title-turbo[data-group-index="${groupIndex}"]`);
       const optionsContainer = document.querySelector(`.turbo-options-container[data-group-index="${groupIndex}"]`);

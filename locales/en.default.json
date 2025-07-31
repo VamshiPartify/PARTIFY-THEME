@@ -817,7 +817,7 @@
     "no_results": "We couldn’t find a match for this VIN.",
     "use_YMM_dropdown": "Please use the year, make, model dropdowns to find your vehicle",
     "enter_valid_characters": "Please enter valid characters. I, O, Q and other special characters are not allowed in VINs.",
-    "exactly_17_characters": "VIN must be exactly 17 characters.",
+    "exactly_17_characters": "VIN must be exactly 17 characters."
   },
   "collapsing_description": {
     "description": "Description",
@@ -883,12 +883,15 @@
   "vin_decoder_product_page": {
     "first": "Using the VIN:",
     "end": "we have determined that the paint code for your vehicle is",
+    "first_license": "Using the license plate:",
     "auto_attach_msg_strong": "The VIN",
     "will_be_attached": "will be attached to this order and",
     "bold": "matched with the correct paint code",
     "for_this_item": "for this item.",
-    "force_select_first": "We couldn’t identify the paint code from the provided VIN:",
-    "force_select_second": "Please select a paint code from the dropdown menu. If you need help finding your paint code, refer to the button below."
+    "force_select_first_vin": "We couldn’t identify the paint code from the provided VIN:",
+    "force_select_first_license": "We couldn’t identify the paint code from the provided license plate:",
+    "force_select_second": "Please select a paint code from the dropdown menu. If you need help finding your paint code, refer to the button below.",
+    "failed_3_times_message": "We weren’t able to validate your VIN. You can still purchase your part without fitment verification."
   },
   "freight_shipping_popup": {
     "congratulations": "Congratulations!",
@@ -924,6 +927,8 @@
     "failed_3_times_message": "We weren’t able to validate your VIN. You can still purchase your part without fitment verification.",
     "success": "VIN is valid",
     "tailored_success_message": "VIN matched to a ",
+    "failed_attempt_vin": "We are unable to determine the paint code from your VIN: ",
+    "failed_attempt_license": "We are unable to determine the paint code from your license plate: ",
     "remaining_attempts": "Attempts remaining: ",
     "fetching_vin_data": "Please wait while we verify your vin...",
     "optional": "(Optional)",
@@ -948,6 +953,7 @@
     "unpainted": "Unpainted",
     "selection": "Select Code",
     "VIN": "Use VIN",
+    "license": "Use License Plate",
     "select_for_price": "Select for Price"
   },
   "quality_level_painted_stock": {
@@ -962,7 +968,7 @@
   "policies_footer": {
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy Policy",
-    "refund_policy": "Refund Policy",
+    "refund_policy": "Refund Policy"
   },
   "easysearch_custom_section": {
     "button_text": "SELECT OR ADD A VEHICLE",
@@ -973,5 +979,8 @@
     "header": "Additional Compatibility Questions",
     "not_compatible": "This part is not compatible with your vehicle.",
     "find_parts": "Find parts that fit your vehicle",
+  },
+  "vin_decoder": {
+    "failed_3_times_msg": "We were not able to match a paint code to your VIN. Please select a paint code from the dropdown.",
   }
 }

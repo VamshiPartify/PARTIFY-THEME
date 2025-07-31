@@ -975,7 +975,8 @@
       "bold": "coincide con el código de pintura correcto",
       "for_this_item": "para este articulo.",
       "force_select_first": "No pudimos identificar el código de pintura del VIN proporcionado:",
-      "force_select_second": "Seleccione un código de pintura del menú desplegable. Si necesita ayuda para encontrar su código de pintura, consulte el botón a continuación."
+      "force_select_second": "Seleccione un código de pintura del menú desplegable. Si necesita ayuda para encontrar su código de pintura, consulte el botón a continuación.",
+      "failed_3_times_message": "No pudimos validar su VIN. Aún puede comprar su pieza sin verificación de ajuste."
     },
     "freight_shipping_popup": {
       "congratulations": "¡Felicidades!",
@@ -1034,6 +1035,7 @@
         "unpainted": "Sin pintar",
         "selection": "Seleccionar código",
         "VIN": "Usar número de bastidor",
+        "license": "Usar matrícula",
         "select_for_price": "Seleccionar por precio"
       },
       "quality_level_painted_stock": {

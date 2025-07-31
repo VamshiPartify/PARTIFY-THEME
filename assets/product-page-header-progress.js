@@ -99,6 +99,29 @@ function isCompatibilityQuestions() {
     }
 }
 
+// function getQualityHeaderColor() {
+//     const hasProductType = !!qualityTypeSelect;
+//     const hasCombinedVariant = !!combinedVariantSelect;
+//     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
+
+
+//     //If it does not needsVin, then the OEM option was not selected
+//     if (hasProductType && hasCombinedVariant) {
+//         if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
+//         if (qualityTypeSelect.disabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
+//     }
+//     if (hasProductType && !hasCombinedVariant && hasFitmentVerification) {
+//         if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === true) return COLORS.red;
+//         if (qualityTypeSelect.disabled === false && vinVerifyCheckbboxYes.disabled === false) return COLORS.black;
+//     }
+//     if (hasProductType && !hasCombinedVariant && !hasFitmentVerification) {
+//         if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
+//         if (qualityTypeSelect.disabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
+//     }
+//     return COLORS.gray; // gray
+// }
+
+
 function getQualityHeaderColor() {
     const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;

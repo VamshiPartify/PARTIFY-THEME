@@ -3,16 +3,36 @@
 **                                             VARIABLES                                              **
 **                                                                                                    **
 *******************************************************************************************************/
+const maxAttempts = 3;
 
 let attemptedVinsInGarage = [];
 let attemptedVinsVinVerification = [];
-let garageVinSubmissionBool = false;
+let attemptedVinsOEM = [];
+let attemptedOEMVins = [];
+let attemptedDecodedVins = [];
+let attemptedDecodedLicensePlates = [];
+
 let finalVinVerificationSubmissionVin = '';
-let successfulVinVerificationVin = false;
+let garageFirstVehicleData = '';
 let themeName = '';
+let autoSelectedColor = '';
+let autoSelectedOption = '';
+let storedDecodedVin = '';
+
+
+let garageVinSubmissionBool = false;
+let successfulVinVerificationVin = false;
+let successfulVinDecoding = false;
 let alreadyLogged = false;
 let garageToCollections = false;
-let garageFirstVehicleData = '';
+let decodedVINHasAvailableStock = false;
+let autoSelectedBanned = false;
+
+const vinInputLibrary = document.querySelector('#vin-textbox');
+const vinTextboxContainer = document.getElementById("vin-textbox-container");
+
+
+
 
 
 
@@ -454,6 +474,71 @@ async function getIpAddress() {
   }
 };
 
+/**
+ * Retrieves the garage search terms from localStorage.
+ *
+ * @function
+ * @returns {Array} An array of search term objects from localStorage, or an empty array if none exist.
+ */
+function getGarageSearchTerms() {
+  return JSON.parse(localStorage.getItem('searchTerms')) || [];
+}
+
+function setVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn) {
+  const garageSearchTerms = getGarageSearchTerms();
+  if (garageSearchTerms && garageSearchTerms[0] && garageSearchTerms[0].vin) {
+    const vin = garageSearchTerms[0].vin;
+    const ymm = garageSearchTerms[0].ymm || '';
+    if (storedVinMsg) {
+      storedVinMsg.style.display = 'block';
+      if (ymm === '') {
+        storedVinMsg.textContent = `Using VIN: ${vin}`;
+      } else {
+        storedVinMsg.textContent = `Using ${vin} for your ${ymm}`;
+      }
+      vinInputBox.value = vin;
+      vinSubmitBtn.disabled = false;
+    }
+  }
+}
+
+function removeVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn) {
+  const garageSearchTerms = getGarageSearchTerms();
+  if (garageSearchTerms && garageSearchTerms[0] && garageSearchTerms[0].vin) {
+    if (storedVinMsg) {
+      storedVinMsg.style.display = 'none';
+      storedVinMsg.textContent = '';
+      vinInputBox.value = '';
+      vinSubmitBtn.disabled = true;
+    }
+  }
+}
+
+// Function to update garage and navigate
+/**
+ * Updates the VIN for a vehicle in the garage search terms and navigates to the specified collection page.
+ *
+ * @async
+ * @function
+ * @param {string} handle - The collection handle to navigate to.
+ * @param {string} vin - The Vehicle Identification Number to update and include in the redirect URL.
+ */
+// async function updateGarageAndNavigate(handle, vin, ymm) {
+//   let currentSearchTerms = getGarageSearchTerms();
+//   const vehicleIndex = currentSearchTerms.findIndex((obj) => obj.ymm === ymm);
+//   let vehicleObj = vehicleIndex > -1 ? currentSearchTerms[vehicleIndex] : null;
+
+//   // Only if the vehicle exists already, insert a VIN if it is not already present
+//   if (vehicleObj) {
+//     if (!currentSearchTerms[vehicleIndex].vin) {
+//       currentSearchTerms[vehicleIndex].vin = vin; // Update the vin in the existing object
+//       localStorage.setItem('searchTerms', JSON.stringify(currentSearchTerms));
+//     }
+//   }
+//   const redirectUrl = `/collections/${handle}${vin ? `?vin=${encodeURIComponent(vin)}` : ''}`;
+//   window.location.href = redirectUrl;
+// }
+
 /*
     functionLocation - 1 = Garage
     functionLocation - 2 = Vin Verification
@@ -512,13 +597,36 @@ function handleVinChange(event, functionLocation, errorMsg) {
     if (vinInput !== filteredValue) {
       alert(errorMsg);
     }
+  } else if (functionLocation === 3) {
+    if (attemptedDecodedVins.length) {
+      for (let i = 0; i < attemptedDecodedVins.length; i++) {
+        if (attemptedDecodedVins[i].toUpperCase() === truncatedValue.toUpperCase()) {
+          document.querySelector('.vin-decoder-submission-failed-message').style.display = 'block';
+          document.querySelector('.vin-decoder-submission-failed-message').innerHTML = 'VIN already searched. Please try a different VIN';
+          // document.getElementById('vin-to-collection-btn').disabled = true;
+          return true;
+        } else {
+          document.querySelector('.vin-decoder-submission-failed-message').style.display = 'none';
+        }
+      }
+    }
+
+    if (truncatedValue.length === 17) {
+      document.getElementById('vin-to-collection-btn').disabled = false;
+    } else {
+      document.getElementById('vin-to-collection-btn').disabled = true;
+    }
+
+    if (vinInput !== filteredValue) {
+      alert(errorMsg);
+    }
   }
 };
 
-function handleLicenseChange(event, functionLocation, errorMsg) {
+function handleLicenseChange(event, functionLocation, errorMsg, id) {
   let licenseInput = event.target.value.toUpperCase();
   event.target.value = licenseInput;
-  const licenseBtn = document.getElementById('license-to-vin-btn');
+  const licenseBtn = document.getElementById(id);
   if (licenseInput.length > 0) {
     licenseBtn.disabled = false;
   } else {
@@ -554,7 +662,6 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
       throw new Error(`Error fetching order details. Status: ${response.status}. Message: ${response.statusText}.`);
     }
     const data = await response.json();
-    console.log('data: ', data);
   } catch (error) {
     console.error("Error fetching vehicle data:", error);
   }
@@ -563,31 +670,138 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
 /*
     functionLocation - 1 = Garage
     functionLocation - 2 = Vin Verification
+    functionLocation - 3 = Vin Decoder - Vin Lookup
+    functionLocation - 4 = Vin Decoder - License Plate Lookup
+    functionLocation - 5 = OEM
 */
-async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, remainingAttempts) {
+async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, failedAttemptMsg, remainingAttempts, troublesomeMakesColors, bumperdotcommake) {
   const vinSearchBtn = document.getElementById("vin-to-collection-btn");
   const errorMessageVIN = document.querySelector('.errorMessageVIN');
-  const maxAttempts = 3;
-  const calculatedRemainingAttempts = maxAttempts - attemptedVinsVinVerification.length;
+  let calculatedRemainingAttemptsVinVerification = maxAttempts - attemptedVinsVinVerification.length;
+  let calculatedRemainingAttemptsVinDecoder = maxAttempts - attemptedDecodedVins.length;
+  let calculatedRemainingAttemptsLicenseDecoder = maxAttempts - attemptedDecodedLicensePlates.length;
   const vinGuaranteeFetchingMsg = document.querySelector('.vin-verification-fetching-vin-data');
-
-  console.log('fetchVehicleDataByVin::vin: ', vin);
+  const vinDecoderFetchingMsg = document.querySelector('.vin-decoder-fetching-vin-data');
+  let partifyLocation = await getPartifyLocation();
+  let parentUrl = window.location.href;
+  let response = '';
+  let data = '';
+  let dataResult = '';
+  let description = '';
+  let vehicleError = false;
+  let validVin = false;
+  let exteriorColors = [];
+  let colorCode = '';
+  let year = '';
+  let make = '';
+  let model = '';
+  let ymm = '';
+  let site = '';
+  let styleId = '';
+  let genericDesc = '';
+  let fullDescription = '';
+  let hex = '';
+  let errorMessage = '';
 
   try {
     if (vinGuaranteeFetchingMsg) vinGuaranteeFetchingMsg.style.display = "block";
-    const response = await fetch('https://garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        vin: vin,
-      }),
-    });
+    if (vinDecoderFetchingMsg) vinDecoderFetchingMsg.style.display = "block";
 
-    if (!response.ok) {
-      throw new Error(`Error fetching order details. Status: ${response.status}. Message: ${response.statusText}.`);
+    // Check if vin is empty.. if so, then license lookup failed
+    if (vin.length === 17) {
+      if (bumperdotcommake && bumperdotcommake === true) {
+        response = await fetch(`https://bumperdotcom-api-345230973812.us-east5.run.app/bumperdotcom-api?vin=${vin}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        data = await response.json();
+
+        if (!response.ok) {
+          validVin = false;
+          errorMessage = `Error fetching order details. Status: ${response.status}. Message: ${response.statusText}.`;
+          throw new Error(`Error fetching order details. Status: ${response.status}`);
+        }
+
+        vehicleError = data.entities.vehicles.automobiles.length === 0;
+        validVin = true;
+        exteriorColors = data.entities.vehicles.automobiles[0]?.design?.colors || [];
+        if (exteriorColors.length > 0) {
+          let exteriorCounter = 0;
+          exteriorColors.forEach((color) => {
+            if (color.category === "Exterior") {
+              if (exteriorCounter === 0) {
+                colorCode = color.code || '';
+              } else {
+                colorCode = '';
+              }
+              exteriorCounter++;
+            }
+          })
+          if (exteriorCounter > 1) {
+            errorMessage = `Too many paint codes to determine`;
+          }
+        } else {
+          errorMessage = `No exterior colors found for the provided VIN: ${vin}`;
+        }
+        description = data.entities.vehicles.automobiles[0]?.design?.current_color?.name || '';
+        year = data.entities.vehicles.automobiles[0]?.year || '';
+        make = data.entities.vehicles.automobiles[0]?.make || '';
+        model = data.entities.vehicles.automobiles[0]?.model || '';
+        ymm = `${year} ${make} ${model}`.trim();
+        site = "Bumper.com";
+        genericDesc = data.entities.vehicles.automobiles[0]?.design?.current_color?.generic_name || '';
+        fullDescription = data.entities.vehicles.automobiles[0]?.design?.current_color?.name || '';
+        hex = data.entities.vehicles.automobiles[0]?.design?.current_color?.hex || '';
+      } else {
+        response = await fetch('https://garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            vin: vin,
+          }),
+        });
+
+        if (!response.ok) {
+          if (data.vehicleData.message === "Invalid vin") {
+            validVin = false;
+          }
+          errorMessage = `Error fetching order details. Status: ${response.status}. Message: ${response.statusText}.`;
+          throw new Error(`Error fetching order details. Status: ${response.status}. Message: ${response.statusText}.`);
+        }
+
+        data = await response.json();
+        if (data.vehicleData.message === "The VIN passed was modified to convert invalid characters") {
+          errorMessage = `The VIN passed was modified to convert invalid characters.`;
+          validVin = false;
+        }
+
+        dataResult = data.vehicleData.result;
+        description = dataResult.exteriorColors[0]?.description || '';
+        vehicleError = data.vehicleData.error || false;
+        validVin = dataResult.validVin || false;
+        exteriorColors = dataResult.exteriorColors || [];
+        year = dataResult.year || '';
+        make = dataResult.make || '';
+        model = dataResult.model || '';
+        ymm = `${year} ${make} ${model}`.trim();
+        site = 'ChromeData';
+        styleId = dataResult.exteriorColors[0]?.styles[0] || '';
+        genericDesc = dataResult.exteriorColors[0]?.genericDesc || '';
+        fullDescription = dataResult.exteriorColors[0]?.description || '';
+        hex = dataResult.exteriorColors[0]?.rgbHexValue || '';
+
+        if (exteriorColors.length === 1) {
+          colorCode = exteriorColors[0]?.colorCode || '';
+        } else if (exteriorColors.length > 1) {
+          errorMessage = `Too many paint codes to determine.`;
+        }
+      }
+    } else {
+      vehicleError = true;
+      validVin = false;
     }
-    const data = await response.json();
-
+    // Garage
     if (functionLocation === 1) {
       // NOTE: The data returns the paint code here! No need to alter gcr function as I can 
       // just use the paint code from the data object here.
@@ -621,19 +835,21 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
         }
         updateGarageAndNavigate(data.year, data.make, data.model, data.submodel, data.engine, vin);
       }
+
+      // Vin Verification
     } else if (functionLocation === 2) {
       if (data.handle === '' || data.isVinValid === false) {
         if (attemptedVinsVinVerification.length < maxAttempts) {
 
           document.querySelector('.vin-verification-submission-failed-message').innerHTML = noResults;
           document.querySelector('.vin-verification-remaining-attempts').style.display = "block";
-          document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
+          document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinVerification;
         } else {
           document.querySelector('.vin-verification-submission-failed-message').innerHTML = failed3times;
-          // document.getElementById('vin-textbox-for-verification').value = '';
-          // document.getElementById('vin-textbox-for-verification').disabled = true;
+          document.getElementById('vin-textbox-for-verification').value = '';
+          document.getElementById('vin-textbox-for-verification').disabled = true;
           document.querySelector('.vin-verification-remaining-attempts').style.display = "block";
-          document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
+          document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinVerification;
           finalVinVerificationSubmissionVin = vin;
         }
         document.querySelector('.vin-verification-submission-success-message').style.display = "none";
@@ -651,9 +867,103 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
 
         return true;
       }
+
+      // Vin Decoder
+    } else if (functionLocation === 3) {
+      if (attemptedDecodedVins.length <= maxAttempts) {
+        let troublesomeMake = false;
+        if (Object.keys(troublesomeMakesColors).length > 0) troublesomeMake = true;
+
+        if (vehicleError === false || validVin === true) {
+          if (troublesomeMake === true) {
+            const keys = Object.keys(troublesomeMakesColors);
+            let matchedKey = keys.find((key) => {
+              const colorArray = key.split(',').map(color => color.trim()); // Trim spaces for clean comparison
+              return colorArray.some(color => color === description); // Check for an exact match
+            });
+            successfulVinDecoding = true;
+            if (!matchedKey) {
+              errorMessage = `Troublesome paintcode found: ${colorCode}. ${description} does not match any description in the metadata fields.`;
+            }
+            colorCode = matchedKey ? troublesomeMakesColors[matchedKey] : '';
+            return { validVin: true, ymm: ymm, paintCode: colorCode || '' };
+          } else {
+            successfulVinDecoding = true;
+            return { validVin: true, ymm: ymm, paintCode: colorCode || '' };
+          }
+        } else {
+          if (errorMessage === '') {
+            errorMessage = `Error fetching vehicle data.`;
+          }
+          document.querySelector('.vin-decoder-submission-failed-message').innerHTML = noResults;
+          document.querySelector('.vin-decoder-failed-attempt').style.display = "block";
+          document.querySelector('.vin-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+          document.querySelector('.vin-decoder-remaining-attempts').style.display = "block";
+          document.querySelector('.vin-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinDecoder;
+          return { validVin: false, ymm: '', paintCode: '' };
+        }
+      } else {
+        if (errorMessage === '') {
+          errorMessage = `Failed 3 times. Error fetching vehicle data.`;
+        }
+        // Vin Decoder failed 3 times
+        document.querySelector('.vin-decoder-submission-failed-message').innerHTML = failed3times;
+        document.querySelector('.vin-decoder-submission-failed-message').style.display = "block";
+        document.querySelector('.vin-decoder-failed-attempt').style.display = "block";
+        document.querySelector('.vin-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+        document.querySelector('.vin-decoder-remaining-attempts').style.display = "block";
+        document.querySelector('.vin-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinDecoder;
+        successfulVinDecoding = false;
+        return { validVin: false, ymm: '', paintCode: '' };
+      }
+    } else if (functionLocation === 4) {
+      if (attemptedDecodedLicensePlates.length <= maxAttempts) {
+        let troublesomeMake = false;
+        if (Object.keys(troublesomeMakesColors).length > 0) troublesomeMake = true;
+
+        if (vehicleError === false || validVin === true) {
+          if (troublesomeMake === true) {
+            const keys = Object.keys(troublesomeMakesColors);
+            let matchedKey = keys.find((key) => {
+              const colorArray = key.split(',').map(color => color.trim()); // Trim spaces for clean comparison
+              return colorArray.some(color => color === description); // Check for an exact match
+            });
+            if (!matchedKey) {
+              errorMessage = `Troublesome paintcode found: ${colorCode}. ${description} does not match any description in the metadata fields.`;
+            }
+            colorCode = matchedKey ? troublesomeMakesColors[matchedKey] : '';
+            successfulVinDecoding = true;
+            return { validVin: true, ymm: ymm, paintCode: colorCode || '' };
+          } else {
+            successfulVinDecoding = true;
+            return { validVin: true, ymm: ymm, paintCode: colorCode || '' };
+          }
+        } else {
+          if (errorMessage === '') {
+            errorMessage = `Error fetching vehicle data.`;
+          }
+          document.querySelector('.license-decoder-submission-failed-message').innerHTML = noResults;
+          document.querySelector('.license-decoder-failed-attempt').style.display = "block";
+          document.querySelector('.license-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+          document.querySelector('.license-decoder-remaining-attempts').style.display = "block";
+          document.querySelector('.license-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsLicenseDecoder;
+          return { validVin: false, ymm: '', paintCode: '' };
+        }
+      } else {
+        if (errorMessage === '') {
+          errorMessage = `Failed 3 times. Error fetching vehicle data.`;
+        }
+        document.querySelector('.license-decoder-submission-failed-message').innerHTML = failed3times;
+        document.querySelector('.license-decoder-submission-failed-message').style.display = "block";
+        document.querySelector('.license-decoder-failed-attempt').style.display = "block";
+        document.querySelector('.license-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+        document.querySelector('.license-decoder-remaining-attempts').style.display = "block";
+        document.querySelector('.license-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsLicenseDecoder;
+        successfulVinDecoding = false;
+        return { validVin: false, ymm: '', paintCode: '' };
+      }
     }
   } catch (error) {
-    console.log('attemptedVinsVinVerification: ', attemptedVinsVinVerification);
     if (functionLocation === 1) {
       if (errorMessageVIN.style.visibility === 'hidden') {
         errorMessageVIN.style.visibility = 'visible';
@@ -670,29 +980,79 @@ async function fetchVehicleDataByVin(vin, functionLocation, noResults, failed3ti
       }
       garageVinSubmissionBool = false;
     } else if (functionLocation === 2) {
+      attemptedVinsVinVerification.push(vin);
       if (attemptedVinsVinVerification.length < maxAttempts) {
         document.querySelector('.vin-verification-submission-failed-message').innerHTML = noResults;
         document.querySelector('.vin-verification-remaining-attempts').style.display = "block";
-        document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
+        document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinVerification;
       } else {
         document.querySelector('.vin-verification-submission-failed-message').innerHTML = failed3times;
         document.getElementById('vin-textbox-for-verification').disabled = true;
         document.querySelector('.vin-verification-remaining-attempts').style.display = "block";
-        document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttempts;
+        document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinVerification;
         finalVinVerificationSubmissionVin = vin;
       }
       document.querySelector('.vin-verification-submission-success-message').style.display = "none";
       document.querySelector('.vin-verification-submission-failed-message').style.display = "block";
       console.error("Error fetching vehicle data:", error);
       return false;
+    } else if (functionLocation === 3) {
+      if (attemptedDecodedVins.length <= maxAttempts) {
+        if (errorMessage === '') {
+          errorMessage = `Error fetching vehicle data: ${error.message}`;
+        }
+        document.querySelector('.vin-decoder-submission-failed-message').innerHTML = noResults;
+        document.querySelector('.vin-decoder-failed-attempt').style.display = "block";
+        document.querySelector('.vin-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+        document.querySelector('.vin-decoder-remaining-attempts').style.display = "block";
+        document.querySelector('.vin-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinDecoder;
+      } else {
+        if (errorMessage === '') {
+          errorMessage = `Failed 3 times. Error fetching vehicle data: ${error.message}`;
+        }
+        document.querySelector('.vin-decoder-submission-failed-message').innerHTML = failed3times;
+        document.querySelector('.vin-decoder-submission-failed-message').style.display = "block";
+        document.querySelector('.vin-decoder-failed-attempt').style.display = "block";
+        document.querySelector('.vin-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+        document.querySelector('.vin-decoder-remaining-attempts').style.display = "none";
+        document.querySelector('.vin-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinDecoder;
+      }
+      return { validVin: false, paintCode: '' };
+    } else if (functionLocation === 4) {
+      if (attemptedDecodedLicensePlates.length <= maxAttempts) {
+        if (errorMessage === '') {
+          errorMessage = `Error fetching vehicle data: ${error.message}`;
+        }
+        document.querySelector('.license-decoder-submission-failed-message').innerHTML = noResults;
+        document.querySelector('.license-decoder-failed-attempt').style.display = "block";
+        document.querySelector('.license-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+        document.querySelector('.license-decoder-remaining-attempts').style.display = "block";
+        document.querySelector('.license-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsLicenseDecoder;
+      } else {
+        if (errorMessage === '') {
+          errorMessage = `Failed 3 times. Error fetching vehicle data: ${error.message}`;
+        }
+        document.querySelector('.license-decoder-submission-failed-message').innerHTML = failed3times;
+        document.querySelector('.license-decoder-submission-failed-message').style.display = "block";
+        document.querySelector('.license-decoder-failed-attempt').style.display = "block";
+        document.querySelector('.license-decoder-failed-attempt').innerHTML = failedAttemptMsg + vin;
+        document.querySelector('.license-decoder-remaining-attempts').style.display = "none";
+        document.querySelector('.license-decoder-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsLicenseDecoder;
+      }
+      return { validVin: false, paintCode: '' };
     }
     console.error("Error fetching vehicle data:", error);
   } finally {
     if (vinGuaranteeFetchingMsg) vinGuaranteeFetchingMsg.style.display = "none";
+    if (vinDecoderFetchingMsg) vinDecoderFetchingMsg.style.display = "none";
 
     if (functionLocation === 1) {
       vinSearchBtn.classList.remove("vin-to-collection-btn--loading");
       vinSearchBtn.innerHTML = searchBtn;
+    }
+
+    if (functionLocation === 3 || functionLocation === 4) {
+      decoderLoggerWebhook(state, plate, vin, site, year, make, model, styleId, colorCode, errorMessage, partifyLocation, parentUrl, genericDesc, fullDescription, hex);
     }
   }
 }
@@ -735,15 +1095,249 @@ async function fetchBumpersLicenseToVin(state, plate) {
   }
 }
 
+async function handleVinDecode(
+  vinInput,
+  state,
+  licensePlate,
+  location,
+  troublesomeMakesColors,
+  bumperdotcommake,
+  failed3timesmsg,
+  noResults,
+  searchBtn,
+  tailoredSuccessMessage,
+  failedAttemptMsg,
+  remainingAttempts,
+  vinDecoderFirstMsg,
+  vinDecoderEndMsg,
+  forceSelectMsgStart,
+  forceSelectMsgEnd
+) {
+  let searchTerms = getGarageSearchTerms();
+  let exteriorColor = '';
+
+  // Returns isVinValid and Paint code (if no paint code, returns empty string)
+  const { validVin, ymm, paintCode } = await fetchVehicleDataByVin(state, licensePlate, vinInput, location, noResults, failed3timesmsg, searchBtn, tailoredSuccessMessage, failedAttemptMsg, remainingAttempts, troublesomeMakesColors, bumperdotcommake);
+
+  if (validVin) {
+    // Vin is valid and paint code is found
+    handleAutoSelectColor(
+      paintCode,
+      vinInput,
+      licensePlate,
+      location,
+      vinDecoderFirstMsg,
+      vinDecoderEndMsg,
+      forceSelectMsgStart,
+      forceSelectMsgEnd
+    );
+    searchTerms[0].vin = vinInput;
+    if (paintCode !== '') {
+      if (Array.isArray(searchTerms) && searchTerms.length > 0) {
+        const firstYMM = searchTerms[0].ymm || '';
+        if (firstYMM === ymm) {
+          searchTerms[0].paintCode = paintCode;
+        }
+      }
+    }
+    localStorage.setItem('searchTerms', JSON.stringify(searchTerms));
+    window.GarageLogic.updateGaragePopup(window.GarageUtils.getSearchTerms());
+  } else {
+    // Vin is not valid
+  }
+
+  return validVin;
+}
+
+function handleAutoSelectColor(paintCode, vinInput, licensePlate, location, decoderFirstMsg, decoderEndMsg, forceSelectMsgStart, forceSelectMsgEnd) {
+  // Reference: Vin-Decoder-app.liquid auto-select logic
+  const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
+  const paintcodeAppContainer = document.getElementById('paintcode-app-container');
+  const variantSelector = document.getElementById('variant-selector');
+  const paintedStockKeyLevel = document.querySelector('.painted-stock-key-paint-level');
+  let matchingOption = false;
+
+  if (variantSelector) {
+    const options = Array.from(variantSelector.options);
+    options.find(option => {
+      if (option.label.split(" ")[0] === paintCode) {
+        matchingOption = true;
+        if (option.textContent.includes("🚚")) {
+          decodedVINHasAvailableStock = true;
+        }
+        autoSelectedColor = option.value;
+        autoSelectedOption = option;
+        return true;
+      }
+    });
+
+    if (matchingOption) {
+      storedDecodedVin = vinInput;
+      if (autoSelectedOption.dataset.unavailable === 'true') {
+        autoSelectedBanned = true;
+      }
+      variantSelector.value = autoSelectedColor;
+      document.body.classList.remove('no-scroll-paint-swatch');
+      if (window.enablePrepaintedMessaging) {
+        if (decodedVINHasAvailableStock) {
+          paintedStockKeyLevel.style.display = 'block';
+        }
+      }
+      if (!autoSelectedBanned) {
+        // Create a new message to indicate the selected VIN
+        if (location === 3) {
+          const vinMessage = document.createElement('div');
+          vinMessage.className = 'vin-decoder-message';
+          vinMessage.style.display = 'block';
+          vinMessage.innerHTML = `
+                          <strong style="color: #444;">${decoderFirstMsg}</strong>
+                          <span style="color: #000; font-weight: 800;">${vinInput},</span>
+                          <span style="color: #444;">${decoderEndMsg}</span>
+                          <span style="color: #000; font-weight: 800;">${paintCode}</span>
+                      `;
+          if (paintCodeWrapper) paintCodeWrapper.appendChild(vinMessage);
+        }
+
+        if (location === 4) {
+          const vinMessage = document.createElement('div');
+          vinMessage.className = 'license-decoder-message';
+          vinMessage.style.display = 'block';
+          vinMessage.innerHTML = `
+                          <strong style="color: #444;">${decoderFirstMsg}</strong>
+                          <span style="color: #000; font-weight: 800;">${licensePlate},</span>
+                          <span style="color: #444;">${decoderEndMsg}</span>
+                          <span style="color: #000; font-weight: 800;">${paintCode}</span>
+                      `;
+          if (paintCodeWrapper) paintCodeWrapper.appendChild(vinMessage);
+        }
+      }
+      // Trigger the change event programmatically
+      variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
+      if (typeof vinInputLibrary !== 'undefined' && vinInputLibrary) {
+        vinInputLibrary.value = vinInput;
+      }
+    } else {
+      resortToForceSelectCode();
+      formulateForcePaintCodeSelectMsg(vinInput, licensePlate, forceSelectMsgStart, forceSelectMsgEnd, location);
+      console.warn(`No matching option found for paint code: ${paintCode} using the vin: ${vinInput}`);
+    }
+  } else {
+    console.warn('Variant selector dropdown not found.');
+  }
+  if (location === 3) {
+    const paintCodeAppContainer = document.getElementById('paintcode-app-container');
+    if (paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
+  }
+
+  if (location === 4) {
+    const paintCodeAppContainerLicense = document.getElementById('paintcode-app-container-license');
+    if (paintCodeAppContainerLicense) paintCodeAppContainerLicense.classList.remove('show');
+  }
+
+  if (paintCodeWrapper) paintCodeWrapper.classList.add('show');
+}
+
+function resortToForceSelectCode() {
+  const paintCodeWrapper = document.querySelector(".paint-code-wrapper");
+  const paintCodeCheckbox = document.getElementById('checkbox-select-paint-option');
+  paintCodeWrapper.classList.add('show');
+  paintCodeCheckbox.checked = true;
+
+  // Hide both checkboxes if they exist
+  const vinCheckboxLabel = document.querySelector('input#checkbox-get-paint-code-with-vin')?.closest('label');
+  if (vinCheckboxLabel) vinCheckboxLabel.style.display = 'none';
+
+  const licenseCheckboxLabel = document.querySelector('input#checkbox-get-paint-code-with-license')?.closest('label');
+  if (licenseCheckboxLabel) licenseCheckboxLabel.style.display = 'none';
+}
+
+
+function formulateForcePaintCodeSelectMsg(vin, licensePlate, forceSelectMsgStart, forceSelectMsgEnd, location) {
+  const vinDecoderMessage = document.querySelector('.vin-decoder-message');
+  if (!vinDecoderMessage) {
+    const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
+    // const existingMessage = vinTextboxContainer.querySelector('.vin-selected-message');
+    // vinTextboxContainer.style.display = "block";
+
+    // // Remove any existing message to avoid duplication
+    // if (existingMessage) {
+    //   existingMessage.remove();
+    // }
+
+    // Create a new message to indicate the selected VIN
+    const vinMessage = document.createElement('div');
+    vinMessage.className = 'vin-decoder-message resort-to-force-select';
+    vinMessage.style.display = 'block';
+    if (location === 3) {
+      vinMessage.innerHTML = `
+        <strong style="color: #444;">${forceSelectMsgStart}</strong> 
+        <span style="color: #000; font-weight: 800;">${vin}.</span> 
+        <span style="color: #444;">${forceSelectMsgEnd}</span> 
+      `;
+    }
+
+    if (location === 4) {
+      vinMessage.innerHTML = `
+        <strong style="color: #444;">${forceSelectMsgStart}</strong> 
+        <span style="color: #000; font-weight: 800;">${licensePlate}.</span> 
+        <span style="color: #444;">${forceSelectMsgEnd}</span> 
+      `;
+    }
+    vinMessage.style.backgroundColor = '#ffbc2c17';
+    vinMessage.style.border = '1px solid #ffae00';
+
+    failedVinDecode = true;
+
+    // Append the message to the VIN textbox container
+    paintCodeWrapper.appendChild(vinMessage);
+  }
+}
+
+async function decoderLoggerWebhook(state, plate, vin, site, year, make, model, styleId, code, error, partifyLocation, parentUrl, genericDesc, fullDescription, hex) {
+  try {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbwMc2VFphCTCLkGPdPWQ7IvBPOXFOqNIJOyNgGKiSOQzog5rLcvDyGT7VxcPw49L53T4Q/exec', {
+      redirect: "follow",
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=UTF-8",
+      },
+      body: JSON.stringify({
+        state: state,
+        plate: plate,
+        vin: vin,
+        site: site,
+        year: year,
+        make: make,
+        model: model,
+        styleId: styleId,
+        code: code,
+        error: error,
+        themeName: themeName,
+        partifyLocation: partifyLocation,
+        parentUrl: parentUrl,
+        genericDesc: genericDesc,
+        fullDescription: fullDescription,
+        hex: hex
+      }),
+    });
+
+    // If the response is not JSON, log it as text to debug
+    const text = await response.text();
+    // Try parsing the JSON only if the response status is OK
+    if (response.ok) {
+      const result = JSON.parse(text);
+      return result;
+    } else {
+      console.error('Server responded with an error:', text);
+    }
+  } catch (error) {
+    console.error("Error submitting logs:", error);
+  }
+}
+
 async function logGarageUsageToSheets(vin, plate, state, year, make, model, error, functionCall) {
   try {
-    const ip = await getIpAddress();
-    let partifyLocation = '';
-    if (ip === "107.5.210.48") {
-      partifyLocation = 'Warren';
-    } else if (ip === "98.209.126.177" || ip === "68.34.24.103" || ip === "68.34.24.104") {
-      partifyLocation = 'Fraser';
-    }
+    let partifyLocation = getPartifyLocation();
 
     const response = await fetch('https://script.google.com/macros/s/AKfycbwCZ8V4gzHelwgcdARADTgoze6bK-VKJYViFH2FgrrPslPZAaPdweVeVTgeWmEqgtOFgg/exec', {
       redirect: "follow",
@@ -777,6 +1371,19 @@ async function logGarageUsageToSheets(vin, plate, state, year, make, model, erro
   } catch (error) {
     console.error("Error submitting logs:", error);
   }
+}
+
+async function getPartifyLocation() {
+  const ip = await getIpAddress();
+
+  let partifyLocation = '';
+  if (ip === "107.5.210.48") {
+    partifyLocation = 'Warren';
+  } else if (ip === "98.209.126.177" || ip === "68.34.24.103" || ip === "68.34.24.104") {
+    partifyLocation = 'Fraser';
+  }
+
+  return partifyLocation;
 }
 
 function toggleProductDoesNotFitMsg(doesNotFit) {
@@ -881,5 +1488,23 @@ function showShopifyChat() {
   const shopifyChat = document.getElementById('shopify-chat');
   if (shopifyChat) {
     shopifyChat.style.display = 'block';
+  }
+}
+
+async function fetchVehicalDataFromBumper(vin) {
+  try {
+    const response = await fetch(`https://bumperdotcom-api-345230973812.us-east5.run.app/bumperdotcom-api?vin=${vin}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+
+    data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(`Error fetching order details. Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching vehicle data:", error);
   }
 }

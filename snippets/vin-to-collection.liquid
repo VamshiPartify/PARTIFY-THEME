@@ -612,7 +612,7 @@
     });
 
     licenseInputField.addEventListener("input", (event) => {
-      handleLicenseChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}');
+      handleLicenseChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}', 'license-to-vin-btn');
     });
 
     // Robust event delegation for both search buttons
@@ -659,7 +659,7 @@
         const noResults = '{{ 'garage.no_results' | t }}';
         const useYMM = '{{ 'garage.use_YMM_dropdown' | t }}';
         const searchBtn = '{{ 'garage.search_btn' | t }}';
-        fetchVehicleDataByVin(vin, 1, noResults, useYMM, searchBtn, '');
+        fetchVehicleDataByVin('', '', vin, 1, noResults, useYMM, searchBtn, '');
       } else {
         // License input is visible
         const stateSelect = document.querySelector('.select-styled-vin-to-collection select');
@@ -724,7 +724,7 @@
       vinInputWrapper.style.display = '';
       if (vin) {
         vinInputField.value = vin;
-        await fetchVehicleDataByVin(vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '');
+        await fetchVehicleDataByVin(stateSelect, plateInput, vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '');
       }
       licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
       garageVinSubmissionBool = false;
