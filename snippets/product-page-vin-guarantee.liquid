@@ -337,7 +337,43 @@
     }
 </style>
 
+{% assign makes_list = settings.makes_list | split: ', ' %}
+{% assign bumperdotcom_makes = settings.bumperdotcom_makes_list | split: ', ' %}
+{% assign troublesome_makes = settings.troublesome_chromedata_makes_list | split: ', ' %}
+{% assign is_makes_found = false %}
+{% assign is_excluded_make_found = false %}
+{% assign is_bumperdotcom_make_found = false %}
+{% assign is_troublesome_make = false %}
+{% assign downcase_handle = product.handle | downcase %}
+
+{% for make in makes_list %}
+  {% if downcase_handle contains make %}
+    {% assign is_makes_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% for bumperdotcom_make in bumperdotcom_makes %}
+  {% if downcase_handle contains bumperdotcom_make %}
+    {% assign is_bumperdotcom_make_found = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% for troublesome_make in troublesome_makes %}
+  {% if downcase_handle contains troublesome_make %}
+    {% assign is_troublesome_make = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<!--
+  is_makes_found means chromedata, bumper is bumper.com, and troublesome is chromedata... so if none of this, then set it to excluded
+-->
+{% unless is_makes_found == true or is_bumperdotcom_make_found == true or is_troublesome_make == true %}
+  {% assign is_excluded_make_found = true %}
+{% endunless %}
+
 <div class="vin-guarantee-container">
+  <div class="divider-large-screen"></div>
   <label class="fitment-guarantee">
     {{- 'fitment_verification.label' | t -}}
     &nbsp;
@@ -381,7 +417,7 @@
       id="vin-textbox-for-verification"
       placeholder="Enter your VIN"
       maxlength="17"
-      name="properties[Fitment Verification]"
+      name="properties[Vin]"
       value=""
       {% comment %} disabled {% endcomment %}
     >
@@ -454,6 +490,9 @@
             const vinInput = document.getElementById('vin-textbox-for-verification');
             const vinVerificationService = 'vin-verification-service';
             const fitmentVariantId = '41104835379285';
+            let isExcludedValue = '{{ is_excluded_make_found }}';
+            let isBumperdotcom = '{{ is_bumperdotcom_make_found }}' === 'true';
+            let isTroublesomeMake = '{{ is_troublesome_make }}' === 'true';
             {% comment %} const productForm = document.getElementById('product-form'); {% endcomment %}
             {% comment %} let productSku = ''; {% endcomment %}
 
@@ -557,10 +596,24 @@
             
                 // Check for VIN length
                 if (vinInput.length === 17) {
+                    const troublesomeMakesColors = {};
+                    let isBumperdotcom = '{{ is_bumperdotcom_make_found }}' === 'true';
+                    let isTroublesomeMake = '{{ is_troublesome_make }}' === 'true';
+                    {% if is_troublesome_make == true or is_troublesome_make == 'true'%}
+                      {% assign product_variants = product.variants %}
+                        {% assign variant_count = product_variants | size %}
+                        {% if variant_count > 0 %}
+                            {% for variant in product_variants %}
+                            {% if variant.metafields.custom.chromedata_reference %}
+                                    troublesomeMakesColors[{{ variant.metafields.custom.chromedata_reference }}] = '{{ variant.title }}';
+                            {% endif %}
+                            {% endfor %}
+                      {% endif %}
+                    {% endif %}
                     attemptedVinsVinVerification.push(vinInput);
                     vinInput.value = vinInput;
 
-                    await handleVinValidation(vinInput, 2);
+                    await handleVinValidation(vinInput, 2, troublesomeMakesColors);
 
                     // No matter what, enable the button if three vins have been attempted
                     if(attemptedVinsVinVerification.length === 3) {
@@ -596,14 +649,15 @@
                 }
             }
 
-            async function handleVinValidation(vinInput, location) {
+            async function handleVinValidation(vinInput, location, troublesomeMakesColors) {
                 const noResults = '{{ 'garage.no_results' | t }}';
-                const useYMM = '{{ 'fitment_verification.failed_3_times_message' | t }}';
+                const failed3times = '{{ 'fitment_verification.failed_3_times_message' | t }}';
                 const searchBtn = '{{ 'garage.search_btn' | t }}';
                 const tailoredSuccessMessage = '{{ 'fitment_verification.tailored_success_message' | t }}'
                 const remainingAttempts = '{{ 'fitment_verification.remaining_attempts' | t }}'
+                const failedAttemptMsg = '{{ 'fitment_verification.failed_attempt_vin' | t }}';
 
-                const validVin = await fetchVehicleDataByVin(vinInput, location, noResults, useYMM, searchBtn, tailoredSuccessMessage, remainingAttempts);
+                const validVin = await fetchVehicleDataByVin('', '', vinInput, location, noResults, failed3times, searchBtn, tailoredSuccessMessage, failedAttemptMsg, remainingAttempts, troublesomeMakesColors, isBumperdotcom);
               
                 if (validVin) {
                   currentAddToCartBtn.disabled = false;

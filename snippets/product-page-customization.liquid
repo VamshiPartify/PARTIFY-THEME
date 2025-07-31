@@ -751,17 +751,18 @@
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
         {% endif %}
-        {% if product.metafields.custom.aspiration_question_keys != blank %}
+        {% if product.metafields.custom.fitment_question_keys != blank %}
           <div class="required-questions-container">
             <label class="additional-options-title" style="none">
               {{ 'aspiration_questions.header' | t }}
             </label>
-            {% assign keys = product.metafields.custom.aspiration_question_keys.value %}
-            {% assign fullKeys = product.metafields.custom.aspiration_question_keys %}
+            {% assign keys = product.metafields.custom.fitment_question_keys.value %}
+            {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
             {% for key in keys %}
               {% render 'product-page-turbo-options', key_index: forloop.index0, aspiration_key: key, keys: fullKeys %}
             {% endfor %}
           </div>
+          <div class="divider"></div>
         {% endif %}
         <!-- The following if/elseif/else determines how the quality and paint options themselves are displayed -->
         {% if meta_fields > 1 %}
@@ -801,20 +802,22 @@
         <!-- Select VIN Option -->
         {% comment %} {%- if product.variants[1].sku contains '.VIN' -%} {% endcomment %}
         <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-        <div class="vin-options-container" style="display: none;">
-          <!-- Hidden Text box for VIN input -->
-          <div id="vin-textbox-container">
-            <input
-              type="hidden"
-              id="vin-textbox"
-              name="properties[VIN]"
-              placeholder="Enter your VIN"
-              maxlength="17"
-              value="{{ vinValue | default: "" }}"
-            >
-            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+        {% comment %}
+          <div class="vin-options-container" style="display: none;">
+            <!-- Hidden Text box for VIN input -->
+            <div id="vin-textbox-container">
+              <input
+                type="hidden"
+                id="vin-textbox"
+                name="properties[VIN]"
+                placeholder="Enter your VIN"
+                maxlength="17"
+                value="{{ vinValue | default: "" }}"
+              >
+              <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+            </div>
           </div>
-        </div>
+        {% endcomment %}
         {% comment %} {% endif %} {% endcomment %}
 
         <!--
@@ -835,9 +838,10 @@
             {% render 'product-page-precision-match' %}
           </div>
         {% endcomment %}
+
         {% comment %}
           {% unless is_make_excluded_from_vin_verification == true %}
-            <div class="divider-large-screen"></div>
+            {% comment %} <div class="divider-large-screen"></div> {% endcomment %}
             {% render 'product-page-vin-guarantee' %}
           {% endunless %}
         {% endcomment %}
@@ -918,12 +922,13 @@
           {% render 'product-page-paint-options' %}
         {% endif %}
         <!-- LEAVE THE FOLLOWING CODE!! Uncomment it whenever ready to use these -->
+
         {% comment %}
           {% unless is_make_excluded_from_vin_verification == true %}
-            <div class="divider-large-screen"></div>
             {% render 'product-page-vin-guarantee' %}
           {% endunless %}
         {% endcomment %}
+
         <div class="divider-small-screen"></div>
         {% render 'product-page-cart-btn', unpainted: true %}
       </div>
@@ -987,20 +992,22 @@
 
       {% comment %} {%- if product.variants[1].sku contains '.VIN' -%} {% endcomment %}
       <!-- Below is for the API calls that failed and have to resort to Get Paint by VIN -->
-      <div class="vin-options-container" style="display: none;">
-        <!-- Hidden Text box for VIN input -->
-        <div id="vin-textbox-container">
-          <input
-            type="hidden"
-            id="vin-textbox"
-            name="properties[VIN]"
-            placeholder="Enter your VIN"
-            maxlength="17"
-            value="{{ vinValue | default: "" }}"
-          >
-          <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+      {% comment %}
+        <div class="vin-options-container" style="display: none;">
+          <!-- Hidden Text box for VIN input -->
+          <div id="vin-textbox-container">
+            <input
+              type="hidden"
+              id="vin-textbox"
+              name="properties[VIN]"
+              placeholder="Enter your VIN"
+              maxlength="17"
+              value="{{ vinValue | default: "" }}"
+            >
+            <p id="vin-warning" style="color: #ff000f; display: none;">I, O, & Q are never used in VINs</p>
+          </div>
         </div>
-      </div>
+      {% endcomment %}
       {% comment %} {% endif %} {% endcomment %}
 
       {% unless is_make_found or is_bumperdotcom_make_found or rendered_vindecoder == true %}
@@ -1114,6 +1121,7 @@
             const verifyFitmentHeader = document.querySelector('.verify-fitment-title');
             const qualityHeader = document.querySelector('.option-title-quality');
             const optionTitle = document.querySelector('.option-title');
+            const oemVinContainer = document.querySelector('.oem-vin-container');
             const vinVerificationCheckboxGroup = document.querySelector('.vin-verification-checkbox-group');
             const vinVerifyCheckbboxYes = document.getElementById('fitment-yes');
             const vinVerifyCheckboxNo = document.getElementById('fitment-no');
@@ -1158,6 +1166,9 @@
               vinVerificationOptional.style.display = 'none';
               enableOrDisableAddToCartForOEM("");
             }
+
+            // Hide the fitment verification initially--unless there are no quality options and the product itself is OEM
+            hideFitmentVerificationComponent('');
 
 
 
@@ -1322,6 +1333,7 @@
                   if(!combinedVariantSelect) enableVinVerificationBtns();
                   updateProgressHeaderColors();
                 }
+                enableVINTextboxForOEM();
                 fitmentSuccess = true;
                 // --- Initialization: disable all but the first group ---
                 document.querySelectorAll('.turbo-type-select').forEach(function(group, idx) {
@@ -1364,6 +1376,9 @@
               const isOnlyOem = '{{ is_only_oem }}';
 
               if(hiddenEl) {
+                if(isOnlyOem === 'false') {
+                  if(oemVinContainer && oemVinContainer.classList.contains("show")) oemVinContainer.classList.remove("show");
+                }
                 if(window.enablePrepaintedMessaging) {
                   hidePaintedStockKeyPaintDisclaimer();
                 }
@@ -1414,9 +1429,15 @@
                         showAddToCartButton();
                         enableAddToCartButton();
                         updateProgressHeaderColors();
+                    } else if(selectedOptionCheckingForVin && fitmentSuccess && oemVinContainer.classList.contains("show") && !hasfitmentVerification) {
+                      form.action = `/cart/add?id=${combinedVariantSelect.value}`;
+                          showAddToCartButton();
+                          enableAddToCartButton();
+                          updateProgressHeaderColors();
                     } else if(selectedOptionCheckingForVin && fitmentSuccess && !hasFitmentVerification) {
                         const vinMessageParagraph = document.querySelector('.vin-decoder-message');
-                        if (vinMessageParagraph) {
+                        const licenseMessageParagraph = document.querySelector('.license-decoder-message');
+                        if (vinMessageParagraph || licenseMessageParagraph) {
                           form.action = `/cart/add?id=${combinedVariantSelect.value}`;
                           showAddToCartButton();
                           enableAddToCartButton();
@@ -1526,7 +1547,6 @@
             // Function to check if the selected variant is the VIN variant -- Displays VIN Input box if so
             function checkVariantForVinInputBox() {
                 const selectedOption = combinedVariantSelect.options[combinedVariantSelect.selectedIndex].text;
-                const vinMessageParagraph = document.querySelector('.vin-decoder-message');
                 if(vinTextBoxContainer) {
                   if (selectedOption.includes('Match Paint by VIN') || selectedOption.includes('Pintura de combinación por VIN')) {
                     //This check is if the vin decoder results in 'match paint by vin', then customer toggles off of it then back onto it
@@ -1537,7 +1557,10 @@
                       if(vinTextBoxContainer) vinTextBoxContainer.style.display = 'block';
                       updateProgressHeaderColors();
                   } else { 
+                    const vinMessageParagraph = document.querySelector('.vin-decoder-message');
+                    const licenseMessageParagraph = document.querySelector('.license-decoder-message');
                     if(vinMessageParagraph && failedVinDecode) hideVinMessageParagraph();
+                    if(licenseMessageParagraph && failedVinDecode) hideLicenseMessageParagraph();
                     if(paintOrVin) paintOrVin.style.visibility = "visible";
                     if(useVinButton) useVinButton.style.display = 'block';
                     if(failedVinDecode && !failedVinDecode) vinSuccess = false;

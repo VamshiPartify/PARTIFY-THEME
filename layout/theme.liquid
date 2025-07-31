@@ -1057,21 +1057,19 @@
         </script>
       {% endif %}
     {% endcomment %}
-    {% comment %}
-      <script>
-        function hidePostscriptPopup() {
-          const popup = document.getElementById('ps__widget_container');
-          if (popup) {
-            popup.style.display = 'none';
-          }
+    <script>
+      function hidePostscriptPopup() {
+        const popup = document.getElementById('ps__widget_container');
+        if (popup) {
+          popup.style.display = 'none';
         }
-        // Hide immediately if present
-        hidePostscriptPopup();
-        // Observe DOM changes for dynamically injected popups
-        const observer = new MutationObserver(hidePostscriptPopup);
-        observer.observe(document.body, { childList: true, subtree: true });
-      </script>
-    {% endcomment %}
+      }
+      // Hide immediately if present
+      hidePostscriptPopup();
+      // Observe DOM changes for dynamically injected popups
+      const observer = new MutationObserver(hidePostscriptPopup);
+      observer.observe(document.body, { childList: true, subtree: true });
+    </script>
 
     <!-- Viewport height fix for mobile browsers -->
     {% comment %}

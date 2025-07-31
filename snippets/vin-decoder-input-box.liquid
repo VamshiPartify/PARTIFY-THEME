@@ -10,6 +10,7 @@
     line-height: 1.5;
   }
 
+  .vin-decoder-failed-attempt,
   .vin-decoder-remaining-attempts {
       color: #e61b24;
       font-size: 14px;
@@ -169,10 +170,13 @@
     id="vin-decoder-textbox-for-verification"
     placeholder="Enter your VIN"
     maxlength="17"
-    name="properties[Fitment Verification]"
+    name="properties[VIN]"
     value=""
     {% comment %} disabled {% endcomment %}
   >
+  <div class="vin-decoder-failed-attempt" style="display: none;">
+    {{ 'fitment_verification.failed_attempt_vin' | t }}
+  </div>
   <div class="vin-decoder-remaining-attempts" style="display: none;">
     {{ 'fitment_verification.remaining_attempts' | t }}
   </div>
@@ -242,105 +246,7 @@
     });
   });
 
-    async function handleVinDecode(vinInput, location, troublesomeMakesColors, bumperdotcommake, failed3timesmsg) {
-        let searchTerms = getGarageSearchTerms();  
-        const noResults = '{{ 'garage.no_results' | t }}';
-        const searchBtn = '{{ 'garage.search_btn' | t }}';
-        const tailoredSuccessMessage = '{{ 'fitment_verification.tailored_success_message' | t }}';
-        const remainingAttempts = '{{ 'fitment_verification.remaining_attempts' | t }}';
-        let exteriorColor = '';
-
-        // Returns isVinValid and Paint code (if no paint code, returns empty string)
-        const { validVin, ymm, paintCode } = await fetchVehicalDataByVin(vinInput, location, noResults, failed3timesmsg, searchBtn, tailoredSuccessMessage, remainingAttempts, troublesomeMakesColors, bumperdotcommake);
-        console.log('validVin', validVin);
-        console.log('paintCode', paintCode);
-        console.log('ymm here', ymm);
-
-        if(validVin) {
-            // Vin is valid and paint code is found
-            handleAutoSelectColor(paintCode, vinInput);
-            searchTerms[0].vin = vinInput;
-            if(paintCode !== '') {
-              if (Array.isArray(searchTerms) && searchTerms.length > 0) {
-                const firstYMM = searchTerms[0].ymm || '';
-                if(firstYMM === ymm) {
-                  searchTerms[0].paintCode = paintCode;
-                }
-              }
-            }
-            localStorage.setItem('searchTerms', JSON.stringify(searchTerms));
-            window.GarageLogic.updateGaragePopup(window.GarageUtils.getSearchTerms());
-        } else {
-            // Vin is not valid
-        }
-        updateProgressHeaderColors();
-
-    }
-
-    function handleAutoSelectColor(paintCode, vinInput) {
-        // Reference: Vin-Decoder-app.liquid auto-select logic
-        const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
-        const variantSelector = document.getElementById('variant-selector');
-        let matchingOption = false;
-
-        if (variantSelector) {
-            const options = Array.from(variantSelector.options);
-            options.find(option => {
-                if(option.label.split(" ")[0] === paintCode) {
-                    matchingOption = true;
-                    if(option.textContent.includes("🚚")) {
-                        decodedVINHasAvailableStock = true;
-                    }
-                    autoSelectedColor = option.value;
-                    autoSelectedOption = option;
-                    return true;
-                }
-            });
-
-            if (matchingOption) {
-                storedDecodedVin = vinInput;
-                if(autoSelectedOption.dataset.unavailable === 'true') {
-                    autoSelectedBanned = true;
-                }
-                variantSelector.value = autoSelectedColor;
-                document.body.classList.remove('no-scroll-paint-swatch');
-                if(enablePrepaintedMessaging) {
-                    if (decodedVINHasAvailableStock) {
-                        if(typeof showPaintedStockKeyPaintDisclaimer === 'function') {
-                            showPaintedStockKeyPaintDisclaimer();
-                        }
-                    }
-                }
-                if(!autoSelectedBanned) {
-                    // Create a new message to indicate the selected VIN
-                    const vinMessage = document.createElement('div');
-                    vinMessage.className = 'vin-decoder-message';
-                    vinMessage.style.display = 'block';
-                    vinMessage.innerHTML = `
-                        <strong style="color: #444;">{{ 'vin_decoder_product_page.first' | t }}</strong>
-                        <span style="color: #000; font-weight: 800;">${vinInput},</span>
-                        <span style="color: #444;">{{ 'vin_decoder_product_page.end' | t }}</span>
-                        <span style="color: #000; font-weight: 800;">${paintCode}</span>
-                    `;
-                    if(paintCodeWrapper) paintCodeWrapper.appendChild(vinMessage);
-                }
-                // Trigger the change event programmatically
-                variantSelector.dispatchEvent(new Event('change', { bubbles: true }));
-            } else {
-                boolMatchByVIN = true;
-                handleMatchByVin(vinInput, true);
-                handleFormulateVinMessage(vinInput);
-                console.warn(`No matching option found for paint code: ${paintCode}`);
-            }
-        } else {
-            console.warn('Variant selector dropdown not found.');
-        }
-        if(paintCodeWrapper) paintCodeWrapper.classList.add('show');
-        const paintCodeAppContainer = document.getElementById('paintcode-app-container');
-        if(paintCodeAppContainer) paintCodeAppContainer.classList.remove('show');
-    }
-
-    function handleMatchByVin(vinInput, boolMatchByVIN) {
+    {% comment %} function handleMatchByVin(vinInput, boolMatchByVIN) {
         // Reference: resortToGetPaintCodeByVin
         const combinedVariantSelect = document.getElementById('variant-selector');
         const vin = vinInput;
@@ -407,7 +313,7 @@
             }
         }
         amountOfVINPostMessages++;
-    }
+    } {% endcomment %}
 
     function handleFormulateVinMessage(vin) {
         // Reference: formulateMessage
@@ -469,6 +375,16 @@
 
     // Add loading spinner logic and VIN submission to vin-decoder-submit-btn
     const vinSubmitBtn = document.querySelector('.vin-decoder-submit-btn');
+    const noResults = '{{ 'garage.no_results' | t }}';
+    const searchBtn = '{{ 'garage.search_btn' | t }}';
+    const tailoredSuccessMessage = '{{ 'fitment_verification.tailored_success_message' | t }}';
+    const failedAttempt = '{{ 'fitment_verification.failed_attempt_vin' | t }}';
+    const remainingAttempts = '{{ 'fitment_verification.remaining_attempts' | t }}';
+    const failed3timesmsg = '{{ 'vin_decoder.failed_3_times_msg' | t }}';
+    const vinDecoderFirstMsg = '{{ 'vin_decoder_product_page.first' | t }}';
+    const vinDecoderEndMsg = '{{ 'vin_decoder_product_page.end' | t }}';
+    const forceSelectMsgStart = '{{ 'vin_decoder_product_page.force_select_first_vin' | t }}';
+    const forceSelectMsgEnd = '{{ 'vin_decoder_product_page.force_select_second' | t }}';
     if (vinSubmitBtn) {
       vinSubmitBtn.addEventListener('click', async function() {
         if (vinSubmitBtn.disabled || vinSubmitBtn.classList.contains('vin-decoder-submit-btn--loading')) return;
@@ -497,13 +413,39 @@
         {% endif %}
         // Submission logic moved here
         attemptedDecodedVins.push(vinInput);
-        const failed3timesmsg = '{{ 'vin_decoder.failed_3_times_msg' | t }}';
-        await handleVinDecode(vinInput, 3, troublesomeMakesColors, isBumperdotcom, failed3timesmsg);
+        const isVinValidWithPaintCode = await handleVinDecode(
+          vinInput,
+          '',
+          '', 
+          3, 
+          troublesomeMakesColors, 
+          isBumperdotcom, 
+          failed3timesmsg, 
+          noResults, 
+          searchBtn, 
+          tailoredSuccessMessage, 
+          failedAttempt, 
+          remainingAttempts, 
+          vinDecoderFirstMsg, 
+          vinDecoderEndMsg,
+          forceSelectMsgStart,
+          forceSelectMsgEnd
+        );
+        if (isVinValidWithPaintCode) {
+          resortToForceSelectCode();
+          formulateForcePaintCodeSelectMsg(vinInput, '', forceSelectMsgStart, forceSelectMsgEnd, 3);
+          isVinDecoderExhausted = true;
+        }
+        updateProgressHeaderColors();
         // No matter what, enable the button if three vins have been attempted
-        if (attemptedDecodedVins.length === 3) {
+        if (attemptedDecodedVins.length === maxAttempts) {
+          isVinDecoderExhausted = true;
           if (successfulVinDecoding === false) {
             vinInputElem.value = '';
             vinInputElem.disabled = true;
+            resortToForceSelectCode();
+            formulateForcePaintCodeSelectMsg(vinInput, '', forceSelectMsgStart, forceSelectMsgEnd, 3);
+            hidePaintCodeAppContainer(false);
             disableAddToCartButton();
           } else {
             enableAddToCartButton();
