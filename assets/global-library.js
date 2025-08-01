@@ -223,17 +223,18 @@ function setSearchTerms(terms) {
 
 async function setSelectValueWhenReady(selectId, value, timeout = 3000) {
   const select = document.getElementById(selectId);
-  if (!select) return;
+  let newValue = '';
+  if (!select) return newValue;
   const start = Date.now();
   return new Promise((resolve) => {
     function trySet() {
-      // Option is present and value is not already set
       if (Array.from(select.options).some(opt => opt.value == value)) {
         select.value = value;
+        newValue = value;
         select.dispatchEvent(new Event('change', { bubbles: true }));
-        resolve();
+        resolve(newValue);
       } else if (Date.now() - start > timeout) {
-        resolve(); // Give up after timeout
+        resolve(newValue); // Timed out, value not set
       } else {
         setTimeout(trySet, 50);
       }
@@ -282,8 +283,19 @@ function updateLocalStorageValues(ymm, yearVal, makeVal, modelVal, submodelVal, 
   let fitmentValue = '';
   const easySearchBtnSearch = document.querySelector('.easysearch-btn-search');
   let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
-  fitmentValue = fields
-    .filter(f => f && f.value)
+  // Build fitmentValue from the longest non-empty prefix of fields
+  let prefix = [];
+  for (let f of fields) {
+    if (!f || f.value === '') {
+      break;
+    }
+    prefix.push(f);
+  }
+  if (prefix.length === 0) {
+    console.warn('Aborting fitmentValue creation: all fields are empty.');
+    return;
+  }
+  fitmentValue = prefix
     .map(f => f.value + 'easysearch-preselect-delimiter')
     .join('');
   const fitmentObject = {
@@ -398,31 +410,31 @@ function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineV
 };
 
 async function updateGarageAndNavigate(year, make, model, submodel, engine, vin) {
-  await setSelectValueWhenReady('easysearch_field_4973', year || '');
-  await setSelectValueWhenReady('easysearch_field_4974', make || '');
-  await setSelectValueWhenReady('easysearch_field_4975', model || '');
-  await setSelectValueWhenReady('easysearch_field_28136', submodel || '');
-  await setSelectValueWhenReady('easysearch_field_28137', engine || '');
+  const yearVal = await setSelectValueWhenReady('easysearch_field_4973', year || '');
+  const makeVal = await setSelectValueWhenReady('easysearch_field_4974', make || '');
+  const modelVal = await setSelectValueWhenReady('easysearch_field_4975', model || '');
+  const submodelVal = await setSelectValueWhenReady('easysearch_field_28136', submodel || '');
+  const engineVal = await setSelectValueWhenReady('easysearch_field_28137', engine || '');
 
 
   let formattedYmm = '';
-  if (submodel && engine) {
-    formattedYmm = `${year} ${make} ${model} ${submodel || ''} ${engine || ''}`;
-  } else if (submodel && !engine) {
-    formattedYmm = `${year} ${make} ${model} ${submodel || ''}`;
+  if (submodelVal && engineVal) {
+    formattedYmm = `${yearVal} ${makeVal} ${modelVal} ${submodelVal || ''} ${engineVal || ''}`;
+  } else if (submodelVal && !engineVal) {
+    formattedYmm = `${yearVal} ${makeVal} ${modelVal} ${submodelVal || ''}`;
   } else {
-    formattedYmm = `${year} ${make} ${model}`;
+    formattedYmm = `${yearVal} ${makeVal} ${modelVal}`;
   }
 
   moveVehicleToFront({
     ymm: formattedYmm,
     vin: vin || null,
     paintCode: null,
-    year: year || null,
-    make: make || null,
-    model: model || null,
-    submodel: submodel || null,
-    engine: engine || null,
+    year: yearVal || null,
+    make: makeVal || null,
+    model: modelVal || null,
+    submodel: submodelVal || null,
+    engine: engineVal || null,
   });
   if (!window.location.pathname.includes('/products/')) {
     const btnHolder = document.querySelector('.easysearch-btn-holder');
@@ -437,7 +449,7 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin)
     }
   } else {
     // toggleGaragePopup();
-    updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, engine);
+    updateEasysearchLocalStorageOrNavigate(yearVal, makeVal, modelVal, submodelVal, engineVal);
   }
 }
 
