@@ -183,8 +183,8 @@
     ];
 
     const currentKey = "{{key_index}}";
-    const fitmentInclusions = inclusions[0];
-    const fitmentExclusions = exclusions[0];
+    const fitmentInclusions = inclusions;
+    const fitmentExclusions = exclusions;
     const groupIndex = currentKey;
     const title = document.querySelector(`.option-title-turbo[data-group-index="${groupIndex}"]`);
     const optionsContainer = document.querySelector(`.turbo-options-container[data-group-index="${groupIndex}"]`);
@@ -246,7 +246,7 @@
         const option2 = option2Arr[idx] !== undefined ? option2Arr[idx] : '';
         const option1 = option1Arr[idx] !== undefined ? option1Arr[idx] : '';
         let value = '';
-        if (option2 && option1) {
+        if (option2.length && option1.length) {
           value = `${option2} - ${option1}`;
         } else {
           value = `${option1}`;
@@ -312,32 +312,42 @@
     }
 
     optionsContainer.innerHTML = '';
-    let hasInclusions = fitmentInclusions && fitmentInclusions.option_1 && fitmentInclusions.option_1.length > 0;
-    let hasExclusions = fitmentExclusions && fitmentExclusions.option_1 && fitmentExclusions.option_1.length > 0;
+    let hasInclusions = fitmentInclusions && fitmentInclusions[0] && fitmentInclusions[0].option_1 && fitmentInclusions[0].option_1.length > 0;
+    let hasExclusions = fitmentExclusions && fitmentExclusions[0] && fitmentExclusions[0].option_1 && fitmentExclusions[0].option_1.length > 0;
+
 
     if (hasInclusions && hasExclusions) {
       // Render both as normal
-      let option1Arr = Array.isArray(fitmentInclusions.option_1) ? fitmentInclusions.option_1 : (fitmentInclusions.option_1 ? [fitmentInclusions.option_1] : []);
-      let option2Arr = Array.isArray(fitmentInclusions.option_2) ? fitmentInclusions.option_2 : (fitmentInclusions.option_2 ? [fitmentInclusions.option_2] : []);
-      let filterUrlArr = Array.isArray(fitmentInclusions.filter_url) ? fitmentInclusions.filter_url : (fitmentInclusions.filter_url ? [fitmentInclusions.filter_url] : []);
+      let option1Arr = []
+      let option2Arr = [];
+      let filterUrlArr = [];
+      for (const option of fitmentInclusions) {
+        option1Arr.push(Array.isArray(option.option_1) ? option.option_1 : (option.option_1 ? [option.option_1] : []));
+        option2Arr.push(Array.isArray(option.option_2) ? option.option_2 : (option.option_2 ? [option.option_2] : []));
+        filterUrlArr.push(Array.isArray(option.filter_url) ? option.filter_url : (option.filter_url ? [option.filter_url] : []));
+      }
       createRadioOptions(option1Arr, option2Arr, filterUrlArr, groupIndex, 'inclusion', optionsContainer);
 
-      let option1ArrEx = Array.isArray(fitmentExclusions.option_1) ? fitmentExclusions.option_1 : (fitmentExclusions.option_1 ? [fitmentExclusions.option_1] : []);
-      let option2ArrEx = Array.isArray(fitmentExclusions.option_2) ? fitmentExclusions.option_2 : (fitmentExclusions.option_2 ? [fitmentExclusions.option_2] : []);
-      let filterUrlArrEx = Array.isArray(fitmentExclusions.filter_url) ? fitmentExclusions.filter_url : (fitmentExclusions.filter_url ? [fitmentExclusions.filter_url] : []);
+      let option1ArrEx = [];
+      let option2ArrEx = [];
+      let filterUrlArrEx = [];
+      for (const option of fitmentExclusions) {
+        option1ArrEx.push(Array.isArray(option.option_1) ? option.option_1 : (option.option_1 ? [option.option_1] : []));
+        option2ArrEx.push(Array.isArray(option.option_2) ? option.option_2 : (option.option_2 ? [option.option_2] : []));
+        filterUrlArrEx.push(Array.isArray(option.filter_url) ? option.filter_url : (option.filter_url ? [option.filter_url] : []));
+      }
       createRadioOptions(option1ArrEx, option2ArrEx, filterUrlArrEx, groupIndex, 'exclusion', optionsContainer);
     } else if (hasInclusions && !hasExclusions) {
-      let option1Arr = Array.isArray(fitmentInclusions.option_1) ? fitmentInclusions.option_1 : (fitmentInclusions.option_1 ? [fitmentInclusions.option_1] : []);
-      let option2Arr = Array.isArray(fitmentInclusions.option_2) ? fitmentInclusions.option_2 : (fitmentInclusions.option_2 ? [fitmentInclusions.option_2] : []);
-      let filterUrlArr = Array.isArray(fitmentInclusions.filter_url) ? fitmentInclusions.filter_url : (fitmentInclusions.filter_url ? [fitmentInclusions.filter_url] : []);
+      let option1Arr = [];
+      let option2Arr = [];
+      let filterUrlArr = [];
+      for (const option of fitmentInclusions) {
+        option1Arr.push(Array.isArray(option.option_1) ? option.option_1 : (option.option_1 ? [option.option_1] : []));
+        option2Arr.push(Array.isArray(option.option_2) ? option.option_2 : (option.option_2 ? [option.option_2] : []));
+        filterUrlArr.push(Array.isArray(option.filter_url) ? option.filter_url : (option.filter_url ? [option.filter_url] : []));
+      }
       createRadioOptions(option1Arr, option2Arr, filterUrlArr, groupIndex, 'inclusion', optionsContainer);
       createOtherRadio(groupIndex, 'exclusion', optionsContainer);
-    } else if (!hasInclusions && hasExclusions) {
-      let option1Arr = Array.isArray(fitmentExclusions.option_1) ? fitmentExclusions.option_1 : (fitmentExclusions.option_1 ? [fitmentExclusions.option_1] : []);
-      let option2Arr = Array.isArray(fitmentExclusions.option_2) ? fitmentExclusions.option_2 : (fitmentExclusions.option_2 ? [fitmentExclusions.option_2] : []);
-      let filterUrlArr = Array.isArray(fitmentExclusions.filter_url) ? fitmentExclusions.filter_url : (fitmentExclusions.filter_url ? [fitmentExclusions.filter_url] : []);
-      createRadioOptions(option1Arr, option2Arr, filterUrlArr, groupIndex, 'exclusion', optionsContainer);
-      createOtherRadio(groupIndex, 'inclusion', optionsContainer);
     }
 
     // Dynamically add not-compatible button for this group
