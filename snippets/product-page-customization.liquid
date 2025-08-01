@@ -751,7 +751,23 @@
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
         {% endif %}
+
+        <!-- Fitment Questions -->
+        {% assign has_fitment_questions = false %}
         {% if product.metafields.custom.fitment_question_keys != blank %}
+          {% assign keys = product.metafields.custom.fitment_question_keys.value %}
+          {% for key in keys %}
+            {% assign fitment_key_value = key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+            {% assign inclusions_key = fitment_key_value | append: '_inclusions' %}
+            {% assign inclusions = product.metafields.custom[inclusions_key].value %}
+            {% assign inclusions_json = inclusions | json %}
+
+            {% if inclusions_json != 'null' %}
+              {% assign has_fitment_questions = true %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if has_fitment_questions %}
           <div class="required-questions-container">
             <label class="additional-options-title" style="none">
               {{ 'aspiration_questions.header' | t }}
@@ -759,11 +775,12 @@
             {% assign keys = product.metafields.custom.fitment_question_keys.value %}
             {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
             {% for key in keys %}
-              {% render 'product-page-turbo-options', key_index: forloop.index0, aspiration_key: key, keys: fullKeys %}
+              {% render 'product-page-turbo-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
             {% endfor %}
           </div>
           <div class="divider"></div>
         {% endif %}
+
         <!-- The following if/elseif/else determines how the quality and paint options themselves are displayed -->
         {% if meta_fields > 1 %}
           <!-- Quality options and not OEM -->
@@ -900,6 +917,35 @@
 
         {% if product.metafields.custom.aftermarket_product != blank %}
           {% assign meta_fields = meta_fields | plus: 1 %}
+        {% endif %}
+
+        <!-- Fitment Questions -->
+        {% assign has_fitment_questions = false %}
+        {% if product.metafields.custom.fitment_question_keys != blank %}
+          {% assign keys = product.metafields.custom.fitment_question_keys.value %}
+          {% for key in keys %}
+            {% assign fitment_key_value = key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+            {% assign inclusions_key = fitment_key_value | append: '_inclusions' %}
+            {% assign inclusions = product.metafields.custom[inclusions_key].value %}
+            {% assign inclusions_json = inclusions | json %}
+
+            {% if inclusions_json != 'null' %}
+              {% assign has_fitment_questions = true %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if has_fitment_questions %}
+          <div class="required-questions-container">
+            <label class="additional-options-title" style="none">
+              {{ 'aspiration_questions.header' | t }}
+            </label>
+            {% assign keys = product.metafields.custom.fitment_question_keys.value %}
+            {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
+            {% for key in keys %}
+              {% render 'product-page-turbo-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
+            {% endfor %}
+          </div>
+          <div class="divider"></div>
         {% endif %}
 
         {% if meta_fields > 1 %}
