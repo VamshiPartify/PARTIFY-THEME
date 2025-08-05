@@ -768,14 +768,36 @@
           {% endfor %}
         {% endif %}
         {% if has_fitment_questions %}
+          {% assign keys = product.metafields.custom.fitment_question_keys.value %}
+          {% assign amount_of_keys = 0 %}
+
+          <!--
+            We must first count to see how many of the keys correspond with inclusions that are not blank.
+            If it is blank, then we want to skip this question entirely.
+          -->
+          {% for key in keys %}
+            {% assign fitment_key_value = key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+            {% assign inclusions_key = fitment_key_value | append: '_inclusions' %}
+            {% assign inclusions = product.metafields.custom[inclusions_key].value | json %}
+            {% if inclusions contains 'option_1' %}
+              {% assign amount_of_keys = amount_of_keys | plus: 1 %}
+            {% endif %}
+          {% endfor %}
           <div class="required-questions-container">
             <label class="additional-options-title" style="none">
               {{ 'aspiration_questions.header' | t }}
             </label>
-            {% assign keys = product.metafields.custom.fitment_question_keys.value %}
-            {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
             {% for key in keys %}
-              {% render 'product-page-fitment-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
+              {% assign fitment_key_value = key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+              {% assign inclusions_key = fitment_key_value | append: '_inclusions' %}
+              {% assign inclusions = product.metafields.custom[inclusions_key].value | json %}
+              {% if inclusions contains 'option_1' %}
+                {% render 'product-page-fitment-options',
+                  key_index: forloop.index0,
+                  fitment_key: key,
+                  amount_of_keys: amount_of_keys
+                %}
+              {% endif %}
             {% endfor %}
           </div>
           <div class="divider"></div>
@@ -934,15 +956,38 @@
             {% endif %}
           {% endfor %}
         {% endif %}
+
         {% if has_fitment_questions %}
+          {% assign keys = product.metafields.custom.fitment_question_keys.value %}
+          {% assign amount_of_keys = 0 %}
+
+          <!--
+            We must first count to see how many of the keys correspond with inclusions that are not blank.
+            If it is blank, then we want to skip this question entirely.
+          -->
+          {% for key in keys %}
+            {% assign fitment_key_value = key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+            {% assign inclusions_key = fitment_key_value | append: '_inclusions' %}
+            {% assign inclusions = product.metafields.custom[inclusions_key].value | json %}
+            {% if inclusions contains 'option_1' %}
+              {% assign amount_of_keys = amount_of_keys | plus: 1 %}
+            {% endif %}
+          {% endfor %}
           <div class="required-questions-container">
             <label class="additional-options-title" style="none">
               {{ 'aspiration_questions.header' | t }}
             </label>
-            {% assign keys = product.metafields.custom.fitment_question_keys.value %}
-            {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
             {% for key in keys %}
-              {% render 'product-page-fitment-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
+              {% assign fitment_key_value = key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+              {% assign inclusions_key = fitment_key_value | append: '_inclusions' %}
+              {% assign inclusions = product.metafields.custom[inclusions_key].value | json %}
+              {% if inclusions contains 'option_1' %}
+                {% render 'product-page-fitment-options',
+                  key_index: forloop.index0,
+                  fitment_key: key,
+                  amount_of_keys: amount_of_keys
+                %}
+              {% endif %}
             {% endfor %}
           </div>
           <div class="divider"></div>
