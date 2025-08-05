@@ -12,6 +12,7 @@ const checkboxGetPaintCodeWithVINAndLabel = document.querySelector('input#checkb
 const checkboxGetPaintCodeWithLicenseAndLabel = document.querySelector('input#checkbox-get-paint-code-with-license')?.closest('label');
 const colorPreviewContainerLibrary = document.querySelector('.color-preview-container-for-customizations');
 const combinedVariantSelectLibrary = document.getElementById('variant-selector');
+const fitmentDescriptionContainerLibrary = document.querySelector('.fitment-description-container');
 const form = document.getElementById('product-form');
 const getPaintCodeUsingVinLibrary = document.querySelector('.get-paint-code-using-vin');
 const howToFindPaintCodeBtnLibrary = document.getElementById('how-to-find-your-paint-code-vindecoder');
@@ -71,6 +72,7 @@ let selectedProductColor = '';
 let selectedProductTitle = '';
 let selectedProductType = '';
 let productVariants = {};
+let fitmentQuestionScrollPosition = {};
 let amountOfVINPostMessages = 0;
 let amountOfOOSPaintVariants = 0;
 let currentAddToCartBtnLibrary;
@@ -157,6 +159,13 @@ function disableFitmentSelect() {
             fitmentDescriptionContainer.parentElement.querySelector('button');
         if (nearestButton) {
             nearestButton.disabled = true;
+        }
+    }
+
+    if (fitmentDescriptionContainerLibrary) {
+        const firstFitmentQuestionButton = document.getElementById('fitment-button-description-0');
+        if (firstFitmentQuestionButton) {
+            firstFitmentQuestionButton.disabled = true;
         }
     }
 }
@@ -488,6 +497,13 @@ function enableFitmentSelect() {
         additionalOptionsTitle.classList.remove('additional-options-title-disabled');
         additionalOptionsTitle.style.color = "#e61b24";
     }
+
+    if (fitmentDescriptionContainerLibrary) {
+        const firstFitmentQuestionButton = document.getElementById('fitment-button-description-0');
+        if (firstFitmentQuestionButton) {
+            firstFitmentQuestionButton.disabled = false;
+        }
+    }
 }
 
 function showNotCompatibleMsg(groupIndex) {
@@ -672,11 +688,12 @@ function setFitmentGroupState(group, enabled, keyIndex) {
     const optionsContainer = group.querySelector('.fitment-options-container');
     const title = group.querySelector('.option-title-fitment');
     const button = document.getElementById(`fitment-button-description-${keyIndex}`);
+    // console.log('wool we are setting the fitment group state');
     if (enabled) {
         group.classList.remove('fitment-disabled');
         if (optionsContainer) optionsContainer.classList.remove('fitment-disabled');
         if (title) title.classList.remove('individual-fitment-title-disabled');
-        if (button) button.disabled = false;
+        if (button && Number(keyIndex) !== 0) button.disabled = false;
         group.querySelectorAll('.fitment-option').forEach(function (option) {
             const label = option.querySelector('label');
             if (label) label.classList.remove('individual-fitment-label-disabled');
@@ -690,7 +707,7 @@ function setFitmentGroupState(group, enabled, keyIndex) {
         group.classList.add('fitment-disabled');
         if (optionsContainer) optionsContainer.classList.add('fitment-disabled');
         if (title) title.classList.add('individual-fitment-title-disabled');
-        if (button) button.disabled = true;
+        if (button && Number(keyIndex) !== 0) button.disabled = true;
         group.querySelectorAll('.fitment-option').forEach(function (option) {
             const label = option.querySelector('label');
             if (label) label.classList.add('individual-fitment-label-disabled');
@@ -702,6 +719,36 @@ function setFitmentGroupState(group, enabled, keyIndex) {
         });
     }
 }
+
+async function fetchFitmentQuestionContent(url, currentLocale) {
+    if (!url) {
+        console.error('No URL provided for fitment key modal content.');
+        return;
+    }
+
+    if (currentLocale === 'es') {
+        let parts = url.split('.com/');
+
+        if (parts.length === 2) {
+            url = `${parts[0]}.com/es/${parts[1]}`;
+        }
+    }
+
+    try {
+        const response = await fetch(`${url}.json`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch content');
+        }
+        const data = await response.json();
+        return data.page.body_html; // Assuming the content is in the body_html of the page
+    } catch (error) {
+        const accordion = document.getElementById('fitment-accordion');
+        if (accordion) {
+            accordion.style.display = 'none';
+        }
+        console.error('Fetch error:', error);
+    }
+};
 
 
 /*******************************************************************************************************

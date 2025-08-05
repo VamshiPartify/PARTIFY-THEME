@@ -430,43 +430,8 @@
 </div>
 
 <script>
-  let fitmentQuestionScrollPosition = 0;
-
-  const fetchFitmentQuestionContent = async () => {
-    let url = '{{ fitment_key.modal_content }}';
-
-    if (!url) {
-      console.error('No URL provided for fitment key modal content.');
-      return;
-    }
-
-    if ('{{ current_locale }}' === 'es') {
-      let parts = url.split('.com/');
-
-      if (parts.length === 2) {
-        url = `${parts[0]}.com/es/${parts[1]}`;
-      }
-    }
-
-    try {
-      const response = await fetch(`${url}.json`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch content');
-      }
-      const data = await response.json();
-      return data.page.body_html; // Assuming the content is in the body_html of the page
-    } catch (error) {
-      const accordion = document.getElementById('fitment-accordion');
-      if (accordion) {
-        accordion.style.display = 'none';
-      }
-      console.error('Fetch error:', error);
-    }
-  };
-
   //Clicking on the buttons will expand that one and then close the other
-  const fitmentAccordionButtons = document.querySelectorAll('.fitment-accordion-button');
-  fitmentAccordionButtons.forEach((button) => {
+  document.querySelectorAll('.fitment-accordion-button').forEach((button) => {
     button.addEventListener('click', () => {
       accordionButtonHandle(button, '.fitment-accordion-section-{{ key_index }}');
     });
@@ -474,21 +439,23 @@
 
   // Open Modal
   document.getElementById('fitment-button-description-{{ key_index }}').onclick = function () {
-    fitmentQuestionScrollPosition = window.scrollY || document.documentElement.scrollTop;
+    fitmentQuestionScrollPosition[{{ key_index }}] = window.scrollY || document.documentElement.scrollTop;
     openQuestionModal({
       scrollLockClass: 'no-scroll-fitment',
       accordionSelector: '.fitment-accordion-section-{{ key_index }}',
       overlaySelector: '.fitment-description-popup-dark-overlay-{{ key_index }}',
       modalSelector: '.fitment-description-popup-container-{{ key_index }}',
       modalContentSelector: '.accordion-modal-content',
-      fetchContentFn: fetchFitmentQuestionContent,
+      fetchContentFn: function() {
+        return fetchFitmentQuestionContent('{{ fitment_key.modal_content }}', '{{ current_locale }}');
+      },
     });
   };
   // Close Modal (exit button)
   document.getElementById('fitment-modal-exit-{{ key_index }}').onclick = function () {
     closeQuestionModal(
       'no-scroll-fitment',
-      fitmentQuestionScrollPosition,
+      fitmentQuestionScrollPosition[{{ key_index }}],
       '.fitment-description-popup-container-{{ key_index }}',
       '.fitment-description-popup-modal-{{ key_index }}',
       '.fitment-description-popup-dark-overlay-{{ key_index }}'
@@ -499,7 +466,7 @@
   document.querySelector('.fitment-description-popup-dark-overlay-{{ key_index }}').onclick = function () {
     closeQuestionModal(
       'no-scroll-fitment',
-      fitmentQuestionScrollPosition,
+      fitmentQuestionScrollPosition[{{ key_index }}],
       '.fitment-description-popup-container-{{ key_index }}',
       '.fitment-description-popup-modal-{{ key_index }}',
       '.fitment-description-popup-dark-overlay-{{ key_index }}'
@@ -514,7 +481,7 @@
     if (event.key === 'Escape' && isModalOpen) {
       closeQuestionModal(
         'no-scroll-fitment',
-        fitmentQuestionScrollPosition,
+        fitmentQuestionScrollPosition[{{ key_index }}],
         '.fitment-description-popup-container-{{ key_index }}',
         '.fitment-description-popup-modal-{{ key_index }}',
         '.fitment-description-popup-dark-overlay-{{ key_index }}'
