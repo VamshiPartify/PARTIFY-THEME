@@ -1,80 +1,80 @@
 <style>
-      body.no-scroll-paint-swatch {
-        width: 100%;
-        height: 100%;
-        overflow: hidden !important;
-      }
+  body.no-scroll-paint-swatch {
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+  }
 
-      .htfypc-wrapper {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: start;
-      }
+  .htfypc-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+  }
 
-      .vin-decoder-product-page-container {
-        {% comment %} padding-top: 10px; {% endcomment %}
-        width: 100%;
-      }
-      .get-paint-code-using-vin {
-          background-color: #007BFF;
-          color: white;
-          border: none;
-          padding: 10px;
-          font-size: 18px;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.2s;
-          width: 100%;
-          border-radius: 6px;
-          margin-bottom: 10px;
-      }
+  .vin-decoder-product-page-container {
+    {% comment %} padding-top: 10px; {% endcomment %}
+    width: 100%;
+  }
+  .get-paint-code-using-vin {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 10px;
+  }
 
-      .get-paint-code-using-vin:hover {
-          background-color: #0056b3;
-          transform: translateY(-2px);
-      }
+  .get-paint-code-using-vin:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+  }
 
-      .get-paint-code-using-vin:active {
-          background-color: #004494;
-          transform: translateY(0);
-      }
+  .get-paint-code-using-vin:active {
+      background-color: #004494;
+      transform: translateY(0);
+  }
 
-      .get-paint-code-using-vin:disabled {
-          background-color: #f0f0f0;
-          color: #ccc;
-          cursor: no-drop;
-          opacity: 0.6;
-      }
+  .get-paint-code-using-vin:disabled {
+      background-color: #f0f0f0;
+      color: #ccc;
+      cursor: no-drop;
+      opacity: 0.6;
+  }
 
-      .vin-decoder-or {
-          text-align: center;
-          color: #6b6b6b;
-      }
+  .vin-decoder-or {
+      text-align: center;
+      color: #6b6b6b;
+  }
 
-      .close-wrapper-vin-decoder {
-          width: 100%;
-          display: flex;
-          justify-content: end;
-      }
+  .close-wrapper-vin-decoder {
+      width: 100%;
+      display: flex;
+      justify-content: end;
+  }
 
-      .close-vin-decoder {
-          background-color: unset;
-          border: none;
-          color: #e61b24;
-          cursor: pointer;
-      }
+  .close-vin-decoder {
+      background-color: unset;
+      border: none;
+      color: #e61b24;
+      cursor: pointer;
+  }
 
-      .button_svg_container {
-        display: flex;
-        justify-content: end;
-      }
+  .button_svg_container {
+    display: flex;
+    justify-content: end;
+  }
 
-      .button_svg {
-        display: flex;
-        justify-content: center;
-      }
+  .button_svg {
+    display: flex;
+    justify-content: center;
+  }
 
-      /* Accordion Style */
+
   .accordion-section {
     margin: 10px 0 0 0;
   }
@@ -110,13 +110,11 @@
     overflow: hidden;
     opacity: 0;
     transition: max-height 0.4s ease-out, opacity 0.3s ease;
-    {% comment %} background-color: #f4f6fc; {% endcomment %}
     padding: 0 15px;
     border-radius: 5px;
     margin-top: 10px;
   }
 
-  /* Show content when active */
   .accordion-content.open {
     max-height: fit-content !important;
     opacity: 1;
@@ -144,248 +142,253 @@
   }
 
 
-    .product-unfolded-popup-dark-overlay {
+  .product-unfolded-popup-dark-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    animation: fade-in 0.5s;
+  }
+
+  @keyframes fade-in {
+    from { background-color: rgba(0, 0, 0, 0); }
+    to { background-color: rgba(0, 0, 0, 0.7); }
+  }
+
+
+  @media only screen and (max-width: 450px) {
+    .unfolded-popup-container {
+      pointer-events: none;
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      z-index: 3000;
-      animation: fade-in 0.5s;
+      z-index: 5000;
+      overflow-y: auto;
+      font-family: 'Lato', sans-serif;
     }
-    @keyframes fade-in {
-      from { background-color: rgba(0, 0, 0, 0); }
-      to { background-color: rgba(0, 0, 0, 0.7); }
+    .unfolded-popup-modal {
+      pointer-events: auto;
+      position: relative;
+      width: 90%;
+      max-width: 400px;
+      background-color: white;
+      margin: 10% auto;
+      padding: 30px 20px 20px 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      border-radius: 8px;
+    }
+    .unfolded-popup-modal img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .unfolded-popup-modal h1 {
+      font-size: 30px;
+      margin-bottom: 5px;
+      text-align: left;
+      color: #373737;
+    }
+    .unfolded-popup-modal h2 {
+      font-size: 22px;
+      font-weight: 900;
+      text-align: left;
+      color: #4b4b4b;
+    }
+    .unfolded-popup-modal h4, h5 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 8px 0;
+      text-align: left;
+      color: #4b4b4b;
+      line-height: 24px;
     }
 
-      /* Phone */
-      @media only screen and (max-width: 450px) {
-        .unfolded-popup-container {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 5000;
-          overflow-y: auto;
-          font-family: 'Lato', sans-serif;
-        }
-        .unfolded-popup-modal {
-          position: relative;
-          width: 90%;
-          max-width: 400px;
-          {% comment %} min-height: 451px; {% endcomment %}
-          background-color: white;
-          margin: 10% auto;
-          padding: 30px 20px 20px 20px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-          animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          z-index: 9999;
-          border-radius: 8px;
-        }
-        .unfolded-popup-modal img {
-          max-width: 100%;
-          height: auto;
-          display: block;
-          margin: 0 auto;
-        }
-        .unfolded-popup-modal h1 {
-          font-size: 30px;
-          margin-bottom: 5px;
-          text-align: left;
-          color: #373737;
-        }
-        .unfolded-popup-modal h2 {
-          font-size: 22px;
-          font-weight: 900;
-          text-align: left;
-          color: #4b4b4b;
-        }
-        .unfolded-popup-modal h4, h5 {
-          font-size: 18px;
-          font-weight: 700;
-          margin: 8px 0;
-          text-align: left;
-          color: #4b4b4b;
-          line-height: 24px;
-        }
-
-        .unfolded-popup-modal ol {
-          font-size: 16px;
-          padding-left: 18px;
-          color: #4b4b4b;
-          font-weight: 400;
-          margin-top: 0;
-          line-height: 20px;
-        }
-        .popup-modal-content {
-          font-size: 16px;
-          line-height: 20px;
-          color: #4b4b4b;
-          font-weight: 400;
-        }
-        #modal-exit {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          font-size: 24px;
-          color: #888;
-          cursor: pointer;
-          background-color: #fff;
-          border: none;
-        }
-        #how-to-find-your-paint-code-vindecoder {
-          width:100%;
-          color: #3b3b3b;
-          background-color: #f3f3f3;
-          border: none;
-          font-size: 16px;
-          padding: 10px 12px;
-          margin-top: 10px;
-          display: block;
-          text-align: left;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.2s;
-          border-radius: 8px;
-          font-family: 'Lato', sans-serif;
-        }
-        #how-to-find-your-paint-code-vindecoder p {
-          margin: 0;
-        }
-        #how-to-find-your-paint-code-vindecoder:hover {
-          background-color: #e5e5e5;
-        }
-        #how-to-find-your-paint-code-vindecoder:active {
-          background-color: #f3f3f3;
-        }
-        #how-to-find-your-paint-code-vindecoder:disabled {
-          color: #ccc;
-          cursor: no-drop;
-          background-color: #f0f0f0;
-          opacity: 0.6;
-        }
-      }
-      /* Desktop */
-      @media only screen and (min-width: 451px) {
-        .unfolded-popup-container {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 5000;
-          overflow-y: auto;
-          font-family: 'Lato', sans-serif;
-        }
-        .unfolded-popup-modal {
-          position: relative;
-          width: 60%;
-          max-width: 800px;
-          {% comment %} min-height: 456px; {% endcomment %}
-          background-color: white;
-          margin: 5% auto;
-          padding: 40px 30px 30px 30px;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-          animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          z-index: 9999;
-          border-radius: 8px;
-        }
-        .unfolded-popup-modal img {
-          max-width: 100%;
-          height: auto;
-          display: block;
-          margin: 0 auto;
-        }
-        .unfolded-popup-modal h1 {
-          font-size: 32px;
-          margin-bottom: 5px;
-          text-align: left;
-          color: #373737;
-        }
-        .unfolded-popup-modal h2 {
-          font-size: 22px;
-          font-weight: 900;
-          margin-bottom: 24px;
-          text-align: left;
-          color: #4b4b4b;
-        }
-        .unfolded-popup-modal h4, h5 {
-          font-size: 18px;
-          font-weight: 700;
-          margin: 8px 0;
-          text-align: left;
-          color: #4b4b4b;
-          line-height: 24px;
-        }
-
-        .unfolded-popup-modal ol {
-          font-size: 16px;
-          padding-left: 18px;
-          color: #4b4b4b;
-          font-weight: 400;
-          margin-top: 0;
-          line-height: 20px;
-        }
-
-        .popup-modal-content {
-          font-size: 16px;
-          line-height: 20px;
-          color: #4b4b4b;
-          font-weight: 400;
-        }
-        #modal-exit {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          font-size: 28px;
-          color: #888;
-          cursor: pointer;
-          background-color: #fff;
-          border: none;
-        }
-        #how-to-find-your-paint-code-vindecoder {
-          width:100%;
-          color: #3b3b3b;
-          background-color: #f3f3f3;
-          border: none;
-          font-size: 18px;
-          padding: 10px 12px;
-          margin-top: 10px;
-          display: block;
-          text-align: left;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.2s;
-          border-radius: 8px;
-          font-family: 'Lato', sans-serif;
-        }
-        #how-to-find-your-paint-code-vindecoder p {
-          margin: 0;
-        }
-        #how-to-find-your-paint-code-vindecoder:hover {
-          background-color: #e5e5e5;
-        }
-        #how-to-find-your-paint-code-vindecoder:active {
-          background-color: #f3f3f3;
-        }
-        #how-to-find-your-paint-code-vindecoder:disabled {
-          color: #ccc;
-          cursor: no-drop;
-          background-color: #f0f0f0;
-          opacity: 0.6;
-        }
-      }
-      @keyframes drop-in {
-        0% { opacity: 0; transform: translateY(-50px); }
-        100% { opacity: 1; transform: translateY(0); }
-      }
-      @keyframes drop-out {
-        0% { opacity: 1; transform: translateY(0); }
-        100% { opacity: 0; transform: translateY(-50px); }
+    .unfolded-popup-modal ol {
+      font-size: 16px;
+      padding-left: 18px;
+      color: #4b4b4b;
+      font-weight: 400;
+      margin-top: 0;
+      line-height: 20px;
     }
+    .popup-modal-content {
+      font-size: 16px;
+      line-height: 20px;
+      color: #4b4b4b;
+      font-weight: 400;
+    }
+    #modal-exit {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      color: #888;
+      cursor: pointer;
+      background-color: #fff;
+      border: none;
+    }
+    #how-to-find-your-paint-code-vindecoder {
+      width:100%;
+      color: #3b3b3b;
+      background-color: #f3f3f3;
+      border: none;
+      font-size: 16px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      display: block;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+    }
+    #how-to-find-your-paint-code-vindecoder p {
+      margin: 0;
+    }
+    #how-to-find-your-paint-code-vindecoder:hover {
+      background-color: #e5e5e5;
+    }
+    #how-to-find-your-paint-code-vindecoder:active {
+      background-color: #f3f3f3;
+    }
+    #how-to-find-your-paint-code-vindecoder:disabled {
+      color: #ccc;
+      cursor: no-drop;
+      background-color: #f0f0f0;
+      opacity: 0.6;
+    }
+  }
+
+  @media only screen and (min-width: 451px) {
+    .unfolded-popup-container {
+      pointer-events: none;
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5000;
+      overflow-y: auto;
+      font-family: 'Lato', sans-serif;
+    }
+    .unfolded-popup-modal {
+      pointer-events: auto;
+      position: relative;
+      width: 60%;
+      max-width: 800px;
+      background-color: white;
+      margin: 5% auto;
+      padding: 40px 30px 30px 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      border-radius: 8px;
+    }
+    .unfolded-popup-modal img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .unfolded-popup-modal h1 {
+      font-size: 32px;
+      margin-bottom: 5px;
+      text-align: left;
+      color: #373737;
+    }
+    .unfolded-popup-modal h2 {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 24px;
+      text-align: left;
+      color: #4b4b4b;
+    }
+    .unfolded-popup-modal h4, h5 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 8px 0;
+      text-align: left;
+      color: #4b4b4b;
+      line-height: 24px;
+    }
+
+    .unfolded-popup-modal ol {
+      font-size: 16px;
+      padding-left: 18px;
+      color: #4b4b4b;
+      font-weight: 400;
+      margin-top: 0;
+      line-height: 20px;
+    }
+
+    .popup-modal-content {
+      font-size: 16px;
+      line-height: 20px;
+      color: #4b4b4b;
+      font-weight: 400;
+    }
+    #modal-exit {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 28px;
+      color: #888;
+      cursor: pointer;
+      background-color: #fff;
+      border: none;
+    }
+    #how-to-find-your-paint-code-vindecoder {
+      width:100%;
+      color: #3b3b3b;
+      background-color: #f3f3f3;
+      border: none;
+      font-size: 18px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      display: block;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+    }
+    #how-to-find-your-paint-code-vindecoder p {
+      margin: 0;
+    }
+    #how-to-find-your-paint-code-vindecoder:hover {
+      background-color: #e5e5e5;
+    }
+    #how-to-find-your-paint-code-vindecoder:active {
+      background-color: #f3f3f3;
+    }
+    #how-to-find-your-paint-code-vindecoder:disabled {
+      color: #ccc;
+      cursor: no-drop;
+      background-color: #f0f0f0;
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes drop-in {
+    0% { opacity: 0; transform: translateY(-50px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes drop-out {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-50px); }
+  }
 </style>
 
 {% assign makes = settings.makes_list | split: ', ' %}
@@ -621,12 +624,72 @@
 
 <script>
   let noPaintSwatchImage = false;
+  let paintModalScrollPosition = 0;
+
+
+  // Function to fetch content from Shopify page using Liquid
+  const fetchPageContent = async () => {
+    let url = '{{ product.metafields.custom.howtofindpaintcodeurl | escape }}';
+    if(!url) {
+      url = '{{ product.metafields.custom.how_to_find_paint_code.value.url | escape }}';
+    }
+
+    if('{{ current_locale }}' === 'es') {
+      let parts = url.split(".com/");
+
+      if (parts.length === 2) {
+          url = `${parts[0]}.com/es/${parts[1]}`;
+      }
+    }
+
+
+    try {
+      const response = await fetch(`${url}.json`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch content');
+      }
+      const data = await response.json();
+      return data.page.body_html; // Assuming the content is in the body_html of the page
+    } catch (error) {
+      noPaintSwatchImage = true;
+      if (noPaintSwatchImage) {
+        const accordion = document.getElementById("paint-code-accordion");
+        if (accordion) {
+            accordion.style.display = "none";
+            updatePaintCodeInstructions();
+        }
+    }
+      console.error('Fetch error:', error);
+      {% comment %} throw error; {% endcomment %}
+    }
+  };
+  
+  function updatePaintCodeInstructions() {
+    const instructionsContainer = document.getElementById("paint-code-instructions");
+
+    if (noPaintSwatchImage === false) {
+        instructionsContainer.innerHTML = `
+            <h4>There are two main ways to get a paint code.</h4>
+            <ol>
+              <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
+              <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
+            </ol>
+        `;
+    } else {
+        instructionsContainer.innerHTML = `
+            <h5>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</h5>
+        `;
+    }
+  }
+
+
+
     
   //Autoscrolls to paintcode section
   if(document.getElementById('instructions-link')) {
     document.getElementById('instructions-link').addEventListener('click', function(event) {
       event.preventDefault();
-          let paintCodeSection = document.getElementById('paint-code-accordion');
+      let paintCodeSection = document.getElementById('paint-code-accordion');
       
       paintCodeSection.scrollIntoView({
           behavior: 'smooth',
@@ -639,189 +702,58 @@
   const accordionButtons = document.querySelectorAll('.accordion-button');
   accordionButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const accordionSection = button.closest('.accordion-section');
-      const content = accordionSection.querySelector('.accordion-content');
-      const circlePlus = accordionSection.querySelector('.circle_plus');
-      const circleNone = accordionSection.querySelector('.circle_none');
-  
-      // Check if the clicked accordion is already open
-      const isOpen = content.classList.contains('open');
-  
-      if (isOpen) {
-        // Open the clicked accordion
-        content.classList.remove('open');
-        content.style.maxHeight = 0;
-  
-        // Show the minus icon and hide the plus icon for the active accordion
-        circlePlus.style.display = 'block';
-        circleNone.style.display = 'none';
-      }
-  
-      if (!isOpen) {
-        // Open the clicked accordion
-        content.classList.add('open');
-        content.style.maxHeight = content.scrollHeight + "px";
-  
-        // Show the minus icon and hide the plus icon for the active accordion
-        circlePlus.style.display = 'none';
-        circleNone.style.display = 'block';
-      }
-    });
-  });
-  
-  
-  
-
-    const showOverlay = () => document.querySelector(".product-unfolded-popup-dark-overlay").style.display = "block";
-    const showModal = (content) => {
-      const modalContent = document.querySelector(".popup-modal-content");
-      modalContent.innerHTML = content;
-      document.querySelector(".unfolded-popup-container").style.display = "block";
-    };
-    window.hideOverlay = () => document.querySelector(".product-unfolded-popup-dark-overlay").style.display = "none";
-    window.hideModal = () => {
-      const container = document.querySelector('.unfolded-popup-container');
-      const modal = document.querySelector('.unfolded-popup-modal');
-      const onAnimationEnd = function() {
-        modal.style.animation = '';
-        container.style.display = 'none';
-        modal.removeEventListener('animationend', onAnimationEnd);
-      };
-    
-      modal.style.animation = "drop-out 0.3s forwards";
-      modal.addEventListener('animationend', onAnimationEnd);
-    };
-
-
-    // Function to fetch content from Shopify page using Liquid
-    const fetchPageContent = async () => {
-      let url = '{{ product.metafields.custom.howtofindpaintcodeurl | escape }}';
-      if(!url) {
-        url = '{{ product.metafields.custom.how_to_find_paint_code.value.url | escape }}';
-      }
-
-      if('{{ current_locale }}' === 'es') {
-        let parts = url.split(".com/");
-
-        if (parts.length === 2) {
-            url = `${parts[0]}.com/es/${parts[1]}`;
-        }
-      }
-
-
-      try {
-        const response = await fetch(`${url}.json`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch content');
-        }
-        const data = await response.json();
-        return data.page.body_html; // Assuming the content is in the body_html of the page
-      } catch (error) {
-        noPaintSwatchImage = true;
-        if (noPaintSwatchImage) {
-          const accordion = document.getElementById("paint-code-accordion");
-          if (accordion) {
-              accordion.style.display = "none";
-              updatePaintCodeInstructions();
-          }
-      }
-        console.error('Fetch error:', error);
-        {% comment %} throw error; {% endcomment %}
-      }
-    };
-
-    let paintModalScrollPosition = 0;
-
-// Open Modal
-document.querySelector("#how-to-find-your-paint-code-vindecoder").onclick = async function() {
-  // Save current scroll position
-  paintModalScrollPosition = window.scrollY || document.documentElement.scrollTop;
-
-  hideShopifyChat();
-  showOverlay();
-
-  const accordionSection = document.querySelectorAll('.accordion-section');
-  accordionSection.forEach(section => {
-    const content = section.querySelector('.accordion-content');
-    const circlePlus = section.querySelector('.circle_plus');
-    const circleNone = section.querySelector('.circle_none');
-    const isOpen = content.classList.contains('open');
-
-    // Auto expands the accordion
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        if (!isOpen) {
-          // Open the clicked accordion
-          content.classList.add('open');
-          content.style.maxHeight = content.scrollHeight + 'px';  // Dynamically set maxHeight to scrollHeight
-
-          // Show the minus icon and hide the plus icon for the active accordion
-          circlePlus.style.display = 'none';
-          circleNone.style.display = 'block';
-        }
-      }, 500);
+      accordionButtonHandle(button, '.accordion-section');
     });
   });
 
-  try {
-    // Lock scroll and show the modal
-    document.body.classList.add('no-scroll-paint-swatch');
-    const pageContent = await fetchPageContent();
-    showModal(pageContent);
-  } catch (error) {
-    console.error('Error fetching page content how-to-find-paint-code:', error);
-  }
-};
 
-// Close Modal
-const closeModal = () => {
-  // Remove scroll lock and restore scroll position
-  document.body.classList.remove('no-scroll-paint-swatch');
-  window.scrollTo(0, paintModalScrollPosition); // Restore scroll position
+  // Open Modal
+  document.querySelector("#how-to-find-your-paint-code-vindecoder").onclick = function() {
+    paintModalScrollPosition = window.scrollY || document.documentElement.scrollTop;
+    openQuestionModal({
+      scrollLockClass: 'no-scroll-paint-swatch',
+      accordionSelector: '.accordion-section',
+      overlaySelector: '.product-unfolded-popup-dark-overlay',
+      modalSelector: '.unfolded-popup-container',
+      modalContentSelector: '.popup-modal-content',
+      fetchContentFn: fetchPageContent // your async function
+    });
+  };
 
-  // Show Shopify chat and hide overlay
-  showShopifyChat();
-  hideOverlay();
-  hideModal();
-};
+  // Close Modal (exit button)
+  document.getElementById("modal-exit").onclick = function() {
+    closeQuestionModal(
+      'no-scroll-paint-swatch',
+      paintModalScrollPosition,
+      '.unfolded-popup-container',
+      '.unfolded-popup-modal',
+      '.product-unfolded-popup-dark-overlay'
+    );
+  };
+  // Close Modal (click outside)
+  document.querySelector('.product-unfolded-popup-dark-overlay').onclick = function() {
+    closeQuestionModal(
+      'no-scroll-paint-swatch',
+      paintModalScrollPosition,
+      '.unfolded-popup-container',
+      '.unfolded-popup-modal',
+      '.product-unfolded-popup-dark-overlay'
+    );
+  };
 
-// Close Modal (exit button)
-document.getElementById("modal-exit").onclick = closeModal;
-
-// Close Modal (click outside)
-window.onclick = function(event) {
-  if (event.target === document.querySelector('.unfolded-popup-container')) {
-    closeModal();
-  }
-};
-
-// Close Modal (ESC key)
-document.addEventListener("keydown", (event) => {
-  event.stopPropagation();
-  const modal = document.querySelector('.unfolded-popup-container');
-  const isModalOpen = modal && modal.style.display === 'block';
-  if (event.key === "Escape" && isModalOpen) {
-    closeModal();
-  }
-});
-
-
-    
-    function updatePaintCodeInstructions() {
-      const instructionsContainer = document.getElementById("paint-code-instructions");
-  
-      if (noPaintSwatchImage === false) {
-          instructionsContainer.innerHTML = `
-              <h4>There are two main ways to get a paint code.</h4>
-              <ol>
-                <li>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</li>
-                <li>You can find your paint code on your vehicle using <a href="#" id="instructions-link"><b>these instructions here.</b></a></li>
-              </ol>
-          `;
-      } else {
-          instructionsContainer.innerHTML = `
-              <h5>Use our free <b>VIN deciphering service</b> to help you find your paint code. Simply enter your VIN, and we’ll provide the code.</h5>
-          `;
-      }
+  // Close Modal (ESC key)
+  document.addEventListener("keydown", (event) => {
+    event.stopPropagation();
+    const modal = document.querySelector('.unfolded-popup-container');
+    const isModalOpen = modal && modal.style.display === 'block';
+    if (event.key === "Escape" && isModalOpen) {
+      closeQuestionModal(
+        'no-scroll-paint-swatch',
+        paintModalScrollPosition,
+        '.unfolded-popup-container',
+        '.unfolded-popup-modal',
+        '.product-unfolded-popup-dark-overlay'
+      );
     }
+  });
 </script>

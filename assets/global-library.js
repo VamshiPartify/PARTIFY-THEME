@@ -1488,6 +1488,133 @@ function generateCollectionHandle(vehicleData) {
   return collectionHandle;
 }
 
+function openQuestionModal({
+  scrollLockClass = 'no-scroll-paint-swatch',
+  accordionSelector = '.accordion-section',
+  overlaySelector = '.product-unfolded-popup-dark-overlay',
+  modalSelector = '.unfolded-popup-container',
+  modalContentSelector = '.popup-modal-content',
+  fetchContentFn = null // async function to fetch content, if needed
+}) {
+  // Save scroll position globally
+  // window.paintModalScrollPosition = window.scrollY || document.documentElement.scrollTop;
+
+  // Optionally expand accordions
+  if (accordionSelector) {
+    const accordionSections = document.querySelectorAll(accordionSelector);
+    accordionSections.forEach(section => {
+      const content = section.querySelector('.accordion-content');
+      const circlePlus = section.querySelector('.circle_plus');
+      const circleNone = section.querySelector('.circle_none');
+      const isOpen = content.classList.contains('open');
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          if (!isOpen) {
+            content.classList.add('open');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            if (circlePlus) circlePlus.style.display = 'none';
+            if (circleNone) circleNone.style.display = 'block';
+          }
+        }, 500);
+      });
+    });
+  }
+
+  // Lock scroll
+  document.body.classList.add(scrollLockClass);
+
+  // Hide Shopify chat
+  if (typeof hideShopifyChat === 'function') hideShopifyChat();
+
+  // Show overlay
+  if (overlaySelector) {
+    const overlay = document.querySelector(overlaySelector);
+    if (overlay) overlay.style.display = 'block';
+  }
+
+  // Show modal and set content
+  if (modalSelector) {
+    document.querySelector(modalSelector).style.display = 'block';
+  }
+  if (fetchContentFn && modalContentSelector) {
+    fetchContentFn().then(pageContent => {
+      document.querySelector(modalContentSelector).innerHTML = pageContent;
+    }).catch(error => {
+      console.error('Error fetching modal content:', error);
+    });
+  }
+}
+
+function showQuestionModal(content, showContent, modalElement, containerElement) {
+  const modalContent = document.querySelector(modalElement);
+  if (showContent) {
+    modalContent.innerHTML = content;
+  }
+  document.querySelector(containerElement).style.display = "block";
+}
+
+function closeQuestionModal(noScrollElement, scrollPosition, containerElement, modalElement, overlayElement) {
+  // Remove scroll lock and restore scroll position
+  document.body.classList.remove(noScrollElement);
+  window.scrollTo(0, scrollPosition); // Restore scroll position
+
+  // Show Shopify chat and hide overlay
+  showShopifyChat();
+  hideQuestionModalOverlay(overlayElement);
+  hideQuestionModal(containerElement, modalElement);
+}
+
+function hideQuestionModal(containerElement, modalElement) {
+  const container = document.querySelector(containerElement);
+  const modal = document.querySelector(modalElement);
+  const onAnimationEnd = function () {
+    modal.style.animation = '';
+    container.style.display = 'none';
+    modal.removeEventListener('animationend', onAnimationEnd);
+  };
+
+  modal.style.animation = "drop-out 0.3s forwards";
+  modal.addEventListener('animationend', onAnimationEnd);
+}
+
+function hideQuestionModalOverlay(overlayElement) {
+  document.querySelector(overlayElement).style.display = "none";
+}
+
+function showQuestionModalOverlay(overlayElement) {
+  document.querySelector(overlayElement).style.display = "block";
+}
+
+function accordionButtonHandle(button, section) {
+  const accordionSection = button.closest(section);
+  const content = accordionSection.querySelector('.accordion-content');
+  const circlePlus = accordionSection.querySelector('.circle_plus');
+  const circleNone = accordionSection.querySelector('.circle_none');
+
+  // Check if the clicked accordion is already open
+  const isOpen = content.classList.contains('open');
+
+  if (isOpen) {
+    // Open the clicked accordion
+    content.classList.remove('open');
+    content.style.maxHeight = 0;
+
+    // Show the minus icon and hide the plus icon for the active accordion
+    circlePlus.style.display = 'block';
+    circleNone.style.display = 'none';
+  }
+
+  if (!isOpen) {
+    // Open the clicked accordion
+    content.classList.add('open');
+    content.style.maxHeight = content.scrollHeight + "px";
+
+    // Show the minus icon and hide the plus icon for the active accordion
+    circlePlus.style.display = 'none';
+    circleNone.style.display = 'block';
+  }
+}
+
 function hideShopifyChat() {
   const shopifyChat = document.getElementById('shopify-chat');
   if (shopifyChat) {

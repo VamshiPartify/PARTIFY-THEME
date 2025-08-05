@@ -18,8 +18,8 @@ const precisionMatchLabel = document.querySelector('.precision-match-guarantee')
 const precisionMatchCheckboxYesLibrary = document.getElementById('precision-match');
 const precisionMatchWrapperLibrary = document.querySelector('.product-page-precision-match-wrapper');
 const additionalOptionsTitle = document.querySelector('.additional-options-title');
-const turboHeader = document.querySelectorAll('.option-title-turbo');
-const turboTypeSelect = document.querySelector('.turbo-type-select');
+const fitmentHeader = document.querySelectorAll('.option-title-fitment');
+const fitmentTypeSelect = document.querySelector('.fitment-type-select');
 const requiredAspirationsContainer = document.querySelector('.required-questions-container');
 
 let currentAddToCartBtn;
@@ -49,23 +49,22 @@ const COLORS = {
 
 
 // Progressive header colors -- STEPS
-function resetAllHeaderColors(fail, turbo) {
+function resetAllHeaderColors(fail) {
     // fail is a bool that determines color of fitment header based on whether or not the fitment is in focus
     if (fail) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
     } else {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.black;
     }
-    if (!turbo) {
-        //if(turboHeader)turboHeader.style.color = COLORS.gray;
-        turboHeader.forEach(function (header) {
-            header.style.color = COLORS.gray; // or any color you want
-        });
-    }
     if (qualityHeader) qualityHeader.style.color = COLORS.gray;
     if (vinHeader) vinHeader.style.color = COLORS.gray;
     if (optionTitle) optionTitle.style.color = COLORS.gray;
     if (fitmentVerificationTitle) fitmentVerificationTitle.style.color = COLORS.gray;
+    if (fitmentHeader) {
+        fitmentHeader.forEach(function (header) {
+            header.style.color = COLORS.gray;
+        });
+    }
 }
 function isFitmentVerified() {
     // No need for checks here as the fitment checker is present on all product pages
@@ -79,23 +78,23 @@ function isCompatibilityQuestions() {
     const hasProductType = !!qualityTypeSelect;
     const hasCombinedVariant = !!combinedVariantSelect;
     const hasFitmentVerification = !!vinVerificationCheckboxGroup;
-    let turboSectionDisabled = false;
+    let fitmentSectionDisabled = false;
 
-    if (turboTypeSelect && turboTypeSelect.classList.contains('turbo-disabled')) {
-        turboSectionDisabled = true;
+    if (fitmentTypeSelect && fitmentTypeSelect.classList.contains('fitment-disabled')) {
+        fitmentSectionDisabled = true;
     }
 
     if (hasCompatibilityQuestions && hasProductType) {
-        if (turboSectionDisabled === false && qualityTypeSelect.disabled === true) return COLORS.red;
-        if (turboSectionDisabled === false && qualityTypeSelect.disabled === false) return COLORS.black;
+        if (fitmentSectionDisabled === false && qualityTypeSelect.disabled === true) return COLORS.red;
+        if (fitmentSectionDisabled === false && qualityTypeSelect.disabled === false) return COLORS.black;
     }
     if (hasCompatibilityQuestions && !hasProductType && hasCombinedVariant) {
-        if (turboSectionDisabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
-        if (turboSectionDisabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
+        if (fitmentSectionDisabled === false && combinedVariantSelect.disabled === true) return COLORS.red;
+        if (fitmentSectionDisabled === false && combinedVariantSelect.disabled === false) return COLORS.black;
     }
     if (hasCompatibilityQuestions && !hasProductType && !hasCombinedVariant) {
-        if (turboSectionDisabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
-        if (turboSectionDisabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
+        if (fitmentSectionDisabled === false && currentAddToCartBtn.disabled === true) return COLORS.red;
+        if (fitmentSectionDisabled === false && currentAddToCartBtn.disabled === false) return COLORS.black;
     }
 }
 
@@ -153,8 +152,8 @@ function getQualityHeaderColor() {
     return COLORS.gray; // gray
 }
 
-function getTurboHeaderColor() {
-    if (turboTypeSelect && !turboTypeSelect.classList.contains('turbo-disabled')) {
+function getfitmentHeaderColor() {
+    if (fitmentTypeSelect && !fitmentTypeSelect.classList.contains('fitment-disabled')) {
         return COLORS.black;
     } else {
         return COLORS.gray;
@@ -339,10 +338,10 @@ function updateProgressHeaderColors() {
     const qualityHeaderColor = getQualityHeaderColor();
     if (qualityHeader) qualityHeader.style.color = qualityHeaderColor;
 
-    if (turboHeader) {
-        const turboHeaderColor = getTurboHeaderColor();
-        turboHeader.forEach(function (header) {
-            header.style.color = turboHeaderColor;
+    if (fitmentHeader) {
+        const fitmentHeaderColor = getfitmentHeaderColor();
+        fitmentHeader.forEach(function (header) {
+            header.style.color = fitmentHeaderColor;
         });
     }
 

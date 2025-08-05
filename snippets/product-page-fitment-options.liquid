@@ -1,5 +1,5 @@
 <style>
-  .product-aspiration-questions select {
+  .product-fitment-questions select {
     color: #000;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -13,12 +13,12 @@
     height: 45px;
     margin-bottom: 10px;
   }
-  .product-aspiration-questions {
+  .product-fitment-questions {
     display: flex;
     flex-direction: column;
     width: 100%;
   }
-  .product-aspiration-questions select[disabled] {
+  .product-fitment-questions select[disabled] {
     background-color: #f0f0f0;
     color: #ccc;
     pointer-events: none;
@@ -26,6 +26,6 @@
   }
 </style>
 
-<div class="product-aspiration-questions">
-  {% render 'product-page-turbo-btns', key_index: key_index, fitment_key: fitment_key, keys: keys %}
+<div class="product-fitment-questions">
+  {% render 'product-page-fitment-btns', key_index: key_index, fitment_key: fitment_key, keys: keys %}
 </div>

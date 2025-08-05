@@ -1,30 +1,27 @@
 <style>
-      body.no-scroll-quality {
-        {% comment %} position: fixed;
-        top: 0;
-        left: 0; {% endcomment %}
-        width: 100%;
-        height: 100%;
-        overflow: hidden !important;
-      }
+  body.no-scroll-quality {
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+  }
 
-      .quality-description-wrapper {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: start;
-      }
+  .quality-description-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+  }
 
-      .button_svg_container {
-        display: flex;
-        justify-content: end;
-      }
+  .button_svg_container {
+    display: flex;
+    justify-content: end;
+  }
 
-      .button_svg {
-        display: flex;
-        justify-content: center;
-      }
-      /* Accordion Style */
+  .button_svg {
+    display: flex;
+    justify-content: center;
+  }
+
   .quality-accordion-section {
     margin: 10px 0 0 0;
   }
@@ -60,13 +57,11 @@
     overflow: hidden;
     opacity: 0;
     transition: max-height 0.4s ease-out, opacity 0.3s ease;
-    {% comment %} background-color: #f4f6fc; {% endcomment %}
     padding: 0 15px;
     border-radius: 5px;
     margin-top: 10px;
   }
 
-  /* Show content when active */
   .accordion-content.open {
     max-height: 400px;
     opacity: 1;
@@ -93,249 +88,270 @@
     align-items: center;
   }
 
-
-      .quality-description-popup-dark-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        z-index: 3000;
-        animation: fade-in 0.5s;
-      }
-      @keyframes fade-in {
-        from { background-color: rgba(0, 0, 0, 0); }
-        to { background-color: rgba(0, 0, 0, 0.7); }
-      }
-      /* Phone */
-      @media only screen and (max-width: 450px) {
-        .quality-description-popup-container {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 5000;
-          overflow-y: auto;
-          font-family: 'Lato', sans-serif;
-        }
-        .quality-description-popup-modal {
-          position: relative;
-          width: 90%;
-          max-width: 400px;
-          {% comment %} min-height: 451px; {% endcomment %}
-          background-color: white;
-          margin: 10% auto;
-          padding: 30px 20px 20px 20px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-          animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          z-index: 9999;
-          border-radius: 8px;
-        }
-        .quality-description-popup-modal img {
-          max-width: 100%;
-          height: auto;
-          display: block;
-          margin: 0 auto;
-        }
-        .quality-description-popup-modal h1 {
-          font-size: 30px;
-          margin-bottom: 5px;
-          text-align: left;
-          color: #373737;
-        }
-        .quality-description-popup-modal h2 {
-          font-size: 20px;
-          font-weight: 900;
-          margin-bottom: 24px;
-          text-align: left;
-          color: #4b4b4b;
-        }
-        .quality-description-popup-modal h4, h5 {
-          font-size: 18px;
-          font-weight: 700;
-          margin: 8px 0;
-          text-align: left;
-          color: #4b4b4b;
-          line-height: 24px;
-        }
-
-        .quality-description-popup-modal ol {
-          font-size: 16px;
-          padding-left: 18px;
-          color: #4b4b4b;
-          font-weight: 400;
-          margin-top: 0;
-          line-height: 20px;
-        }
-        .popup-modal-content {
-          font-size: 16px;
-          line-height: 20px;
-          color: #4b4b4b;
-          font-weight: 400;
-        }
-        #quality-modal-exit {
-          position: absolute;
-          top: 10px;
-          right: 0;
-          font-size: 24px;
-          color: #888;
-          cursor: pointer;
-          background-color: #fff;
-          border: none;
-        }
-        #quality-description-vindecoder {
-          width:100%;
-          color: #3b3b3b;
-          background-color: #f3f3f3;
-          border: none;
-          font-size: 16px;
-          padding: 10px 12px;
-          display: block;
-          text-align: left;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.2s;
-          border-radius: 8px;
-          font-family: 'Lato', sans-serif;
-        }
-        #quality-description-vindecoder p {
-          margin: 0;
-        }
-        #quality-description-vindecoder:hover {
-          background-color: #e5e5e5;
-        }
-        #quality-description-vindecoder:active {
-          background-color: #f3f3f3;
-        }
-        #quality-description-vindecoder:disabled {
-          color: #ccc;
-          cursor: no-drop;
-          background-color: #f0f0f0;
-          opacity: 0.6;
-        }
-      }
-      /* Desktop */
-      @media only screen and (min-width: 451px) {
-        .quality-description-popup-container {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 5000;
-          overflow-y: auto;
-          font-family: 'Lato', sans-serif;
-        }
-        .quality-description-popup-modal {
-          position: relative;
-          width: 60%;
-          max-width: 800px;
-          {% comment %} min-height: 456px; {% endcomment %}
-          background-color: white;
-          margin: 5% auto;
-          padding: 40px 30px 30px 30px;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-          animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          z-index: 9999;
-          border-radius: 8px;
-        }
-        .quality-description-popup-modal img {
-          max-width: 100%;
-          height: auto;
-          display: block;
-          margin: 0 auto;
-        }
-        .quality-description-popup-modal h1 {
-          font-size: 32px;
-          margin-bottom: 5px;
-          text-align: left;
-          color: #373737;
-        }
-        .quality-description-popup-modal h2 {
-          font-size: 20px;
-          font-weight: 900;
-          margin-bottom: 24px;
-          text-align: left;
-          color: #4b4b4b;
-        }
-        .quality-description-popup-modal h4, h5 {
-          font-size: 18px;
-          font-weight: 700;
-          margin: 8px 0;
-          text-align: left;
-          color: #4b4b4b;
-          line-height: 24px;
-        }
-
-        .quality-description-popup-modal ol {
-          font-size: 16px;
-          padding-left: 18px;
-          color: #4b4b4b;
-          font-weight: 400;
-          margin-top: 0;
-          line-height: 20px;
-        }
-
-        .popup-modal-content {
-          font-size: 16px;
-          line-height: 20px;
-          color: #4b4b4b;
-          font-weight: 400;
-        }
-        #quality-modal-exit {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          font-size: 28px;
-          color: #888;
-          cursor: pointer;
-          background-color: #fff;
-          border: none;
-        }
-        #quality-description-vindecoder {
-          width:100%;
-          color: #3b3b3b;
-          background-color: #f3f3f3;
-          border: none;
-          font-size: 18px;
-          padding: 10px 12px;
-          {% comment %} margin: 20px 0; {% endcomment %}
-          display: block;
-          text-align: left;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.2s;
-          border-radius: 8px;
-          font-family: 'Lato', sans-serif;
-        }
-        #quality-description-vindecoder p {
-          margin: 0;
-        }
-        #quality-description-vindecoder:hover {
-          background-color: #e5e5e5;
-        }
-        #quality-description-vindecoder:active {
-          background-color: #f3f3f3;
-        }
-        #quality-description-vindecoder:disabled {
-          color: #ccc;
-          cursor: no-drop;
-          background-color: #f0f0f0;
-          opacity: 0.6;
-        }
-      }
-      @keyframes drop-in {
-        0% { opacity: 0; transform: translateY(-50px); }
-        100% { opacity: 1; transform: translateY(0); }
-      }
-      @keyframes drop-out {
-        0% { opacity: 1; transform: translateY(0); }
-        100% { opacity: 0; transform: translateY(-50px); }
+  .quality-description-popup-dark-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    animation: fade-in 0.5s;
+  }
+  @keyframes fade-in {
+    from {
+      background-color: rgba(0, 0, 0, 0);
     }
+    to {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+  }
+  /* Phone */
+  @media only screen and (max-width: 450px) {
+    .quality-description-popup-container {
+      pointer-events: none;
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5000;
+      overflow-y: auto;
+      font-family: 'Lato', sans-serif;
+    }
+    .quality-description-popup-modal {
+      pointer-events: auto;
+      position: relative;
+      width: 90%;
+      max-width: 400px;
+      background-color: white;
+      margin: 10% auto;
+      padding: 30px 20px 20px 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      border-radius: 8px;
+    }
+    .quality-description-popup-modal img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .quality-description-popup-modal h1 {
+      font-size: 30px;
+      margin-bottom: 5px;
+      text-align: left;
+      color: #373737;
+    }
+    .quality-description-popup-modal h2 {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 24px;
+      text-align: left;
+      color: #4b4b4b;
+    }
+    .quality-description-popup-modal h4,
+    h5 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 8px 0;
+      text-align: left;
+      color: #4b4b4b;
+      line-height: 24px;
+    }
+
+    .quality-description-popup-modal ol {
+      font-size: 16px;
+      padding-left: 18px;
+      color: #4b4b4b;
+      font-weight: 400;
+      margin-top: 0;
+      line-height: 20px;
+    }
+    .popup-modal-content {
+      font-size: 16px;
+      line-height: 20px;
+      color: #4b4b4b;
+      font-weight: 400;
+    }
+    #quality-modal-exit {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      font-size: 24px;
+      color: #888;
+      cursor: pointer;
+      background-color: #fff;
+      border: none;
+    }
+    #quality-description-vindecoder {
+      width: 100%;
+      color: #3b3b3b;
+      background-color: #f3f3f3;
+      border: none;
+      font-size: 16px;
+      padding: 10px 12px;
+      display: block;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+    }
+    #quality-description-vindecoder p {
+      margin: 0;
+    }
+    #quality-description-vindecoder:hover {
+      background-color: #e5e5e5;
+    }
+    #quality-description-vindecoder:active {
+      background-color: #f3f3f3;
+    }
+    #quality-description-vindecoder:disabled {
+      color: #ccc;
+      cursor: no-drop;
+      background-color: #f0f0f0;
+      opacity: 0.6;
+    }
+  }
+  /* Desktop */
+  @media only screen and (min-width: 451px) {
+    .quality-description-popup-container {
+      pointer-events: none;
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5000;
+      overflow-y: auto;
+      font-family: 'Lato', sans-serif;
+    }
+    .quality-description-popup-modal {
+      pointer-events: auto;
+      position: relative;
+      width: 60%;
+      max-width: 800px;
+      background-color: white;
+      margin: 5% auto;
+      padding: 40px 30px 30px 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: drop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      border-radius: 8px;
+    }
+    .quality-description-popup-modal img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .quality-description-popup-modal h1 {
+      font-size: 32px;
+      margin-bottom: 5px;
+      text-align: left;
+      color: #373737;
+    }
+    .quality-description-popup-modal h2 {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 24px;
+      text-align: left;
+      color: #4b4b4b;
+    }
+    .quality-description-popup-modal h4,
+    h5 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 8px 0;
+      text-align: left;
+      color: #4b4b4b;
+      line-height: 24px;
+    }
+
+    .quality-description-popup-modal ol {
+      font-size: 16px;
+      padding-left: 18px;
+      color: #4b4b4b;
+      font-weight: 400;
+      margin-top: 0;
+      line-height: 20px;
+    }
+
+    .popup-modal-content {
+      font-size: 16px;
+      line-height: 20px;
+      color: #4b4b4b;
+      font-weight: 400;
+    }
+    #quality-modal-exit {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 28px;
+      color: #888;
+      cursor: pointer;
+      background-color: #fff;
+      border: none;
+    }
+    #quality-description-vindecoder {
+      width: 100%;
+      color: #3b3b3b;
+      background-color: #f3f3f3;
+      border: none;
+      font-size: 18px;
+      padding: 10px 12px;
+      display: block;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      border-radius: 8px;
+      font-family: 'Lato', sans-serif;
+    }
+    #quality-description-vindecoder p {
+      margin: 0;
+    }
+    #quality-description-vindecoder:hover {
+      background-color: #e5e5e5;
+    }
+    #quality-description-vindecoder:active {
+      background-color: #f3f3f3;
+    }
+    #quality-description-vindecoder:disabled {
+      color: #ccc;
+      cursor: no-drop;
+      background-color: #f0f0f0;
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes drop-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes drop-out {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+  }
 </style>
+
 <button id="quality-description-vindecoder" type="button" class="btn" disabled>
   <div class="quality-description-wrapper">
     <p id="quality-button-text">
@@ -547,131 +563,63 @@
 </div>
 
 <script>
-    {% comment %} function hideShopifyChat() {
-      const shopifyChat = document.getElementById('shopify-chat');
-      if (shopifyChat) {
-        shopifyChat.style.display = 'none';
-      }
-    }
-  
-  function showShopifyChat() {
-    const shopifyChat = document.getElementById('shopify-chat');
-    if (shopifyChat) {
-      shopifyChat.style.display = 'block';
-    }
-  } {% endcomment %}
+  let scrollPosition = 0;
 
   //Clicking on the buttons will expand that one and then close the other
   const qualityAccordionButtons = document.querySelectorAll('.quality-accordion-button');
-  qualityAccordionButtons.forEach(button => {
+  qualityAccordionButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const accordionSection = button.closest('.quality-accordion-section');
-      const content = accordionSection.querySelector('.accordion-content');
-      const circlePlus = accordionSection.querySelector('.circle_plus');
-      const circleNone = accordionSection.querySelector('.circle_none');
-  
-      // Check if the clicked accordion is already open
-      const isOpen = content.classList.contains('open');
-  
-      if (isOpen) {
-        // Open the clicked accordion
-        content.classList.remove('open');
-        content.style.maxHeight = 0;
-  
-        // Show the minus icon and hide the plus icon for the active accordion
-        circlePlus.style.display = 'block';
-        circleNone.style.display = 'none';
-      }
-  
-      if (!isOpen) {
-        // Open the clicked accordion
-        content.classList.add('open');
-        content.style.maxHeight = content.scrollHeight + "px";
-  
-        // Show the minus icon and hide the plus icon for the active accordion
-        circlePlus.style.display = 'none';
-        circleNone.style.display = 'block';
-      }
+      accordionButtonHandle(button, '.quality-accordion-section');
     });
   });
-  
-  
-  
 
-    const showQualityOverlay = () => document.querySelector(".quality-description-popup-dark-overlay").style.display = "block";
-    const showQualityModal = () => {
-      const modalContent = document.querySelector(".popup-modal-content");
-      {% comment %} modalContent.innerHTML = content; {% endcomment %}
-      document.querySelector(".quality-description-popup-container").style.display = "block";
-    };
-    const hideQualityOverlay = () => document.querySelector(".quality-description-popup-dark-overlay").style.display = "none";
-    const hideQualityModal = () => {
-      const container = document.querySelector('.quality-description-popup-container');
-      const modal = document.querySelector('.quality-description-popup-modal');
-      const onAnimationEnd = function() {
-        modal.style.animation = '';
-        container.style.display = 'none';
-        modal.removeEventListener('animationend', onAnimationEnd);
-      };
-    
-      modal.style.animation = "drop-out 0.3s forwards";
-      modal.addEventListener('animationend', onAnimationEnd);
-    };
-
-
-    let scrollPosition = 0;
-
-    const openQualityModal = () => {
-      // Save current scroll position
-      scrollPosition = window.scrollY || document.documentElement.scrollTop;
-    
-      // Add class to prevent scroll
-      document.body.classList.add('no-scroll-quality');
-    
-      // Lock scroll by offsetting the body position
-      document.body.style.top = `-${scrollPosition}px`;
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-    
-      // Show overlay and modal
-      document.querySelector('.quality-description-popup-dark-overlay').style.display = 'block';
-      document.querySelector('.quality-description-popup-container').style.display = 'block';
-    };
-    
-    const closeQualityModal = () => {
-      // Remove scroll lock classes and styles
-      document.body.classList.remove('no-scroll-quality');
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-    
-      // Restore scroll position
-      window.scrollTo(0, scrollPosition);
-    
-      // Hide overlay and modal
-      document.querySelector('.quality-description-popup-dark-overlay').style.display = 'none';
-      document.querySelector('.quality-description-popup-container').style.display = 'none';
-    };
-   
-    // Open Modal
-    document.getElementById("quality-description-vindecoder")?.addEventListener("click", openQualityModal);
-    
-    // Close Modal (exit button)
-    document.getElementById("quality-modal-exit")?.addEventListener("click", closeQualityModal);
-    
-    // Close Modal (click outside)
-    document.querySelector('.quality-description-popup-dark-overlay')?.addEventListener("click", () => {
-      closeQualityModal();
+  // Open Modal
+  document.getElementById('quality-description-vindecoder').onclick = function () {
+    scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    openQuestionModal({
+      scrollLockClass: 'no-scroll-quality',
+      accordionSelector: '.accordion-section',
+      overlaySelector: '.quality-description-popup-dark-overlay',
+      modalSelector: '.quality-description-popup-container',
+      modalContentSelector: null,
+      fetchContentFn: null,
     });
-    
-    
-    // Close Modal (ESC key)
-    document.addEventListener("keydown", (event) => {
-      event.stopPropagation();
-      const modal = document.querySelector('.quality-description-popup-container');
-      const isModalOpen = modal && modal.style.display === 'block';
-      if (event.key === "Escape" && isModalOpen) {
-        closeQualityModal();
-      }
-    });
+  };
+  // Close Modal (exit button)
+  document.getElementById('quality-modal-exit').onclick = function () {
+    closeQuestionModal(
+      'no-scroll-quality',
+      scrollPosition,
+      '.quality-description-popup-container',
+      '.quality-description-popup-modal',
+      '.quality-description-popup-dark-overlay'
+    );
+  };
+
+  // Close Modal (click outside)
+  document.querySelector('.quality-description-popup-dark-overlay').onclick = function () {
+    closeQuestionModal(
+      'no-scroll-quality',
+      scrollPosition,
+      '.quality-description-popup-container',
+      '.quality-description-popup-modal',
+      '.quality-description-popup-dark-overlay'
+    );
+  };
+
+  // Close Modal (ESC key)
+  document.addEventListener('keydown', (event) => {
+    event.stopPropagation();
+    const modal = document.querySelector('.quality-description-popup-container');
+    const isModalOpen = modal && modal.style.display === 'block';
+    if (event.key === 'Escape' && isModalOpen) {
+      closeQuestionModal(
+        'no-scroll-quality',
+        scrollPosition,
+        '.quality-description-popup-container',
+        '.quality-description-popup-modal',
+        '.quality-description-popup-dark-overlay'
+      );
+    }
+  });
 </script>

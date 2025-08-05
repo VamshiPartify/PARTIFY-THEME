@@ -775,7 +775,7 @@
             {% assign keys = product.metafields.custom.fitment_question_keys.value %}
             {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
             {% for key in keys %}
-              {% render 'product-page-turbo-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
+              {% render 'product-page-fitment-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
             {% endfor %}
           </div>
           <div class="divider"></div>
@@ -942,7 +942,7 @@
             {% assign keys = product.metafields.custom.fitment_question_keys.value %}
             {% assign fullKeys = product.metafields.custom.fitment_question_keys %}
             {% for key in keys %}
-              {% render 'product-page-turbo-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
+              {% render 'product-page-fitment-options', key_index: forloop.index0, fitment_key: key, keys: fullKeys %}
             {% endfor %}
           </div>
           <div class="divider"></div>
@@ -1298,7 +1298,7 @@
                 disableSelectVinVariantBtn();
                 disableVINTextboxForOEM();
                 hideNotCompatibleMsg();
-                disableTurboSelect();
+                disableFitmentSelect();
                 fitmentSuccess = false;
                 {% comment %} toggleProductDoesNotFitMsg(false); {% endcomment %}
 
@@ -1327,7 +1327,7 @@
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
                 hideNotCompatibleMsg();
-                disableTurboSelect();
+                disableFitmentSelect();
 
                 //The following two are for the vin decoder button and how to find paint code button
                 disablehowToFindPaintCodeBtn();
@@ -1353,7 +1353,7 @@
                 const event = new Event('eventFitmentSuccess');
                 successEl.dispatchEvent(event);
                 if(aspirationQuestionsContainer) {
-                  enableTurboSelect();
+                  enableFitmentSelect();
                 }
                 if(!aspirationQuestionsContainer && qualityTypeSelect) {
                   productSelect = qualityTypeSelect.value;
@@ -1382,8 +1382,8 @@
                 enableVINTextboxForOEM();
                 fitmentSuccess = true;
                 // --- Initialization: disable all but the first group ---
-                document.querySelectorAll('.turbo-type-select').forEach(function(group, idx) {
-                  setTurboGroupState(group, idx === 0);
+                document.querySelectorAll('.fitment-type-select').forEach(function(group, idx) {
+                  setFitmentGroupState(group, idx === 0, 0);
                 });
 
               // Anything else (never should enter this)
@@ -1402,7 +1402,7 @@
                 clearVinVerificationRadioButtons();
                 disableAddToCartButton();
                 hideNotCompatibleMsg();
-                disableTurboSelect();
+                disableFitmentSelect();
 
                 //The following two are for the vin decoder button and how to find paint code button
                 disablehowToFindPaintCodeBtn();

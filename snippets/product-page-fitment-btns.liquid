@@ -1,0 +1,477 @@
+<style>
+  .option-title-fitment {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #333;
+  }
+
+  .fitment-disabled {
+    color: #ccc;
+    pointer-events: none;
+  }
+  #option-title-fitment.disabled {
+    color: #ccc;
+    pointer-events: none;
+  }
+  .individual-fitment-title-disabled {
+    color: #ccc !important;
+  }
+  .individual-fitment-select-disabled {
+    color: #ccc !important;
+    pointer-events: none;
+  }
+  .individual-fitment-label-disabled {
+    color: #ccc !important;
+    pointer-events: none;
+  }
+  {% comment %} .verifyCompatibilityButton.disabled {
+    color: #ccc;
+    pointer-events: none;
+  } {% endcomment %}
+
+  #fitment-type-select:hover {
+    cursor: pointer;
+  }
+  #fitment-option:hover {
+    cursor: pointer;
+  }
+
+  .fitment-type-select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    flex-direction: column;
+    {% comment %} min-height: 45px; {% endcomment %}
+  }
+
+  .fitment-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .available-options {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: #fff;
+    font-weight: 600;
+    background: #0d1ca2;
+    padding: 2px 5px;
+    border-radius: 999px;
+    font-size: 11px;
+    z-index: 1;
+  }
+
+  .available-options.ready-paint {
+  }
+
+  .fitment-options-checkbox input[type='radio']:hover {
+    cursor: pointer;
+  }
+
+  .fitment-option:hover {
+    cursor: pointer;
+  }
+
+  label.fitment-options-checkbox:has(input:disabled) {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+  .fitmentText:hover {
+    cursor: pointer;
+  }
+
+  .fitment-radio {
+    margin-right: 3px;
+    cursor: pointer;
+  }
+
+  .not-compatible-button {
+    border-radius: 14px;
+    width: 100%;
+    background-color: #f4534d;
+    color: #fff;
+    padding: 7px 7px;
+    margin-top: 8px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .compatible-message {
+    display: inline-flex;
+    align-items: center;
+    background: #01a601;
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .not-compatible-label {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-top: 8px;
+    color: #f4534d;
+    text-align: center;
+    display: block;
+  }
+
+  .not-compatible-msg-label {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 0;
+    color: #f4534d;
+    text-align: start;
+    display: block;
+  }
+
+  .fitment-description-container {
+    padding: 0 0 10px 0;
+  }
+</style>
+<div class="fitment-type-select fitment-disabled" data-group-index="{{key_index}}">
+  <label class="option-title-fitment" data-group-index="{{key_index}}"></label>
+  <div class="fitment-options-container" data-group-index="{{key_index}}"></div>
+  {% if fitment_key.show_modal_button == true %}
+    <div class="fitment-description-container" data-group-index="{{key_index}}">
+      {% render 'fitment-question-modal', fitment_key: fitment_key, key_index: key_index %}
+    </div>
+  {% endif %}
+</div>
+
+{% assign product_title = product.title %}
+{% assign fitment_key_value = fitment_key.keys.value | remove: '[' | remove: ']' | remove: '"' %}
+{% assign english_fitment_key_question = fitment_key.question.value | remove: '[' | remove: ']' | remove: '"' %}
+{% assign spanish_fitment_key_question = fitment_key.spanish_question.value | remove: '[' | remove: ']' | remove: '"' %}
+{% assign inclusions_key = fitment_key_value | append: '_inclusions' %}
+{% assign inclusions = product.metafields.custom[inclusions_key].value %}
+{% assign exclusions_key = fitment_key_value | append: '_exclusions' %}
+{% assign exclusions = product.metafields.custom[exclusions_key].value %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const fitmentKey = '{{ fitment_key.keys.value }}';
+    const questionKeys = JSON.parse('{{ keys }}');
+    const amountOfKeys = questionKeys.length;
+    const answers = {};
+    const totalQuestions = amountOfKeys;
+    let currentLocale = '{{ request.locale.iso_code }}';
+    let fitmentQuestion = '';
+    if (currentLocale === 'en') {
+      fitmentQuestion = '{{ english_fitment_key_question }}';
+    } else {
+      fitmentQuestion = '{{ spanish_fitment_key_question }}';
+    }
+
+    const inclusions = [
+      {% for inclusion in inclusions %}
+        {
+          option_2: {{ inclusion.option_2.value | json }} || '',
+          option_1: {{ inclusion.option_1.value | json }},
+          filter_url: {{ inclusion.filter_url.value | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
+    const exclusions = [
+      {% for exclusion in exclusions %}
+        {
+          option_2: {{ exclusion.option_2.value | json }} || '',
+          option_1: {{ exclusion.option_1.value | json }},
+          filter_url: {{ exclusion.filter_url.value | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ];
+
+    const currentKey = "{{key_index}}";
+    const fitmentInclusions = inclusions;
+    const fitmentExclusions = exclusions;
+    const groupIndex = currentKey;
+    const title = document.querySelector(`.option-title-fitment[data-group-index="${groupIndex}"]`);
+    const optionsContainer = document.querySelector(`.fitment-options-container[data-group-index="${groupIndex}"]`);
+    const product_title = "{{ product_title }}";
+    const vehicleDataContainer = document.querySelector('.vehicle-item-container.first-vehicle-item-container .vehicle-browse-catalog-container strong[data-vehicle]');
+    if (vehicleDataContainer) {
+      garageFirstVehicleData = vehicleDataContainer.getAttribute('data-vehicle');
+    }
+    const productType = '{{ product.type }}';
+    const partType = productType.replace(' ', '+');
+
+    // Set the title text -- English or Spanish based on locale
+    title.textContent = fitmentQuestion;
+
+        // Show not compatible message, disable all controls except radios
+    function showExclusionState(groupIndex) {
+      disableQualityTypeSelect();
+      disableQualityDescriptionBtn();
+      updateProgressHeaderColors();
+      clearCombinedVariantSelect();
+      disableCombinedVariantSelect();
+      disablePrecisionMatchBtns();
+      clearPrecisionMatchRadioButtons();
+      disableVinVerificationBtns();
+      clearVinVerificationRadioButtons();
+      disableAddToCartButton();
+      disablehowToFindPaintCodeBtn();
+      disableGetPaintCodeUsingVin();
+      disableSelectVinVariantBtn();
+      disableVINTextboxForOEM();
+      hideVINTextboxForOEM();
+      showNotCompatibleMsg(groupIndex);
+    }
+
+    // Helper to enable inclusions if all are answered and no exclusions
+    function enablefitmentControlsIfReady(groupIndex) {
+      const answeredInclusions = Object.values(answers).filter(a => a && a.originType === 'inclusion').length;
+      const hasExclusion = Object.values(answers).some(a => a && a.originType === 'exclusion');
+      if (hasExclusion) {
+        showExclusionState(groupIndex);
+      } else {
+        document.querySelectorAll('.fitment-radio').forEach(radio => {
+          radio.disabled = false;
+        });
+        hideNotCompatibleMsg();
+        if (answeredInclusions === totalQuestions) {
+          enableProductTypeSelect();
+          enableQualityDescriptionBtn();
+          enableVINTextboxForOEM();
+          updateProgressHeaderColors();
+          hideNotCompatibleMsg();
+        }
+      }
+    }
+
+    // Helper to create radio buttons
+    function createRadioOptions(option1Arr, option2Arr, filterUrlArr, groupIndex, originType, optionsContainer) {
+      for (let idx = 0; idx < option1Arr.length; idx++) {
+        const option2 = option2Arr[idx] !== undefined ? option2Arr[idx] : '';
+        const option1 = option1Arr[idx] !== undefined ? option1Arr[idx] : '';
+        let value = '';
+        if (option2.length && option1.length) {
+          value = `${option2} - ${option1}`;
+        } else {
+          value = `${option1}`;
+        }
+        const optionId = `aspiration-${originType}-radio-${groupIndex}-${idx}`;
+        const div = document.createElement('div');
+        div.className = 'fitment-option';
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = `aspirationOption-${groupIndex}`;
+        input.value = value;
+        input.id = optionId;
+        input.className = 'fitment-radio';
+        input.disabled = true;
+        input.setAttribute('data-origin-type', originType);
+        let filterUrlValue = '';
+        if (
+          filterUrlArr[idx] !== null &&
+          filterUrlArr[idx] !== undefined &&
+          filterUrlArr[idx] !== 'null'
+        ) {
+          filterUrlValue = filterUrlArr[idx];
+        }
+        if (filterUrlValue === null || filterUrlValue === undefined || filterUrlValue === 'null') {
+          filterUrlValue = '';
+        }
+        input.setAttribute('data-filter-url', filterUrlValue);
+        const label = document.createElement('label');
+        label.className = 'fitmentText';
+        label.setAttribute('for', optionId);
+        label.setAttribute('data-group-index', groupIndex);
+        label.textContent = value;
+        div.appendChild(input);
+        div.appendChild(label);
+        div.appendChild(document.createElement('br'));
+        optionsContainer.appendChild(div);
+      }
+    }
+
+    // Helper to create a single 'Other' radio button
+    function createOtherRadio(groupIndex, originType, optionsContainer) {
+      const optionId = `aspiration-${originType}-radio-${groupIndex}-other`;
+      const div = document.createElement('div');
+      div.className = 'fitment-option';
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = `aspirationOption-${groupIndex}`;
+      input.value = 'Other';
+      input.id = optionId;
+      input.className = 'fitment-radio';
+      input.disabled = true;
+      input.setAttribute('data-origin-type', originType);
+      input.setAttribute('data-filter-url', '');
+      const label = document.createElement('label');
+      label.className = 'fitmentText';
+      label.setAttribute('for', optionId);
+      label.setAttribute('data-group-index', groupIndex);
+      label.textContent = 'Other';
+      div.appendChild(input);
+      div.appendChild(label);
+      div.appendChild(document.createElement('br'));
+      optionsContainer.appendChild(div);
+    }
+
+    optionsContainer.innerHTML = '';
+    let hasInclusions = fitmentInclusions && fitmentInclusions[0] && fitmentInclusions[0].option_1 && fitmentInclusions[0].option_1.length > 0;
+    let hasExclusions = fitmentExclusions && fitmentExclusions[0] && fitmentExclusions[0].option_1 && fitmentExclusions[0].option_1.length > 0;
+
+
+    if (hasInclusions && hasExclusions) {
+      // Render both as normal
+      let option1Arr = []
+      let option2Arr = [];
+      let filterUrlArr = [];
+      for (const option of fitmentInclusions) {
+        option1Arr.push(Array.isArray(option.option_1) ? option.option_1 : (option.option_1 ? [option.option_1] : []));
+        option2Arr.push(Array.isArray(option.option_2) ? option.option_2 : (option.option_2 ? [option.option_2] : []));
+        filterUrlArr.push(Array.isArray(option.filter_url) ? option.filter_url : (option.filter_url ? [option.filter_url] : []));
+      }
+      createRadioOptions(option1Arr, option2Arr, filterUrlArr, groupIndex, 'inclusion', optionsContainer);
+
+      let option1ArrEx = [];
+      let option2ArrEx = [];
+      let filterUrlArrEx = [];
+      for (const option of fitmentExclusions) {
+        option1ArrEx.push(Array.isArray(option.option_1) ? option.option_1 : (option.option_1 ? [option.option_1] : []));
+        option2ArrEx.push(Array.isArray(option.option_2) ? option.option_2 : (option.option_2 ? [option.option_2] : []));
+        filterUrlArrEx.push(Array.isArray(option.filter_url) ? option.filter_url : (option.filter_url ? [option.filter_url] : []));
+      }
+      createRadioOptions(option1ArrEx, option2ArrEx, filterUrlArrEx, groupIndex, 'exclusion', optionsContainer);
+    } else if (hasInclusions && !hasExclusions) {
+      let option1Arr = [];
+      let option2Arr = [];
+      let filterUrlArr = [];
+      for (const option of fitmentInclusions) {
+        option1Arr.push(Array.isArray(option.option_1) ? option.option_1 : (option.option_1 ? [option.option_1] : []));
+        option2Arr.push(Array.isArray(option.option_2) ? option.option_2 : (option.option_2 ? [option.option_2] : []));
+        filterUrlArr.push(Array.isArray(option.filter_url) ? option.filter_url : (option.filter_url ? [option.filter_url] : []));
+      }
+      createRadioOptions(option1Arr, option2Arr, filterUrlArr, groupIndex, 'inclusion', optionsContainer);
+      createOtherRadio(groupIndex, 'exclusion', optionsContainer);
+    }
+
+    // Dynamically add not-compatible button for this group
+    const notCompatibleMsgDiv = document.createElement('div');
+    notCompatibleMsgDiv.className = 'not-compatible-msg';
+    notCompatibleMsgDiv.style.display = 'none';
+    const notCompatibleLabel = document.createElement('label');
+    notCompatibleLabel.className = 'not-compatible-msg-label';
+    notCompatibleLabel.textContent = '{{ 'aspiration_questions.not_compatible' | t }}';
+    const notCompatibleBtn = document.createElement('button');
+    notCompatibleBtn.className = 'not-compatible-button';
+    notCompatibleBtn.type = 'button';
+    notCompatibleBtn.textContent = '{{ 'aspiration_questions.find_parts' | t }}';
+    notCompatibleMsgDiv.appendChild(notCompatibleLabel);
+    notCompatibleMsgDiv.appendChild(notCompatibleBtn);
+    optionsContainer.appendChild(notCompatibleMsgDiv);
+
+
+    // Attach event listener for this group's not-compatible button
+    notCompatibleBtn.addEventListener('click', function() {
+      if (garageFirstVehicleData) {
+        const vehicle = generateCollectionHandle(garageFirstVehicleData);
+        if (vehicle) {
+          // Collect all filter URLs from answered questions
+          let filterUrls = [];
+          for (let i = 0; i < amountOfKeys; i++) {
+            if (answers[i] && answers[i].filter_url && answers[i].filter_url !== 'null') {
+              filterUrls.push(answers[i].filter_url);
+            }
+          }
+          // Join with '&' and remove empty strings
+          const filterQuery = filterUrls.filter(Boolean).join('&');
+          if (currentLocale === 'en') {
+            window.location.href = `/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`;
+          } else {
+            window.location.href = `/es/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`;
+          }
+        } else {
+          alert('No link available for parts that fit your vehicle.');
+        }
+      } else {
+        alert('No link available for parts that fit your vehicle.');
+      }
+    });
+
+    // Store reference for later show/hide logic
+    optionsContainer.notCompatibleMsgDiv = notCompatibleMsgDiv;
+
+    // --- Initialization: disable all but the first group ---
+    document.querySelectorAll('.fitment-type-select').forEach(function(group, idx) {
+      setFitmentGroupState(group, idx === 0, currentKey);
+    });
+
+    /*
+      --- Sequential Question Logic Handler ---
+      This event handler manages the logic for enabling/disabling each question group (fitment-type-select) in a sequential order:
+      1. At initialization, only the first group is enabled; all others are disabled (fitment-disabled class).
+      2. When a user answers a question (selects a radio):
+          - If the answer is an 'exclusion', all subsequent groups are disabled and cleared, and their titles are visually dimmed.
+          - If the answer is not an 'exclusion', only the next group is enabled (if all previous answers are not exclusions), and all others remain disabled.
+      3. The handler also manages the display of the not-compatible message for the current group, and ensures all subsequent groups hide their not-compatible messages.
+      4. The answers object is updated for each group, and all subsequent answers are cleared when a new answer is selected.
+      5. This logic enforces that the user must answer questions in order, and cannot skip ahead or change later answers without re-answering previous ones.
+      6. Visual feedback is provided by toggling the 'fitment-disabled' and 'individual-fitment-title-disabled' classes, and by disabling/enabling radio inputs and updating label colors.
+    */
+    document.querySelectorAll('.fitment-radio').forEach(function(radio) {
+      radio.addEventListener('change', function(event) {
+        const groupIndex = parseInt(this.name.split('-')[1]);
+        const originType = this.getAttribute('data-origin-type');
+        answers[groupIndex] = {
+          originType: originType,
+          filter_url: this.getAttribute('data-filter-url')
+        };
+
+        // Show/hide not-compatible button for this group
+        const container = document.querySelector(`.fitment-options-container[data-group-index="${groupIndex}"]`);
+        if (container && container.notCompatibleMsgDiv) {
+          container.notCompatibleMsgDiv.style.display = originType === 'exclusion' ? 'block' : 'none';
+        }
+
+        // Sequential logic: unlock only the next group if not exclusion
+        for (let j = groupIndex + 1; j < amountOfKeys; j++) {
+          const group = document.querySelector(`.fitment-type-select[data-group-index="${j}"]`);
+          if (!group) continue;
+          const radios = group.querySelectorAll('input[type="radio"]');
+          const title = group.querySelector('.option-title-fitment');
+          const optionsContainer = group.querySelector('.fitment-options-container');
+          if (originType === 'exclusion') {
+            setFitmentGroupState(group, false, currentKey);
+            radios.forEach(function(radioNext) {
+              radioNext.checked = false;
+              radioNext.disabled = true;
+              const label = radioNext.parentNode.querySelector('label[for="' + radioNext.id + '"]');
+              if (label) label.style.color = '#ccc';
+            });
+            // All subsequent groups remain disabled
+          } else {
+            // Only unlock the next group if all previous are not exclusion
+            if (j === groupIndex + 1 && !Object.values(answers).slice(0, j).some(a => a && a.originType === 'exclusion')) {
+              setFitmentGroupState(group, true, currentKey);
+              radios.forEach(function(radioNext) {
+                radioNext.disabled = false;
+                const label = radioNext.parentNode.querySelector('label[for="' + radioNext.id + '"]');
+                if (label) label.style.color = '#1D1D1D';
+              });
+            } else {
+              setFitmentGroupState(group, false, currentKey);
+              radios.forEach(function(radioNext) {
+                radioNext.checked = false;
+                radioNext.disabled = true;
+                const label = radioNext.parentNode.querySelector('label[for="' + radioNext.id + '"]');
+                if (label) label.style.color = '#ccc';
+              });
+            }
+          }
+          // Hide not compatible message for all subsequent
+          const nextContainer = document.querySelector(`.fitment-options-container[data-group-index="${j}"]`);
+          if (nextContainer && nextContainer.notCompatibleMsgDiv) {
+            nextContainer.notCompatibleMsgDiv.style.display = 'none';
+          }
+          answers[j.toString()] = undefined;
+        }
+        enablefitmentControlsIfReady(groupIndex);
+      });
+    });
+  });
+</script>
