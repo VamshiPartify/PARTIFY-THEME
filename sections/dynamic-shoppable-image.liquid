@@ -517,7 +517,7 @@
                       {% capture current_price_range_html %}
                         {% if price_varies %}
                           {% if price_range_format == 'range' %}
-                            <span class="money price__current--min" data-price-min>{{ price_min | money}}</span>
+                            <span class="money price__current--min" data-price-min>{{ price_min | money | replace: ' CAD', '' }}</span>
                             -
                             <span class="money price__current--max" data-price-max>{{ price_max | money }}</span>
                           {% else %}
@@ -546,7 +546,7 @@
                       {% endcomment %}
                       <div class="price__current--hidden" data-current-price-range-hidden>
                         {% if price_range_format == 'range' %}
-                          <span class="money price__current--min" data-price-min>{{ price_min | money}}</span>
+                          <span class="money price__current--min" data-price-min>{{ price_min | money | replace: ' CAD', '' }}</span>
                           -
                           <span class="money price__current--max" data-price-max>{{ price_max | money }}</span>
                         {% else %}

@@ -21,6 +21,8 @@ const additionalOptionsTitle = document.querySelector('.additional-options-title
 const fitmentHeader = document.querySelectorAll('.option-title-fitment');
 const fitmentTypeSelect = document.querySelector('.fitment-type-select');
 const requiredAspirationsContainer = document.querySelector('.required-questions-container');
+const notCompatibleMsgHeader = document.querySelector('.not-compatible-msg');
+
 
 let currentAddToCartBtn;
 if (addToCartButton) {
@@ -330,6 +332,11 @@ function updateProgressHeaderColors() {
 
     if (!isFitmentVerified()) {
         if (verifyFitmentHeader) verifyFitmentHeader.style.color = COLORS.red;
+        return;
+    }
+
+    if (notCompatibleMsgHeader && notCompatibleMsgHeader.classList.contains("show")) {
+        notCompatibleMsgHeader.style.color = COLORS.red;
         return;
     }
 

@@ -195,7 +195,10 @@ function disableQualityDescriptionBtn() {
 }
 
 function disableVINTextboxForOEM() {
-    if (vinTextBoxOEMLibrary) vinTextBoxOEMLibrary.disabled = true;
+    if (vinTextBoxOEMLibrary) {
+        vinTextBoxOEMLibrary.value = "";
+        vinTextBoxOEMLibrary.disabled = true;
+    }
 }
 
 function hideVINTextboxForOEM() {
