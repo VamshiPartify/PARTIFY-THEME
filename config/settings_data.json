@@ -571,7 +571,6 @@
   },
   "platform_customizations": {
     "custom_css": [
-      ".breadcrumbs-container,.collabs-page__header,.collabs-page__images {display: none !important;}",
       ".partify-collabs-hero-content .collabs-page__intro {width: 100% !important; max-width: 100% !important; min-width: 0 !important; margin: 0 !important; align-items: flex-start !important; justify-content: flex-start !important;}",
       ".partify-collabs-hero-content .collabs-page__cta-main,.partify-collabs-hero-content .collabs-page__cta-btn {background: #ffb900 !important; color: #232323 !important; font-size: 1.06rem !important; /* Normal button size */ font-weight: 700 !important; border-radius: 6px !important; /* Compact padding */ box-shadow: 0 2px 8px #0002 !important; border: none !important; margin: 0 0 16px 0 !important; text-align: left !important; align-self: flex-start !important; display: inline-block !important; letter-spacing: 0.01em !important; line-height: 1.14 !important; transition: background 0.13s, box-shadow 0.13s;}",
       ".partify-collabs-hero-content .collabs-page__cta-main:hover,.partify-collabs-hero-content .collabs-page__cta-btn:hover {background: #ffd655 !important; color: #232323 !important; box-shadow: 0 3px 16px #0002 !important;}",

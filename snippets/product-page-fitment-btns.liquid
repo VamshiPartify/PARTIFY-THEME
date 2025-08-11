@@ -142,15 +142,18 @@
 <div class="fitment-type-select fitment-disabled" data-group-index="{{key_index}}">
   <label class="option-title-fitment" data-group-index="{{key_index}}"></label>
   <div class="fitment-options-container" data-group-index="{{key_index}}"></div>
-  {% if fitment_key.show_modal_button == true %}
+  {% comment %} {% if fitment_key.show_modal_button == true %}
     <div class="fitment-description-container" data-group-index="{{key_index}}">
       {% render 'fitment-question-modal', fitment_key: fitment_key, key_index: key_index %}
     </div>
-  {% endif %}
+  {% endif %} {% endcomment %}
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+      const qualityOptionsCheckbox = document.querySelector('.quality-options-checkbox');
+      const paintOptionsCheckbox = document.querySelector('.paint-options-checkbox-group');
+      const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
       const fitmentKey = '{{ fitment_key.keys.value }}';
       const amountOfKeys = {{ amount_of_keys }};
       const answers = {};
@@ -218,9 +221,9 @@
       function showExclusionState(groupIndex) {
         disableQualityTypeSelect();
         disableQualityDescriptionBtn();
-        updateProgressHeaderColors();
         clearCombinedVariantSelect();
         disableCombinedVariantSelect();
+        clearPaintOptionRadioBtns();
         disablePrecisionMatchBtns();
         clearPrecisionMatchRadioButtons();
         disableVinVerificationBtns();
@@ -232,6 +235,7 @@
         disableVINTextboxForOEM();
         hideVINTextboxForOEM();
         showNotCompatibleMsg(groupIndex);
+        updateProgressHeaderColors();
       }
 
       // Helper to enable inclusions if all are answered and no exclusions
@@ -246,9 +250,27 @@
           });
           hideNotCompatibleMsg();
           if (answeredInclusions === totalQuestions) {
-            enableProductTypeSelect();
-            enableQualityDescriptionBtn();
-            enableVINTextboxForOEM();
+
+            // If quality options are present, enable them
+            if (qualityOptionsCheckbox) {
+              enableProductTypeSelect();
+              enableQualityDescriptionBtn();
+              
+            // If no quality options but paint options are present, enable paint options
+            } else if (paintOptionsCheckbox) {
+              enablePaintOptionRadioBtns();
+              enableCombinedVariantSelect();
+              enablehowToFindPaintCodeBtn();
+
+            // If no quality and no paint options, enable add to cart button
+            } else {
+              enableAddToCartButton();
+            }
+
+            if (vinTextBoxOEM) {
+              enableVINTextboxForOEM();
+            }
+
             updateProgressHeaderColors();
             hideNotCompatibleMsg();
           }
