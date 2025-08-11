@@ -142,11 +142,13 @@
 <div class="fitment-type-select fitment-disabled" data-group-index="{{key_index}}">
   <label class="option-title-fitment" data-group-index="{{key_index}}"></label>
   <div class="fitment-options-container" data-group-index="{{key_index}}"></div>
-  {% comment %} {% if fitment_key.show_modal_button == true %}
-    <div class="fitment-description-container" data-group-index="{{key_index}}">
-      {% render 'fitment-question-modal', fitment_key: fitment_key, key_index: key_index %}
-    </div>
-  {% endif %} {% endcomment %}
+  {% comment %}
+    {% if fitment_key.show_modal_button == true %}
+      <div class="fitment-description-container" data-group-index="{{key_index}}">
+        {% render 'fitment-question-modal', fitment_key: fitment_key, key_index: key_index %}
+      </div>
+    {% endif %}
+  {% endcomment %}
 </div>
 
 <script>
@@ -155,6 +157,7 @@
       const paintOptionsCheckbox = document.querySelector('.paint-options-checkbox-group');
       const vinTextBoxOEM = document.getElementById('vin-textbox-for-oem');
       const fitmentKey = '{{ fitment_key.keys.value }}';
+      const properKey = toProperKey(fitmentKey);
       const amountOfKeys = {{ amount_of_keys }};
       const answers = {};
       const totalQuestions = amountOfKeys;
@@ -216,6 +219,15 @@
 
       // Set the title text -- English or Spanish based on locale
       title.textContent = fitmentQuestion;
+
+      function toProperKey(str) {
+        if (!str) return '';
+        return str
+          .replace(/_/g, ' ')
+          .replace(/\w\S*/g, function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+          });
+      }
 
           // Show not compatible message, disable all controls except radios
       function showExclusionState(groupIndex) {
@@ -293,11 +305,12 @@
           div.className = 'fitment-option';
           const input = document.createElement('input');
           input.type = 'radio';
-          input.name = `aspirationOption-${groupIndex}`;
+          input.name = `properties[${properKey}]`;
           input.value = value;
           input.id = optionId;
           input.className = 'fitment-radio';
           input.disabled = true;
+          input.setAttribute('data-group-index', groupIndex);
           input.setAttribute('data-origin-type', originType);
           let filterUrlValue = '';
           if (
@@ -330,11 +343,12 @@
         div.className = 'fitment-option';
         const input = document.createElement('input');
         input.type = 'radio';
-        input.name = `aspirationOption-${groupIndex}`;
+        input.name = `properties[${properKey}]`;
         input.value = 'Other';
         input.id = optionId;
         input.className = 'fitment-radio';
         input.disabled = true;
+        input.setAttribute('data-group-index', groupIndex);
         input.setAttribute('data-origin-type', originType);
         input.setAttribute('data-filter-url', '');
         const label = document.createElement('label');
@@ -454,7 +468,7 @@
       */
       document.querySelectorAll('.fitment-radio').forEach(function(radio) {
         radio.addEventListener('change', function(event) {
-          const groupIndex = parseInt(this.name.split('-')[1]);
+          const groupIndex = Number(this.getAttribute('data-group-index'));
           const originType = this.getAttribute('data-origin-type');
           answers[groupIndex] = {
             originType: originType,
