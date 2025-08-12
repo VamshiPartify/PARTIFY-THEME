@@ -8,7 +8,7 @@
 | 14–19      | Rebase feature branch onto latest `main`, resolve conflicts     |
 | 20–21      | Merge feature to `main`, deploy to Shopify                      |
 
-1. git checkout main
+1. git checkout   main
 2. git pull origin main
 3. git checkout -b branch-name
 4. make changes
