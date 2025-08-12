@@ -142,13 +142,11 @@
 <div class="fitment-type-select fitment-disabled" data-group-index="{{key_index}}">
   <label class="option-title-fitment" data-group-index="{{key_index}}"></label>
   <div class="fitment-options-container" data-group-index="{{key_index}}"></div>
-  {% comment %}
-    {% if fitment_key.show_modal_button == true %}
-      <div class="fitment-description-container" data-group-index="{{key_index}}">
-        {% render 'fitment-question-modal', fitment_key: fitment_key, key_index: key_index %}
-      </div>
-    {% endif %}
-  {% endcomment %}
+  {% if fitment_key.show_modal_button == true %}
+    <div class="fitment-description-container" data-group-index="{{key_index}}">
+      {% render 'fitment-question-modal', fitment_key: fitment_key, key_index: key_index %}
+    </div>
+  {% endif %}
 </div>
 
 <script>
@@ -424,20 +422,38 @@
         if (garageFirstVehicleData) {
           const vehicle = generateCollectionHandle(garageFirstVehicleData);
           if (vehicle) {
-            // Collect all filter URLs from answered questions
             let filterUrls = [];
             for (let i = 0; i < amountOfKeys; i++) {
               if (answers[i] && answers[i].filter_url && answers[i].filter_url !== 'null') {
                 filterUrls.push(answers[i].filter_url);
               }
             }
-            // Join with '&' and remove empty strings
             const filterQuery = filterUrls.filter(Boolean).join('&');
-            if (currentLocale === 'en') {
-              window.location.href = `/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`;
-            } else {
-              window.location.href = `/es/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`;
-            }
+            let baseUrl = currentLocale === 'en'
+              ? `/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`
+              : `/es/collections/${vehicle}?${filterQuery}&filter.p.product_type=${partType}`;
+
+            // Fetch the collection page to check for products
+            fetch(baseUrl)
+              .then(response => response.text())
+              .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const productGrid = doc.querySelector('.productgrid--items');
+                if (productGrid && productGrid.children.length > 0) {
+                  window.location.href = baseUrl;
+                } else {
+                  baseUrl = currentLocale === 'en'
+                    ? `/collections/${vehicle}?filter.p.product_type=${partType}`
+                    : `/es/collections/${vehicle}?filter.p.product_type=${partType}`;
+
+
+                  window.location.href = baseUrl;
+                }
+              })
+              .catch(() => {
+                alert('Could not check products. Please try again.');
+              });
           } else {
             alert('No link available for parts that fit your vehicle.');
           }
