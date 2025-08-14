@@ -551,6 +551,8 @@
     const switcher = document.getElementById('vin-license-switcher');
     const vinInputWrapper = document.getElementById('vin-input-wrapper');
     const licenseInputWrapper = document.getElementById('license-input-wrapper');
+    const allBumperMakes = '{{ settings.bumperdotcom_makes_list }}';
+    let bumperdotcommake = false;
 
     function setTitles(vinOnLeft) {
       if (vinOnLeft) {
@@ -685,7 +687,12 @@
             licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
             return;
           }
+
+          const currentMake = data.make.toLowerCase();
           // Lets hide the license input wrapper and show the license confirmation wrapper
+          if (allBumperMakes.includes(currentMake)) {
+            bumperdotcommake = true;
+          }
           licenseInputWrapper.style.display = 'none';
           licenseConfirmationWrapper.style.display = 'flex';
           // Populate the confirmation details
@@ -724,7 +731,7 @@
       vinInputWrapper.style.display = '';
       if (vin) {
         vinInputField.value = vin;
-        await fetchVehicleDataByVin(stateSelect, plateInput, vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '');
+        await fetchVehicleDataByVin(stateSelect.value, plateInput.value, vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '', '', '', '', bumperdotcommake);
       }
       licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
       garageVinSubmissionBool = false;

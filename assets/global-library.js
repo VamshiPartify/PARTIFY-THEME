@@ -18,6 +18,9 @@ let themeName = '';
 let autoSelectedColor = '';
 let autoSelectedOption = '';
 let storedDecodedVin = '';
+let firstVehicleColor = '';
+let licenseOptionMsg = '';
+let vinOptionMsg = '';
 
 
 let garageVinSubmissionBool = false;
@@ -30,6 +33,11 @@ let autoSelectedBanned = false;
 
 const vinInputLibrary = document.querySelector('#vin-textbox');
 const vinTextboxContainer = document.getElementById("vin-textbox-container");
+const vinOptionLabel = document.getElementById('paint-code-vin-option');
+const licenseOptionLabel = document.getElementById('paint-code-license-option');
+const storedOptionLabel = document.getElementById('paint-code-stored-option');
+const checkboxStoredCodeText = document.querySelector('.checkbox-stored-code');
+const checkboxStoredCodeMsg = document.querySelector('.checkbox-stored-msg');
 
 
 
@@ -118,7 +126,9 @@ function addCustomEasysearchBtn() {
           make ?? null,
           model ?? null,
           submodel ?? null,
-          engine ?? null
+          engine ?? null,
+          null,
+          null
         );
       });
     }
@@ -126,7 +136,6 @@ function addCustomEasysearchBtn() {
 }
 
 
-// --- GarageUtils: getSearchTerms and setSearchTerms helpers (migrated from garage-script.liquid) ---
 function getSearchTerms() {
   let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
   // Migrate if needed
@@ -142,6 +151,8 @@ function getSearchTerms() {
           model: null,
           submodel: null,
           engine: null,
+          state: null,
+          plate: null
         }
         : ymm
     );
@@ -159,6 +170,8 @@ function getSearchTerms() {
         model: entry.ymm.model,
         submodel: entry.ymm.submodel,
         engine: entry.ymm.engine,
+        state: entry.ymm.state,
+        plate: entry.ymm.plate,
       };
     }
     return {
@@ -170,8 +183,13 @@ function getSearchTerms() {
       model: entry.model || null,
       submodel: entry.submodel || null,
       engine: entry.engine || null,
+      state: entry.state || null,
+      plate: entry.plate || null,
     };
   });
+
+  // Set the items here to ensure it is in the correct format.  It is a fix for migration
+  // Doesn't actually add more items to the garage
   localStorage.setItem('searchTerms', JSON.stringify(terms));
   return terms;
 }
@@ -181,6 +199,10 @@ function moveVehicleToFront(vehicleData) {
   let currentSearchTerms = getSearchTerms();
   // vehicleData can be a string (ymm) or an object
   let ymm = typeof vehicleData === 'string' ? vehicleData : vehicleData.ymm;
+
+  let state = typeof vehicleData === 'string' ? null : vehicleData.state;
+  let plate = typeof vehicleData === 'string' ? null : vehicleData.plate;
+
   // Find index where ymm matches exactly, or is contained in obj.ymm, or obj.ymm is contained in ymm
   let vehicleIndex = currentSearchTerms.findIndex(
     (obj) => obj.ymm === ymm || obj.ymm.includes(ymm) || ymm.includes(obj.ymm)
@@ -192,13 +214,22 @@ function moveVehicleToFront(vehicleData) {
     if (vehicleObj.ymm !== ymm) {
       if (vehicleObj.ymm.length < ymm.length) {
         vehicleObj.ymm = ymm;
-      } // else keep as is (already longer)
+      }
     }
   } else {
     vehicleObj =
       typeof vehicleData === 'object'
         ? vehicleData
-        : { ymm, vin: null, paintCode: null, year: null, make: null, model: null, submodel: null, engine: null };
+        : { ymm, vin: null, paintCode: null, year: null, make: null, model: null, submodel: null, engine: null, state: null, plate: null };
+  }
+
+  // If currentSearchTerms.state does not exist add it
+  if (state) {
+    vehicleObj.state = state;
+  }
+
+  if (plate) {
+    vehicleObj.plate = plate;
   }
   currentSearchTerms.unshift(vehicleObj);
   if (currentSearchTerms.length > 5) currentSearchTerms.pop();
@@ -210,6 +241,7 @@ function setSearchTerms(terms) {
   // Remove duplicates by trimmed ymm, keeping the first occurrence
   const uniqueTerms = [];
   const seen = new Set();
+
   for (const term of terms) {
     const trimmedYmm = term.ymm.trim();
     if (!seen.has(trimmedYmm)) {
@@ -243,15 +275,15 @@ async function setSelectValueWhenReady(selectId, value, timeout = 3000) {
   });
 }
 
-function setFitmentObjectGlobal(obj) {
+function setFitmentObject(obj) {
   localStorage.setItem('easysearch-preselect-fitment', JSON.stringify(obj));
   localStorage.setItem('easysearch-preselect', JSON.stringify(obj));
 }
 
-function updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, engine) {
+function updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, engine, vin, paintCode) {
   let anchor = null;
   const holder = document.querySelector('.easysearch-holder');
-  const actionsHolder = holder.querySelector('.easysearch-actions-holder');
+  const actionsHolder = holder?.querySelector('.easysearch-actions-holder');
   if (actionsHolder) {
     const btnHolder = actionsHolder.querySelector('.easysearch-btn-holder');
     if (btnHolder) {
@@ -260,26 +292,26 @@ function updateEasysearchLocalStorageOrNavigate(year, make, model, submodel, eng
   }
 
   const fields = [year, make, model, submodel, engine];
-  // Build ymm string and searchTerm object
   const yearVal = year && year.value ? year.value.trim() : '';
   const makeVal = make && make.value ? make.value.trim() : '';
   const modelVal = model && model.value ? model.value.trim() : '';
   const submodelVal = submodel && submodel.value ? submodel.value.trim() : '';
   const engineVal = engine && engine.value ? engine.value.trim() : '';
+  const vinVal = vin && vin.value ? vin.value.trim() : '';
+  const paintCodeVal = paintCode && paintCode.value ? paintCode.value.trim() : '';
   const ymm = [yearVal, makeVal, modelVal, submodelVal, engineVal].filter(Boolean).join(' ');
 
-
-  // If on the product page, set fitment values and do not redirect
-  // If on product page and the Easysearch Change Vehicle was clicked (not the garage btn)
-  if (window.location.pathname.includes('/products/')) {
-    updateLocalStorageValues(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal, fields, anchor);
+  const isProductPage = window.location.pathname.includes('/products/');
+  updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal, vinVal, paintCodeVal);
+  if (isProductPage) {
+    updateProductPageFitment(ymm, fields, anchor);
   } else {
-    updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal);
-    window.location.href = anchor.href;
+    window.location.href = anchor?.href;
   }
 }
 
-function updateLocalStorageValues(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal, fields, anchor) {
+
+function updateProductPageFitment(ymm, fields, anchor) {
   let fitmentValue = '';
   const easySearchBtnSearch = document.querySelector('.easysearch-btn-search');
   let expires = Date.now() + 365 * 24 * 60 * 60 * 1000;
@@ -302,42 +334,32 @@ function updateLocalStorageValues(ymm, yearVal, makeVal, modelVal, submodelVal, 
     value: fitmentValue,
     expires: expires.toString(),
   }
-  setFitmentObjectGlobal(fitmentObject);
-
-  updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal);
+  setFitmentObject(fitmentObject);
 
   // Save current search parameters to localStorage or backend
   easysearch.saveSearchParams(easySearchBtnSearch);
   easysearch.addPropertyToProductForm();
   // Get the fitment widget element and the URL to load fitment results
   const fitWidget = document.querySelector('.easysearch-fitment-widget');
-  const fitmentUrl = anchor.href;
+  const fitmentUrl = anchor?.href;
 
   // Function to trigger the fitment widget toggle after EasySearch is ready
   function triggerFitmentWidget() {
-    // Only proceed if easysearch and fitmentToggleWidget are available, and required elements exist
     if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function' && fitWidget && fitmentUrl) {
-      // Show or update the fitment widget with the selected fitment URL
       easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
-      // Remove the event listener after firing to avoid duplicate calls
       document.removeEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
     }
   }
 
-  // Listen for the EasySearch ready event, then trigger the fitment widget
   document.addEventListener('easysearch_init_native_search_page', triggerFitmentWidget);
 
-  // If EasySearch is already loaded, call the fitment widget toggle immediately
   if (window.easysearch && typeof easysearch.fitmentToggleWidget === 'function') {
     easysearch.fitmentToggleWidget(fitWidget, fitmentUrl);
   }
 
-  // Open the garage popup (likely a UI overlay for saved vehicles)
   toggleGaragePopup();
-  // Hidden El
   const hiddenEasysearchEl = document.querySelector('.easysearch-fitment-search-widget');
   const failOrSuccessEasysearchEl = document.querySelector('.easysearch-fitment-holder');
-  // need to check if the hiddenEasysearchEl class contains the 'easysearch-hidden' class
   if (hiddenEasysearchEl && !hiddenEasysearchEl.classList.contains('easysearch-hidden')) {
     hiddenEasysearchEl.classList.add('easysearch-hidden');
   }
@@ -346,7 +368,7 @@ function updateLocalStorageValues(ymm, yearVal, makeVal, modelVal, submodelVal, 
   }
 }
 
-function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal) {
+function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineVal, vinVal, paintCodeVal) {
   // Custom deduplication and update logic
   let searchTerms = getSearchTerms();
   let foundIdx = searchTerms.findIndex(term =>
@@ -354,8 +376,9 @@ function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineV
     term.make === makeVal &&
     term.model === modelVal
   );
+
+  // Found a match on year, make, model
   if (ymm && foundIdx > -1) {
-    // Found a match on year, make, model
     let updated = false;
     // Update submodel if incoming is more specific
     if (submodelVal && (searchTerms[foundIdx].submodel === null || searchTerms[foundIdx].submodel === '' || searchTerms[foundIdx].submodel === undefined)) {
@@ -365,6 +388,16 @@ function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineV
     // Update engine if incoming is more specific
     if (engineVal && (searchTerms[foundIdx].engine === null || searchTerms[foundIdx].engine === '' || searchTerms[foundIdx].engine === undefined)) {
       searchTerms[foundIdx].engine = engineVal;
+      updated = true;
+    }
+    // Update VIN if it doesn't already exist
+    if (vinVal && (searchTerms[foundIdx].vin === null || searchTerms[foundIdx].vin === '' || searchTerms[foundIdx].vin === undefined)) {
+      searchTerms[foundIdx].vin = vinVal;
+      updated = true;
+    }
+    // Update paintcode if it doesn't already exist
+    if (paintCodeVal && (searchTerms[foundIdx].paintCode === null || searchTerms[foundIdx].paintCode === '' || searchTerms[foundIdx].paintCode === undefined)) {
+      searchTerms[foundIdx].paintCode = paintCodeVal;
       updated = true;
     }
     // If both submodel and engine already match, do nothing
@@ -379,8 +412,8 @@ function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineV
       // If submodel/engine are different, add as new entry
       const newTerm = {
         ymm: ymm,
-        vin: null,
-        paintCode: null,
+        vin: vinVal || null,
+        paintCode: paintCodeVal || null,
         year: yearVal || null,
         make: makeVal || null,
         model: modelVal || null,
@@ -391,12 +424,14 @@ function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineV
       if (searchTerms.length > 5) searchTerms.splice(5);
       setSearchTerms(searchTerms);
     }
+
+    // This is a new entry (did not find a match in garage)
   } else if (ymm) {
     // No match on year, make, model, so add new
     const newTerm = {
       ymm: ymm,
-      vin: null,
-      paintCode: null,
+      vin: vinVal || null,
+      paintCode: paintCodeVal || null,
       year: yearVal || null,
       make: makeVal || null,
       model: modelVal || null,
@@ -409,7 +444,7 @@ function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineV
   }
 };
 
-async function updateGarageAndNavigate(year, make, model, submodel, engine, vin) {
+async function updateGarageAndNavigate(year, make, model, submodel, engine, vin, paintCode, state, plate) {
   const yearVal = await setSelectValueWhenReady('easysearch_field_4973', year || '');
   const makeVal = await setSelectValueWhenReady('easysearch_field_4974', make || '');
   const modelVal = await setSelectValueWhenReady('easysearch_field_4975', model || '');
@@ -429,12 +464,14 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin)
   moveVehicleToFront({
     ymm: formattedYmm,
     vin: vin || null,
-    paintCode: null,
+    paintCode: paintCode || null,
     year: yearVal || null,
     make: makeVal || null,
     model: modelVal || null,
     submodel: submodelVal || null,
     engine: engineVal || null,
+    state: state || null,
+    plate: plate || null
   });
   if (!window.location.pathname.includes('/products/')) {
     const btnHolder = document.querySelector('.easysearch-btn-holder');
@@ -448,8 +485,10 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin)
       }
     }
   } else {
-    // toggleGaragePopup();
-    updateEasysearchLocalStorageOrNavigate(yearVal, makeVal, modelVal, submodelVal, engineVal);
+    updateEasysearchLocalStorageOrNavigate(yearVal, makeVal, modelVal, submodelVal, engineVal, vin, paintCode);
+    // If on product page and paint option is available in local storage, update paint 
+    // options radio buttons
+    firstVehicleColor = handleInsertLocalStoragePaintOption();
   }
 }
 
@@ -837,7 +876,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
         return;
       } else {
         // Don't add garageVinSubmissionBool here because there will be a time when the button
-        // is clickable between submission and page navigation.  Don't wan't anyone spamming
+        // is clickable between submission and page navigation.  Don't want anyone spamming
         // the button.
         if (!alreadyLogged) {
           logGarageUsageToSheets(vin, '', '', data.year, data.make, data.model, '', 'Garage VIN Submission');
@@ -845,7 +884,8 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
           // If already logged, reset the flag so it can be logged again if needed.
           alreadyLogged = false;
         }
-        updateGarageAndNavigate(data.year, data.make, data.model, data.submodel, data.engine, vin);
+
+        updateGarageAndNavigate(year.toString(), make, model, '', '', vin, colorCode, state, plate);
       }
 
       // Vin Verification
@@ -1069,6 +1109,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
   }
 }
 
+// Uncomment the following function whenever we get more bumper credits
 async function fetchBumpersLicenseToVin(state, plate) {
   try {
     alreadyLogged = false;
@@ -1130,7 +1171,6 @@ async function handleVinDecode(
 
   // Returns isVinValid and Paint code (if no paint code, returns empty string)
   const { validVin, ymm, paintCode } = await fetchVehicleDataByVin(state, licensePlate, vinInput, location, noResults, failed3timesmsg, searchBtn, tailoredSuccessMessage, failedAttemptMsg, remainingAttempts, troublesomeMakesColors, bumperdotcommake);
-
   if (validVin) {
     // Vin is valid and paint code is found
     handleAutoSelectColor(
@@ -1144,6 +1184,12 @@ async function handleVinDecode(
       forceSelectMsgEnd
     );
     searchTerms[0].vin = vinInput;
+    if (state) {
+      searchTerms[0].state = state;
+    }
+    if (licensePlate) {
+      searchTerms[0].plate = licensePlate;
+    }
     if (paintCode !== '') {
       if (Array.isArray(searchTerms) && searchTerms.length > 0) {
         const firstYMM = searchTerms[0].ymm || '';
@@ -1152,8 +1198,9 @@ async function handleVinDecode(
         }
       }
     }
-    localStorage.setItem('searchTerms', JSON.stringify(searchTerms));
-    window.GarageLogic.updateGaragePopup(window.GarageUtils.getSearchTerms());
+
+    setSearchTerms(searchTerms);
+    window.GarageLogic.updateGaragePopup(getSearchTerms());
   } else {
     // Vin is not valid
   }
@@ -1162,7 +1209,6 @@ async function handleVinDecode(
 }
 
 function handleAutoSelectColor(paintCode, vinInput, licensePlate, location, decoderFirstMsg, decoderEndMsg, forceSelectMsgStart, forceSelectMsgEnd) {
-  // Reference: Vin-Decoder-app.liquid auto-select logic
   const paintCodeWrapper = document.querySelector('.paint-code-wrapper');
   const paintcodeAppContainer = document.getElementById('paintcode-app-container');
   const variantSelector = document.getElementById('variant-selector');
@@ -1247,6 +1293,79 @@ function handleAutoSelectColor(paintCode, vinInput, licensePlate, location, deco
   }
 
   if (paintCodeWrapper) paintCodeWrapper.classList.add('show');
+}
+
+function handleInsertLocalStoragePaintOption() {
+  const garageSearchTerms = getGarageSearchTerms();
+  let firstItemColor = '';
+  let firstItemState = '';
+  let firstItemPlate = '';
+  let firstItemVin = '';
+  let foundMatchingColor = false;
+  if (garageSearchTerms && garageSearchTerms.length) {
+    firstItemColor = garageSearchTerms[0]?.paintCode;
+    firstItemState = garageSearchTerms[0]?.state;
+    firstItemPlate = garageSearchTerms[0]?.plate;
+    firstItemVin = garageSearchTerms[0]?.vin;
+
+    // If the color exists in local storage
+    if (firstItemColor) {
+      const allVariantOptions = window.productVariants;
+
+      // Set sampleArrToCheck to the first existing array within window.productVariants (NOTE: all product qualities should have the same
+      // paint variants)
+      const sampleArrToCheck = allVariantOptions.aftermarket || allVariantOptions.capa || allVariantOptions.oem || allVariantOptions.current;
+      for (let i = 0; i < sampleArrToCheck.length; i++) {
+        const option = sampleArrToCheck[i];
+        if (firstItemColor === option.variantTitle) {
+          foundMatchingColor = true;
+        }
+      }
+
+      // If the color stored in local storage is found to match a variant option, display matching option and hide VIN and license option
+      if (foundMatchingColor) {
+        storedOptionLabel.style.display = 'block';
+        checkboxStoredCodeText.innerHTML = firstItemColor;
+
+        // If both state and plate exist in local storage, render the paint option message accordingly
+        if (firstItemState && firstItemPlate) {
+          checkboxStoredCodeMsg.innerHTML = licenseOptionMsg + firstItemState + '-' + firstItemPlate + ')';
+
+          // If no state or plate exist but a vin does, render the paint option accordingly
+        } else if (firstItemVin) {
+          checkboxStoredCodeMsg.innerHTML = vinOptionMsg + firstItemVin + ')';
+        }
+        if (vinOptionLabel) {
+          vinOptionLabel.style.display = 'none';
+        }
+        if (licenseOptionLabel) {
+          licenseOptionLabel.style.display = 'none';
+        }
+
+        // If the color stored in local storage does not match a variant option, just hide VIN and license option
+      } else {
+        if (vinOptionLabel) {
+          vinOptionLabel.style.display = 'none';
+        }
+        if (licenseOptionLabel) {
+          licenseOptionLabel.style.display = 'none';
+        }
+      }
+
+      // If vehicle exists in garage but does not have a color associated with it yet,
+      // ensure the VIN and license options are displayed
+    } else {
+      if (vinOptionLabel) {
+        vinOptionLabel.style.display = 'block';
+      }
+      if (licenseOptionLabel) {
+        licenseOptionLabel.style.display = 'block';
+      }
+    }
+  }
+
+
+  return firstItemColor;
 }
 
 function resortToForceSelectCode() {

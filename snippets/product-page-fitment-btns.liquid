@@ -484,6 +484,8 @@
       */
       document.querySelectorAll('.fitment-radio').forEach(function(radio) {
         radio.addEventListener('change', function(event) {
+          // Ensure the color preview is hidden if the fitment questions are being answered
+          hideColorPreviewContainer();
           const groupIndex = Number(this.getAttribute('data-group-index'));
           const originType = this.getAttribute('data-origin-type');
           answers[groupIndex] = {

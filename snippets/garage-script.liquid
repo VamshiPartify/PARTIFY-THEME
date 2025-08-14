@@ -109,90 +109,16 @@
 <script>
   // Utility functions module
   const GarageUtils = (() => {
-    function getSearchTerms() {
-      let terms = JSON.parse(localStorage.getItem('searchTerms')) || [];
-      // Migrate if needed
-      if (terms.length && typeof terms[0] === 'string') {
-        terms = terms.map((ymm) =>
-          typeof ymm === 'string'
-            ? {
-                ymm,
-                vin: null,
-                paintCode: null,
-                year: null,
-                make: null,
-                model: null,
-                submodel: null,
-                engine: null,
-              }
-            : ymm
-        );
-        localStorage.setItem('searchTerms', JSON.stringify(terms));
-      }
-      terms = terms.map((entry) => {
-        // If entry.ymm is an object, flatten it
-        if (entry && typeof entry.ymm === 'object' && entry.ymm !== null) {
-          entry = {
-            ymm: entry.ymm.ymm,
-            vin: entry.ymm.vin,
-            paintCode: entry.ymm.paintCode,
-            year: entry.ymm.year,
-            make: entry.ymm.make,
-            model: entry.ymm.model,
-            submodel: entry.ymm.submodel,
-            engine: entry.ymm.engine,
-          };
-        }
-        return {
-          ymm: entry.ymm,
-          vin: entry.vin || null,
-          paintCode: entry.paintCode || null,
-          year: entry.year || null,
-          make: entry.make || null,
-          model: entry.model || null,
-          submodel: entry.submodel || null,
-          engine: entry.engine || null,
-        };
-      });
-      localStorage.setItem('searchTerms', JSON.stringify(terms));
-      return terms;
-    }
     function getFitmentObject() {
       return JSON.parse(localStorage.getItem('easysearch-preselect-fitment'));
     }
-    function setFitmentObject(obj) {
-      localStorage.setItem('easysearch-preselect-fitment', JSON.stringify(obj));
-    }
-    // New: add or update a vehicle object
-    function addOrUpdateVehicle({
-      ymm,
-      vin = null,
-      paintCode = null,
-      year = null,
-      make = null,
-      model = null,
-      submodel = null,
-      engine = null,
-    }) {
-      let terms = getSearchTerms();
-      const idx = terms.findIndex((obj) => obj.ymm === ymm);
-      const newObj = { ymm, vin, paintCode, year, make, model, submodel, engine };
-      if (idx > -1) {
-        terms[idx] = newObj;
-      } else {
-        terms.unshift(newObj);
-        if (terms.length > 5) terms.pop();
-      }
-      setSearchTerms(terms);
-      return terms;
-    }
-    return { getSearchTerms, getFitmentObject, setFitmentObject, addOrUpdateVehicle };
+    return { getFitmentObject };
   })();
 
   // Main logic module
   const GarageLogic = (() => {
     function removeVehicleFromLocalStorage(index) {
-      let searchTerms = GarageUtils.getSearchTerms();
+      let searchTerms = getSearchTerms();
       searchTerms.splice(Number(index), 1); // Convert index to number
       setSearchTerms(searchTerms);
       if (index === '0') {
@@ -357,6 +283,7 @@
 
       // Update vehicle list
       if (vehicleList) {
+        // Building Vehicle List just creates each vehicle in the garage and how it looks (button, name, trashcan, etc.)
         vehicleList.innerHTML = GarageUI.buildVehicleListHTML(searchTerms);
         updateGarageFirstVehicleData();
       }
@@ -409,7 +336,7 @@
       const vinToCollectionOr = document.getElementById('vin-to-collection-or');
       const garageBlock = document.querySelector('.garage-block');
       const selectYourVehicleHeader = document.querySelector('.select-your-vehicle-header');
-      const clearGarage = document.querySelector('.clear-garage');
+      {% comment %} const clearGarage = document.querySelector('.clear-garage'); {% endcomment %}
       const garagePopupContainer = document.querySelector('.garage-easyYMM-popup-container');
 
       if (addVehicleBtn) {
@@ -447,17 +374,17 @@
         });
       });
 
-      if (clearGarage) {
+      {% comment %} if (clearGarage) {
         clearGarage.addEventListener('click', function () {
           setSearchTerms([]);
           let fitmentObject = GarageUtils.getFitmentObject();
           if (fitmentObject) {
             fitmentObject.value = '';
-            GarageUtils.setFitmentObject(fitmentObject);
+            setFitmentObject(fitmentObject);
           }
           window.location.reload();
         });
-      }
+      } {% endcomment %}
     }
     return { attachEventListeners };
   })();
@@ -505,7 +432,24 @@
               .split('easysearch-preselect-delimiter')
               .join(' ');
 
-            let searchTerms = moveVehicleToFront(productPageYMM);
+            let currentSearchTerms = getSearchTerms();
+            let trimmedProductPageYMM = productPageYMM.trim();
+            let vehicleIndex = currentSearchTerms.findIndex((obj) => {
+              let trimmedObjYMM = obj.ymm.trim();
+              return (
+                trimmedObjYMM === trimmedProductPageYMM ||
+                trimmedObjYMM.includes(trimmedProductPageYMM) ||
+                trimmedProductPageYMM.includes(trimmedObjYMM)
+              );
+            });
+            let searchTerms = '';
+            if (vehicleIndex > -1) {
+              searchTerms = moveVehicleToFront(currentSearchTerms[vehicleIndex]);
+            } else {
+              searchTerms = moveVehicleToFront(productPageYMM);
+            }
+
+            handleInsertLocalStoragePaintOption();
             GarageUI.updateVehicleSelectionElement(productPageYMM);
             GarageLogic.updateGaragePopup(searchTerms);
             setVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn);
@@ -523,7 +467,7 @@
     const storedVinMsg = document.querySelector('.stored-vin-message');
     const vinInputBox = document.getElementById('vin-decoder-textbox-for-verification');
     const vinSubmitBtn = document.querySelector('.vin-decoder-submit-btn');
-    let searchTerms = GarageUtils.getSearchTerms();
+    let searchTerms = getSearchTerms();
     let ymmse = searchTerms.length ? searchTerms[0].ymm : null;
 
     setVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn);
@@ -545,7 +489,7 @@
       value: fitmentValue,
       expires: expires.toString(),
     };
-    GarageUtils.setFitmentObject(fitmentObject);
+    setFitmentObject(fitmentObject);
 
     GarageUI.updateVehicleSelectionElement(ymmse);
 

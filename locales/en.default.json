@@ -954,6 +954,9 @@
     "selection": "Select Code",
     "VIN": "Use VIN",
     "license": "Use License Plate",
+    "local_storage": "(Based On Your Vehicle's Information)",
+    "local_storage_license": "(Based On Your License Plate: ",
+    "local_storage_vin": "(Based On Your VIN: ",
     "select_for_price": "Select for Price"
   },
   "quality_level_painted_stock": {

@@ -3,187 +3,199 @@
     border: none;
     padding: 3px 0 0 0;
   }
-    .option-dropdowns {
-        color: #0073e6;
-        font-weight: bold;
-        border-radius: 4px;
-        display: inline-block;
-        margin-top: 5px;
-        height: fit-content;
-        width: 100%;
-    }
+  .option-dropdowns {
+    color: #0073e6;
+    font-weight: bold;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 5px;
+    height: fit-content;
+    width: 100%;
+  }
 
-    .option-title {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: #333;
-        margin-bottom: 3px;
-    }
+  .option-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 3px;
+  }
 
-    .paint-code-wrapper {
-        {% comment %} margin-top: 3px; {% endcomment %}
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
-    }
-    .paint-code-wrapper.show {
-      max-height: fit-content;
-      opacity: 1;
-      margin-top: 3px;
-    }
+  .paint-code-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
+  }
+  .paint-code-wrapper.show {
+    max-height: fit-content;
+    opacity: 1;
+    margin-top: 3px;
+  }
 
-    #paintcode-app-container,
-    #paintcode-app-container-license {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
-    }
+  #paintcode-app-container,
+  #paintcode-app-container-license {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease, margin-top 0.7s ease;
+  }
 
-    #paintcode-app-container.show,
-    #paintcode-app-container-license.show {
-      max-height: 1000px;
-      opacity: 1;
-      margin-top: 3px;
-    }
+  #paintcode-app-container.show,
+  #paintcode-app-container-license.show {
+    max-height: 1000px;
+    opacity: 1;
+    margin-top: 3px;
+  }
 
-    .two-tone-message {
-      background-color: #ffbc2c17;
-      font-size: 16px;
-      font-weight: 500;
-      margin-top: 5px;
-      margin-bottom: 15px;
-      text-align: left;
-      color: #4b4b4b;
-      line-height: 1.2;
-      padding: 5px;
-      border-left: 4px solid #ffae00;
-      border-top: 1px solid #ffae00;
-      border-bottom: 1px solid #ffae00;
-      border-right: 1px solid #ffae00;
-      border-radius: 5px;
-    }
-    .two-tone-message b {
-      font-weight: 800;
-    }
-    .two-tone-message span {
-      font-weight: 800;
-      color:#0000EE;
-    }
+  .two-tone-message {
+    background-color: #ffbc2c17;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    text-align: left;
+    color: #4b4b4b;
+    line-height: 1.2;
+    padding: 5px;
+    border-left: 4px solid #ffae00;
+    border-top: 1px solid #ffae00;
+    border-bottom: 1px solid #ffae00;
+    border-right: 1px solid #ffae00;
+    border-radius: 5px;
+  }
 
-    .product-options .price-info {
-        font-size: 1.1rem;
-        font-weight: bold;
-        color: #333;
-        margin-top: 1rem;
-    }
+  .two-tone-message b {
+    font-weight: 800;
+  }
 
-    .combined-variant-dropdown {
-        height: fit-content;
-    }
-    .combined-variant-dropdown select {
-        width: 100%;
-        padding: 0.75rem;
-        font-size: 1rem;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        pointer-events: auto;
-        opacity: 1;
-    }
-    .combined-variant-dropdown select[disabled] {
-        background-color: #f0f0f0;
-        color: #ccc;
-        pointer-events: none;
-        opacity: 0.6;
-    }
+  .two-tone-message span {
+    font-weight: 800;
+    color: #0000ee;
+  }
 
-    .find-paint-option-link-container {
-      display: flex;
-      justify-content: start;
-      width: 100%;
-      font-size: 14px;
-      color: #0000EE;
-    }
+  .product-options .price-info {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 1rem;
+  }
 
+  .combined-variant-dropdown {
+    height: fit-content;
+  }
+
+  .combined-variant-dropdown select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  .combined-variant-dropdown select[disabled] {
+    background-color: #f0f0f0;
+    color: #ccc;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .find-paint-option-link-container {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    font-size: 14px;
+    color: #0000ee;
+  }
+
+  .paint-option-and-how-to-find-paint-code-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .paint-options-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: start;
+    font-weight: 500;
+    margin: 10px 0;
+    color: #444;
+    transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  }
+
+  .paint-options-checkbox-group.hide {
+    margin-top: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+
+  input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .paint-options-checkbox-option:has(input:disabled) {
+    color: #ccc;
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .paint-options-checkbox-option input[type='radio']:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .paint-options-checkbox-option input[type='radio']:hover {
+    cursor: pointer;
+  }
+
+  .paint-options-checkbox-option:hover {
+    cursor: pointer;
+  }
+
+  .find-paint-option-link-container {
+    order: 1;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #0000ee;
+    margin: 3px 0 8px 0;
+  }
+
+  .option-title {
+    order: 2;
+  }
+
+  .checkbox-stored-msg {
+    font-size: 13px;
+    color: #666;
+    font-style: italic;
+  }
+
+  @media only screen and (min-width: 769px) {
     .paint-option-and-how-to-find-paint-code-wrapper {
-      display: flex;
       flex-direction: column;
-      justify-content: start;
+      align-items: start;
     }
 
-        .paint-options-checkbox-group {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          align-items: start;
-          font-weight: 500;
-          margin: 10px 0;
-          color: #444;
-          transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
-        }
-
-        .paint-options-checkbox-group.hide {
-          margin-top: 0;
-          max-height: 0;
-          overflow: hidden;
-          opacity: 0;
-        }
-
-        input[type="checkbox"] {
-          width: 16px;
-          height: 16px;
-        }
-
-        .paint-options-checkbox-option:has(input:disabled) {
-          color: #ccc;
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-
-        .paint-options-checkbox-option input[type="radio"]:disabled {
-          color: #ccc;
-          cursor: not-allowed;
-        }
-
-        .paint-options-checkbox-option input[type="radio"]:hover {
-          cursor: pointer;
-        }
-
-        .paint-options-checkbox-option:hover {
-          cursor: pointer;
-        }
-
     .find-paint-option-link-container {
-      order: 1;
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      color: #0000EE;
-      margin: 3px 0 8px 0;
+      order: 2;
+      margin-bottom: 0;
+      width: fit-content;
     }
 
     .option-title {
-      order: 2;
+      order: 1;
     }
-
-    @media only screen and (min-width: 769px) {
-      .paint-option-and-how-to-find-paint-code-wrapper {
-        flex-direction: column;
-        align-items: start;
-      }
-
-      .find-paint-option-link-container {
-        order: 2;
-        margin-bottom: 0;
-        width: fit-content;
-      }
-
-      .option-title {
-        order: 1;
-      }
+    .checkbox-stored-msg {
+      font-size: 14px;
     }
+  }
 </style>
 
 {% assign makes = settings.makes_list | split: ', ' %}
@@ -278,6 +290,17 @@
             {{ 'paint_options_radio_labels.license' | t }}
           </label>
         {% endunless %}
+        <label class="paint-options-checkbox-option" id="paint-code-stored-option" style="display: none;">
+          <input
+            type="radio"
+            name="select_paint_option"
+            value="select"
+            id="checkbox-paint-code-local-storage"
+            disabled
+          >
+          <span class="checkbox-stored-code"></span>
+          <span class="checkbox-stored-msg">{{ 'paint_options_radio_labels.local_storage' | t }}</span>
+        </label>
       </div>
       <div class="painted-stock-key-paint-level" style="display: none;">
         {{ 'variant_instock_message' | t }}
@@ -648,6 +671,7 @@
         const checkboxUnpainted = document.getElementById('checkbox-select-unpainted');
         const checkboxPaintOptions = document.getElementById('checkbox-select-paint-option');
         const checkboxGetPaintCodeWithVin = document.getElementById('checkbox-get-paint-code-with-vin');
+        const checkboxUseStoredCode = document.getElementById('checkbox-paint-code-local-storage');
         const paintCodeAppContainer = document.getElementById('paintcode-app-container');
         const paintCodeAppContainerLicense = document.getElementById('paintcode-app-container-license');
         const paintOptionPriceDisplay = document.querySelector('#paint-option-price-display');
@@ -656,8 +680,10 @@
         const AFTERMARKET_WORD = '{{ 'quality_level_painted_stock.aftermarket' | t }}';
         const AND_WORD = '{{ 'quality_level_painted_stock.and' | t }}';
         const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}';
-        const garageSearchTerms = getGarageSearchTerms();
-        const vinOptionLabel = document.getElementById('paint-code-vin-option');
+        const checkboxStoredMsg = document.querySelector('.checkbox-stored-msg');
+
+        licenseOptionMsg = '{{ 'paint_options_radio_labels.local_storage_license' | t }}';
+        vinOptionMsg = '{{ 'paint_options_radio_labels.local_storage_vin' | t }}';
         aftermarketAvailability = {{ aftermarket_any_available_options | default: false | json }};
         capaAvailability = {{ capa_any_available_options | default: false | json }};
         oemAvailability = {{ oem_any_available_options | default: false | json }};
@@ -676,12 +702,9 @@
           unpainted = true;
         };
 
-        {% comment %} if(!hasDotVinOptionAftermarket && !hasDotVinOptionCapa && !hasDotVinOptionOem) {
-          const vinOptionLabel = document.getElementById('paint-code-vin-option');
-          if (vinOptionLabel) {
-            vinOptionLabel.style.display = 'none';
-          }
-        } {% endcomment %}
+        // Check to see if the first item in the garage has a paint code
+        // If the paint code exists, show the stored option label and hide the Use VIN and Use License Plate options
+        firstVehicleColor = handleInsertLocalStoragePaintOption();
 
         if(addToCartButton) {
           currentAddToCartBtn = addToCartButton;
@@ -726,14 +749,19 @@
                 }
               }
             }
-          }
+        }
+
+        updateStoredMsgColor();
 
         /*******************************************************************************************************
         **                                                                                                    **
         **                                         FUNCTIONS                                                  **
         **                                                                                                    **
         *******************************************************************************************************/
-                
+          function updateStoredMsgColor() {
+            checkboxStoredMsg.style.color = checkboxUseStoredCode.disabled ? '#ccc' : '#666';
+          }      
+          
           function changingPaintOptions(matchPaintByVin) {
             let selectedOption;
 
@@ -778,6 +806,7 @@
             }
             clearOOSPaintCheckbox();
             clearVinVerificationRadioButtons();
+            updateColorBox();
             updateProgressHeaderColors();
           }
 
@@ -976,12 +1005,18 @@
         **                                                                                                    **
         *******************************************************************************************************/
 
+          const observer = new MutationObserver(() => {
+            updateStoredMsgColor();
+          });
+          observer.observe(checkboxUseStoredCode, { attributes: true, attributeFilter: ['disabled'] });
+
 
           // Show/hide VIN input based on radio selection
           const radios = document.querySelectorAll('input[name="select_paint_option"]');
           radios.forEach(radio => {
             radio.addEventListener('change', function () {
                 if (checkboxPaintOptions.checked) {
+                  hideColorPreviewContainer();
                 //Select Paint Code
                   if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
                   hidePaintCodeAppContainer(false);
@@ -1049,6 +1084,61 @@
                 // Vin Decoder option
                   toggleVinDecoderContainer('vin');
 
+                } else if (checkboxUseStoredCode.checked) {
+                  const allVariantOptions = combinedVariantSelect.options;
+                  let matchedIndex = -1;
+                  let firstItemHexCode = '';
+                  for (let i = 0; i < allVariantOptions.length; i++) {
+                    const option = allVariantOptions[i];
+                    // get the attribute for data-variant-title, see if it matches the stored code. set matchedIndex to i and break
+                    const variantTitle = option.getAttribute('data-variant-title');
+                    const hexCode = option.getAttribute('data-color');
+                    if (variantTitle === firstVehicleColor) {
+                      firstItemHexCode = hexCode;
+                      matchedIndex = i;
+                      break;
+                    }
+                  }
+
+                  selectedProductColor = firstItemHexCode;
+                  updateColorBox();
+                  const dataSetPrice = combinedVariantSelect.options[matchedIndex].dataset.price;
+                  const formattedPrice = formatPriceToUSD(dataSetPrice);
+                  //Set the combined variant select to unpainted
+                  combinedVariantSelect.value = combinedVariantSelect.options[matchedIndex].value;
+                  priceDisplay.textContent = formattedPrice;
+                  priceDisplaySmallScreen.textContent =  formattedPrice;
+                  priceDisplaySticky.textContent =  formattedPrice;
+                  priceDisplayA2C.textContent =  formattedPrice;
+                  form.action = `/cart/add?id=${combinedVariantSelect.options[matchedIndex].value}`;
+                  //Show combined variant select dropdown for now
+                  if(paintCodeWrapper) paintCodeWrapper.classList.remove('show');
+                  hidePaintCodeAppContainer(false);
+                  hidePaintCodeAppContainerLicense(false, true);
+                  if(window.enablePrepaintedMessaging) {
+                    hidePaintedStockKeyPaintDisclaimer();
+                  }
+
+                  //If precision match exists, enable it
+                  //If vin verification exists, but precision match does not, enable it
+                  //If neither exist, enable add to cart
+                  if(precisionMatchContainerLibrary) {
+                    enablePrecisionMatchBtns();
+                  } else if(vinVerificationCheckboxGroupLibrary) {
+                    enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
+                    enableVinVerificationBtns();
+                  } else {
+                    enableAddToCartButton();
+                  }
+
+                  if (isDeliveryCountdownEnabled) {
+                    let selectedOption = combinedVariantSelect.options[matchedIndex];
+                    dataVariantTitle = selectedOption.getAttribute('data-variant-title');
+                    receivedDataVariantTitle(dataVariantTitle);
+                    dataVariantSku = selectedOption.getAttribute('data-variant-sku');
+                    receivedDataVariantSku(dataVariantSku);
+                    getCountdownAndGeoValues();
+                  }
                 } else {
                 // License Plate Vin Decoder option
                   toggleVinDecoderContainer('license');
