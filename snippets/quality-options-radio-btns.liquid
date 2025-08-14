@@ -489,6 +489,7 @@
       if (qualityRadioInputs.length > 0) {
         qualityRadioInputs.forEach((input) => {
           input.addEventListener('change', async function (event) {
+            hideColorPreviewContainer();
             calculatePrice(input);
             const selectedInput = event.target;
             const selectedType = selectedInput.value;

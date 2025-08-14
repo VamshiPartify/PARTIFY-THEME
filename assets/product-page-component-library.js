@@ -10,7 +10,11 @@ const addToCartForUnpaintedLibrary = document.querySelector('.add-to-cart-for-un
 const addToCartStickyLibrary = document.querySelector('.sticky-add-to-cart');
 const checkboxGetPaintCodeWithVINAndLabel = document.querySelector('input#checkbox-get-paint-code-with-vin')?.closest('label');
 const checkboxGetPaintCodeWithLicenseAndLabel = document.querySelector('input#checkbox-get-paint-code-with-license')?.closest('label');
+const colorBox = document.getElementById("color-preview-box");
 const colorPreviewContainerLibrary = document.querySelector('.color-preview-container-for-customizations');
+const colorPreviewTitle = document.querySelector('.color-preview-title');
+const colorPreviewWrapper = document.getElementById("color-preview-wrapper");
+const colorSkeleton = document.getElementById("color-preview-skeleton");
 const combinedVariantSelectLibrary = document.getElementById('variant-selector');
 const fitmentDescriptionContainerLibrary = document.querySelector('.fitment-description-container');
 const form = document.getElementById('product-form');
@@ -27,6 +31,7 @@ const paintOptionCheckboxByPaintCode = document.getElementById('checkbox-select-
 const paintOptionCheckboxByUnpainted = document.getElementById('checkbox-select-unpainted');
 const paintOptionCheckboxByVIN = document.getElementById('checkbox-get-paint-code-with-vin');
 const paintOptionCheckboxByLicense = document.getElementById('checkbox-get-paint-code-with-license');
+const paintOptionCheckboxStoredCode = document.getElementById('checkbox-paint-code-local-storage');
 const paintOptionsCheckboxGroupLibrary = document.querySelector('.paint-options-checkbox-group');
 const precisionMatchContainerLibrary = document.querySelector('.precision-match-container');
 const precisionMatchCheckboxYes = document.getElementById('precision-match');
@@ -71,7 +76,7 @@ let selectedProductSku = '';
 let selectedProductColor = '';
 let selectedProductTitle = '';
 let selectedProductType = '';
-let productVariants = {};
+window.productVariants = {};
 let fitmentQuestionScrollPosition = {};
 let amountOfVINPostMessages = 0;
 let amountOfOOSPaintVariants = 0;
@@ -153,7 +158,6 @@ function disableFitmentSelect() {
     }
     // Disable the nearest button to fitmentDescriptionContainer
     if (fitmentDescriptionContainer) {
-        console.log('wool fitmentDescriptionContainer: ', fitmentDescriptionContainer);
         const nearestButton = fitmentDescriptionContainer.querySelector('button') ||
             fitmentDescriptionContainer.closest('button') ||
             fitmentDescriptionContainer.parentElement.querySelector('button');
@@ -228,6 +232,7 @@ function disablePaintOptionRadioBtns() {
     }
     if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = true;
     if (paintOptionCheckboxByLicense) paintOptionCheckboxByLicense.disabled = true;
+    if (paintOptionCheckboxStoredCode) paintOptionCheckboxStoredCode.disabled = true;
 }
 
 function hidePaintCodeAppContainer(toggleDisplay) {
@@ -558,6 +563,7 @@ function enablePaintOptionRadioBtns() {
     if (paintOptionCheckboxByPaintCode) paintOptionCheckboxByPaintCode.disabled = false;
     if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = false;
     if (paintOptionCheckboxByLicense) paintOptionCheckboxByLicense.disabled = false;
+    if (paintOptionCheckboxStoredCode) paintOptionCheckboxStoredCode.disabled = false;
 }
 
 function showGetPaintCodeUsingVINCheckbox() {
@@ -691,7 +697,6 @@ function setFitmentGroupState(group, enabled, keyIndex) {
     const optionsContainer = group.querySelector('.fitment-options-container');
     const title = group.querySelector('.option-title-fitment');
     const button = document.getElementById(`fitment-button-description-${keyIndex}`);
-    // console.log('wool we are setting the fitment group state');
     if (enabled) {
         group.classList.remove('fitment-disabled');
         if (optionsContainer) optionsContainer.classList.remove('fitment-disabled');
@@ -1041,6 +1046,29 @@ function decodeHtmlEntities(text) {
     const tempElement = document.createElement('textarea');
     tempElement.innerHTML = text;
     return tempElement.value;
+}
+
+function updateColorBox() {
+    colorPreviewWrapper.style.display = 'block';
+    const selectedColor = selectedProductColor;
+    const selectedTitle = selectedProductTitle;
+
+    if (selectedColor) {
+        showColorPreviewContainer();
+        colorBox.style.backgroundColor = selectedColor;
+        colorPreviewTitle.style.visibility = "visible";
+        colorBox.style.display = 'block';
+        colorSkeleton.style.display = 'none';
+        colorBox.setAttribute("title", `${selectedTitle} Paint Example`);
+        // currentColor = selectedColor;
+    } else {
+        // Hide both the color preview and the skeleton if no metafield
+        hideColorPreviewContainer();
+        colorPreviewTitle.style.visibility = "hidden";
+        colorBox.style.display = 'none';
+        colorSkeleton.style.display = 'block';
+        colorBox.removeAttribute("title");
+    }
 }
 
 /*******************************************************************************************************

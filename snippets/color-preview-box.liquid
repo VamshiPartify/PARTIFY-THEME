@@ -81,26 +81,28 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const colorBox = document.getElementById("color-preview-box");
+        {% comment %} const colorBox = document.getElementById("color-preview-box"); {% endcomment %}
         const colorWrapper = document.getElementById("color-preview-wrapper");
-        const colorSkeleton = document.getElementById("color-preview-skeleton");
+        {% comment %} const colorSkeleton = document.getElementById("color-preview-skeleton"); {% endcomment %}
         const variantSelector = document.querySelector('[name="id"]');
-        const colorPreviewTitle = document.querySelector('.color-preview-title');
+        {% comment %} const colorPreviewTitle = document.querySelector('.color-preview-title'); {% endcomment %}
+        const combinedVariantSelect = document.getElementById('variant-selector');
         const colorPreviewContainer = document.querySelector('.color-preview-container-for-customizations');
 
+        const allVariantOptions = combinedVariantSelect.options;
         let currentColor = '';
     
         // Get variant metafields from Liquid
-        const variantColors = {};
+        {% comment %} const variantColors = {};
         const variantNames = {};
 
          {% for variant in product.variants %}
             {% assign color = variant.metafields.custom.paint_preview_hex_code %}
             variantColors[{{ variant.id }}] = "{{ color | escape }}";
             variantNames[{{ variant.id }}] = "{{ variant.title | escape }}";
-        {% endfor %}
+        {% endfor %} {% endcomment %}
     
-        function updateColorBox(variantId) {
+        {% comment %} function updateColorBox(variantId) {
             const selectedColor = selectedProductColor;
             const selectedTitle = selectedProductTitle;
 
@@ -132,11 +134,14 @@
                 colorSkeleton.style.display = 'block';
                 colorBox.removeAttribute("title");
             }
-        }
+        } {% endcomment %}
     
+
+        {% comment %} console.log('wool variantSelector: ', variantSelector);
         // Handle variant change events
         function handleVariantChange() {
             if (variantSelector) {
+                const hexCode = option.getAttribute('data-color');
                 const variantId = variantSelector.value;
                 colorWrapper.style.display = 'block';
                 updateColorBox(variantId);
@@ -155,6 +160,6 @@
             const initialVariantId = variantSelector.value;
             colorWrapper.style.display = 'block'; // Ensure wrapper is visible
             updateColorBox(initialVariantId);
-        }
+        } {% endcomment %}
     });
 </script>
