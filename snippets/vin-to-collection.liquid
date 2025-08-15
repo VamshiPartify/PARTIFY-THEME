@@ -521,7 +521,7 @@
           <button id="license-to-vin-btn" type="button" disabled>{{ 'garage.search_btn' | t }}</button>
         </div>
       </div>
-      <div class="errorMessageLicense" style="visibility: hidden;">{{ 'garage.failed_vin' | t }}</div>
+      <div class="errorMessageLicense" style="visibility: hidden;">{{ 'garage.failed_license' | t }}</div>
     </div>
 
     <div class="license-confirmation-wrapper" style="display: none;">
@@ -552,6 +552,7 @@
     const vinInputWrapper = document.getElementById('vin-input-wrapper');
     const licenseInputWrapper = document.getElementById('license-input-wrapper');
     const allBumperMakes = '{{ settings.bumperdotcom_makes_list }}';
+    troublesomeMakesGlobal = '{{ settings.troublesome_chromedata_makes_list }}';
     let bumperdotcommake = false;
 
     function setTitles(vinOnLeft) {
@@ -689,7 +690,10 @@
           }
 
           const currentMake = data.make.toLowerCase();
-          // Lets hide the license input wrapper and show the license confirmation wrapper
+          
+          // Ensure the bumperdotcommake flag is always reset to false, just incase a user tries a bumper vehicle
+          // then they try a chromedata vehicle
+          bumperdotcommake = false;
           if (allBumperMakes.includes(currentMake)) {
             bumperdotcommake = true;
           }
@@ -731,7 +735,7 @@
       vinInputWrapper.style.display = '';
       if (vin) {
         vinInputField.value = vin;
-        await fetchVehicleDataByVin(stateSelect.value, plateInput.value, vin, 1, '{{ 'garage.no_results' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '', '', '', '', bumperdotcommake);
+        await fetchVehicleDataByVin(stateSelect.value, plateInput.value, vin, 1, '{{ 'garage.failed_license' | t }}', '{{ 'garage.use_YMM_dropdown' | t }}', '{{ 'garage.search_btn' | t }}', '', '', '', '', bumperdotcommake);
       }
       licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
       garageVinSubmissionBool = false;

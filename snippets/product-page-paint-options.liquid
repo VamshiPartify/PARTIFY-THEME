@@ -116,13 +116,37 @@
     justify-content: start;
   }
 
+  .stored-paint-code-color,
+  .stored-paint-code-license-or-vin {
+    font-weight: 800;
+  }
+
+  .stored-decoded-paint-msg.disabled {
+    border: 1px solid #dadada;
+    background-color: #f0f0f0;
+    color: #ccc;
+    opacity: 0.6;
+  }
+
+  .stored-decoded-paint-msg {
+    padding: 10px;
+    border: 1px solid #007600;
+    border-radius: 5px;
+    background-color: #f4f9f4;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+  }
+
   .paint-options-checkbox-group {
     display: flex;
     flex-direction: column;
     gap: 15px;
     align-items: start;
     font-weight: 500;
-    margin: 10px 0;
+    margin: 15px 0;
     color: #444;
     transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
   }
@@ -171,10 +195,20 @@
     order: 2;
   }
 
-  .checkbox-stored-msg {
-    font-size: 13px;
-    color: #666;
+  .select-code-fail-safe:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .select-code-fail-safe {
     font-style: italic;
+    color: #666;
+    text-align: start;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
   }
 
   @media only screen and (min-width: 769px) {
@@ -192,7 +226,7 @@
     .option-title {
       order: 1;
     }
-    .checkbox-stored-msg {
+    .select-code-fail-safe {
       font-size: 14px;
     }
   }
@@ -247,6 +281,12 @@
         {% endcomment %}
         <label class="option-title" for="quality-type-select">{{ 'paint_options.title' | t }}</label>
       </div>
+      <div class="stored-decoded-paint-msg" style="display: none;">
+        {{ 'paint_options_stored_msg.first' | t }}
+        <span class="stored-paint-code-license-or-vin"></span>
+        {{ 'paint_options_stored_msg.last' | t }}
+        <span class="stored-paint-code-color"></span>
+      </div>
       <div class="paint-options-checkbox-group">
         <label class="paint-options-checkbox-option">
           <input
@@ -258,7 +298,7 @@
           >
           {{ 'paint_options_radio_labels.unpainted' | t }}
         </label>
-        <label class="paint-options-checkbox-option">
+        <label class="paint-options-checkbox-option" id="paint-code-select-code-option">
           <input
             type="radio"
             name="select_paint_option"
@@ -299,26 +339,26 @@
             disabled
           >
           <span class="checkbox-stored-code"></span>
-          <span class="checkbox-stored-msg">{{ 'paint_options_radio_labels.local_storage' | t }}</span>
         </label>
       </div>
       <div class="painted-stock-key-paint-level" style="display: none;">
         {{ 'variant_instock_message' | t }}
       </div>
+      <button type="button" class="select-code-fail-safe" style="display: none;">
+        {{ 'paint_options_radio_labels.fail_safe' | t }}
+      </button>
       <div class="paint-code-wrapper">
         <select id="variant-selector" name="id" disabled>
           <option value="" disabled selected>{{ 'paint_options.disabled_first_option' | t }}</option>
         </select>
         {% render 'paint-options-oos-msg' %}
       </div>
-      {% comment %} {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %} {% endcomment %}
       <div id="paintcode-app-container">
         <div class="two-tone-message">
           {{ 'paintcode_popup.two_tone_message_beg' | t }}&nbsp;<b>{{ 'paintcode_popup.two_tone_two_tone' | t }}</b>
           {{- 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span
           >&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}
         </div>
-        {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
         {% render 'vin-decoder-input-box' %}
       </div>
       <div id="paintcode-app-container-license">
@@ -327,17 +367,9 @@
           {{- 'paintcode_popup.two_tone_mid' | t }}&nbsp;<span>{{ 'paintcode_popup.two_tone_message_bold' | t }}</span
           >&nbsp;{{ 'paintcode_popup.two_tone_message_end' | t }}
         </div>
-        {% comment %} {% render 'Vin-Decoder-app' %} {% endcomment %}
         {% render 'vin-decoder-license-option' %}
       </div>
-      {% comment %} {% endif %} {% endcomment %}
       {% render 'how-to-find-paint-code' %}
-      {% comment %} NOTE: the vin-decoder is the exact same as 'excluded-chromedata-makes.... maybe combine them and delete the other' {% endcomment %}
-      {% comment %}
-        {% if is_make_found or is_excluded_make_found or is_bumperdotcom_make_found %}
-          {% render 'vin-decoder' %}
-        {% endif %}
-      {% endcomment %}
     </div>
   {% endif %}
 </div>
@@ -667,7 +699,6 @@
         const getPaintCodeUsingVin = document.querySelector('.get-paint-code-using-vin');
         const asmSettings = document.getElementById("asm-settings");
         const isDeliveryCountdownEnabled = asmSettings.dataset.deliveryCountdown === "Enabled";
-        const paintCodeWrapper = document.querySelector(".paint-code-wrapper");
         const checkboxUnpainted = document.getElementById('checkbox-select-unpainted');
         const checkboxPaintOptions = document.getElementById('checkbox-select-paint-option');
         const checkboxGetPaintCodeWithVin = document.getElementById('checkbox-get-paint-code-with-vin');
@@ -681,7 +712,11 @@
         const AND_WORD = '{{ 'quality_level_painted_stock.and' | t }}';
         const disabledFirstOptionTranslation = '{{ 'paint_options.disabled_first_option' | t }}';
         const checkboxStoredMsg = document.querySelector('.checkbox-stored-msg');
+        const selectCodeFailSafe =  document.querySelector('.select-code-fail-safe');
 
+        decodedPaintedOptionPainted = '{{ 'paint_options_radio_labels.local_storage_painted' | t }}';
+        vinWord = '{{ 'paint_options_stored_msg.vin' | t }}';
+        licensePlateWord = '{{ 'paint_options_stored_msg.license_plate' | t }}';
         licenseOptionMsg = '{{ 'paint_options_radio_labels.local_storage_license' | t }}';
         vinOptionMsg = '{{ 'paint_options_radio_labels.local_storage_vin' | t }}';
         aftermarketAvailability = {{ aftermarket_any_available_options | default: false | json }};
@@ -751,16 +786,11 @@
             }
         }
 
-        updateStoredMsgColor();
-
         /*******************************************************************************************************
         **                                                                                                    **
         **                                         FUNCTIONS                                                  **
         **                                                                                                    **
-        *******************************************************************************************************/
-          function updateStoredMsgColor() {
-            checkboxStoredMsg.style.color = checkboxUseStoredCode.disabled ? '#ccc' : '#666';
-          }      
+        *******************************************************************************************************/  
           
           function changingPaintOptions(matchPaintByVin) {
             let selectedOption;
@@ -894,7 +924,7 @@
 
                 changingPaintOptions(true);
 
-                if (paintCodeWrapper) paintCodeWrapper.classList.add('show');
+                showPaintCodeWrapper();
 
                 // Enable or disable the following components based off of whether or the VIN Decoder
                 // resulted in a banned paint code
@@ -924,7 +954,7 @@
 
               // ELSE: Vin Decoder has not been used
               } else {
-                if (paintCodeWrapper) paintCodeWrapper.classList.remove('show');
+                hidePaintCodeWrapper();
                 if (vinOrLicense === 'vin') {
 
                   // If selected checkbox is Use VIN && !isVinDecoderExhausted
@@ -969,7 +999,7 @@
               showVinMessageParagraph();
 
               //Show combined variant select dropdown for now
-              if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
+              showPaintCodeWrapper();
 
               if (vinOrLicense === 'vin') {
                 // If selected checkbox is Use VIN && !isVinDecoderExhausted
@@ -1005,12 +1035,6 @@
         **                                                                                                    **
         *******************************************************************************************************/
 
-          const observer = new MutationObserver(() => {
-            updateStoredMsgColor();
-          });
-          observer.observe(checkboxUseStoredCode, { attributes: true, attributeFilter: ['disabled'] });
-
-
           // Show/hide VIN input based on radio selection
           const radios = document.querySelectorAll('input[name="select_paint_option"]');
           radios.forEach(radio => {
@@ -1018,7 +1042,7 @@
                 if (checkboxPaintOptions.checked) {
                   hideColorPreviewContainer();
                 //Select Paint Code
-                  if(!paintCodeWrapper.classList.contains('show')) paintCodeWrapper.classList.add('show');
+                  showPaintCodeWrapper();
                   hidePaintCodeAppContainer(false);
                   hidePaintCodeAppContainerLicense(false, true);
                   combinedVariantSelect.value = combinedVariantSelect.options[0].value;
@@ -1053,7 +1077,7 @@
                   form.action = `/cart/add?id=${combinedVariantSelect.options[1].value}`;
                   {% comment %} currentAddToCartBtn.style.display = 'block'; {% endcomment %}
                   //Show combined variant select dropdown for now
-                  if(paintCodeWrapper) paintCodeWrapper.classList.remove('show');
+                  hidePaintCodeWrapper()
                   hidePaintCodeAppContainer(false);
                   hidePaintCodeAppContainerLicense(false, true);
                   if(window.enablePrepaintedMessaging) {
@@ -1112,7 +1136,7 @@
                   priceDisplayA2C.textContent =  formattedPrice;
                   form.action = `/cart/add?id=${combinedVariantSelect.options[matchedIndex].value}`;
                   //Show combined variant select dropdown for now
-                  if(paintCodeWrapper) paintCodeWrapper.classList.remove('show');
+                  hidePaintCodeWrapper();
                   hidePaintCodeAppContainer(false);
                   hidePaintCodeAppContainerLicense(false, true);
                   if(window.enablePrepaintedMessaging) {
@@ -1122,13 +1146,19 @@
                   //If precision match exists, enable it
                   //If vin verification exists, but precision match does not, enable it
                   //If neither exist, enable add to cart
-                  if(precisionMatchContainerLibrary) {
-                    enablePrecisionMatchBtns();
-                  } else if(vinVerificationCheckboxGroupLibrary) {
-                    enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
-                    enableVinVerificationBtns();
+                  if (storedPaintOptionIsDTM) {
+                    showPaintCodeWrapper();
+                    showOOSPaintVariantsMsg();   
+                    selectedVariantUnavailable = true;
                   } else {
-                    enableAddToCartButton();
+                    if(precisionMatchContainerLibrary) {
+                      enablePrecisionMatchBtns();
+                    } else if(vinVerificationCheckboxGroupLibrary) {
+                      enableOrDisableAddToCartForOEM(finalVinVerificationSubmissionVin);
+                      enableVinVerificationBtns();
+                    } else {
+                      enableAddToCartButton();
+                    }
                   }
 
                   if (isDeliveryCountdownEnabled) {
@@ -1146,6 +1176,28 @@
                 clearOOSPaintCheckbox();
                 updateProgressHeaderColors();
             });    
+          });
+
+          selectCodeFailSafe.addEventListener('click', function() {
+            hideColorPreviewContainer();
+            clearPaintOptionRadioBtns();
+            showPaintCodeWrapper();
+            hidePaintCodeAppContainer(false);
+            hidePaintCodeAppContainerLicense(false, true);
+            combinedVariantSelect.value = combinedVariantSelect.options[0].value;
+
+            hideVinMessageParagraph();
+            hideLicenseMessageParagraph();
+
+            if(window.enablePrepaintedMessaging) {
+              if (selectedOptionHasAvailableStock === true) showPaintedStockKeyPaintDisclaimer();
+            }
+            hideOOSPaintVariantsMsg();
+            disablePrecisionMatchBtns();
+            clearPrecisionMatchRadioButtons();
+            disableVinVerificationBtns();
+            clearVinVerificationRadioButtons();
+            disableAddToCartButton();
           });
 
           if(combinedVariantSelect) { 
