@@ -810,6 +810,7 @@
     "or": "or",
     "search_btn": "ADD VEHICLE",
     "failed_vin": "No results found. Please try a different VIN",
+    "failed_license": "No results found. Please try a different license plate",
     "placeholder_vin": "e.g. 19UYA31581L000000",
     "placeholder_license_plate": "e.g. ABC1234",
     "select_state": "State",
@@ -949,12 +950,20 @@
     "point_2": "We will use a premium paint line and spray your part with adjustments determined by your VIN. Using OEM build data, we tailor the paint mix to match your vehicle’s exact color—resulting in up to a 99% match.",
     "final_message": "This added level of accuracy is ideal for customers who want a seamless color blend, especially when replacing parts on visible areas of the vehicle."
   },
+  "paint_options_stored_msg": {
+    "first": "Based on your",
+    "last": "we have determined your paint code is",
+    "vin": "VIN:",
+    "license_plate": "license plate:"
+  },
   "paint_options_radio_labels": {
     "unpainted": "Unpainted",
     "selection": "Select Code",
     "VIN": "Use VIN",
     "license": "Use License Plate",
+    "fail_safe": "Select different paint code",
     "local_storage": "(Based On Your Vehicle's Information)",
+    "local_storage_painted": "Painted",
     "local_storage_license": "(Based On Your License Plate: ",
     "local_storage_vin": "(Based On Your VIN: ",
     "select_for_price": "Select for Price"

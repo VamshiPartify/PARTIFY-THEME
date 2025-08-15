@@ -19,8 +19,13 @@ let autoSelectedColor = '';
 let autoSelectedOption = '';
 let storedDecodedVin = '';
 let firstVehicleColor = '';
+let decodedPaintedOptionPainted = '';
+let decodedPaintedOptionPrice = '';
 let licenseOptionMsg = '';
 let vinOptionMsg = '';
+let vinWord = '';
+let licensePlateWord = '';
+let troublesomeMakesGlobal = '';
 
 
 let garageVinSubmissionBool = false;
@@ -30,14 +35,18 @@ let alreadyLogged = false;
 let garageToCollections = false;
 let decodedVINHasAvailableStock = false;
 let autoSelectedBanned = false;
+let isCurrentVehicleTroublesome = false;
+let storedPaintOptionIsDTM = false;
 
 const vinInputLibrary = document.querySelector('#vin-textbox');
 const vinTextboxContainer = document.getElementById("vin-textbox-container");
 const vinOptionLabel = document.getElementById('paint-code-vin-option');
+const storedDecodedPaintCodeMsgGlobal = document.querySelector('.stored-decoded-paint-msg');
+const selectCodeOptionLabel = document.getElementById('paint-code-select-code-option');
 const licenseOptionLabel = document.getElementById('paint-code-license-option');
 const storedOptionLabel = document.getElementById('paint-code-stored-option');
+const failSafeSelectCodeOptionLabel = document.querySelector('.select-code-fail-safe');
 const checkboxStoredCodeText = document.querySelector('.checkbox-stored-code');
-const checkboxStoredCodeMsg = document.querySelector('.checkbox-stored-msg');
 
 
 
@@ -451,6 +460,13 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin,
   const submodelVal = await setSelectValueWhenReady('easysearch_field_28136', submodel || '');
   const engineVal = await setSelectValueWhenReady('easysearch_field_28137', engine || '');
 
+  let localPaintCode = null;
+
+  if (!isCurrentVehicleTroublesome) {
+    localPaintCode = paintCode;
+  }
+
+
 
   let formattedYmm = '';
   if (submodelVal && engineVal) {
@@ -464,7 +480,7 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin,
   moveVehicleToFront({
     ymm: formattedYmm,
     vin: vin || null,
-    paintCode: paintCode || null,
+    paintCode: localPaintCode || null,
     year: yearVal || null,
     make: makeVal || null,
     model: modelVal || null,
@@ -728,6 +744,7 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
 async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, failedAttemptMsg, remainingAttempts, troublesomeMakesColors, bumperdotcommake) {
   const vinSearchBtn = document.getElementById("vin-to-collection-btn");
   const errorMessageVIN = document.querySelector('.errorMessageVIN');
+  const errorMessageLicense = document.querySelector('.errorMessageLicense');
   let calculatedRemainingAttemptsVinVerification = maxAttempts - attemptedVinsVinVerification.length;
   let calculatedRemainingAttemptsVinDecoder = maxAttempts - attemptedDecodedVins.length;
   let calculatedRemainingAttemptsLicenseDecoder = maxAttempts - attemptedDecodedLicensePlates.length;
@@ -741,6 +758,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
   let description = '';
   let vehicleError = false;
   let validVin = false;
+  let validVehicleFound = false;
   let exteriorColors = [];
   let colorCode = '';
   let year = '';
@@ -757,6 +775,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
   try {
     if (vinGuaranteeFetchingMsg) vinGuaranteeFetchingMsg.style.display = "block";
     if (vinDecoderFetchingMsg) vinDecoderFetchingMsg.style.display = "block";
+
 
     // Check if vin is empty.. if so, then license lookup failed
     if (vin.length === 17) {
@@ -804,6 +823,9 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
         genericDesc = data.entities.vehicles.automobiles[0]?.design?.current_color?.generic_name || '';
         fullDescription = data.entities.vehicles.automobiles[0]?.design?.current_color?.name || '';
         hex = data.entities.vehicles.automobiles[0]?.design?.current_color?.hex || '';
+        if (year !== '' && make !== '' && model !== '') {
+          validVehicleFound = true;
+        }
       } else {
         response = await fetch('https://garage-vin-service-node-740168228309.us-east5.run.app/fetchVehicleData', {
           method: 'POST',
@@ -842,6 +864,10 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
         fullDescription = dataResult.exteriorColors[0]?.description || '';
         hex = dataResult.exteriorColors[0]?.rgbHexValue || '';
 
+        if (year !== '' && make !== '' && model !== '') {
+          validVehicleFound = true;
+        }
+
         if (exteriorColors.length === 1) {
           colorCode = exteriorColors[0]?.colorCode || '';
         } else if (exteriorColors.length > 1) {
@@ -852,11 +878,20 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
       vehicleError = true;
       validVin = false;
     }
+
+    // If current vehicle is troublesome, we don't want to set the paint code at the garage level
+    if (make.length && troublesomeMakesGlobal.includes(make.toLowerCase())) {
+      isCurrentVehicleTroublesome = true;
+    }
     // Garage
     if (functionLocation === 1) {
-      // NOTE: The data returns the paint code here! No need to alter gcr function as I can 
+      let usedLicenseLookup = false;
+      if (state && plate) {
+        usedLicenseLookup = true;
+      }
+      // NOTE: The data returns the paint code here! No need to alter gcr function as I can
       // just use the paint code from the data object here.
-      if (data.handle === '') {
+      if (!validVehicleFound) {
         if (!alreadyLogged) {
           logGarageUsageToSheets(vin, '', '', '', '', '', 'No vehicles found for the provided VIN.', 'Garage VIN Submission');
         } else {
@@ -864,12 +899,23 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
           alreadyLogged = false;
         }
         if (attemptedVinsInGarage.length < maxAttempts) {
-          errorMessageVIN.innerHTML = noResults;
-          errorMessageVIN.style.visibility = 'visible';
+          if (usedLicenseLookup) {
+            errorMessageLicense.innerHTML = noResults;
+            errorMessageLicense.style.visibility = 'visible';
+          } else {
+            errorMessageVIN.innerHTML = noResults;
+            errorMessageVIN.style.visibility = 'visible';
+          }
         } else {
-          errorMessageVIN.innerHTML = failed3times;
-          errorMessageVIN.style.visibility = 'visible';
-          document.getElementById('vin').disabled = true;
+          if (usedLicenseLookup) {
+            errorMessageLicense.innerHTML = failed3times;
+            errorMessageLicense.style.visibility = 'visible';
+            document.getElementById('license').disabled = true;
+          } else {
+            errorMessageVIN.innerHTML = failed3times;
+            errorMessageVIN.style.visibility = 'visible';
+            document.getElementById('vin').disabled = true;
+          }
           return;
         }
         garageVinSubmissionBool = false;
@@ -1173,7 +1219,7 @@ async function handleVinDecode(
   const { validVin, ymm, paintCode } = await fetchVehicleDataByVin(state, licensePlate, vinInput, location, noResults, failed3timesmsg, searchBtn, tailoredSuccessMessage, failedAttemptMsg, remainingAttempts, troublesomeMakesColors, bumperdotcommake);
   if (validVin) {
     // Vin is valid and paint code is found
-    handleAutoSelectColor(
+    const foundMatchingOption = handleAutoSelectColor(
       paintCode,
       vinInput,
       licensePlate,
@@ -1189,6 +1235,9 @@ async function handleVinDecode(
     }
     if (licensePlate) {
       searchTerms[0].plate = licensePlate;
+    }
+    if (foundMatchingOption) {
+      searchTerms[0].paintCode = paintCode;
     }
     if (paintCode !== '') {
       if (Array.isArray(searchTerms) && searchTerms.length > 0) {
@@ -1293,6 +1342,8 @@ function handleAutoSelectColor(paintCode, vinInput, licensePlate, location, deco
   }
 
   if (paintCodeWrapper) paintCodeWrapper.classList.add('show');
+
+  return matchingOption;
 }
 
 function handleInsertLocalStoragePaintOption() {
@@ -1317,23 +1368,42 @@ function handleInsertLocalStoragePaintOption() {
       const sampleArrToCheck = allVariantOptions.aftermarket || allVariantOptions.capa || allVariantOptions.oem || allVariantOptions.current;
       for (let i = 0; i < sampleArrToCheck.length; i++) {
         const option = sampleArrToCheck[i];
+
         if (firstItemColor === option.variantTitle) {
+          decodedPaintedOptionPrice = (option.priceDifference / 100).toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD'
+          });
           foundMatchingColor = true;
+
+          // If the variant is difficult to match and a disclaimer must be show, set the storedPaintOptionsIsDTM flag
+          if (option.variantAvailable === "true" || option.variantAvailable === true) {
+            storedPaintOptionIsDTM = true;
+          }
         }
       }
 
       // If the color stored in local storage is found to match a variant option, display matching option and hide VIN and license option
       if (foundMatchingColor) {
         storedOptionLabel.style.display = 'block';
-        checkboxStoredCodeText.innerHTML = firstItemColor;
+        failSafeSelectCodeOptionLabel.style.display = 'block';
+        selectCodeOptionLabel.style.display = 'none';
+        // Formats the checkbox to look like: "Painted [color] +[price]"
+        if (decodedPaintedOptionPrice.length) {
+          checkboxStoredCodeText.innerHTML = decodedPaintedOptionPainted + ' ' + firstItemColor + ' +' + decodedPaintedOptionPrice;
+        } else if (decodedPaintedOptionPrice.length === 0) {
+          checkboxStoredCodeText.innerHTML = decodedPaintedOptionPainted + ' ' + firstItemColor;
+        }
 
         // If both state and plate exist in local storage, render the paint option message accordingly
         if (firstItemState && firstItemPlate) {
-          checkboxStoredCodeMsg.innerHTML = licenseOptionMsg + firstItemState + '-' + firstItemPlate + ')';
+          const localStatePlate = firstItemState + '-' + firstItemPlate;
+          displayStoredPaintCodeMsg(false, localStatePlate, firstItemColor);
 
           // If no state or plate exist but a vin does, render the paint option accordingly
         } else if (firstItemVin) {
-          checkboxStoredCodeMsg.innerHTML = vinOptionMsg + firstItemVin + ')';
+          const localVin = firstItemVin;
+          displayStoredPaintCodeMsg(true, localVin, firstItemColor);
         }
         if (vinOptionLabel) {
           vinOptionLabel.style.display = 'none';
@@ -1366,6 +1436,19 @@ function handleInsertLocalStoragePaintOption() {
 
 
   return firstItemColor;
+}
+
+function displayStoredPaintCodeMsg(isVin, vinOrLicense, color) {
+  storedDecodedPaintCodeMsgGlobal.style.display = 'block';
+  const licenseOrVinSpan = document.querySelector('.stored-paint-code-license-or-vin');
+  const colorSpan = document.querySelector('.stored-paint-code-color');
+
+  if (isVin) {
+    licenseOrVinSpan.textContent = vinWord + ' ' + vinOrLicense + ',';
+  } else {
+    licenseOrVinSpan.textContent = licensePlateWord + ' ' + vinOrLicense + ',';
+  }
+  colorSpan.textContent = color + '.';
 }
 
 function resortToForceSelectCode() {

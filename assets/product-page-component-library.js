@@ -47,6 +47,8 @@ const qualityTypeSelectLibrary = document.getElementById('quality-type-select');
 const qualityOptionsCheckboxLibrary = document.querySelectorAll('.quality-options-checkbox');
 const qualityDescriptionBtnLibrary = document.getElementById('quality-description-vindecoder');
 const selectVinVariantButtonLibrary = document.getElementById('select-vin-variant');
+const storedDecodedPaintCodeMsgLibrary = document.querySelector('.stored-decoded-paint-msg');
+const selectCodeFailSafeLibrary = document.querySelector('.select-code-fail-safe');
 const titleElementLibrary = document.querySelector('.product-title');
 const vinTextBoxOEMLibrary = document.getElementById('vin-textbox-for-oem');
 const vinVerificationCheckboxGroupLibrary = document.querySelector('.vin-verification-checkbox-group');
@@ -209,6 +211,12 @@ function hideVINTextboxForOEM() {
     if (oemVinContainerLibrary && oemVinContainerLibrary.classList.contains("show")) oemVinContainerLibrary.classList.remove("show");
 }
 
+function hidePaintCodeWrapper() {
+    if (paintCodeWrapperLibrary && paintCodeWrapperLibrary.classList.contains('show')) {
+        paintCodeWrapperLibrary.classList.remove('show');
+    }
+}
+
 function disableCombinedVariantSelect() {
     if (combinedVariantSelectLibrary) combinedVariantSelectLibrary.disabled = true;
 }
@@ -216,13 +224,15 @@ function clearCombinedVariantSelect() {
     if (combinedVariantSelectLibrary) combinedVariantSelectLibrary.selectedIndex = 0;
 }
 
+function disableStoredPaintCodeMsg() {
+    if (storedDecodedPaintCodeMsgLibrary) storedDecodedPaintCodeMsgLibrary.classList.add('disabled');
+}
+
 function disablePaintOptionRadioBtns() {
     if (paintOptionCheckboxByUnpainted) paintOptionCheckboxByUnpainted.disabled = true;
     if (paintOptionCheckboxByPaintCode) {
         paintOptionCheckboxByPaintCode.disabled = true;
-        if (paintCodeWrapperLibrary && paintCodeWrapperLibrary.classList.contains('show')) {
-            paintCodeWrapperLibrary.classList.remove('show');
-        }
+        hidePaintCodeWrapper();
         if (paintCodeAppContainerLibrary && paintCodeAppContainerLibrary.classList.contains('show')) {
             paintCodeAppContainerLibrary.classList.remove('show');
         }
@@ -233,6 +243,7 @@ function disablePaintOptionRadioBtns() {
     if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = true;
     if (paintOptionCheckboxByLicense) paintOptionCheckboxByLicense.disabled = true;
     if (paintOptionCheckboxStoredCode) paintOptionCheckboxStoredCode.disabled = true;
+    if (selectCodeFailSafeLibrary) selectCodeFailSafeLibrary.disabled = true;
 }
 
 function hidePaintCodeAppContainer(toggleDisplay) {
@@ -356,6 +367,7 @@ function hideLicenseMessageParagraph() {
 }
 
 function disablehowToFindPaintCodeBtn() {
+    disableStoredPaintCodeMsg();
     disablePaintOptionRadioBtns();
     if (howToFindPaintCodeBtnLibrary) howToFindPaintCodeBtnLibrary.disabled = true;
 }
@@ -532,6 +544,12 @@ function enableVINTextboxForOEM() {
     if (vinTextBoxOEMLibrary) vinTextBoxOEMLibrary.disabled = false;
 }
 
+function showPaintCodeWrapper() {
+    if (paintCodeWrapperLibrary && !paintCodeWrapperLibrary.classList.contains('show')) {
+        paintCodeWrapperLibrary.classList.add('show');
+    }
+}
+
 function enableCombinedVariantSelect() {
     if (combinedVariantSelectLibrary) combinedVariantSelectLibrary.disabled = false;
 }
@@ -558,12 +576,17 @@ function showPaintCodeAppContainerLicense() {
     }
 }
 
+function enableStoredPaintCodeMsg() {
+    if (storedDecodedPaintCodeMsgLibrary) storedDecodedPaintCodeMsgLibrary.classList.remove('disabled');
+}
+
 function enablePaintOptionRadioBtns() {
     if (paintOptionCheckboxByUnpainted) paintOptionCheckboxByUnpainted.disabled = false;
     if (paintOptionCheckboxByPaintCode) paintOptionCheckboxByPaintCode.disabled = false;
     if (paintOptionCheckboxByVIN) paintOptionCheckboxByVIN.disabled = false;
     if (paintOptionCheckboxByLicense) paintOptionCheckboxByLicense.disabled = false;
     if (paintOptionCheckboxStoredCode) paintOptionCheckboxStoredCode.disabled = false;
+    if (selectCodeFailSafeLibrary) selectCodeFailSafeLibrary.disabled = false;
 }
 
 function showGetPaintCodeUsingVINCheckbox() {
@@ -602,6 +625,7 @@ function showLicenseMessageParagraph() {
 }
 
 function enablehowToFindPaintCodeBtn() {
+    enableStoredPaintCodeMsg();
     enablePaintOptionRadioBtns();
     if (howToFindPaintCodeBtnLibrary) howToFindPaintCodeBtnLibrary.disabled = false;
 }
