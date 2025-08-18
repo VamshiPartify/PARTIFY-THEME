@@ -388,7 +388,7 @@
           const stateSelect = document.getElementById('license-decoder-state-select');
           const state = stateSelect ? stateSelect.value : '';
           // Remove spaces and trim the plate input
-          const plate = licenseInput ? licenseInput.replace(/\s+/g, '').trim() : '';
+          const plate = licenseInput ? licenseInput.replace(/[\s-]+/g, '').trim() : '';
           licenseDecoderSubmitBtn._originalText = licenseDecoderSubmitBtn.textContent;
           licenseDecoderSubmitBtn.textContent = '';
           licenseDecoderSubmitBtn.classList.add('license-decoder-submit-btn--loading');
@@ -406,8 +406,8 @@
                   {% endfor %}
               {% endif %}
           {% endif %}
-          // Submission logic moved here
-          attemptedDecodedLicensePlates.push(licenseInput);
+
+          attemptedDecodedLicensePlates.push(state + '-' + plate);
           try {
               const data = await fetchBumpersLicenseToVin(state, plate);
               const vinInput = data.vin ? data.vin.toUpperCase() : '';
