@@ -454,10 +454,35 @@ function updateSearchTerms(ymm, yearVal, makeVal, modelVal, submodelVal, engineV
   }
 };
 
+function refactorModels(make, model) {
+  let refactoredModel = model;
+  let capMake = make.toUpperCase();
+  let capModel = model.toUpperCase();
+  // Special cases: 
+
+  // Chromedata returns the word mazda along with the model type. 
+  // e.g. Mazda3 instead of 3
+  if (refactoredModel.includes('Mazda')) {
+    refactoredModel = refactoredModel.replace('Mazda', '');
+  }
+
+  // Chromedata can return the submodel along with subaru submodels.
+  // e.g. WRX STI instead of WRX
+  if (capMake === 'SUBARU' && capModel.includes('WRX')) {
+    // Just take the first word in this case
+    refactoredModel = refactoredModel.split(' ')[0];
+  }
+
+  return refactoredModel;
+}
+
 async function updateGarageAndNavigate(year, make, model, submodel, engine, vin, paintCode, state, plate) {
+
+  const refactoredModel = refactorModels(make, model);
+
   const yearVal = await setSelectValueWhenReady('easysearch_field_4973', year || '');
   const makeVal = await setSelectValueWhenReady('easysearch_field_4974', make || '');
-  const modelVal = await setSelectValueWhenReady('easysearch_field_4975', model || '');
+  const modelVal = await setSelectValueWhenReady('easysearch_field_4975', refactoredModel || '');
   const submodelVal = await setSelectValueWhenReady('easysearch_field_28136', submodel || '');
   const engineVal = await setSelectValueWhenReady('easysearch_field_28137', engine || '');
 
@@ -468,10 +493,7 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin,
   }
 
   if (yearVal === '' || makeVal === '' || modelVal === '') {
-    const errorMessageVIN = document.querySelector('.errorMessageVIN');
-    errorMessageVIN.innerHTML = 'Sorry. There was a problem.';
-    errorMessageVIN.style.visibility = 'visible';
-    return;
+    return false;
   }
 
   let formattedYmm = '';
@@ -512,6 +534,7 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin,
     // options radio buttons
     firstVehicleColor = handleInsertLocalStoragePaintOption();
   }
+  return true;
 }
 
 // Used for generating the correct filtered URL for non compatible vehicles
@@ -586,31 +609,6 @@ function removeVinDecoderInputValue(storedVinMsg, vinInputBox, vinSubmitBtn) {
     }
   }
 }
-
-// Function to update garage and navigate
-/**
- * Updates the VIN for a vehicle in the garage search terms and navigates to the specified collection page.
- *
- * @async
- * @function
- * @param {string} handle - The collection handle to navigate to.
- * @param {string} vin - The Vehicle Identification Number to update and include in the redirect URL.
- */
-// async function updateGarageAndNavigate(handle, vin, ymm) {
-//   let currentSearchTerms = getGarageSearchTerms();
-//   const vehicleIndex = currentSearchTerms.findIndex((obj) => obj.ymm === ymm);
-//   let vehicleObj = vehicleIndex > -1 ? currentSearchTerms[vehicleIndex] : null;
-
-//   // Only if the vehicle exists already, insert a VIN if it is not already present
-//   if (vehicleObj) {
-//     if (!currentSearchTerms[vehicleIndex].vin) {
-//       currentSearchTerms[vehicleIndex].vin = vin; // Update the vin in the existing object
-//       localStorage.setItem('searchTerms', JSON.stringify(currentSearchTerms));
-//     }
-//   }
-//   const redirectUrl = `/collections/${handle}${vin ? `?vin=${encodeURIComponent(vin)}` : ''}`;
-//   window.location.href = redirectUrl;
-// }
 
 /*
     functionLocation - 1 = Garage
@@ -927,8 +925,23 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
       if (state && plate) {
         usedLicenseLookup = true;
       }
-      // NOTE: The data returns the paint code here! No need to alter gcr function as I can
-      // just use the paint code from the data object here.
+
+      if (validVehicleFound) {
+        // Don't add garageVinSubmissionBool here because there will be a time when the button
+        // is clickable between submission and page navigation.  Don't want anyone spamming
+        // the button.
+        if (!alreadyLogged) {
+          logGarageUsageToSheets(vin, '', '', data.year, data.make, data.model, '', 'Garage VIN Submission');
+        } else {
+          // If already logged, reset the flag so it can be logged again if needed.
+          alreadyLogged = false;
+        }
+
+        validVehicleFound = await updateGarageAndNavigate(year.toString(), make, model, '', '', vin, colorCode, state, plate);
+      }
+
+      // validVehicleFound can change from true to false if updateGarageAndNavigate does not find a valid YMM in the easysearch dropdowns
+      // Consequently, it must be treated as an invalid vehicle
       if (!validVehicleFound) {
         if (!alreadyLogged) {
           logGarageUsageToSheets(vin, '', '', '', '', '', 'No vehicles found for the provided VIN.', 'Garage VIN Submission');
@@ -958,18 +971,6 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
         }
         garageVinSubmissionBool = false;
         return;
-      } else {
-        // Don't add garageVinSubmissionBool here because there will be a time when the button
-        // is clickable between submission and page navigation.  Don't want anyone spamming
-        // the button.
-        if (!alreadyLogged) {
-          logGarageUsageToSheets(vin, '', '', data.year, data.make, data.model, '', 'Garage VIN Submission');
-        } else {
-          // If already logged, reset the flag so it can be logged again if needed.
-          alreadyLogged = false;
-        }
-
-        updateGarageAndNavigate(year.toString(), make, model, '', '', vin, colorCode, state, plate);
       }
 
       // Vin Verification
