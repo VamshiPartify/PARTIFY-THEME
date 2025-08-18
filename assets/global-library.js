@@ -731,7 +731,7 @@ function handleLicenseChange(event, functionLocation, errorMsg, errorAlreadyAtte
     return;
   }
   if (errorMessageLicense.style.visibility === 'visible') errorMessageLicense.style.visibility = 'hidden';
-  if (sanitizedPlateInput.length > 0) {
+  if (state.length && sanitizedPlateInput.length > 0) {
     licenseBtn.disabled = false;
   } else {
     licenseBtn.disabled = true;
