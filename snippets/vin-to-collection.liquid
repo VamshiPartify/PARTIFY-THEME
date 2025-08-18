@@ -605,6 +605,7 @@
 
     // VIN form logic
     const vinForm = document.getElementById("vin-to-collection");
+    const stateSelectField = document.querySelector('.select-styled-vin-to-collection select');
     const vinInputField = document.getElementById("vin-to-collection-input");
     const licenseInputField = document.getElementById("license-to-vin-input");
     const errorMessageVIN = document.querySelector('.errorMessageVIN');
@@ -612,6 +613,10 @@
 
     vinInputField.addEventListener("input", (event) => {
       handleVinChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}');
+    });
+
+    stateSelectField.addEventListener("change", (event) => {
+      handleStateSelectChange(event, '{{ 'garage.license_plate_already_attempted' | t }}', 'license-to-vin-btn');
     });
 
     licenseInputField.addEventListener("input", (event) => {
@@ -670,7 +675,7 @@
         const state = stateSelect ? stateSelect.value : '';
 
         // Remove spaces and trim the plate input
-        const plate = plateInput ? plateInput.value.replace(/\s+/g, '').trim() : '';
+        const plate = plateInput ? plateInput.value.replace(/[\s-]+/g, '').trim() : '';
         if (!state || !plate) {
           alert('Please enter both state and license plate.');
           garageVinSubmissionBool = false;
@@ -678,11 +683,11 @@
           licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
           return;
         }
-        if (attemptedDecodedLicensePlates.includes(plate)) {
-          throw new Error("License plate has already been attempted.", plate);
+        if (attemptedDecodedLicensePlates.includes(state + '-' + plate)) {
+          throw new Error("License plate has already been attempted.");
         }
         console.log(`Fetching vehicle data for license plate: ${plate} in state: ${state}`);
-        attemptedDecodedLicensePlates.push(plate);
+        attemptedDecodedLicensePlates.push(state + '-' + plate);
         // Await the result of fetchBumpersLicenseToVin before proceeding
         try {
           const data = await fetchBumpersLicenseToVin(state, plate);

@@ -26,6 +26,7 @@ let vinOptionMsg = '';
 let vinWord = '';
 let licensePlateWord = '';
 let troublesomeMakesGlobal = '';
+let licenseGarageLatest = '';
 
 
 let garageVinSubmissionBool = false;
@@ -695,19 +696,42 @@ function handleVinChange(event, functionLocation, errorMsg) {
   }
 };
 
-function handleLicenseChange(event, functionLocation, errorMsg, errorAlreadyAttempted, id) {
-  let licenseInput = event.target.value.toUpperCase();
-  event.target.value = licenseInput;
+function handleStateSelectChange(event, errorAlreadyAttempted, id) {
+  const stateInput = event.target.value.toUpperCase();
   const licenseBtn = document.getElementById(id);
   const errorMessageLicense = document.querySelector('.errorMessageLicense');
-  if (attemptedDecodedLicensePlates.includes(licenseInput)) {
+  event.target.value = stateInput;
+  if (attemptedDecodedLicensePlates.includes(stateInput + '-' + licenseGarageLatest)) {
     licenseBtn.disabled = true;
-    errorMessageLicense.style.display = 'block';
+    errorMessageLicense.style.visibility = 'visible';
     errorMessageLicense.innerHTML = errorAlreadyAttempted;
     return;
   }
-  if (errorMessageLicense.style.display === 'block') errorMessageLicense.style.display = 'none';
-  if (licenseInput.length > 0) {
+  if (errorMessageLicense.style.visibility === 'visible') errorMessageLicense.style.visibility = 'hidden';
+  if (licenseGarageLatest.length > 0) {
+    licenseBtn.disabled = false;
+  } else {
+    licenseBtn.disabled = true;
+  }
+}
+
+function handleLicenseChange(event, functionLocation, errorMsg, errorAlreadyAttempted, id) {
+  let licenseInput = event.target.value.toUpperCase();
+  let sanitizedPlateInput = licenseInput ? licenseInput.replace(/[\s-]+/g, '').trim() : '';
+  event.target.value = sanitizedPlateInput;
+  const licenseBtn = document.getElementById(id);
+  const errorMessageLicense = document.querySelector('.errorMessageLicense');
+  const stateSelect = document.querySelector('.select-styled-vin-to-collection select');
+  const state = stateSelect ? stateSelect.value : '';
+  licenseGarageLatest = sanitizedPlateInput;
+  if (attemptedDecodedLicensePlates.includes(state + '-' + sanitizedPlateInput)) {
+    licenseBtn.disabled = true;
+    errorMessageLicense.style.visibility = 'visible';
+    errorMessageLicense.innerHTML = errorAlreadyAttempted;
+    return;
+  }
+  if (errorMessageLicense.style.visibility === 'visible') errorMessageLicense.style.visibility = 'hidden';
+  if (sanitizedPlateInput.length > 0) {
     licenseBtn.disabled = false;
   } else {
     licenseBtn.disabled = true;
