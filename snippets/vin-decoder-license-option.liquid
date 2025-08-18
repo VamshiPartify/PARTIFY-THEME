@@ -363,7 +363,7 @@
       const licenseDecoderPlateInput = document.getElementById('license-decoder-plate-input');
 
       licenseDecoderPlateInput.addEventListener('input', async function (event) {
-          handleLicenseChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}', 'license-decoder-submit-btn');
+          handleLicenseChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}', '{{ 'garage.license_plate_already_attempted' | t }}', 'license-decoder-submit-btn');
       });
   });
 
@@ -443,7 +443,7 @@
               document.querySelector('.license-decoder-submission-failed-message').style.display = 'block';
           } finally {
               // No matter what, enable the button if three license plates have been attempted
-              if (attemptedDecodedLicensePlates.length === maxAttempts) {
+              if (attemptedDecodedLicensePlates.length === decodeMaxAttempts) {
                   isLicenseDecoderExhausted = true;
                   if (successfulVinDecoding === false) {
                       licenseInputElem.value = '';

@@ -515,7 +515,7 @@
             name="vin"
             class="license-to-vin"
             placeholder="{{ 'garage.placeholder_license_plate' | t }}"
-            {% comment %} onChange="handleVinChange(event)" {% endcomment %}
+            maxlength="9"
             required
           >
           <button id="license-to-vin-btn" type="button" disabled>{{ 'garage.search_btn' | t }}</button>
@@ -615,7 +615,7 @@
     });
 
     licenseInputField.addEventListener("input", (event) => {
-      handleLicenseChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}', 'license-to-vin-btn');
+      handleLicenseChange(event, 1, '{{ 'garage.enter_valid_characters' | t }}', '{{ 'garage.license_plate_already_attempted' | t }}', 'license-to-vin-btn');
     });
 
     // Robust event delegation for both search buttons
@@ -678,7 +678,11 @@
           licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";
           return;
         }
+        if (attemptedDecodedLicensePlates.includes(plate)) {
+          throw new Error("License plate has already been attempted.", plate);
+        }
         console.log(`Fetching vehicle data for license plate: ${plate} in state: ${state}`);
+        attemptedDecodedLicensePlates.push(plate);
         // Await the result of fetchBumpersLicenseToVin before proceeding
         try {
           const data = await fetchBumpersLicenseToVin(state, plate);
@@ -708,8 +712,13 @@
 
 
         } catch (err) {
-          errorMessageVIN.style.visibility = 'visible';
-          errorMessageVIN.textContent = "{{ 'garage.failed_vin' | t }}";
+          if (err.includes("License plate has already been attempted.")) {
+            errorMessageLicense.style.visibility = 'visible';
+            errorMessageLicense.textContent = "{{ 'garage.license_plate_already_attempted' | t }}";
+          } else {
+            errorMessageVIN.style.visibility = 'visible';
+            errorMessageVIN.textContent = "{{ 'garage.failed_vin' | t }}";
+          }
           garageVinSubmissionBool = false;
           licenseSearchBtn.classList.remove("vin-to-collection-btn--loading");
           licenseSearchBtn.innerHTML = "{{ 'garage.search_btn' | t }}";

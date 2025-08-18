@@ -438,7 +438,7 @@
         }
         updateProgressHeaderColors();
         // No matter what, enable the button if three vins have been attempted
-        if (attemptedDecodedVins.length === maxAttempts) {
+        if (attemptedDecodedVins.length === decodeMaxAttempts) {
           isVinDecoderExhausted = true;
           if (successfulVinDecoding === false) {
             vinInputElem.value = '';
