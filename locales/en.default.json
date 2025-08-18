@@ -804,7 +804,7 @@
     "select_vehicle_subtitle": "We need more information to help you find the right parts for your vehicle. Select a vehicle to narrow your results.",
     "add_by_vin": "ADD BY VIN",
     "add_by_license_plate": "ADD BY LICENSE PLATE",
-    "add_by_vin_subtitle": "Available for car and truck model years 1981 and newer.",
+    "add_by_vin_subtitle": "Available for car and truck model years 1990 and newer.",
     "vehicle_identification_number": "Vehicle Identification Number",
     "license_plate_number": "License Plate Number",
     "or": "or",
@@ -818,7 +818,8 @@
     "no_results": "We couldn’t find a match for this VIN.",
     "use_YMM_dropdown": "Please use the year, make, model dropdowns to find your vehicle",
     "enter_valid_characters": "Please enter valid characters. I, O, Q and other special characters are not allowed in VINs.",
-    "exactly_17_characters": "VIN must be exactly 17 characters."
+    "exactly_17_characters": "VIN must be exactly 17 characters.",
+    "license_plate_already_attempted": "License plate has already been attempted. Please try a different license plate."
   },
   "collapsing_description": {
     "description": "Description",

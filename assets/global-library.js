@@ -3,7 +3,7 @@
 **                                             VARIABLES                                              **
 **                                                                                                    **
 *******************************************************************************************************/
-const maxAttempts = 3;
+const decodeMaxAttempts = 3;
 
 let attemptedVinsInGarage = [];
 let attemptedVinsVinVerification = [];
@@ -466,7 +466,12 @@ async function updateGarageAndNavigate(year, make, model, submodel, engine, vin,
     localPaintCode = paintCode;
   }
 
-
+  if (yearVal === '' || makeVal === '' || modelVal === '') {
+    const errorMessageVIN = document.querySelector('.errorMessageVIN');
+    errorMessageVIN.innerHTML = 'Sorry. There was a problem.';
+    errorMessageVIN.style.visibility = 'visible';
+    return;
+  }
 
   let formattedYmm = '';
   if (submodelVal && engineVal) {
@@ -690,10 +695,18 @@ function handleVinChange(event, functionLocation, errorMsg) {
   }
 };
 
-function handleLicenseChange(event, functionLocation, errorMsg, id) {
+function handleLicenseChange(event, functionLocation, errorMsg, errorAlreadyAttempted, id) {
   let licenseInput = event.target.value.toUpperCase();
   event.target.value = licenseInput;
   const licenseBtn = document.getElementById(id);
+  const errorMessageLicense = document.querySelector('.errorMessageLicense');
+  if (attemptedDecodedLicensePlates.includes(licenseInput)) {
+    licenseBtn.disabled = true;
+    errorMessageLicense.style.display = 'block';
+    errorMessageLicense.innerHTML = errorAlreadyAttempted;
+    return;
+  }
+  if (errorMessageLicense.style.display === 'block') errorMessageLicense.style.display = 'none';
   if (licenseInput.length > 0) {
     licenseBtn.disabled = false;
   } else {
@@ -743,11 +756,12 @@ async function createCompanyProfile(companyName, firstName, lastName, email, pho
 */
 async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResults, failed3times, searchBtn, tailoredSuccessMessage, failedAttemptMsg, remainingAttempts, troublesomeMakesColors, bumperdotcommake) {
   const vinSearchBtn = document.getElementById("vin-to-collection-btn");
+  const licenseToVinbtn = document.getElementById("license-to-vin-btn");
   const errorMessageVIN = document.querySelector('.errorMessageVIN');
   const errorMessageLicense = document.querySelector('.errorMessageLicense');
-  let calculatedRemainingAttemptsVinVerification = maxAttempts - attemptedVinsVinVerification.length;
-  let calculatedRemainingAttemptsVinDecoder = maxAttempts - attemptedDecodedVins.length;
-  let calculatedRemainingAttemptsLicenseDecoder = maxAttempts - attemptedDecodedLicensePlates.length;
+  let calculatedRemainingAttemptsVinVerification = decodeMaxAttempts - attemptedVinsVinVerification.length;
+  let calculatedRemainingAttemptsVinDecoder = decodeMaxAttempts - attemptedDecodedVins.length;
+  let calculatedRemainingAttemptsLicenseDecoder = decodeMaxAttempts - attemptedDecodedLicensePlates.length;
   const vinGuaranteeFetchingMsg = document.querySelector('.vin-verification-fetching-vin-data');
   const vinDecoderFetchingMsg = document.querySelector('.vin-decoder-fetching-vin-data');
   let partifyLocation = await getPartifyLocation();
@@ -898,7 +912,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
           // If already logged, reset the flag so it can be logged again if needed.
           alreadyLogged = false;
         }
-        if (attemptedVinsInGarage.length < maxAttempts) {
+        if (attemptedVinsInGarage.length < decodeMaxAttempts) {
           if (usedLicenseLookup) {
             errorMessageLicense.innerHTML = noResults;
             errorMessageLicense.style.visibility = 'visible';
@@ -937,7 +951,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
       // Vin Verification
     } else if (functionLocation === 2) {
       if (data.handle === '' || data.isVinValid === false) {
-        if (attemptedVinsVinVerification.length < maxAttempts) {
+        if (attemptedVinsVinVerification.length < decodeMaxAttempts) {
 
           document.querySelector('.vin-verification-submission-failed-message').innerHTML = noResults;
           document.querySelector('.vin-verification-remaining-attempts').style.display = "block";
@@ -968,7 +982,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
 
       // Vin Decoder
     } else if (functionLocation === 3) {
-      if (attemptedDecodedVins.length <= maxAttempts) {
+      if (attemptedDecodedVins.length <= decodeMaxAttempts) {
         let troublesomeMake = false;
         if (Object.keys(troublesomeMakesColors).length > 0) troublesomeMake = true;
 
@@ -1015,7 +1029,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
         return { validVin: false, ymm: '', paintCode: '' };
       }
     } else if (functionLocation === 4) {
-      if (attemptedDecodedLicensePlates.length <= maxAttempts) {
+      if (attemptedDecodedLicensePlates.length <= decodeMaxAttempts) {
         let troublesomeMake = false;
         if (Object.keys(troublesomeMakesColors).length > 0) troublesomeMake = true;
 
@@ -1063,23 +1077,32 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
     }
   } catch (error) {
     if (functionLocation === 1) {
-      if (errorMessageVIN.style.visibility === 'hidden') {
-        errorMessageVIN.style.visibility = 'visible';
+      let usedLicenseLookup = false;
+      if (state && plate) {
+        usedLicenseLookup = true;
       }
-      vinSearchBtn.disabled = true;
-      logGarageUsageToSheets(vin, '', '', '', '', '', error.message, 'Garage VIN Submission');
-      if (attemptedVinsInGarage.length < maxAttempts) {
-        errorMessageVIN.innerHTML = noResults;
+      if (usedLicenseLookup) {
+        errorMessageLicense.innerHTML = noResults;
+        errorMessageLicense.style.visibility = 'visible';
+        licenseToVinbtn.disabled = true;
+        logGarageUsageToSheets(vin, state, plate, '', '', '', error.message, 'License To VIN');
       } else {
-        errorMessageVIN.innerHTML = failed3times;
-        document.getElementById('vin').disabled = true;
-        console.error("Error fetching vehicle data:", error);
-        return;
+        errorMessageVIN.innerHTML = noResults;
+        errorMessageVIN.style.visibility = 'visible';
+        vinSearchBtn.disabled = true;
+        logGarageUsageToSheets(vin, '', '', '', '', '', error.message, 'Garage VIN Submission');
+        if (attemptedVinsInGarage.length >= decodeMaxAttempts) {
+          errorMessageVIN.innerHTML = failed3times;
+          document.getElementById('vin').disabled = true;
+          console.error("Error fetching vehicle data:", error);
+          return;
+        }
       }
+
       garageVinSubmissionBool = false;
     } else if (functionLocation === 2) {
       attemptedVinsVinVerification.push(vin);
-      if (attemptedVinsVinVerification.length < maxAttempts) {
+      if (attemptedVinsVinVerification.length < decodeMaxAttempts) {
         document.querySelector('.vin-verification-submission-failed-message').innerHTML = noResults;
         document.querySelector('.vin-verification-remaining-attempts').style.display = "block";
         document.querySelector('.vin-verification-remaining-attempts').innerHTML = remainingAttempts + calculatedRemainingAttemptsVinVerification;
@@ -1095,7 +1118,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
       console.error("Error fetching vehicle data:", error);
       return false;
     } else if (functionLocation === 3) {
-      if (attemptedDecodedVins.length <= maxAttempts) {
+      if (attemptedDecodedVins.length <= decodeMaxAttempts) {
         if (errorMessage === '') {
           errorMessage = `Error fetching vehicle data: ${error.message}`;
         }
@@ -1117,7 +1140,7 @@ async function fetchVehicleDataByVin(state, plate, vin, functionLocation, noResu
       }
       return { validVin: false, paintCode: '' };
     } else if (functionLocation === 4) {
-      if (attemptedDecodedLicensePlates.length <= maxAttempts) {
+      if (attemptedDecodedLicensePlates.length <= decodeMaxAttempts) {
         if (errorMessage === '') {
           errorMessage = `Error fetching vehicle data: ${error.message}`;
         }
