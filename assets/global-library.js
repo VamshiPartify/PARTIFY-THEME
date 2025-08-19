@@ -463,6 +463,8 @@ function refactorModels(make, model) {
   // Chromedata returns the word mazda along with the model type. 
   // e.g. Mazda3 instead of 3
   if (refactoredModel.includes('Mazda')) {
+    // For the case where it is a hatchback, will look like Mazda3 Hatchback, pull the first word
+    refactoredModel = refactoredModel.split(' ')[0];
     refactoredModel = refactoredModel.replace('Mazda', '');
   }
 
