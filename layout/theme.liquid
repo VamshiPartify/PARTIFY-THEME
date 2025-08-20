@@ -182,7 +182,7 @@
       <link rel="canonical" href="{{ canonical_url }}">
     {% endif %}
 
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     {% assign twitter_handle = settings.social_twitter | split: 'twitter.com/' | last %}
     {% render 'social-meta-tags', twitter_handle: twitter_handle %}
